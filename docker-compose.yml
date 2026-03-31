@@ -43,15 +43,13 @@ services:
 
   redis:
     image: redis:7.2
-    # container_name: redis          ← 삭제
     ports:
       - "6379:6379"
     networks: [ app ]
-    command : ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    command: [ "redis-server", "/usr/local/etc/redis/redis.conf", "--requirepass", "${REDIS_PASSWORD}" ]
     volumes:
       - ./infra/redis/redis.conf:/usr/local/etc/redis/redis.conf
       - ./infra/redis/data:/data
-
 
   loki:
     image: grafana/loki:2.9.8
@@ -83,6 +81,15 @@ services:
       - "3000:3000"
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
+      # SMTP 설정 추가
+      - GF_SMTP_ENABLED=true
+      - GF_SMTP_HOST=smtp.gmail.com:587
+      - GF_SMTP_USER=mjsearch2025@gmail.com
+      - GF_SMTP_PASSWORD=ncbc aqip zamv zfhq
+      - GF_SMTP_FROM_ADDRESS=mjsearch2025@gmail.com
+      - GF_SMTP_FROM_NAME=Thingo 경고 메일
+      - GF_SMTP_SKIP_VERIFY=true
+
     depends_on:
       - loki
     volumes:

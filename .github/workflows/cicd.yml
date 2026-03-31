@@ -69,6 +69,7 @@ jobs:
 
           # 6) systemd 재시작
           sudo systemctl daemon-reload || true
+          echo "REDIS_PASSWORD=${REDIS_PASSWORD}" | sudo tee /home/ubuntu/.env > /dev/null
           sudo systemctl restart "${SERVICE_NAME}"
 
           set +x
@@ -113,11 +114,10 @@ jobs:
           scp -o StrictHostKeyChecking=no ./deploy_remote.sh \
             "${{ secrets.EC2_USER }}"@"${{ secrets.EC2_HOST }}":/home/ubuntu/deploy_remote.sh
 
-      - name: 🚀 Run deploy script on EC2 (MAX_WAIT=60)
-        shell: bash
+      - name: 🚀 Run deploy script on EC2 (MAX_WAIT=60 with Redis Secret)
         run: |
           ssh -o StrictHostKeyChecking=no "${{ secrets.EC2_USER }}"@"${{ secrets.EC2_HOST }}" \
-            "MAX_WAIT=60 bash /home/ubuntu/deploy_remote.sh"
+            "REDIS_PASSWORD='${{ secrets.REDIS_PASSWORD }}' MAX_WAIT=60 bash /home/ubuntu/deploy_remote.sh"
 
       - name: 📜 Show service status & logs (always)
         if: always()
