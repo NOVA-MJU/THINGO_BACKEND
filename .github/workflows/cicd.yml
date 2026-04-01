@@ -17,112 +17,107 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
-      # 원격에서 실행할 배포 스크립트를 로컬에 생성
       - name: 📝 Create remote deploy script (locally)
         shell: bash
         run: |
-          cat > deploy_remote.sh <<'EOS'
+          cat > deploy_remote.sh <<EOS
           #!/usr/bin/env bash
           set -Eeuo pipefail
 
-          # === 고정 변수(Secrets 추가 불필요) ===
           APP_DIR="/home/ubuntu/MJS_BACKEND"
           SERVICE_NAME="MJS_BACKEND"
           APP_PORT="8080"
           JAR_NAME="MJS_BACKEND-0.0.1-SNAPSHOT.jar"
-          JAR_PATH="${APP_DIR}/build/libs/${JAR_NAME}"
+          JAR_PATH="\${APP_DIR}/build/libs/\${JAR_NAME}"
 
-          # 헬스체크 최대 대기(초) - 기본 60초 (필요시 SSH 실행 시 MAX_WAIT=45처럼 덮어쓰기 가능)
-          MAX_WAIT="${MAX_WAIT:-60}"
+          MAX_WAIT="\${MAX_WAIT:-60}"
 
-          log(){ printf "\n[%(%F %T)T] %s\n" -1 "$*"; }
-          trap 'log "❌ 실패: 라인 $LINENO (명령: $BASH_COMMAND)"; exit 1' ERR
+          log(){ printf "\n[%(%F %T)T] %s\n" -1 "\$*"; }
+          trap 'log "❌ 실패: 라인 \$LINENO (명령: \$BASH_COMMAND)"; exit 1' ERR
 
-          log "who=$(whoami) host=$(hostname)"
+          log "who=\$(whoami) host=\$(hostname)"
           set -x
 
-          # 0) github 호스트키 등록(첫 실행시 프롬프트 방지)
           ssh-keyscan -H github.com | sudo tee -a /etc/ssh/ssh_known_hosts > /dev/null || true
 
-          # 1) 프로젝트 이동
-          cd "${APP_DIR}"
+          cd "\${APP_DIR}"
 
-          # 2) 메인 레포 최신화(안전: main 고정 + Fast-forward만)
           git fetch origin
           git checkout main
           git pull --ff-only origin main
 
-          # 3) 서브모듈 최신화 (branch=main 추적)
-          #    .gitmodules: url=git@github.com:NOVA-MJU/MJS-BACK-SECURITY.git, branch=main
           git submodule sync --recursive
           git submodule update --init --recursive --remote
           git submodule foreach --recursive 'git reset --hard || true'
           git submodule foreach --recursive 'git clean -fdx || true'
 
-          # 4) 빌드 (clean -> bootJar)
           chmod +x ./gradlew || true
-          ./gradlew --version
           ./gradlew clean bootJar -x test
 
-          # 5) 산출물 확인
-          test -f "${JAR_PATH}" || { set +x; log "❌ JAR 미존재: ${JAR_PATH}"; exit 1; }
+          test -f "\${JAR_PATH}" || { set +x; log "❌ JAR 미존재"; exit 1; }
 
-          # 6) systemd 재시작
+          # 🔥 핵심 1: docker-compose용 env 생성
+          echo "REDIS_PASSWORD=\${REDIS_PASSWORD}" > "\${APP_DIR}/.env"
+
+          # 🔥 핵심 2: Redis 재시작 (env 반영)
+          docker compose down
+          docker compose up -d
+
+          # systemd env도 유지 (Spring용)
+          echo "REDIS_PASSWORD=\${REDIS_PASSWORD}" | sudo tee /home/ubuntu/.env > /dev/null
+
           sudo systemctl daemon-reload || true
-          echo "REDIS_PASSWORD=${REDIS_PASSWORD}" | sudo tee /home/ubuntu/.env > /dev/null
-          sudo systemctl restart "${SERVICE_NAME}"
+          sudo systemctl restart "\${SERVICE_NAME}"
 
           set +x
-          # 7) 빠른 헬스체크 (조기성공: 로그/HTTP/포트 중 하나라도 OK, 최대 ${MAX_WAIT}s)
-          alive(){ systemctl is-active --quiet "${SERVICE_NAME}"; }
-          ready_by_log(){
-            # Spring Boot의 기동 완료 로그 시그널들
-            journalctl -u "${SERVICE_NAME}" -n 400 --no-pager 2>/dev/null | \
-              grep -Eq "Started .* in .* seconds|Tomcat started on port|Starting ProtocolHandler|Started MjsApplication"
-          }
-          ready_by_http(){ command -v curl >/dev/null 2>&1 && curl -fsS "http://127.0.0.1:${APP_PORT}/actuator/health" >/dev/null 2>&1; }
-          ready_by_port(){ (command -v ss >/dev/null 2>&1 && ss -lnt | grep -q ":${APP_PORT} ") || (command -v nc >/dev/null 2>&1 && nc -z 127.0.0.1 "${APP_PORT}"); }
 
-          log "🩺 헬스체크 시작(최대 ${MAX_WAIT}s)"
-          for i in $(seq 1 "${MAX_WAIT}"); do
+          alive(){ systemctl is-active --quiet "\${SERVICE_NAME}"; }
+
+          ready_by_log(){
+            journalctl -u "\${SERVICE_NAME}" -n 400 --no-pager 2>/dev/null | \
+            grep -Eq "Started .* in .* seconds|Tomcat started on port|Started MjsApplication"
+          }
+
+          ready_by_http(){
+            curl -fsS "http://127.0.0.1:\${APP_PORT}/actuator/health" >/dev/null 2>&1
+          }
+
+          log "🩺 헬스체크 시작"
+
+          for i in \$(seq 1 "\${MAX_WAIT}"); do
             if ! alive; then
-              log "❌ 서비스 비활성 (조기 종료)"
-              sudo systemctl --no-pager --full status "${SERVICE_NAME}" || true
-              journalctl -u "${SERVICE_NAME}" -n 200 --no-pager || true
+              log "❌ 서비스 비활성"
+              journalctl -u "\${SERVICE_NAME}" -n 200 --no-pager || true
               exit 1
             fi
-            if ready_by_log || ready_by_http || ready_by_port; then
-              log "✅ 준비 완료 (~${i}s)"
+
+            if ready_by_log || ready_by_http; then
+              log "✅ 준비 완료"
               exit 0
             fi
+
             sleep 1
           done
 
-          log "⚠️ ${MAX_WAIT}s 내 준비 신호 미확인 — 최근 상태/로그"
-          sudo systemctl --no-pager --full status "${SERVICE_NAME}" || true
-          journalctl -u "${SERVICE_NAME}" -n 200 --no-pager || true
+          log "⚠️ 헬스체크 실패"
+          journalctl -u "\${SERVICE_NAME}" -n 200 --no-pager || true
           exit 1
           EOS
 
           chmod +x deploy_remote.sh
-          ls -al deploy_remote.sh
-          head -n 20 deploy_remote.sh
 
       - name: 📤 Upload deploy script to EC2
-        shell: bash
         run: |
           scp -o StrictHostKeyChecking=no ./deploy_remote.sh \
             "${{ secrets.EC2_USER }}"@"${{ secrets.EC2_HOST }}":/home/ubuntu/deploy_remote.sh
 
-      - name: 🚀 Run deploy script on EC2 (MAX_WAIT=60 with Redis Secret)
+      - name: 🚀 Run deploy script on EC2
         run: |
           ssh -o StrictHostKeyChecking=no "${{ secrets.EC2_USER }}"@"${{ secrets.EC2_HOST }}" \
             "REDIS_PASSWORD='${{ secrets.REDIS_PASSWORD }}' MAX_WAIT=60 bash /home/ubuntu/deploy_remote.sh"
 
-      - name: 📜 Show service status & logs (always)
+      - name: 📜 Show logs
         if: always()
         run: |
-          ssh -o StrictHostKeyChecking=no "${{ secrets.EC2_USER }}"@"${{ secrets.EC2_HOST }}" \
-            "sudo systemctl --no-pager --full status MJS_BACKEND || true"
           ssh -o StrictHostKeyChecking=no "${{ secrets.EC2_USER }}"@"${{ secrets.EC2_HOST }}" \
             "journalctl -u MJS_BACKEND -n 120 --no-pager || true"
