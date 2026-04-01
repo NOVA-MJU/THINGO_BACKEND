@@ -38,39 +38,39 @@ jobs:
           log "who=\$(whoami) host=\$(hostname)"
           set -x
 
+          # github host key
           ssh-keyscan -H github.com | sudo tee -a /etc/ssh/ssh_known_hosts > /dev/null || true
 
           cd "\${APP_DIR}"
 
+          # 최신 코드 반영
           git fetch origin
           git checkout main
           git pull --ff-only origin main
 
+          # submodule 최신화
           git submodule sync --recursive
           git submodule update --init --recursive --remote
           git submodule foreach --recursive 'git reset --hard || true'
           git submodule foreach --recursive 'git clean -fdx || true'
 
+          # 빌드
           chmod +x ./gradlew || true
           ./gradlew clean bootJar -x test
 
+          # jar 체크
           test -f "\${JAR_PATH}" || { set +x; log "❌ JAR 미존재"; exit 1; }
 
-          # 🔥 핵심 1: docker-compose용 env 생성
-          echo "REDIS_PASSWORD=\${REDIS_PASSWORD}" > "\${APP_DIR}/.env"
-
-          # 🔥 핵심 2: Redis 재시작 (env 반영)
-          docker-compose down
-          docker-compose up -d
-
-          # systemd env도 유지 (Spring용)
+          # 🔥 Spring용 env (필수)
           echo "REDIS_PASSWORD=\${REDIS_PASSWORD}" | sudo tee /home/ubuntu/.env > /dev/null
 
+          # 🔥 Spring만 재시작 (Docker 건드리지 않음)
           sudo systemctl daemon-reload || true
           sudo systemctl restart "\${SERVICE_NAME}"
 
           set +x
 
+          # 헬스체크
           alive(){ systemctl is-active --quiet "\${SERVICE_NAME}"; }
 
           ready_by_log(){
