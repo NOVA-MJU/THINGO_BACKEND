@@ -13,6 +13,9 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -38,7 +41,24 @@ public class WeeklyMenuService {
         List<WeeklyMenu> weeklyMenus = new ArrayList<>();
 
         try {
-            Document doc = Jsoup.connect(url).get();
+            Document doc;
+
+            LocalDate today = LocalDate.now();
+            DayOfWeek dayOfWeek = today.getDayOfWeek();
+
+            if (dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY) {
+                LocalDate currentWeekMonday = today.minusDays(dayOfWeek == DayOfWeek.SATURDAY ? 5 : 6);
+                String mondayParam = currentWeekMonday.format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+
+                log.info("주말이므로 다음 주 식단 페이지를 직접 요청합니다. monday={}, week=next", mondayParam);
+
+                doc = Jsoup.connect("https://www.mju.ac.kr/diet/mjukr/10/view.do")
+                        .data("monday", mondayParam)
+                        .data("week", "next")
+                        .post();
+            } else {
+                doc = Jsoup.connect(url).get();
+            }
             Element tableWrap = doc.selectFirst(".tableWrap.marT50");
 
             if (tableWrap == null) {
@@ -127,13 +147,42 @@ public class WeeklyMenuService {
     }
 
     //DB에서 전체 식단 데이터를 가져오는 메서드
-    public List<WeeklyMenuResponseDTO> getAllWeeklyMenus(){
+    public List<WeeklyMenuResponseDTO> getAllWeeklyMenus() {
         List<WeeklyMenu> menus = menuRepository.findAll();
 
-        if (menus.isEmpty()){
+        if (menus.isEmpty()) {
             throw new WeeklyMenuNotFoundException("저장된 식단 정보가 없습니다.", ErrorCode.WEEKLYMENU_NOT_FOUND);
         }
-        return WeeklyMenuResponseDTO.fromEntityToList(menus);
+
+        LocalDate today = LocalDate.now();
+        DayOfWeek dayOfWeek = today.getDayOfWeek();
+
+        LocalDate targetDate;
+        if (dayOfWeek == DayOfWeek.SATURDAY) {
+            targetDate = today.plusDays(2); // 다음주 월요일
+        } else if (dayOfWeek == DayOfWeek.SUNDAY) {
+            targetDate = today.plusDays(1); // 다음주 월요일
+        } else {
+            targetDate = today; // 평일은 오늘
+        }
+
+        String targetDateText = formatMenuDate(targetDate);
+
+        List<WeeklyMenu> filteredMenus = menus.stream()
+                .filter(menu -> menu.getDate().equals(targetDateText))
+                .toList();
+
+        if (filteredMenus.isEmpty()) {
+            throw new WeeklyMenuNotFoundException("해당 날짜의 식단 정보가 없습니다.", ErrorCode.WEEKLYMENU_NOT_FOUND);
+        }
+
+        return WeeklyMenuResponseDTO.fromEntityToList(filteredMenus);
+    }
+
+    private String formatMenuDate(LocalDate date) {
+        String[] dayNames = {"월", "화", "수", "목", "금", "토", "일"};
+        String dayName = dayNames[date.getDayOfWeek().getValue() - 1];
+        return String.format("%02d.%02d (%s)", date.getMonthValue(), date.getDayOfMonth(), dayName);
     }
 }
 

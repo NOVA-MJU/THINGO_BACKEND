@@ -93,11 +93,15 @@ public class SchedulerService {
     }
 
     //식단 데이터 크롤링 스케줄링 (매주 토, 일, 월 19:00 실행)
+    //@Scheduled(cron = "0 55 22 * * 6") // 테스트 추가
+    @Scheduled(cron = "0 0 22 * * 5") // 매주 금요일 22:00시 추가
+    @Scheduled(cron = "0 0 10 * * 6") // 매주 토요일 10:00 추가 (금요일에 안올라왔을 경우)
+    @Scheduled(cron = "0 0 14 * * 6") // 매주 토요일 14:00 추가 (금요일에 안올라왔을 경우)
     @Scheduled(cron = "0 0 19 * * 6") // 매주 토요일 19:00 실행
     @Scheduled(cron = "0 0 19 * * 7") // 매주 일요일 19:00 실행
     @Scheduled(cron = "0 0 19 * * 1") // 매주 월요일 19:00 실행
     public void scheduledCrawlWeeklyMenu() {
-        log.info("[스케쥴러] 매주 토, 일, 월 19시에 식단 크롤링 실행");
+        log.info("[스케쥴러] 매주 토, 일, 월 19시와 추가로 금 22시, 토 10시, 14시에 식단 크롤링 실행");
         CompletableFuture.runAsync(() -> {
             try {
                 weeklyMenuService.crawlWeeklyMenu();
