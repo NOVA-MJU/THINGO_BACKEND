@@ -1,6 +1,5 @@
 package nova.mjs.domain.thingo.realtimeKeyword;
 
-import lombok.RequiredArgsConstructor;
 import nova.mjs.domain.thingo.ElasticSearch.Repository.PostgresUnifiedSearchRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -13,13 +12,18 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-@RequiredArgsConstructor
 public class RealtimeKeywordService {
 
     private final PostgresUnifiedSearchRepository postgresUnifiedSearchRepository;
-
-    @Qualifier("keywordRedisTemplate")
     private final RedisTemplate<String, String> redisTemplate;
+
+    public RealtimeKeywordService(
+            PostgresUnifiedSearchRepository postgresUnifiedSearchRepository,
+            @Qualifier("keywordRedisTemplate") RedisTemplate<String, String> redisTemplate
+    ) {
+        this.postgresUnifiedSearchRepository = postgresUnifiedSearchRepository;
+        this.redisTemplate = redisTemplate;
+    }
 
     private static final String ZSET_KEY = "realtime_keywords";
     private static final String LIST_KEY_PREFIX = "search:history";
