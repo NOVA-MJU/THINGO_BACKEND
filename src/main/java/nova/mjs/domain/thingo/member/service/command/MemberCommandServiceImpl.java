@@ -81,7 +81,7 @@ public class MemberCommandServiceImpl implements MemberCommandService {
 
         // Access Token & Refresh Token 생성
         String accessToken = jwtUtil.generateAccessToken(userId, email, role);
-        String refreshToken = jwtUtil.generateRefreshToken(userId, email);
+        String refreshToken = jwtUtil.generateRefreshToken(userId, email, role);
 
         // 응답 DTO 반환
         return AuthDTO.LoginResponseDTO.builder()

@@ -53,10 +53,11 @@ public class JwtUtil {
     }
 
     //JWT Refresh Token 생성
-    public String generateRefreshToken(UUID uuid, String email) {
+    public String generateRefreshToken(UUID uuid, String email, String role) {
         return Jwts.builder()
                 .setSubject(uuid.toString())  // 사용자 uuid
                 .claim("email", email)
+                .claim("role", role)  // 사용자 역할
                 .setId(UUID.randomUUID().toString())  // JWT 고유 식별자 (JTI) - 블랙리스트 관리 가능
                 .setIssuedAt(new Date())  // 발행 시간
                 .setExpiration(new Date(System.currentTimeMillis() + refreshTokenExpiration))  // 만료 시간
@@ -154,14 +155,13 @@ public class JwtUtil {
     }
 
     // Access Token 재발급
-    // Access Token 재발급
     public AuthDTO.TokenResponseDTO reissueToken(String refreshToken) {
 
         if (refreshToken == null || refreshToken.isBlank()) {
             throw new TokenNotProvidedException("Refresh Token이 제공되지 않았습니다.");
         }
 
-        // 🔹 Bearer 강제 제거 (AccessToken과 정책 분리)
+        // Bearer 강제 제거 (AccessToken과 정책 분리)
         String token = refreshToken.trim();
 
         // 혹시 모를 Bearer 접두어 방어적 제거

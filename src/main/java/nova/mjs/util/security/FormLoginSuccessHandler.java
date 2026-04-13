@@ -46,7 +46,7 @@ public class FormLoginSuccessHandler implements AuthenticationSuccessHandler {//
 
         //JWT 생성
         String accessToken = jwtUtil.generateAccessToken(uuid, email, role);
-        String refreshToken = jwtUtil.generateRefreshToken(uuid, email);
+        String refreshToken = jwtUtil.generateRefreshToken(uuid, email, role);
 
         ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken)
                 .httpOnly(true)
