@@ -44,8 +44,14 @@ bin/
 /dist/
 /nbdist/
 /.nb-gradle/
+.gradle-local/
 
 ### VS Code ###
 .vscode/
 /bin/
 /logs/application.log
+# Added by code-review-graph
+.code-review-graph/
+
+.claude/settings.local.json
+.claude/config.json

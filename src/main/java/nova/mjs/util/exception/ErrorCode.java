@@ -85,7 +85,12 @@ public enum ErrorCode {
     MENTOR_NOT_FOUND(HttpStatus.NOT_FOUND,"MENTOR_NOT_FOUND" ,"[MJS] 멘토 정보를 찾을 수 없습니다." ),
 
     // 명대방송국 관련 에러
-    BROADCAST_SYNC_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "BROADCAST_SYNC_FAILED", "[MJS] Broadcast 동기화에 실패했습니다.");
+    BROADCAST_SYNC_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "BROADCAST_SYNC_FAILED", "[MJS] Broadcast 동기화에 실패했습니다."),
+
+    // 버스 도착 정보 관련 에러
+    BUS_ARRIVAL_API_CALL_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "BUS_ARRIVAL_API_CALL_FAILED", "[MJS] 버스 도착 정보 API 호출 중 오류가 발생했습니다."),
+    BUS_ARRIVAL_PARSE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "BUS_ARRIVAL_PARSE_FAILED", "[MJS] 버스 도착 정보 파싱 중 오류가 발생했습니다."),
+    BUS_ARRIVAL_NOT_FOUND(HttpStatus.NOT_FOUND, "BUS_ARRIVAL_NOT_FOUND", "[MJS] 해당 정류장의 버스 도착 정보를 찾을 수 없습니다.");
 
     private final HttpStatus status;
     private final String error;
