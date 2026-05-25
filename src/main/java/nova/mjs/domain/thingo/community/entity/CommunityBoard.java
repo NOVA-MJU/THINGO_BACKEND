@@ -157,4 +157,11 @@ public class CommunityBoard extends BaseEntity {
         this.published = isPublished;
     }
 
+    public void increaseViewCount() {
+        if (this.viewCount == null) {
+            this.viewCount = 0;
+        }
+        this.viewCount++;
+    }
+
 }

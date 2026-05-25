@@ -87,6 +87,9 @@ public interface CommunityBoardRepository extends JpaRepository<CommunityBoard, 
             Pageable pageable
     );
 
+    @Query("SELECT c FROM CommunityBoard c ORDER BY c.viewCount DESC")
+    List<CommunityBoard> findHotBoards(Pageable pageable);
+
     /**
      * ===== 일반글 / 전체글 조회 =====
      *

@@ -434,6 +434,25 @@ public class CommunityBoardServiceImpl implements CommunityBoardService {
         log.debug("게시글 삭제 성공. uuid={}, requester={}", uuid, emailId);
     }
 
+    @Override
+    public List<CommunityBoardResponse.SummaryDTO> getHotBoards() {
+        PageRequest pageRequest = PageRequest.of(0, 2);
+        List<CommunityBoard> hotBoards = communityBoardRepository.findHotBoards(pageRequest);
+
+        List<CommunityBoardResponse.SummaryDTO> result = new ArrayList<>();
+        for (CommunityBoard board : hotBoards) {
+            result.add(CommunityBoardResponse.SummaryDTO.fromEntityPreview(
+                    board,
+                    board.getLikeCount(),
+                    board.getCommentCount(),
+                    false,
+                    true
+            ));
+        }
+
+        return result;
+    }
+
     private CommunityBoard getExistingBoard(UUID uuid) {
         return communityBoardRepository.findByUuid(uuid)
                 .orElseThrow(CommunityNotFoundException::new);

@@ -5,6 +5,7 @@ import nova.mjs.domain.thingo.community.DTO.CommunityBoardResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -31,4 +32,7 @@ public interface CommunityBoardService {
 
     // 게시판 삭제
     void deleteBoard(UUID uuid, String email);
+
+    // HOT 게시판 조회
+    List<CommunityBoardResponse.SummaryDTO> getHotBoards();
 }

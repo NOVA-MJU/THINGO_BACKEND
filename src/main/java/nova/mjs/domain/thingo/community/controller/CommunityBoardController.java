@@ -155,4 +155,14 @@ public class CommunityBoardController {
 
         return ResponseEntity.noContent().build();
     }
+
+    /**
+     * 6. 핫 게시글 조회
+     */
+    @GetMapping("/hot")
+    public ApiResponse<List<CommunityBoardResponse.SummaryDTO>> getHotBoards() {
+        List<CommunityBoardResponse.SummaryDTO> response = communityBoardServiceImpl.getHotBoards();
+        return ApiResponse.success(response);
+    }
+
 }
