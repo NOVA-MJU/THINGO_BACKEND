@@ -4,8 +4,11 @@ import lombok.RequiredArgsConstructor;
 import nova.mjs.domain.thingo.notice.service.NoticeCrawlingService;
 import nova.mjs.domain.thingo.notice.service.NoticeService;
 import nova.mjs.domain.thingo.notice.dto.NoticeResponseDto;
+import nova.mjs.util.response.ApiResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -49,5 +52,11 @@ public class NoticeController {
             @RequestParam(value = "sort", defaultValue = "desc") String sort
     ) {
         return noticeService.getNotices(category, year, page, size, sort);
+    }
+
+    @GetMapping("/hot")
+    public ApiResponse<List<NoticeResponseDto.Summary>> getHotNotices() {
+        List<NoticeResponseDto.Summary> response = noticeService.getHotNotices();
+        return ApiResponse.success(response);
     }
 }

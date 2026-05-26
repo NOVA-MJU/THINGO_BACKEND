@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -36,6 +37,10 @@ public interface NoticeRepository extends JpaRepository<Notice, Long> {
             LocalDateTime end,
             Pageable pageable
     );
+
+    // 조회수 기준 내림차순 조회
+    @Query("SELECT n FROM Notice n ORDER BY n.viewCount DESC")
+    List<Notice> findHotNotices(Pageable pageable);
 
     // =========================
     // 크롤링 중 중복/교체 판단용

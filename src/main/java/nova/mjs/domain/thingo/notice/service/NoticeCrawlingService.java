@@ -215,6 +215,21 @@ public class NoticeCrawlingService {
         String rawTitle = row.select(".artclLinkView strong").text();
         String rawLink = row.select(".artclLinkView").attr("href");
 
+        Elements tds = row.select("td");
+        String rawViewCount = "0";
+
+        if (tds.size() >= 6) {
+            rawViewCount = tds.get(5).text();
+        } else if (!tds.isEmpty()) {
+            rawViewCount = tds.last().text();
+        }
+
+        int viewCount = 0;
+        String numbersOnly = rawViewCount.replaceAll("[^0-9]", "");
+        if (!numbersOnly.isEmpty()) {
+            viewCount = Integer.parseInt(numbersOnly);
+        }
+
         LocalDateTime date = normalizeDate(rawDate);
         String title = normalizeTitle(rawTitle);
 
@@ -333,7 +348,8 @@ public class NoticeCrawlingService {
                         content,
                         date,
                         category,
-                        finalUrl
+                        finalUrl,
+                        viewCount
                 )
         );
 

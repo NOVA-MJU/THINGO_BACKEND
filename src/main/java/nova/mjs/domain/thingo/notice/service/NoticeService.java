@@ -1,6 +1,8 @@
 package nova.mjs.domain.thingo.notice.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 import nova.mjs.domain.thingo.notice.dto.NoticeResponseDto;
@@ -65,5 +67,17 @@ public class NoticeService {
 
         return notices.map(NoticeResponseDto.Summary::fromEntity);
 
+    }
+
+    public List<NoticeResponseDto.Summary> getHotNotices() {
+        PageRequest pageRequest = PageRequest.of(0, 6);
+        List<Notice> hotNotices = noticeRepository.findHotNotices(pageRequest);
+
+        List<NoticeResponseDto.Summary> result = new ArrayList<>();
+        for (Notice notice : hotNotices) {
+            result.add(NoticeResponseDto.Summary.fromEntity(notice));
+        }
+
+        return result;
     }
 }
