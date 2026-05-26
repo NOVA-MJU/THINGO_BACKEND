@@ -238,6 +238,28 @@
         }
       }
     },
+    "/boards/hot": {
+      "get": {
+        "tags": [
+          "Board"
+        ],
+        "summary": "HOT 게시글 조회",
+        "description": "메인페이지용 조회수 기준 인기 게시글 2개를 고정으로 조회합니다.",
+        "operationId": "getHotBoards",
+        "responses": {
+          "200": {
+            "description": "API 요청 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HotBoardsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/boards/{boardUUID}": {
       "get": {
         "tags": ["Board"],
@@ -703,6 +725,26 @@
       }
     },
     "schemas": {
+      "HotBoardsResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "API 요청 성공"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BoardSummary"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-05-19T17:40:49.822003"
+          }
+        }
+      },
       "ApiSuccessMessage": {
         "type": "object",
         "properties": {
