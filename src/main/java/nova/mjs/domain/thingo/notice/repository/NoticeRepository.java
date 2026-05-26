@@ -38,9 +38,9 @@ public interface NoticeRepository extends JpaRepository<Notice, Long> {
             Pageable pageable
     );
 
-    // 조회수 기준 내림차순 조회
-    @Query("SELECT n FROM Notice n ORDER BY n.viewCount DESC")
-    List<Notice> findHotNotices(Pageable pageable);
+    // 조회수 기준 내림차순 조회 (한달 이내 공지사항)
+    @Query("SELECT n FROM Notice n WHERE n.date >= :startDate ORDER BY n.viewCount DESC, n.date DESC")
+    List<Notice> findHotNoticesWithinMonth(@Param("startDate") LocalDateTime startDate, Pageable pageable);
 
     // =========================
     // 크롤링 중 중복/교체 판단용

@@ -69,9 +69,13 @@ public class NoticeService {
 
     }
 
+    @Transactional(readOnly = true)
     public List<NoticeResponseDto.Summary> getHotNotices() {
+        LocalDateTime oneMonthAgo = LocalDateTime.now().minusMonths(1);
+
         PageRequest pageRequest = PageRequest.of(0, 6);
-        List<Notice> hotNotices = noticeRepository.findHotNotices(pageRequest);
+
+        List<Notice> hotNotices = noticeRepository.findHotNoticesWithinMonth(oneMonthAgo, pageRequest);
 
         List<NoticeResponseDto.Summary> result = new ArrayList<>();
         for (Notice notice : hotNotices) {
