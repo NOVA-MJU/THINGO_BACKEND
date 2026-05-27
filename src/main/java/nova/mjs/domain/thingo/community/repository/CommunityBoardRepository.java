@@ -87,7 +87,26 @@ public interface CommunityBoardRepository extends JpaRepository<CommunityBoard, 
             Pageable pageable
     );
 
-    @Query("SELECT c FROM CommunityBoard c ORDER BY c.viewCount DESC")
+    /**
+     * ===== HOT 게시글 조회 =====
+     *
+     * 정책
+     * - 전체 기간 공개글(published=true) 대상
+     * - 점수 = viewCount + 2 * likeCount, DESC
+     * - 동률은 createdAt DESC
+     * - Pageable로 N(프론트에서 size 지정, 기본 7) 제어
+     *
+     * 주의
+     * - author EntityGraph로 N+1 방지 (DTO 변환 시 nickname 접근)
+     * - 추후 슬라이딩 윈도우 도입 시 일별 집계 테이블 + 별도 쿼리로 분리 예정
+     */
+    @EntityGraph(attributePaths = "author")
+    @Query("""
+        SELECT c
+        FROM CommunityBoard c
+        WHERE c.published = true
+        ORDER BY (c.viewCount + 2 * c.likeCount) DESC, c.createdAt DESC
+    """)
     List<CommunityBoard> findHotBoards(Pageable pageable);
 
     /**

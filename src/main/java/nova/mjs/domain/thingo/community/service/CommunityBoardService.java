@@ -33,6 +33,6 @@ public interface CommunityBoardService {
     // 게시판 삭제
     void deleteBoard(UUID uuid, String email);
 
-    // HOT 게시판 조회
-    List<CommunityBoardResponse.SummaryDTO> getHotBoards();
+    // HOT 게시판 조회 (페이지/사이즈는 프론트 지정, 기본 size=7)
+    List<CommunityBoardResponse.SummaryDTO> getHotBoards(Pageable pageable);
 }
