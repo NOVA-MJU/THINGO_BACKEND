@@ -39,7 +39,14 @@ public interface NoticeRepository extends JpaRepository<Notice, Long> {
     );
 
     // 조회수 기준 내림차순 조회 (한달 이내 공지사항)
-    @Query("SELECT n FROM Notice n WHERE n.date >= :startDate ORDER BY n.viewCount DESC, n.date DESC")
+    // COALESCE(viewCount, 0): viewCount가 NULL인 row를 0으로 간주하여
+    // PostgreSQL 기본 동작(DESC 시 NULLS FIRST)에 의해 NULL이 상단에 노출되는 것을 방지
+    @Query("""
+        SELECT n
+        FROM Notice n
+        WHERE n.date >= :startDate
+        ORDER BY COALESCE(n.viewCount, 0) DESC, n.date DESC
+    """)
     List<Notice> findHotNoticesWithinMonth(@Param("startDate") LocalDateTime startDate, Pageable pageable);
 
     // =========================
