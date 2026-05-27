@@ -600,6 +600,45 @@
         }
       }
     },
+
+    "/notices/hot": {
+      "get": {
+        "tags": ["Notice"],
+        "summary": "인기 공지사항 조회",
+        "description": "최근 1개월 이내 공지 중 조회수(viewCount) 내림차순, 동률은 date 내림차순으로 정렬한 HOT 공지 목록입니다. 페이지/사이즈는 프론트가 지정하며 기본 size=6 입니다.",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "0-base 페이지 번호 (기본 0)",
+            "schema": { "type": "integer", "default": 0, "minimum": 0 }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "description": "한 페이지 크기 (기본 6)",
+            "schema": { "type": "integer", "default": 6, "minimum": 1 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "API 요청 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiSuccess_HotNoticeList"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "NOTICE_NOT_FOUND: 해당 조건의 공지사항을 찾을 수 없습니다."
+          }
+        }
+      }
+    },
   "/calendar": {
     "get": {
       "tags": ["MJU_Calendar"],
@@ -1120,7 +1159,36 @@
       }
     },
     "schemas": {
-
+      "ApiSuccess_HotNoticeList": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "API 요청 성공"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NoticeSummary"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-05-19T17:40:49.822003"
+          }
+        }
+      },
+      "NoticeSummary": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string" },
+          "date": { "type": "string", "format": "date-time" },
+          "category": { "type": "string" },
+          "link": { "type": "string" },
+          "viewCount": { "type": "integer" }
+        }
+      },
       "MenuItem": {
         "type": "object",
         "properties": {

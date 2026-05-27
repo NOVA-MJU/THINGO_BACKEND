@@ -238,6 +238,44 @@
         }
       }
     },
+    "/boards/hot": {
+      "get": {
+        "tags": [
+          "Board"
+        ],
+        "summary": "HOT 게시글 조회",
+        "description": "메인페이지용 HOT 게시글 목록입니다. 정책: 전체 기간 공개글(published=true) 대상, 점수 = viewCount + 2 * likeCount DESC + 동률 시 createdAt DESC 정렬. 페이지/사이즈는 프론트가 지정하며 기본 size=7 입니다.",
+        "operationId": "getHotBoards",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "default": 0, "minimum": 0 },
+            "description": "0-base 페이지 번호 (기본 0)"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "default": 7, "minimum": 1 },
+            "description": "한 페이지 크기 (기본 7)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "API 요청 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HotBoardsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/boards/{boardUUID}": {
       "get": {
         "tags": ["Board"],
@@ -703,6 +741,26 @@
       }
     },
     "schemas": {
+      "HotBoardsResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "API 요청 성공"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BoardSummary"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-05-19T17:40:49.822003"
+          }
+        }
+      },
       "ApiSuccessMessage": {
         "type": "object",
         "properties": {

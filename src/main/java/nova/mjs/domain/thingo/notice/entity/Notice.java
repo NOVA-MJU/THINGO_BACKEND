@@ -35,13 +35,16 @@ public class Notice {
     @Column(nullable = false, length = 1000)
     private String link;        // 공지 링크
 
-    public static Notice createNotice(String title, String content, LocalDateTime date, String type, String link) {
+    private Integer viewCount;  // 공지 조회수
+
+    public static Notice createNotice(String title, String content, LocalDateTime date, String type, String link, Integer viewCount) {
         return Notice.builder()
                 .title(title)
                 .content(content)
                 .date(date)
                 .category(type)
                 .link(link)
+                .viewCount(viewCount)
                 .build();
     }
 

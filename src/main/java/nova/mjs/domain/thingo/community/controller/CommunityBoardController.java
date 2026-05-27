@@ -4,9 +4,8 @@ import lombok.RequiredArgsConstructor;
 import nova.mjs.config.aop.LogExecutionTime;
 import nova.mjs.domain.thingo.community.DTO.CommunityBoardRequest;
 import nova.mjs.domain.thingo.community.DTO.CommunityBoardResponse;
-import nova.mjs.domain.thingo.community.service.CommunityBoardServiceImpl;
+import nova.mjs.domain.thingo.community.service.CommunityBoardService;
 import nova.mjs.util.response.ApiResponse;
-import nova.mjs.util.s3.S3ServiceImpl;
 import nova.mjs.util.security.UserPrincipal;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,8 +26,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CommunityBoardController {
 
-    private final CommunityBoardServiceImpl communityBoardServiceImpl;
-    private final S3ServiceImpl s3ServiceImpl;
+    private final CommunityBoardService communityBoardService;
 
     private static final List<String> ALLOWED_SORT_FIELDS =
             Arrays.asList("createdAt", "title", "likeCount", "viewCount");
@@ -67,7 +65,7 @@ public class CommunityBoardController {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
 
         Page<CommunityBoardResponse.SummaryDTO> boards =
-                communityBoardServiceImpl.getBoards(pageable, email, communityCategory);
+                communityBoardService.getBoards(pageable, email, communityCategory);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -85,7 +83,7 @@ public class CommunityBoardController {
         String email = (userPrincipal != null) ? userPrincipal.getUsername() : null;
 
         CommunityBoardResponse.DetailDTO board =
-                communityBoardServiceImpl.getBoardDetail(boardUuid, email);
+                communityBoardService.getBoardDetail(boardUuid, email);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -113,7 +111,7 @@ public class CommunityBoardController {
         String email = (userPrincipal != null) ? userPrincipal.getUsername() : null;
 
         CommunityBoardResponse.DetailDTO board =
-                communityBoardServiceImpl.createBoard(request, email);
+                communityBoardService.createBoard(request, email);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -133,7 +131,7 @@ public class CommunityBoardController {
         String email = (userPrincipal != null) ? userPrincipal.getUsername() : null;
 
         CommunityBoardResponse.DetailDTO board =
-                communityBoardServiceImpl.updateBoard(boardUuid, request, email);
+                communityBoardService.updateBoard(boardUuid, request, email);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -151,8 +149,28 @@ public class CommunityBoardController {
     ) {
         String email = (userPrincipal != null) ? userPrincipal.getUsername() : null;
 
-        communityBoardServiceImpl.deleteBoard(boardUuid, email);
+        communityBoardService.deleteBoard(boardUuid, email);
 
         return ResponseEntity.noContent().build();
     }
+
+    /**
+     * 6. 핫 게시글 조회
+     *
+     * - 프론트에서 page/size 지정 가능
+     * - 기본 size 7
+     * - 정렬: viewCount DESC, createdAt DESC (서비스 내부 고정)
+     */
+    @GetMapping("/hot")
+    public ResponseEntity<ApiResponse<List<CommunityBoardResponse.SummaryDTO>>> getHotBoards(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "7") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        List<CommunityBoardResponse.SummaryDTO> response = communityBoardService.getHotBoards(pageable);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApiResponse.success(response));
+    }
+
 }

@@ -31,6 +31,7 @@ public class NoticeResponseDto {
         private LocalDateTime date;    // 공지 날짜
         private String category;       // 공지 카테고리
         private String link;           // 공지 링크
+        private Integer viewCount;     // 공지 조회수
 
         /**
          * Entity → 목록 DTO 변환
@@ -41,6 +42,7 @@ public class NoticeResponseDto {
                     .date(notice.getDate())
                     .category(notice.getCategory())
                     .link(notice.getLink())
+                    .viewCount(notice.getViewCount())
                     .build();
         }
     }

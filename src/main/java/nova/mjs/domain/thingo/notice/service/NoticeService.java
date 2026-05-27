@@ -1,6 +1,7 @@
 package nova.mjs.domain.thingo.notice.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 import nova.mjs.domain.thingo.notice.dto.NoticeResponseDto;
@@ -65,5 +66,21 @@ public class NoticeService {
 
         return notices.map(NoticeResponseDto.Summary::fromEntity);
 
+    }
+
+    /**
+     * HOT 공지 조회
+     *
+     * 정책
+     * - 최근 1개월(date >= now - 1m) 이내 공지만 대상
+     * - viewCount DESC, 동률은 date DESC (리포지토리 쿼리 고정)
+     * - 페이지/사이즈는 프론트가 지정 (기본 size=6은 Controller 기본값)
+     */
+    public List<NoticeResponseDto.Summary> getHotNotices(Pageable pageable) {
+        LocalDateTime oneMonthAgo = LocalDateTime.now().minusMonths(1);
+
+        return noticeRepository.findHotNoticesWithinMonth(oneMonthAgo, pageable).stream()
+                .map(NoticeResponseDto.Summary::fromEntity)
+                .toList();
     }
 }

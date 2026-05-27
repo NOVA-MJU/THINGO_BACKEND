@@ -4,8 +4,15 @@ import lombok.RequiredArgsConstructor;
 import nova.mjs.domain.thingo.notice.service.NoticeCrawlingService;
 import nova.mjs.domain.thingo.notice.service.NoticeService;
 import nova.mjs.domain.thingo.notice.dto.NoticeResponseDto;
+import nova.mjs.util.response.ApiResponse;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -49,5 +56,24 @@ public class NoticeController {
             @RequestParam(value = "sort", defaultValue = "desc") String sort
     ) {
         return noticeService.getNotices(category, year, page, size, sort);
+    }
+
+    /**
+     * HOT 공지 조회
+     *
+     * - 프론트에서 page/size 지정 가능
+     * - 기본 size 6
+     * - 정책: 최근 1개월 이내 공지 중 viewCount DESC, date DESC (서비스/리포지토리 고정)
+     */
+    @GetMapping("/hot")
+    public ResponseEntity<ApiResponse<List<NoticeResponseDto.Summary>>> getHotNotices(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "7") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        List<NoticeResponseDto.Summary> response = noticeService.getHotNotices(pageable);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApiResponse.success(response));
     }
 }

@@ -434,6 +434,36 @@ public class CommunityBoardServiceImpl implements CommunityBoardService {
         log.debug("게시글 삭제 성공. uuid={}, requester={}", uuid, emailId);
     }
 
+    /**
+     * HOT 게시글 조회
+     *
+     * 정책
+     * - 전체 기간 공개글(published=true) 대상
+     * - 점수 = viewCount + 2 * likeCount, DESC (동률은 createdAt DESC)
+     * - 페이지/사이즈는 프론트가 지정(기본 size=7은 Controller 기본값)
+     *
+     * 주의
+     * - author는 EntityGraph로 즉시 로딩하여 DTO 변환 시 N+1 차단.
+     * - 슬라이딩 윈도우(예: 최근 2주) 정책은 일별 집계 테이블 도입 후 별도 적용 예정.
+     */
+    @Override
+    public List<CommunityBoardResponse.SummaryDTO> getHotBoards(Pageable pageable) {
+        List<CommunityBoard> hotBoards = communityBoardRepository.findHotBoards(pageable);
+
+        List<CommunityBoardResponse.SummaryDTO> result = new ArrayList<>();
+        for (CommunityBoard board : hotBoards) {
+            result.add(CommunityBoardResponse.SummaryDTO.fromEntityPreview(
+                    board,
+                    board.getLikeCount(),
+                    board.getCommentCount(),
+                    false,
+                    true
+            ));
+        }
+
+        return result;
+    }
+
     private CommunityBoard getExistingBoard(UUID uuid) {
         return communityBoardRepository.findByUuid(uuid)
                 .orElseThrow(CommunityNotFoundException::new);
