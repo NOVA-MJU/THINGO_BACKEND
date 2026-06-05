@@ -34,10 +34,6 @@
     {
       "name": "Broadcast",
       "description": "명지대학교 방송국 영상 크롤링 및 목록 조회 기능"
-    },
-    {
-      "name": "D-Day",
-      "description": "학사일정 기반 디데이 조회 기능. 임박순 정렬, 기본 4개(프론트가 limit으로 조절)"
     }
   ],
   "paths": {
@@ -886,7 +882,7 @@
 
     "/ddays": {
       "get": {
-        "tags": ["D-Day"],
+        "tags": ["MJU_Calendar"],
         "summary": "디데이 목록 조회",
         "description": "끝나지 않은 학사일정(종료일 >= 오늘)을 임박순(카운트다운 대상일 오름차순)으로 정렬해 상위 `limit`개 반환합니다.\n\n- phase: UPCOMING(시작 전, 시작일까지) / ONGOING(진행 중, 종료일까지)\n- ddayValue = targetDate - 오늘 (예: 3 → D-3)\n- limit: 프론트가 노출 개수 지정, 미지정 시 기본 4개. 0 이하는 서버에서 기본값 처리\n- eventNameTruncated: 12자 초과 시 11자 + 말줄임표(…)",
         "parameters": [
