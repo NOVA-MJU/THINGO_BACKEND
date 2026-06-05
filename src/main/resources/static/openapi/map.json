@@ -1,0 +1,352 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "MJU Map & Bus API",
+    "version": "v1.0.0",
+    "description": "명지대 주변 정류장의 서울 버스 실시간 도착 정보를 제공하는 API입니다.\n\n## 개요\n- 공공데이터포털(data.go.kr) 서울 버스 도착 정보 API를 백엔드에서 중계합니다.\n- 프론트는 정류장 키(`A`/`B`)만 전달하면 되고, 실제 ARS ID와 서비스키는 백엔드가 보유/관리합니다.\n- DB 저장 없이 매 요청마다 외부 API를 실시간 호출합니다.\n\n## 고정 정류장 (백엔드 보유)\n| 키 | 방면 |\n|----|------|\n| A | DMC센트럴아이파크아파트 방면 |\n| B | 명지대삼거리 방면 |\n\n## 인증\n- 도착 정보 조회는 인증 불필요. 로그인 시 즐겨찾기 마킹/정렬이 적용됩니다.\n- 즐겨찾기 토글은 로그인 필요."
+  },
+  "servers": [
+    {
+      "url": "https://api.thingo.kr/api/v1",
+      "description": "운영 서버"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Bus Arrivals",
+      "description": "서울 버스 실시간 도착 정보 API. 공공데이터포털 `getStationByUid`를 백엔드에서 중계하여 노선 번호, 방면, 막차 시간, 남은 시간, 정류장 수, 혼잡도, 즐겨찾기 여부를 제공합니다."
+    }
+  ],
+  "paths": {
+    "/bus/arrivals": {
+      "get": {
+        "tags": ["Bus Arrivals"],
+        "summary": "실시간 버스 도착 정보 조회",
+        "operationId": "getBusArrivals",
+        "description": "정류장(A/B)의 실시간 버스 도착 정보를 반환합니다.\n\n### 사용 시나리오\n1. 지도에서 정류장(A 또는 B) 선택\n2. `station=A` 또는 `station=B`로 호출\n3. 응답의 `buses` 배열을 화면 목록으로 렌더링 (즐겨찾기 노선이 상단)\n\n### 혼잡도\n| 코드 | 한글 |\n|------|------|\n| 3 | 여유 |\n| 4 | 보통 |\n| 5 | 혼잡 |\n| 6 | 매우혼잡 |\n| 0 | (정보없음 → null) |",
+        "parameters": [
+          {
+            "name": "station",
+            "in": "query",
+            "required": true,
+            "description": "정류장 선택 키",
+            "schema": {
+              "type": "string",
+              "enum": ["A", "B"],
+              "example": "A"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "버스 도착 정보 반환 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseBusArrival"
+                },
+                "examples": {
+                  "stationA": {
+                    "summary": "정류장 A (station=A) 조회 예시",
+                    "value": {
+                      "status": "API 요청 성공",
+                      "data": {
+                        "arsId": "13195",
+                        "stationName": "명지대 (DMC센트럴아이파크아파트 방면)",
+                        "lat": 37.5815,
+                        "lng": 126.9187,
+                        "buses": [
+                          {
+                            "routeName": "7611",
+                            "direction": "여의도",
+                            "lastBusTime": "23:30",
+                            "favorite": true,
+                            "arrivals": []
+                          },
+                          {
+                            "routeName": "7612",
+                            "direction": "영등포구청역",
+                            "lastBusTime": "23:40",
+                            "favorite": false,
+                            "arrivals": [
+                              {
+                                "remainingTime": "5분 10초",
+                                "stationCount": "2정류장",
+                                "congestion": "보통"
+                              },
+                              {
+                                "remainingTime": "10분 20초",
+                                "stationCount": "4정류장",
+                                "congestion": "혼잡"
+                              }
+                            ]
+                          },
+                          {
+                            "routeName": "7734",
+                            "direction": "홍대입구역",
+                            "lastBusTime": "23:00",
+                            "favorite": false,
+                            "arrivals": [
+                              {
+                                "remainingTime": "곧 도착",
+                                "stationCount": null,
+                                "congestion": "여유"
+                              },
+                              {
+                                "remainingTime": "6분 55초",
+                                "stationCount": "4정류장",
+                                "congestion": "보통"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "timestamp": "2026-05-19T09:05:12"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "잘못된 정류장 키 (A/B 아님)",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+                "example": {
+                  "error": "BUS_STATION_NOT_FOUND",
+                  "message": "[MJS] 지원하지 않는 정류장입니다. (A 또는 B)",
+                  "status": 400
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "해당 정류장의 도착 예정 버스 없음",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+                "example": {
+                  "error": "BUS_ARRIVAL_NOT_FOUND",
+                  "message": "[MJS] 버스 도착 정보를 찾을 수 없습니다.",
+                  "status": 404
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "외부 공공데이터 API 호출 실패",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+                "example": {
+                  "error": "BUS_ARRIVAL_API_CALL_FAILED",
+                  "message": "[MJS] 버스 도착 정보 API 호출에 실패했습니다.",
+                  "status": 502
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bus/favorites": {
+      "post": {
+        "tags": ["Bus Arrivals"],
+        "summary": "버스 노선 즐겨찾기 토글",
+        "operationId": "toggleBusFavorite",
+        "description": "정류장(A/B)의 특정 노선을 즐겨찾기에 추가하거나 해제합니다.\n\n### 동작\n- 즐겨찾기가 없으면 등록(true), 이미 있으면 해제(false) - 토글 방식\n- 즐겨찾기한 노선은 `/bus/arrivals` 응답에서 상단 정렬되고 `favorite=true`로 표시됩니다.\n\n### 인증\n로그인 필요 (Bearer 토큰).",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "station",
+            "in": "query",
+            "required": true,
+            "description": "정류장 선택 키",
+            "schema": { "type": "string", "enum": ["A", "B"], "example": "A" }
+          },
+          {
+            "name": "routeName",
+            "in": "query",
+            "required": true,
+            "description": "버스 노선 번호",
+            "schema": { "type": "string", "example": "7611" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "토글 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "API 요청 성공" },
+                    "data": {
+                      "type": "boolean",
+                      "description": "true: 즐겨찾기 추가됨 / false: 즐겨찾기 해제됨",
+                      "example": true
+                    },
+                    "timestamp": { "type": "string", "format": "date-time", "example": "2026-05-19T09:05:12" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "잘못된 정류장 키 (A/B 아님)"
+          },
+          "401": {
+            "description": "미인증 (로그인 필요)"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Arrival": {
+        "type": "object",
+        "description": "도착 예정 버스 1대의 정보",
+        "properties": {
+          "remainingTime": {
+            "type": "string",
+            "description": "도착까지 남은 시간 ('m분 s초' 또는 '곧 도착')",
+            "example": "5분 10초"
+          },
+          "stationCount": {
+            "type": "string",
+            "nullable": true,
+            "description": "남은 정류장 수 (arrmsg '[n번째 전]' 파싱). 정보 없으면 null",
+            "example": "2정류장"
+          },
+          "congestion": {
+            "type": "string",
+            "nullable": true,
+            "description": "혼잡도 (코드 0=정보없음은 null)",
+            "enum": ["여유", "보통", "혼잡", "매우혼잡"],
+            "example": "보통"
+          }
+        },
+        "required": ["remainingTime"]
+      },
+      "BusItem": {
+        "type": "object",
+        "description": "개별 버스(노선) 도착 정보",
+        "properties": {
+          "routeName": {
+            "type": "string",
+            "description": "버스 노선 번호",
+            "example": "7612"
+          },
+          "direction": {
+            "type": "string",
+            "description": "버스 운행 방면 / 종점",
+            "example": "영등포구청역"
+          },
+          "lastBusTime": {
+            "type": "string",
+            "nullable": true,
+            "description": "막차 시간 'HH:mm'. 정보 없으면 null",
+            "example": "23:30"
+          },
+          "favorite": {
+            "type": "boolean",
+            "description": "로그인 사용자의 즐겨찾기 여부 (비로그인 시 false). true면 목록 상단 정렬",
+            "example": true
+          },
+          "arrivals": {
+            "type": "array",
+            "description": "도착 예정 버스 목록 (최대 2개). 비어있으면 '도착 예정 정보 없음' 표기",
+            "items": {
+              "$ref": "#/components/schemas/Arrival"
+            }
+          }
+        },
+        "required": ["routeName", "direction", "favorite", "arrivals"]
+      },
+      "BusArrivalResponse": {
+        "type": "object",
+        "description": "버스 도착 정보 응답 (정류장 정보 + 버스 목록)",
+        "properties": {
+          "arsId": {
+            "type": "string",
+            "description": "조회된 정류장 ARS ID (백엔드가 station 키로부터 해석)",
+            "example": "13195"
+          },
+          "stationName": {
+            "type": "string",
+            "description": "정류장 이름",
+            "example": "명지대 (DMC센트럴아이파크아파트 방면)"
+          },
+          "lat": {
+            "type": "number",
+            "format": "double",
+            "description": "정류장 위도",
+            "example": 37.5815
+          },
+          "lng": {
+            "type": "number",
+            "format": "double",
+            "description": "정류장 경도",
+            "example": 126.9187
+          },
+          "buses": {
+            "type": "array",
+            "description": "해당 정류장을 지나는 버스 도착 목록 (즐겨찾기 노선 상단)",
+            "items": {
+              "$ref": "#/components/schemas/BusItem"
+            }
+          }
+        },
+        "required": ["arsId", "stationName", "lat", "lng", "buses"]
+      },
+      "ApiResponseBusArrival": {
+        "type": "object",
+        "description": "버스 도착 정보 공통 응답 래퍼",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "API 요청 성공"
+          },
+          "data": {
+            "$ref": "#/components/schemas/BusArrivalResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-05-19T09:05:12"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "description": "에러 응답 형식",
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "에러 코드 식별자",
+            "example": "BUS_ARRIVAL_NOT_FOUND"
+          },
+          "message": {
+            "type": "string",
+            "description": "사용자 친화적 에러 메시지",
+            "example": "[MJS] 버스 도착 정보를 찾을 수 없습니다."
+          },
+          "status": {
+            "type": "integer",
+            "description": "HTTP 상태 코드",
+            "example": 404
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
