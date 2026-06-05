@@ -10,6 +10,7 @@ import nova.mjs.domain.thingo.weeklyMenu.repository.WeeklyMenuRepository;
 import org.jsoup.*;
 import org.jsoup.nodes.*;
 import org.jsoup.select.Elements;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -146,43 +147,16 @@ public class WeeklyMenuService {
         menuRepository.deleteAll();
     }
 
-    //DB에서 전체 식단 데이터를 가져오는 메서드
+    //DB에서 해당 주 전체 식단 데이터를 가져오는 메서드 (크롤링 시점 기준 1주일치)
     public List<WeeklyMenuResponseDTO> getAllWeeklyMenus() {
-        List<WeeklyMenu> menus = menuRepository.findAll();
+        // 크롤링 순서(월~금, 조/중/석)를 보존하기 위해 id 오름차순 정렬
+        List<WeeklyMenu> menus = menuRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
 
         if (menus.isEmpty()) {
             throw new WeeklyMenuNotFoundException("저장된 식단 정보가 없습니다.", ErrorCode.WEEKLYMENU_NOT_FOUND);
         }
 
-        LocalDate today = LocalDate.now();
-        DayOfWeek dayOfWeek = today.getDayOfWeek();
-
-        LocalDate targetDate;
-        if (dayOfWeek == DayOfWeek.SATURDAY) {
-            targetDate = today.plusDays(2); // 다음주 월요일
-        } else if (dayOfWeek == DayOfWeek.SUNDAY) {
-            targetDate = today.plusDays(1); // 다음주 월요일
-        } else {
-            targetDate = today; // 평일은 오늘
-        }
-
-        String targetDateText = formatMenuDate(targetDate);
-
-        List<WeeklyMenu> filteredMenus = menus.stream()
-                .filter(menu -> menu.getDate().equals(targetDateText))
-                .toList();
-
-        if (filteredMenus.isEmpty()) {
-            throw new WeeklyMenuNotFoundException("해당 날짜의 식단 정보가 없습니다.", ErrorCode.WEEKLYMENU_NOT_FOUND);
-        }
-
-        return WeeklyMenuResponseDTO.fromEntityToList(filteredMenus);
-    }
-
-    private String formatMenuDate(LocalDate date) {
-        String[] dayNames = {"월", "화", "수", "목", "금", "토", "일"};
-        String dayName = dayNames[date.getDayOfWeek().getValue() - 1];
-        return String.format("%02d.%02d (%s)", date.getMonthValue(), date.getDayOfMonth(), dayName);
+        return WeeklyMenuResponseDTO.fromEntityToList(menus);
     }
 }
 
