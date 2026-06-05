@@ -140,7 +140,7 @@ public class BusArrivalServiceImpl implements BusArrivalService {
     private SeoulBusArrivalApiDto callBusApi(String arsId) {
         try {
             String uri = String.format(
-                    "/getStationByUid?serviceKey=%s&arsId=%s&resultType=json",
+                    "/stationinfo/getStationByUid?serviceKey=%s&arsId=%s&resultType=json",
                     serviceKey, arsId
             );
 
