@@ -25,4 +25,7 @@ public interface MjuCalendarRepository extends JpaRepository<MjuCalendar, Long> 
     );
 
     Page<MjuCalendar> findByYear(int year, Pageable pageable);
+
+    // 디데이용: 아직 끝나지 않은 일정(종료일 >= 기준일)만, 임박순 정렬
+    List<MjuCalendar> findByEndDateGreaterThanEqualOrderByStartDateAscEndDateAscIdAsc(LocalDate today);
 }

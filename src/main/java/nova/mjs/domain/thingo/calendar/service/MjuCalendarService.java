@@ -36,6 +36,15 @@ public class MjuCalendarService {
     private final RestTemplate restTemplate;
     private final MjuCalendarRepository calendarRepository;
 
+    // 디데이 기능용: 기준일(today) 이후까지 진행되는(종료일 >= today) 일정만 임박순으로 반환
+    public List<MjuCalendarDTO> getOngoingAndUpcoming(LocalDate today) {
+        return calendarRepository
+                .findByEndDateGreaterThanEqualOrderByStartDateAscEndDateAscIdAsc(today)
+                .stream()
+                .map(MjuCalendarDTO::fromEntity)
+                .toList();
+    }
+
     public Page<MjuCalendarDTO> getCalendarsFiltered(Integer year, Pageable pageable) {
         Page<MjuCalendar> result = (year != null)
                 ? calendarRepository.findByYear(year, pageable)
