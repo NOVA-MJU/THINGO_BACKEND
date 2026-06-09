@@ -27,20 +27,23 @@
 ### Code.gs
 
 ```javascript
-const ENDPOINT_SYNC   = "https://thingo.kr/api/v1/sync/banners";
-const ENDPOINT_UPLOAD = "https://thingo.kr/api/v1/s3/upload";
+// API 서버는 api.thingo.kr (thingo.kr은 CDN이라 HTML을 돌려줌 - 절대 쓰지 말 것)
+const ENDPOINT_SYNC   = "https://api.thingo.kr/api/v1/sync/banners";
+const ENDPOINT_UPLOAD = "https://api.thingo.kr/api/v1/s3/upload";
 const SHEET_NAME = "배너";
 const HEADER = {
   title: "제목", oneLineIntro: "한줄소개", imageUrl: "이미지",
   category: "카테고리", linkUrl: "링크", displayOrder: "순서",
   active: "노출여부", startAt: "노출시작", endAt: "노출종료"
 };
+// 발행 전 반드시 채워져야 하는 필수 컬럼 (작성 시작한 행 기준)
+const REQUIRED = ["title", "imageUrl", "category"];
 
 function onOpen() {
   SpreadsheetApp.getUi().createMenu("배너")
     .addItem("① 시트 초기 세팅", "setupSheet")
     .addItem("이미지 업로드", "showUploadDialog")
-    .addItem("지금 동기화", "syncBanners")
+    .addItem("발행 (검증 후 반영)", "syncBanners")
     .addToUi();
 }
 
@@ -68,15 +71,18 @@ function getToken_() {
   return PropertiesService.getScriptProperties().getProperty("BANNER_SYNC_TOKEN");
 }
 
+// 발행: 미완성 행이 있으면 반영하지 않고(기존 데이터 유지) 어디가 비었는지 알려줌
 function syncBanners() {
+  const ui = SpreadsheetApp.getUi();
   const sheet = SpreadsheetApp.getActive().getSheetByName(SHEET_NAME);
   const values = sheet.getDataRange().getValues();
   const header = values[0];
   const col = {};
   Object.keys(HEADER).forEach(k => col[k] = header.indexOf(HEADER[k]));
-  if (col.title < 0) throw new Error("'제목' 헤더를 찾을 수 없습니다");
+  if (col.title < 0) { ui.alert("'제목' 헤더를 찾을 수 없습니다"); return; }
 
   const get = (r, k) => col[k] >= 0 ? r[col[k]] : "";
+  const isFilled = v => String(v == null ? "" : v).trim() !== "";
   const fmtDate = v => {
     if (!v) return "";
     if (Object.prototype.toString.call(v) === "[object Date]")
@@ -84,9 +90,19 @@ function syncBanners() {
     return String(v).trim();
   };
 
-  const rows = values.slice(1)
-    .filter(r => String(r[col.title]).trim() !== "")
-    .map(r => ({
+  const rows = [];
+  const errors = [];
+  for (let i = 1; i < values.length; i++) {     // i=0은 헤더
+    const r = values[i];
+    const started = REQUIRED.some(k => isFilled(get(r, k))); // 작성 시작한 행만 검사
+    if (!started) continue;                                   // 완전 빈 행은 무시
+
+    const missing = REQUIRED.filter(k => !isFilled(get(r, k))).map(k => HEADER[k]);
+    if (missing.length) {                                     // 작성 중(미완성) 행 발견
+      errors.push((i + 1) + "행: " + missing.join(", ") + " 비어있음");
+      continue;
+    }
+    rows.push({
       title: get(r, "title"),
       oneLineIntro: get(r, "oneLineIntro"),
       imageUrl: get(r, "imageUrl"),
@@ -96,7 +112,18 @@ function syncBanners() {
       active: (function(){ const v = get(r,"active"); return v !== false && String(v).toUpperCase() !== "FALSE"; })(),
       startAt: fmtDate(get(r, "startAt")),
       endAt: fmtDate(get(r, "endAt"))
-    }));
+    });
+  }
+
+  // 미완성 행이 하나라도 있으면 발행 중단 (기존 데이터 그대로 유지)
+  if (errors.length) {
+    ui.alert("발행 취소 - 아래 항목을 채운 뒤 다시 발행하세요:\n\n" + errors.join("\n"));
+    return;
+  }
+  if (rows.length === 0) {
+    ui.alert("발행할 배너가 없습니다.");
+    return;
+  }
 
   const res = UrlFetchApp.fetch(ENDPOINT_SYNC, {
     method: "post", contentType: "application/json",
@@ -104,10 +131,11 @@ function syncBanners() {
     payload: JSON.stringify({ rows }),
     muteHttpExceptions: true
   });
-  const ok = res.getResponseCode() === 200;
-  SpreadsheetApp.getActive().toast(
-    ok ? "동기화 완료" : "동기화 실패: " + res.getContentText(),
-    ok ? "배너" : "오류", ok ? 3 : 6);
+  if (res.getResponseCode() === 200) {
+    ui.alert("발행 완료: 배너 " + rows.length + "건 반영되었습니다.");
+  } else {
+    ui.alert("발행 실패 (반영 안 됨):\n" + res.getContentText());
+  }
 }
 
 function showUploadDialog() {
@@ -163,21 +191,24 @@ Apps Script → 프로젝트 설정(⚙️) → 스크립트 속성 → 추가
 - 이름: `BANNER_SYNC_TOKEN`
 - 값: 백엔드 `application.yml`의 `app.sync.banner-token`과 동일한 시크릿
 
-## 4. 자동반영 트리거
+## 4. 발행 방식 (수동 발행 권장)
 
-Apps Script → 트리거(⏰) → 트리거 추가
-- 함수: `syncBanners`
-- 이벤트 소스: 스프레드시트에서
-- 이벤트 유형: **변경 시(On change)** (단순 onEdit는 외부 호출 불가 — 반드시 설치형)
-- 저장 후 최초 1회 권한 승인
+**기본은 수동 발행이다.** 운영팀이 자유롭게 작성/수정하는 동안에는 아무것도 반영되지 않고,
+**메뉴 `배너 → 발행 (검증 후 반영)`** 을 누를 때만 검증 후 한 번에 반영된다.
+- 작성 중(미완성) 데이터가 실수로 올라가는 일 없음
+- 필수값(제목/이미지/카테고리) 안 채운 행이 있으면 어느 행인지 알려주고 **반영 취소**(기존 데이터 유지)
+- 편집 빈도/타이밍 문제 없음 (발행 누를 때만 호출)
 
-메뉴 `배너 → 지금 동기화`로 수동 실행도 가능.
+> 자동반영을 원하면 트리거(⏰ → 추가 → 함수 `syncBanners` / 소스 "스프레드시트에서" / 유형 "변경 시")를 걸 수 있다.
+> 단 이 경우에도 미완성 행이 있으면 발행이 자동 취소되므로(검증 통과 시에만 반영) 깨진 데이터는 안 올라간다.
+> 편집할 때마다 호출되는 점만 감수하면 됨. **권장은 수동 발행.**
 
 ## 5. 운영 흐름
 
 1. 이미지 셀 선택 → 메뉴 `배너 → 이미지 업로드` → 파일 선택 → URL 자동 기입
 2. 나머지 칸 입력(드롭다운/체크박스/날짜)
-3. 셀 수정 시 onChange가 자동 동기화 → 앱 반영
+3. 다 채웠으면 메뉴 `배너 → 발행 (검증 후 반영)` 클릭 → 검증 통과 시 앱 반영
+4. 미완성 행이 있으면 알림에 표시 → 채운 뒤 다시 발행
 
 ## 보안 메모
 
