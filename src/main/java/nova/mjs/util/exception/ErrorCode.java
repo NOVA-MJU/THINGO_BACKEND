@@ -91,7 +91,11 @@ public enum ErrorCode {
     BUS_ARRIVAL_API_CALL_FAILED(HttpStatus.BAD_GATEWAY, "BUS_ARRIVAL_API_CALL_FAILED", "[MJS] 버스 도착 정보 API 호출에 실패했습니다."),
     BUS_ARRIVAL_PARSE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "BUS_ARRIVAL_PARSE_FAILED", "[MJS] 버스 도착 정보 응답을 파싱하지 못했습니다."),
     BUS_ARRIVAL_NOT_FOUND(HttpStatus.NOT_FOUND, "BUS_ARRIVAL_NOT_FOUND", "[MJS] 버스 도착 정보를 찾을 수 없습니다."),
-    BUS_STATION_NOT_FOUND(HttpStatus.BAD_REQUEST, "BUS_STATION_NOT_FOUND", "[MJS] 지원하지 않는 정류장입니다. (A 또는 B)");
+    BUS_STATION_NOT_FOUND(HttpStatus.BAD_REQUEST, "BUS_STATION_NOT_FOUND", "[MJS] 지원하지 않는 정류장입니다. (A 또는 B)"),
+
+    // 배너 동기화(구글 시트 → DB) 관련 에러
+    BANNER_SYNC_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "BANNER_SYNC_UNAUTHORIZED", "[MJS] 배너 동기화 토큰이 유효하지 않습니다."),
+    BANNER_SYNC_INVALID_ROW(HttpStatus.BAD_REQUEST, "BANNER_SYNC_INVALID_ROW", "[MJS] 배너 동기화 데이터에 유효하지 않은 행이 있습니다.");
 
     private final HttpStatus status;
     private final String error;
