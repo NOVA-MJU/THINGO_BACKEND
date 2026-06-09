@@ -33,8 +33,8 @@ public class BannerSyncController {
 
     private final BannerSyncService bannerSyncService;
 
-    // 서버 환경변수 BANNER_SYNC_TOKEN으로 주입 (미설정 시 기본값 - prod에서는 반드시 env로 덮어쓸 것)
-    @Value("${BANNER_SYNC_TOKEN:change-me-banner-sync-token}")
+    // application.yml의 app.sync.banner-token으로 주입 (미설정 시 기본값 - prod에서는 반드시 실제 값으로 덮어쓸 것)
+    @Value("${app.sync.banner-token:change-me-banner-sync-token}")
     private String bannerSyncToken;
 
     @PostMapping

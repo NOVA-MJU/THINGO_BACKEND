@@ -161,7 +161,7 @@ function uploadImage(base64, mimeType, filename) {
 
 Apps Script → 프로젝트 설정(⚙️) → 스크립트 속성 → 추가
 - 이름: `BANNER_SYNC_TOKEN`
-- 값: 백엔드 환경변수 `BANNER_SYNC_TOKEN`과 동일한 시크릿
+- 값: 백엔드 `application.yml`의 `app.sync.banner-token`과 동일한 시크릿
 
 ## 4. 자동반영 트리거
 
@@ -182,4 +182,4 @@ Apps Script → 트리거(⏰) → 트리거 추가
 ## 보안 메모
 
 - `POST /api/v1/s3/upload`는 현재 무인증(permitAll). 누구나 S3 업로드 가능. 배너 한정으로 토큰 검증을 태울지는 별도 결정(기존 앱 업로드와 호환 영향 확인 필요).
-- sync 엔드포인트는 `X-Sync-Token` 상수시간 비교로 보호. prod는 `BANNER_SYNC_TOKEN`을 환경변수로 주입(HTTPS 필수).
+- sync 엔드포인트는 `X-Sync-Token` 상수시간 비교로 보호. 토큰은 `MJS-BACK-SECURITY/application.yml`의 `app.sync.banner-token`에 보관(비공개 secrets 레포). HTTPS 필수.
