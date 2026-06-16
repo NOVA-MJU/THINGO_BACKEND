@@ -50,13 +50,15 @@ public class SchedulerService {
         });
     }
 
-    // 명대신문 크롤링 스케줄링 (매주 월요일 정각마다 실행)
-    @Scheduled(cron = "0 0 * * 1 *")
+    // 명대신문 크롤링 스케줄링 (매주 월요일 09:00 실행)
+    // 주의: Spring cron 6필드 = 초 분 시 일 월 요일.
+    //       기존 "0 0 * * 1 *" 는 월(month)=1 위치라 1월에만 동작하던 버그였음.
+    @Scheduled(cron = "0 0 9 * * MON")
     public void scheduledCrawlNews() {
-        log.info("[스케쥴러] 매시간 5분마다 기사 크롤링 실행");
+        log.info("[스케쥴러] 매주 월요일 09:00 기사 크롤링 실행");
         CompletableFuture.runAsync(() -> {
             try {
-                newsService.crawlAndSaveNews(null);
+                newsService.crawlLatest();
                 log.info("기사 데이터 업데이트");
             } catch (IllegalArgumentException e) {
                 log.error("잘못된 Cron 표현식 오류 : {}", e.getMessage());

@@ -17,19 +17,10 @@ public interface NewsRepository extends JpaRepository<News, Long> {
     //카테고리 기준으로 탐색
     Page<News> findByCategory(News.Category category, Pageable pageable);
 
-    //링크를 기준으로 중복 여부 확인
-    boolean existsByLink(String link);
-
-    //기사 인덱스를 기준으로 중복 여부 확인
-    boolean existsByNewsIndex(Long newsIndex);
-
-    //카테고리 기준으로 존재 여부 확인
-    boolean existsByCategory(News.Category category);
-
     //카테고리를 기준으로 삭제
     void deleteByCategory(News.Category category);
 
-    // ✅ 추가: 페이지 단위로 중복 조회 (newsIndex만 가져옴)
+    // 페이지 단위로 중복 조회 (newsIndex만 가져옴)
     @Query("select n.newsIndex from News n where n.newsIndex in :idxList")
     List<Long> findExistingNewsIndexIn(@Param("idxList") Collection<Long> idxList);
 

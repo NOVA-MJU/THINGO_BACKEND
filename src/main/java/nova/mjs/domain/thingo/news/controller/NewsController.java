@@ -37,15 +37,22 @@ public class NewsController {
     }
 
 
+    // 증분 크롤링: 최신 신규 기사(보도/사회)만 저장
     @PostMapping
-    public ResponseEntity<ApiResponse<List<NewsResponseDTO>>> crawlAndSaveNews(
-            @RequestParam(required = false) String category) {
-
-        List<NewsResponseDTO> savedNews = newsService.crawlAndSaveNews(category);
-
+    public ResponseEntity<ApiResponse<List<NewsResponseDTO>>> crawlLatest() {
+        List<NewsResponseDTO> savedNews = newsService.crawlLatest();
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(ApiResponse.success(savedNews));
+    }
+
+    // 백필: 과거 기사 전체(보도/사회)를 비동기로 수집. 즉시 202 반환 후 백그라운드 실행.
+    @PostMapping("/backfill")
+    public ResponseEntity<ApiResponse<String>> backfill() {
+        newsService.backfillAll();
+        return ResponseEntity
+                .accepted()
+                .body(ApiResponse.success("백필을 시작했습니다. 진행 상황은 서버 로그를 확인하세요."));
     }
 
     @DeleteMapping

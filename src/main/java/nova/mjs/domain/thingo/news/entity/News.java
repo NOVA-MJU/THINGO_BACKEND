@@ -58,18 +58,5 @@ public class News {
             }
         }
     }
-
-    public static News createNews(Long newsIndex, String title, LocalDateTime date, String reporter, String imageUrl, String summary, String link, String category) {
-        return News.builder()
-                .newsIndex(newsIndex)
-                .title(title)
-                .date(date)
-                .reporter(reporter)
-                .imageUrl(imageUrl)
-                .summary(summary)
-                .link(link)
-                .category(Category.fromStringTOUppercase(category))
-                .build();
-    }
 }
 
