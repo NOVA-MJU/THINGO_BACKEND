@@ -1,14 +1,23 @@
 package nova.mjs.domain.thingo.member.email;
 
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StreamUtils;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmailService {
@@ -21,20 +30,62 @@ public class EmailService {
     private static final Duration CODE_TTL      = Duration.ofMinutes(5);
     private static final Duration VERIFIED_TTL  = Duration.ofMinutes(15);
 
-    /** 인증코드 발송 */
+    private static final String TEMPLATE_PATH = "templates/email/verification-code.html";
+    private static final String CODE_PLACEHOLDER = "{{CODE}}";
+    private static final String MAIL_SUBJECT = "[Thingo] 회원가입 인증코드";
+
+    // 템플릿은 변하지 않으므로 최초 1회만 읽어 캐시
+    private volatile String cachedTemplate;
+
+    /** 인증코드 발송 (HTML 템플릿) */
     public String sendVerificationEmail(String rawEmail) {
         final String email = normalize(rawEmail);
         final String code  = generateVerificationCode();
 
+        // 1) 인증코드를 Redis에 TTL과 함께 저장
         redis.opsForValue().set(codeKey(email), code, CODE_TTL);
 
-        SimpleMailMessage msg = new SimpleMailMessage();
-        msg.setTo(email);
-        msg.setSubject("[MJS] 이메일 인증코드 안내");
-        msg.setText("인증 코드: " + code);
-        mailSender.send(msg);
+        // 2) 템플릿에 인증코드를 주입해 HTML 본문 생성
+        final String html = loadTemplate().replace(CODE_PLACEHOLDER, code);
+
+        // 3) HTML 메일 발송
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, false, StandardCharsets.UTF_8.name());
+            helper.setTo(email);
+            helper.setSubject(MAIL_SUBJECT);
+            helper.setText(html, true); // true = HTML
+            mailSender.send(message);
+        } catch (MessagingException e) {
+            log.error("인증 메일 발송 실패 - email: {}", maskEmail(email), e);
+            throw new IllegalStateException("인증 메일 발송에 실패했습니다.", e);
+        }
 
         return "인증 코드가 이메일로 발송되었습니다.";
+    }
+
+    /** 인증 메일 HTML 템플릿 로드(최초 1회 캐시) */
+    private String loadTemplate() {
+        if (cachedTemplate == null) {
+            synchronized (this) {
+                if (cachedTemplate == null) {
+                    try (InputStream is = new ClassPathResource(TEMPLATE_PATH).getInputStream()) {
+                        cachedTemplate = StreamUtils.copyToString(is, StandardCharsets.UTF_8);
+                    } catch (IOException e) {
+                        throw new IllegalStateException("인증 메일 템플릿 로드 실패: " + TEMPLATE_PATH, e);
+                    }
+                }
+            }
+        }
+        return cachedTemplate;
+    }
+
+    /** 로그용 이메일 마스킹 (앞 2글자만 노출) */
+    private String maskEmail(String email) {
+        if (email == null) return "null";
+        int at = email.indexOf('@');
+        if (at <= 2) return "***" + (at >= 0 ? email.substring(at) : "");
+        return email.substring(0, 2) + "***" + email.substring(at);
     }
 
     /** 인증코드 검증(성공 시 소각) */
