@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.Map;
 import java.util.UUID;
 
 @Slf4j
@@ -31,8 +32,17 @@ public class EmailService {
     private static final Duration VERIFIED_TTL  = Duration.ofMinutes(15);
 
     private static final String TEMPLATE_PATH = "templates/email/verification-code.html";
+    private static final String IMAGE_DIR = "templates/email/images/";
     private static final String CODE_PLACEHOLDER = "{{CODE}}";
     private static final String MAIL_SUBJECT = "[Thingo] 회원가입 인증코드";
+
+    // 메일 본문에 CID로 인라인 삽입할 이미지 (contentId -> 파일명).
+    // 외부 호스팅 없이 메일 자체에 첨부되어 모든 메일 클라이언트에서 표시된다.
+    private static final Map<String, String> INLINE_IMAGES = Map.of(
+            "thLogo",        "th_logo.png",
+            "thingoLogo",    "thingo_logo.png",
+            "instagramIcon", "instagram.png"
+    );
 
     // 템플릿은 변하지 않으므로 최초 1회만 읽어 캐시
     private volatile String cachedTemplate;
@@ -48,13 +58,15 @@ public class EmailService {
         // 2) 템플릿에 인증코드를 주입해 HTML 본문 생성
         final String html = loadTemplate().replace(CODE_PLACEHOLDER, code);
 
-        // 3) HTML 메일 발송
+        // 3) HTML 메일 발송 (이미지는 CID 인라인 첨부)
         try {
             MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, false, StandardCharsets.UTF_8.name());
+            // multipart=true: 본문 + 인라인 이미지 첨부를 위해 멀티파트로 구성
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, StandardCharsets.UTF_8.name());
             helper.setTo(email);
             helper.setSubject(MAIL_SUBJECT);
-            helper.setText(html, true); // true = HTML
+            helper.setText(html, true); // true = HTML (반드시 인라인 추가보다 먼저 호출)
+            attachInlineImages(helper);
             mailSender.send(message);
         } catch (MessagingException e) {
             log.error("인증 메일 발송 실패 - email: {}", maskEmail(email), e);
@@ -62,6 +74,18 @@ public class EmailService {
         }
 
         return "인증 코드가 이메일로 발송되었습니다.";
+    }
+
+    /** 템플릿이 cid:로 참조하는 이미지를 인라인 첨부. 파일이 없으면 건너뛴다(메일은 정상 발송). */
+    private void attachInlineImages(MimeMessageHelper helper) throws MessagingException {
+        for (Map.Entry<String, String> image : INLINE_IMAGES.entrySet()) {
+            ClassPathResource resource = new ClassPathResource(IMAGE_DIR + image.getValue());
+            if (!resource.exists()) {
+                log.warn("인증 메일 인라인 이미지 누락 - {} (cid={})", image.getValue(), image.getKey());
+                continue;
+            }
+            helper.addInline(image.getKey(), resource);
+        }
     }
 
     /** 인증 메일 HTML 템플릿 로드(최초 1회 캐시) */
