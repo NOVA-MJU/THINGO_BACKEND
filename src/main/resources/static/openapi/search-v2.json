@@ -1,0 +1,341 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "MJU 통합 검색 API (v2 / PostgreSQL FTS)",
+    "version": "v2.1.0",
+    "description": "PostgreSQL FTS(tsvector) + pg_trgm 기반 통합 검색.\n\n변경점 (v1 ES → v2 PG)\n- 엔진: Elasticsearch → PostgreSQL FTS\n- 경로: /api/v1/search/* → /api/v2/search/*\n- 요청/응답 스키마는 v1과 동일 (프론트 마이그레이션 0)\n- 한국어 토큰화: Komoran 동일 사전/규칙 유지\n\n검색 품질/성능 (v2.1)\n- 검색어를 색인과 동일한 Komoran 형태소로 토큰화하여 OR tsquery 생성 → 복합어/다어절/자연어 recall 확보\n- 매칭은 search_vector(GIN) FTS 단독 → trigram seq scan 제거. 3,975건 기준 keyword 검색 P95 약 230ms (warmup 후)\n- 자모/기호 노이즈(예: ㅁㅈㄷ)는 DB 조회 없이 빈 결과 즉시 반환\n- 자동완성: prefix(ILIKE) + pg_trgm word_similarity\n\n인덱싱 동기화\n- 원본 도메인 트랜잭션 AFTER_COMMIT 에 PgUnifiedSearchIndexListener 가 upsert\n- ES 리스너와 병행 동작 가능 (이중 인덱싱). ES 제거 시 PG 단독.\n- 전체 재구축은 POST /api/v2/search/sync (운영 전용)\n\n인증\n- 본 API 는 인증 불필요 (permitAll)."
+  },
+  "servers": [
+    {
+      "url": "https://api.thingo.kr/api/v2"
+    },
+    {
+      "url": "http://localhost:8080/api/v2"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Search",
+      "description": "PostgreSQL FTS 통합 검색 및 인덱스 동기화"
+    },
+    {
+      "name": "Suggest",
+      "description": "검색어 자동완성 (prefix + pg_trgm)"
+    }
+  ],
+  "paths": {
+    "/search/sync": {
+      "post": {
+        "tags": ["Search"],
+        "summary": "PostgreSQL 통합 인덱스 전체 재구축 (운영 전용)",
+        "description": "원본 도메인 7종(Notice, News, Community, DepartmentSchedule, StudentCouncilNotice, Broadcast, MjuCalendar)을 순회하여 unified_search_index 테이블을 TRUNCATE 후 bulk insert 합니다.\n\n주의\n- 운영 전용. 호출 중 단시간 빈 검색 결과가 발생할 수 있음.\n- 1000건 단위 batch flush.\n- 변환 실패 row 는 skip + WARN 로그.\n- 평상시 동기화는 도메인 변경 이벤트(AFTER_COMMIT)로 자동 수행되므로 호출 불필요.",
+        "responses": {
+          "200": {
+            "description": "인덱싱 완료",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "API 요청 성공",
+                  "data": "Success Indexing",
+                  "timestamp": "2026-06-18T10:00:00.000000"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "인덱싱 중 서버 오류",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+                "example": {
+                  "status": 500,
+                  "error": "INTERNAL_SERVER_ERROR",
+                  "message": "인덱싱 중 오류가 발생했습니다."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/search/detail": {
+      "get": {
+        "tags": ["Search"],
+        "summary": "통합 상세 검색 (PostgreSQL FTS)",
+        "description": "PostgreSQL FTS 기반 통합 검색.\n\n매칭 전략 (keyword 있을 때)\n1. 검색어를 Komoran 으로 토큰화 (색인과 동일 규칙)\n   - 내용 형태소(NN*/SL/SH/SN) 추출 → OR(|) 로 결합한 tsquery 생성\n   - compact(공백 제거) + 공백 단위 토큰 추가 → 띄어쓰기 변형/복합어 보완\n   - 완성형 음절·영숫자가 하나도 없으면(자모/기호 노이즈) DB 조회 없이 빈 결과 반환\n2. WHERE: search_vector @@ to_tsquery('simple', :orQuery)  (idx_usi_search_vector GIN, seq scan 없음)\n\n점수식 (order=relevance)\nscore = ts_rank(search_vector, orQuery) * 0.6\n      + (제목이 검색어 토큰 중 하나라도 포함) ? 0.25 : 0      // 제목 매칭 부스트\n      + (제목이 모든 토큰 포함, AND)            ? 0.40 : 0      // coverage 부스트\n      + popularity * 0.0001\n      + categoryWeight   // general 0.10, academic 0.08, scholarship 0.06, career 0.04, activity 0.02, rule 0.00\n      + typeWeight       // NOTICE 0.10, MJU_CALENDAR 0.08, DEPARTMENT_SCHEDULE 0.06, STUDENT_COUNCIL_NOTICE 0.05, COMMUNITY 0.04, NEWS 0.02, BROADCAST 0.01\n      + hotKeywordBoost  // 실시간 인기검색어 top-10 이 title 에 매칭되면 +0.05\n- popularity = (likes*1 + comments*2) * 0.5^(ageDays/30)\n\n하이라이팅\n- ts_headline('simple', title|content, orQuery) 결과를 highlightedTitle / highlightedContent 로 반환\n- 매칭 fragment 가 없으면 원문 fallback\n\n필터\n- type: 대소문자 무시. SearchType enum 정규화 후 exact match. 미지원 값은 400(ILLEGAL_ARGUMENT)\n- category: trim 후 exact match (대소문자 구분)\n- active = TRUE 강제\n\n목록 조회 모드\n- keyword 미입력 + filter 만 주면 목록 조회. 이때 order 기본값은 latest.\n\n부수효과\n- keyword 가 공백이 아니면 실시간 인기검색어 ZSET 에 기록됨(빈/공백 keyword 는 기록 X).",
+        "parameters": [
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string", "default": "" },
+            "description": "검색어. 공백/미입력 시 필터+정렬 기반 목록 조회",
+            "example": "장학금 신청"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "NOTICE",
+                "MJU_CALENDAR",
+                "DEPARTMENT_NOTICE",
+                "STUDENT_COUNCIL_NOTICE",
+                "DEPARTMENT_SCHEDULE",
+                "COMMUNITY",
+                "NEWS",
+                "BROADCAST"
+              ]
+            },
+            "description": "상위 탭 필터. 대소문자 무시. 미지원 값 입력 시 400 응답"
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string", "example": "scholarship" },
+            "description": "세부 카테고리 exact match (대소문자 구분).\n- NOTICE: general, academic, scholarship, career, activity, rule\n- NEWS: REPORT, SOCIETY\n- COMMUNITY: FREE, NOTICE\n- BROADCAST / MJU_CALENDAR / DEPARTMENT_SCHEDULE / STUDENT_COUNCIL_NOTICE: 미적재(null)"
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["relevance", "latest", "oldest"],
+              "default": "relevance"
+            },
+            "description": "정렬. keyword 가 비어 있으면 자동으로 latest 로 처리"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "minimum": 0, "default": 0 }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "minimum": 1, "maximum": 100, "default": 10 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "검색 결과 페이지",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ApiResponsePageSearchResult" },
+                "examples": {
+                  "relevanceHit": {
+                    "summary": "keyword=장학금 신청, relevance 정렬",
+                    "value": {
+                      "status": "API 요청 성공",
+                      "data": {
+                        "content": [
+                          {
+                            "id": "NOTICE:13317",
+                            "highlightedTitle": "2025학년도 2학기 교내 <em>장학금</em> <em>신청</em> 안내",
+                            "highlightedContent": "교내 <em>장학금</em> <em>신청</em> 기간 및 대상자 안내...",
+                            "date": "2025-05-19T01:39:00Z",
+                            "link": "https://www.mju.ac.kr/mjukr/255/subview.do",
+                            "category": "scholarship",
+                            "type": "notice",
+                            "imageUrl": "",
+                            "score": 1.1542,
+                            "authorName": "",
+                            "likeCount": 0,
+                            "commentCount": 0
+                          }
+                        ],
+                        "pageable": {
+                          "pageNumber": 0,
+                          "pageSize": 10,
+                          "offset": 0,
+                          "paged": true,
+                          "unpaged": false
+                        },
+                        "totalElements": 149,
+                        "totalPages": 15,
+                        "size": 10,
+                        "number": 0,
+                        "first": true,
+                        "last": false,
+                        "numberOfElements": 10,
+                        "empty": false
+                      },
+                      "timestamp": "2026-06-18T10:00:00.000000"
+                    }
+                  },
+                  "latestList": {
+                    "summary": "keyword 비움 + type=NEWS, latest 정렬 (목록 조회)",
+                    "value": {
+                      "status": "API 요청 성공",
+                      "data": {
+                        "content": [
+                          {
+                            "id": "NEWS:12941",
+                            "highlightedTitle": "내년 인문캠 총학 비대위… 후보 불출마로 선거 무산",
+                            "highlightedContent": "...총동아리연합회 비상대책위원회...",
+                            "date": "2024-11-11T01:51:00Z",
+                            "link": "https://news.mju.ac.kr/news/articleView.html?idxno=12941",
+                            "category": "REPORT",
+                            "type": "news",
+                            "imageUrl": "http://news.mju.ac.kr/.../12941.jpg",
+                            "score": 0.02,
+                            "authorName": "명대신문",
+                            "likeCount": 0,
+                            "commentCount": 0
+                          }
+                        ],
+                        "totalElements": 128,
+                        "totalPages": 13,
+                        "size": 10,
+                        "number": 0,
+                        "first": true,
+                        "last": false,
+                        "numberOfElements": 10,
+                        "empty": false
+                      },
+                      "timestamp": "2026-06-18T10:00:00.000000"
+                    }
+                  },
+                  "emptyResult": {
+                    "summary": "조건에 맞는 문서 없음 / 자모 노이즈 입력",
+                    "value": {
+                      "status": "API 요청 성공",
+                      "data": {
+                        "content": [],
+                        "totalElements": 0,
+                        "totalPages": 0,
+                        "size": 10,
+                        "number": 0,
+                        "first": true,
+                        "last": true,
+                        "numberOfElements": 0,
+                        "empty": true
+                      },
+                      "timestamp": "2026-06-18T10:00:00.000000"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "미지원 type 값 등 잘못된 요청",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+                "example": {
+                  "status": 400,
+                  "error": "ILLEGAL_ARGUMENT",
+                  "message": "지원하지 않는 검색 타입입니다: foo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/search/suggest": {
+      "get": {
+        "tags": ["Suggest"],
+        "summary": "자동완성 (prefix + pg_trgm)",
+        "description": "매칭 전략\n- title ILIKE :keyword% (prefix)\n- OR word_similarity(:keyword, title) > 0.2 (pg_trgm)\n\n정렬: word_similarity DESC, date DESC NULLS LAST\n제약: 최대 10건, active=TRUE, 중복 title 제거. 빈/공백 keyword 면 빈 배열 반환.",
+        "parameters": [
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "장학"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "추천 목록",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "API 요청 성공",
+                  "data": ["장학금 안내", "장학사업 변경", "장학 신청"],
+                  "timestamp": "2026-06-18T10:00:00.000000"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "필수 파라미터 keyword 누락",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+                "example": {
+                  "status": 400,
+                  "error": "BAD_REQUEST",
+                  "message": "Required request parameter 'keyword' for method parameter type String is not present"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ApiResponsePageSearchResult": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "example": "API 요청 성공" },
+          "data": { "$ref": "#/components/schemas/PageSearchResponseDTO" },
+          "timestamp": { "type": "string", "format": "date-time" }
+        }
+      },
+      "PageSearchResponseDTO": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/SearchResponseDTO" }
+          },
+          "totalElements": { "type": "integer" },
+          "totalPages": { "type": "integer" },
+          "size": { "type": "integer" },
+          "number": { "type": "integer" },
+          "first": { "type": "boolean" },
+          "last": { "type": "boolean" },
+          "numberOfElements": { "type": "integer" },
+          "empty": { "type": "boolean" }
+        }
+      },
+      "SearchResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "description": "TYPE:ORIGINAL_ID", "example": "NOTICE:13317" },
+          "highlightedTitle": { "type": "string", "description": "ts_headline 결과(<em> 강조). 매칭 없으면 원문" },
+          "highlightedContent": { "type": "string", "description": "ts_headline 결과(<em> 강조). 매칭 없으면 원문" },
+          "date": { "type": "string", "format": "date-time" },
+          "link": { "type": "string" },
+          "category": { "type": "string", "nullable": true },
+          "type": { "type": "string", "description": "소문자 (예: notice, news, broadcast)" },
+          "imageUrl": { "type": "string", "nullable": true },
+          "score": { "type": "number", "format": "float", "description": "relevance 점수. latest/oldest 정렬 시 의미 없음" },
+          "authorName": { "type": "string", "nullable": true },
+          "likeCount": { "type": "integer", "nullable": true },
+          "commentCount": { "type": "integer", "nullable": true }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "integer", "description": "HTTP 상태 코드", "example": 400 },
+          "error": { "type": "string", "description": "오류 코드", "example": "ILLEGAL_ARGUMENT" },
+          "message": { "type": "string", "description": "오류 메시지" }
+        }
+      }
+    }
+  }
+}
