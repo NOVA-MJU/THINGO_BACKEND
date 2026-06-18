@@ -71,9 +71,24 @@ public class UnifiedSearchIndexQueryRepositoryImpl implements UnifiedSearchIndex
                     + " + CASE WHEN valid_until IS NOT NULL AND valid_until >= now() THEN  0.10 ELSE 0 END ";
 
     /*
+     * 최신성(recency) 가중치.
+     * - 학교 데이터는 최신이 매우 중요하다. 같은 키워드/관련도라도 최근 글이 위로 오도록
+     *   발행일(date) 기준 지수감쇠 부스트를 점수에 더한다.
+     * - 공고류(NOTICE/DEPARTMENT_NOTICE/STUDENT_COUNCIL_NOTICE)는 최신성이 특히 중요 → 0.50,
+     *   그 외(일정/뉴스/커뮤니티 등)는 0.30.
+     * - 반감기 30일(2,592,000초): 30일이면 절반, 60일이면 1/4, 수개월이면 사실상 0.
+     * - date 는 NOT NULL. 미래 발행(드묾)은 GREATEST 로 0 클램프.
+     * 주의: ts_rank(보통 0~0.3) 대비 큰 값이라 최신성이 관련도를 강하게 보정한다(의도된 설계).
+     *       latest/oldest 정렬은 date 기준이라 이 가중치의 영향을 받지 않는다.
+     */
+    private static final String RECENCY_WEIGHT_EXPR =
+            " + (CASE WHEN type IN ('NOTICE','DEPARTMENT_NOTICE','STUDENT_COUNCIL_NOTICE') THEN 0.50 ELSE 0.30 END) "
+                    + " * power(0.5, GREATEST(extract(epoch FROM (now() - date)), 0) / 2592000.0) ";
+
+    /*
      * 도메인 타입 가중치.
-     * - 학사 공지/학사일정 우선, 외부 콘텐츠(NEWS/BROADCAST) 하위.
-     * - 카테고리 가중치와 동일한 약 boost 스케일(<=0.10).
+     * - 학사 공지/일정 우선. 외부 콘텐츠(NEWS/BROADCAST)는 학교 공식 정보 대비 우선순위가 낮아
+     *   음수(-0.05)로 명확히 하향한다(같은 키워드면 공지·일정이 뉴스보다 위).
      */
     private static final String TYPE_WEIGHT_EXPR =
             " CASE type "
@@ -82,8 +97,8 @@ public class UnifiedSearchIndexQueryRepositoryImpl implements UnifiedSearchIndex
                     + "  WHEN 'DEPARTMENT_SCHEDULE' THEN 0.06 "
                     + "  WHEN 'STUDENT_COUNCIL_NOTICE' THEN 0.05 "
                     + "  WHEN 'COMMUNITY' THEN 0.04 "
-                    + "  WHEN 'NEWS' THEN 0.02 "
-                    + "  WHEN 'BROADCAST' THEN 0.01 "
+                    + "  WHEN 'NEWS' THEN -0.05 "
+                    + "  WHEN 'BROADCAST' THEN -0.05 "
                     + "  ELSE 0.00 "
                     + " END ";
 
@@ -163,10 +178,11 @@ public class UnifiedSearchIndexQueryRepositoryImpl implements UnifiedSearchIndex
                 + weightExpr
                 + hotBoostExpr
                 + VALIDITY_WEIGHT_EXPR
+                + RECENCY_WEIGHT_EXPR
                 + " ) "
                 : (hasHot
-                ? " (coalesce(popularity, 0) * 0.0001 " + weightExpr + hotBoostExpr + VALIDITY_WEIGHT_EXPR + ") "
-                : " (0.0 " + weightExpr + VALIDITY_WEIGHT_EXPR + ") ");
+                ? " (coalesce(popularity, 0) * 0.0001 " + weightExpr + hotBoostExpr + VALIDITY_WEIGHT_EXPR + RECENCY_WEIGHT_EXPR + ") "
+                : " (0.0 " + weightExpr + VALIDITY_WEIGHT_EXPR + RECENCY_WEIGHT_EXPR + ") ");
 
         String headlineTitle = hasTsQuery
                 ? " ts_headline('simple', coalesce(title,''), to_tsquery('simple', :tsQuery), "

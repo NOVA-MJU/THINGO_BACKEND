@@ -205,8 +205,9 @@ class UnifiedSearchIndexQueryRepositoryImplIT {
     void evergreen_rule_is_surfaced() {
         // given - 무기한 학칙(valid_until null) + 마감 지난 일반 공지
         Instant now = Instant.now();
+        // 발행일은 동일(now-5일)로 두어 최신성 영향을 배제하고 유효성/카테고리만으로 비교한다.
         repository.save(build("NOTICE", "rule", "출결 규정", "결석 처리 기준 안내",
-                "출결 규정 결석", now.minus(400, ChronoUnit.DAYS), null));
+                "출결 규정 결석", now.minus(5, ChronoUnit.DAYS), null));
         repository.save(build("NOTICE", "general", "출결 행사 안내", "내용",
                 "출결 행사", now.minus(5, ChronoUnit.DAYS), now.minus(1, ChronoUnit.DAYS)));
         repository.flush();
@@ -218,6 +219,46 @@ class UnifiedSearchIndexQueryRepositoryImplIT {
         // then - 학칙이 결과에 있고, 만료된 일반 공지보다 위
         assertThat(page.getContent()).isNotEmpty();
         assertThat(page.getContent().get(0).title()).isEqualTo("출결 규정");
+    }
+
+    @Test
+    @DisplayName("관련도가 같으면 최신 공지가 위로 (recency 부스트)")
+    void newer_notice_ranks_first() {
+        // given - 동일 제목/토큰/유효성(무기한), 발행일만 다름
+        Instant now = Instant.now();
+        repository.save(build("NOTICE", "academic", "수강신청 안내", "내용",
+                "수강신청 수강 신청", now.minus(200, ChronoUnit.DAYS), null));
+        repository.save(build("NOTICE", "academic", "수강신청 안내", "내용",
+                "수강신청 수강 신청", now.minus(1, ChronoUnit.DAYS), null));
+        repository.flush();
+
+        // when
+        Page<SearchResultRow> page = repository.search(
+                "수강신청", null, null, "relevance", null, 0.0d, PageRequest.of(0, 10));
+
+        // then - 최근(1일 전) 공지가 위
+        assertThat(page.getTotalElements()).isEqualTo(2);
+        assertThat(page.getContent().get(0).score())
+                .isGreaterThan(page.getContent().get(1).score());
+    }
+
+    @Test
+    @DisplayName("같은 키워드면 공지가 뉴스보다 위 (뉴스 타입 가중치 하향)")
+    void notice_outranks_news() {
+        // given - 동일 키워드/발행일, 타입만 NOTICE vs NEWS
+        Instant date = Instant.now().minus(3, ChronoUnit.DAYS);
+        repository.save(build("NOTICE", "scholarship", "장학금 안내", "내용", "장학금", date, null));
+        repository.save(build("NEWS", "REPORT", "장학금 기사", "내용", "장학금", date, null));
+        repository.flush();
+
+        // when
+        Page<SearchResultRow> page = repository.search(
+                "장학금", null, null, "relevance", null, 0.0d, PageRequest.of(0, 10));
+
+        // then - 공지가 위, 뉴스가 아래
+        assertThat(page.getTotalElements()).isEqualTo(2);
+        assertThat(page.getContent().get(0).type()).isEqualTo("NOTICE");
+        assertThat(page.getContent().get(1).type()).isEqualTo("NEWS");
     }
 
     private UnifiedSearchIndex row(String type, String title, String content, Instant date) {
