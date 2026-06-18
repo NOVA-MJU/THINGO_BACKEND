@@ -187,6 +187,14 @@ public class UnifiedSearchIndex {
         this.indexedAt = Instant.now();
     }
 
+    /** 중복 collapse 시 canonical(대표) 행을 다시 노출시킨다. */
+    public void activate() {
+        if (!Boolean.TRUE.equals(this.active)) {
+            this.active = true;
+            this.indexedAt = Instant.now();
+        }
+    }
+
     /**
      * 정합성 reconcile 용 변경 감지.
      * 검색 결과/정렬에 영향을 주는 핵심 필드만 비교한다(indexedAt 은 매번 바뀌므로 제외).

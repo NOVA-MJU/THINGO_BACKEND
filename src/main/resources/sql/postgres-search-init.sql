@@ -32,6 +32,10 @@ CREATE INDEX IF NOT EXISTS idx_usi_date
 CREATE INDEX IF NOT EXISTS idx_usi_valid_until
     ON unified_search_index (valid_until);
 
+-- link: 동일 원문 중복 collapse 조회용(findByLink)
+CREATE INDEX IF NOT EXISTS idx_usi_link
+    ON unified_search_index (link);
+
 CREATE OR REPLACE FUNCTION usi_update_search_vector() RETURNS trigger AS $$
 BEGIN
     NEW.search_vector :=

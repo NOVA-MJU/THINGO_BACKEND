@@ -30,6 +30,9 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import nova.mjs.domain.thingo.ElasticSearch.indexing.publisher.SearchIndexPublisher;
+import nova.mjs.domain.thingo.search.indexing.PgUnifiedSearchIndexListener;
+import nova.mjs.domain.thingo.search.indexing.DeadlineExtractor;
+import nova.mjs.domain.thingo.search.mapper.PgUnifiedSearchMapper;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -56,7 +59,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @EnableAutoConfiguration
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(properties = "spring.main.allow-bean-definition-overriding=true")
-@Import(UnifiedSearchIndexQueryRepositoryImpl.class)
+@Import({UnifiedSearchIndexQueryRepositoryImpl.class, PgUnifiedSearchIndexListener.class,
+        PgUnifiedSearchMapper.class, DeadlineExtractor.class})
 class UnifiedSearchIndexQueryRepositoryImplIT {
 
     @Container
@@ -85,6 +89,9 @@ class UnifiedSearchIndexQueryRepositoryImplIT {
 
     @Autowired
     UnifiedSearchIndexRepository repository;
+
+    @Autowired
+    PgUnifiedSearchIndexListener listener;
 
     @BeforeEach
     void clean() {
@@ -259,6 +266,40 @@ class UnifiedSearchIndexQueryRepositoryImplIT {
         assertThat(page.getTotalElements()).isEqualTo(2);
         assertThat(page.getContent().get(0).type()).isEqualTo("NOTICE");
         assertThat(page.getContent().get(1).type()).isEqualTo("NEWS");
+    }
+
+    @Test
+    @DisplayName("같은 link 중복 공지는 collapse 되어 active 1건만 검색된다")
+    void collapse_keeps_single_active_per_link() {
+        // given - 같은 원문 link, 서로 다른 카테고리/id 2건 (둘 다 active)
+        String link = "https://www.mju.ac.kr/notice/1";
+        Instant now = Instant.now();
+        repository.save(buildLinked("NOTICE:100", "general", "장학금 안내", "장학금", link, now));
+        repository.save(buildLinked("NOTICE:101", "scholarship", "장학금 안내", "장학금", link, now));
+        repository.flush();
+
+        // when - link collapse
+        listener.collapseByLink(link);
+        repository.flush();
+
+        // then - 같은 link 중 active 1건, canonical = 최소 id(NOTICE:100)
+        var siblings = repository.findByLink(link);
+        assertThat(siblings).hasSize(2);
+        assertThat(siblings.stream().filter(r -> Boolean.TRUE.equals(r.getActive())))
+                .singleElement()
+                .satisfies(r -> assertThat(r.getId()).isEqualTo("NOTICE:100"));
+
+        // 검색 결과에도 1건만 노출
+        Page<SearchResultRow> page = repository.search(
+                "장학금", null, null, "relevance", null, 0.0d, PageRequest.of(0, 10));
+        assertThat(page.getTotalElements()).isEqualTo(1);
+    }
+
+    private UnifiedSearchIndex buildLinked(String id, String category, String title,
+                                           String tokens, String link, Instant date) {
+        String originalId = id.substring(id.indexOf(':') + 1);
+        return UnifiedSearchIndex.of(id, originalId, "NOTICE", category, title, "내용",
+                null, link, null, 0, 0, 0.0d, date, null, tokens);
     }
 
     private UnifiedSearchIndex row(String type, String title, String content, Instant date) {

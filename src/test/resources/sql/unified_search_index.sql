@@ -31,6 +31,9 @@ CREATE INDEX IF NOT EXISTS idx_usi_search_tokens_trgm
 CREATE INDEX IF NOT EXISTS idx_usi_title_trgm
     ON unified_search_index USING GIN (title gin_trgm_ops);
 
+CREATE INDEX IF NOT EXISTS idx_usi_link
+    ON unified_search_index (link);
+
 CREATE OR REPLACE FUNCTION usi_update_search_vector() RETURNS trigger AS $$
 BEGIN
     NEW.search_vector :=
