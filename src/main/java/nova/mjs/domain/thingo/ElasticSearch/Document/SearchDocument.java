@@ -26,6 +26,15 @@ public interface SearchDocument {
      */
     Instant getInstant();
 
+    /**
+     * 유효 마감 시점(있으면). null = 무기한.
+     * - 학사일정/학과일정 등 명시적 종료일이 있는 도메인만 override 한다.
+     * - 공지의 본문 추정 마감은 매퍼(DeadlineExtractor)에서 채운다.
+     */
+    default Instant getValidUntil() {
+        return null;
+    }
+
     default String getCategory() {
         return null;
     }

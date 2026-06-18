@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS unified_search_index (
     popularity      DOUBLE PRECISION         DEFAULT 0.0,
     active          BOOLEAN                  NOT NULL DEFAULT TRUE,
     date            TIMESTAMP WITH TIME ZONE NOT NULL,
+    valid_until     TIMESTAMP WITH TIME ZONE,
     indexed_at      TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
     search_tokens   TEXT,
     search_vector   TSVECTOR

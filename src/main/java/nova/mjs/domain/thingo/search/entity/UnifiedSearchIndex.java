@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.util.Objects;
 
 /**
  * PostgreSQL 통합 검색 인덱스 엔티티.
@@ -67,6 +68,15 @@ public class UnifiedSearchIndex {
     @Column(name = "date", nullable = false)
     private Instant date;
 
+    /**
+     * 유효 마감 시점. null = 무기한(학칙 등 만료 개념 없는 문서).
+     * - 학사일정/학과일정: 소스 endDate
+     * - 공지: 본문에서 추정(DeadlineExtractor), 추정 실패 시 null
+     * 검색 랭킹에서 과거 시점이면 후순위로 감점한다(응답 스키마에는 노출하지 않는다).
+     */
+    @Column(name = "valid_until")
+    private Instant validUntil;
+
     @Column(name = "indexed_at", nullable = false)
     private Instant indexedAt;
 
@@ -95,6 +105,7 @@ public class UnifiedSearchIndex {
                                Double popularity,
                                Boolean active,
                                Instant date,
+                               Instant validUntil,
                                Instant indexedAt,
                                String searchTokens) {
         this.id = id;
@@ -111,6 +122,7 @@ public class UnifiedSearchIndex {
         this.popularity = popularity;
         this.active = active;
         this.date = date;
+        this.validUntil = validUntil;
         this.indexedAt = indexedAt;
         this.searchTokens = searchTokens;
     }
@@ -128,6 +140,7 @@ public class UnifiedSearchIndex {
                                         Integer commentCount,
                                         Double popularity,
                                         Instant date,
+                                        Instant validUntil,
                                         String searchTokens) {
         return UnifiedSearchIndex.builder()
                 .id(id)
@@ -144,6 +157,7 @@ public class UnifiedSearchIndex {
                 .popularity(popularity == null ? 0.0d : popularity)
                 .active(true)
                 .date(date)
+                .validUntil(validUntil)
                 .indexedAt(Instant.now())
                 .searchTokens(searchTokens)
                 .build();
@@ -163,6 +177,7 @@ public class UnifiedSearchIndex {
         this.popularity = source.popularity;
         this.active = source.active;
         this.date = source.date;
+        this.validUntil = source.validUntil;
         this.indexedAt = Instant.now();
         this.searchTokens = source.searchTokens;
     }
@@ -170,5 +185,24 @@ public class UnifiedSearchIndex {
     public void deactivate() {
         this.active = false;
         this.indexedAt = Instant.now();
+    }
+
+    /**
+     * 정합성 reconcile 용 변경 감지.
+     * 검색 결과/정렬에 영향을 주는 핵심 필드만 비교한다(indexedAt 은 매번 바뀌므로 제외).
+     */
+    public boolean differsFrom(UnifiedSearchIndex other) {
+        if (other == null) {
+            return true;
+        }
+        return !Objects.equals(this.title, other.title)
+                || !Objects.equals(this.content, other.content)
+                || !Objects.equals(this.category, other.category)
+                || !Objects.equals(this.type, other.type)
+                || !Objects.equals(this.date, other.date)
+                || !Objects.equals(this.validUntil, other.validUntil)
+                || !Objects.equals(this.popularity, other.popularity)
+                || !Objects.equals(this.searchTokens, other.searchTokens)
+                || !Objects.equals(this.active, other.active);
     }
 }

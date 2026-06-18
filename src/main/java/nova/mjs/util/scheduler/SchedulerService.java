@@ -6,6 +6,7 @@ import nova.mjs.domain.thingo.broadcast.service.BroadcastService;
 import nova.mjs.domain.thingo.news.service.NewsService;
 import nova.mjs.domain.thingo.notice.exception.NoticeCrawlingException;
 import nova.mjs.domain.thingo.notice.service.NoticeCrawlingService;
+import nova.mjs.domain.thingo.search.service.PgSearchIndexSyncService;
 import nova.mjs.util.exception.ErrorCode;
 import nova.mjs.util.scheduler.exception.SchedulerCronInvalidException;
 import nova.mjs.util.scheduler.exception.SchedulerTaskFailedException;
@@ -28,6 +29,25 @@ public class SchedulerService {
     private final WeeklyMenuService weeklyMenuService;
     private final NoticeCrawlingService noticeCrawlingService;
     private final BroadcastService broadcastService;
+    private final PgSearchIndexSyncService pgSearchIndexSyncService;
+
+    // 검색 인덱스 정합성 보정 (매일 04:00, 저트래픽 시간대)
+    // - 평상시 반영은 도메인 변경 이벤트(AFTER_COMMIT)가 담당.
+    // - 이 스케줄은 이벤트 누락으로 생긴 drift 를 truncate 없이 reconcile 로 메운다(무중단).
+    // 주의: 다중 인스턴스 운영 시 동시 실행될 수 있으나 upsert/deactivate 라 결과는 멱등.
+    //       엄격한 단일 실행 보장이 필요하면 ShedLock 도입(후속 과제).
+    @Scheduled(cron = "0 0 4 * * *")
+    public void scheduledReconcileSearchIndex() {
+        log.info("[스케쥴러] 매일 04:00 검색 인덱스 정합성 보정 실행");
+        CompletableFuture.runAsync(() -> {
+            try {
+                pgSearchIndexSyncService.reconcile();
+                log.info("검색 인덱스 정합성 보정 완료");
+            } catch (Exception e) {
+                log.error("검색 인덱스 정합성 보정 실패 : {}", e.getMessage(), e);
+            }
+        });
+    }
 
     //날씨 데이터 스케줄링 (매 정각 실행)
     @Scheduled(cron = "0 0 * * * *")

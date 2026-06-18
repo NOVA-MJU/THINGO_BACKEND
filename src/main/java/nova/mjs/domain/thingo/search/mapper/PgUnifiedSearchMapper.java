@@ -1,8 +1,10 @@
 package nova.mjs.domain.thingo.search.mapper;
 
+import lombok.RequiredArgsConstructor;
 import nova.mjs.config.elasticsearch.KomoranTokenizerUtil;
 import nova.mjs.domain.thingo.ElasticSearch.Document.SearchDocument;
 import nova.mjs.domain.thingo.search.entity.UnifiedSearchIndex;
+import nova.mjs.domain.thingo.search.indexing.DeadlineExtractor;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
@@ -16,11 +18,14 @@ import java.time.Instant;
  * - popularity 는 likeCount + commentCount + recency 기반 0~100 점.
  */
 @Component
+@RequiredArgsConstructor
 public class PgUnifiedSearchMapper {
 
     private static final double LIKE_WEIGHT = 1.0d;
     private static final double COMMENT_WEIGHT = 2.0d;
     private static final long RECENCY_HALFLIFE_DAYS = 30L;
+
+    private final DeadlineExtractor deadlineExtractor;
 
     public String buildId(SearchDocument doc) {
         return buildId(doc.getType(), doc.getId());
@@ -37,6 +42,7 @@ public class PgUnifiedSearchMapper {
 
         String tokens = KomoranTokenizerUtil.buildSearchTokens(title, category, content);
         double popularity = computePopularity(doc.getLikeCount(), doc.getCommentCount(), doc.getInstant());
+        Instant validUntil = resolveValidUntil(doc, content);
 
         return UnifiedSearchIndex.of(
                 buildId(doc),
@@ -52,8 +58,26 @@ public class PgUnifiedSearchMapper {
                 doc.getCommentCount(),
                 popularity,
                 doc.getInstant(),
+                validUntil,
                 tokens
         );
+    }
+
+    /**
+     * 유효 마감 시점 결정.
+     * - 소스가 명시적 종료일을 주면(학사일정/학과일정) 그대로 사용.
+     * - 없고 공지(NOTICE)면 본문에서 추정(DeadlineExtractor). 추정 실패 시 null(=무기한).
+     * - 그 외 도메인은 null(무기한).
+     */
+    Instant resolveValidUntil(SearchDocument doc, String content) {
+        Instant explicit = doc.getValidUntil();
+        if (explicit != null) {
+            return explicit;
+        }
+        if ("NOTICE".equals(doc.getType())) {
+            return deadlineExtractor.extract(content).orElse(null);
+        }
+        return null;
     }
 
     /**

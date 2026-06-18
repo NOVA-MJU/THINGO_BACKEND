@@ -28,6 +28,10 @@ CREATE INDEX IF NOT EXISTS idx_usi_type_category_date
 CREATE INDEX IF NOT EXISTS idx_usi_date
     ON unified_search_index (date DESC);
 
+-- valid_until: 만료 여부 정렬/필터 대비 (컬럼은 JPA ddl-auto 가 생성)
+CREATE INDEX IF NOT EXISTS idx_usi_valid_until
+    ON unified_search_index (valid_until);
+
 CREATE OR REPLACE FUNCTION usi_update_search_vector() RETURNS trigger AS $$
 BEGIN
     NEW.search_vector :=

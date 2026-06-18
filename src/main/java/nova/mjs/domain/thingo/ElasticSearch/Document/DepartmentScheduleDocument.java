@@ -33,6 +33,9 @@ public class DepartmentScheduleDocument implements SearchDocument{
     @Field(type = FieldType.Date, format = DateFormat.epoch_millis)
     private Instant date;
 
+    // 유효 마감(학과일정 종료일). null 가능.
+    private Instant endDate;
+
     @CompletionField
     private List<String> suggest;
 
@@ -47,6 +50,12 @@ public class DepartmentScheduleDocument implements SearchDocument{
     public Instant getInstant() {
         return date;
     }
+
+    @Override
+    public Instant getValidUntil() {
+        return endDate;
+    }
+
     public static DepartmentScheduleDocument from(DepartmentSchedule schedule) {
         return DepartmentScheduleDocument.builder()
                 .id(schedule.getDepartmentScheduleUuid().toString())
@@ -54,6 +63,8 @@ public class DepartmentScheduleDocument implements SearchDocument{
                 .content(schedule.getContent())
                 .department(schedule.getDepartment().getDepartmentName().getLabel())
                 .date(schedule.getStartDate().atStartOfDay(ZoneId.systemDefault()).toInstant())
+                .endDate(schedule.getEndDate() == null ? null
+                        : schedule.getEndDate().atTime(23, 59, 59).atZone(ZoneId.systemDefault()).toInstant())
                 .type(SearchType.DEPARTMENT_SCHEDULE.name())
                 .build();
     }

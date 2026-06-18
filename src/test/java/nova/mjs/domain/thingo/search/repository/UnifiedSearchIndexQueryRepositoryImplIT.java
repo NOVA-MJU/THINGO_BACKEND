@@ -3,7 +3,6 @@ package nova.mjs.domain.thingo.search.repository;
 import nova.mjs.domain.thingo.search.dto.SearchResultRow;
 import nova.mjs.domain.thingo.search.entity.UnifiedSearchIndex;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +25,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import nova.mjs.domain.thingo.ElasticSearch.indexing.publisher.SearchIndexPublisher;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -56,9 +57,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(properties = "spring.main.allow-bean-definition-overriding=true")
 @Import(UnifiedSearchIndexQueryRepositoryImpl.class)
-@Disabled("@DataJpaTest 슬라이스 컨텍스트 wiring 미완성(일부 빈 미주입). "
-        + "검색 로직은 KomoranTokenizerUtilTsQueryTest(단위) + docs/search-eval 실엔드포인트 평가로 검증됨. "
-        + "슬라이스 설정 정리 후 재활성화 예정.")
 class UnifiedSearchIndexQueryRepositoryImplIT {
 
     @Container
@@ -79,6 +77,11 @@ class UnifiedSearchIndexQueryRepositoryImplIT {
         // 문제(BeanDefinitionOverrideException) 회피: 테스트 한정 override 허용.
         registry.add("spring.main.allow-bean-definition-overriding", () -> "true");
     }
+
+    // JPA 엔티티 리스너들이 의존하는 SearchIndexPublisher 를 슬라이스 컨텍스트에 제공한다.
+    // (검색 쿼리 테스트라 실제 발행은 불필요 → mock 으로 컨텍스트 로드만 충족)
+    @MockBean
+    SearchIndexPublisher searchIndexPublisher;
 
     @Autowired
     UnifiedSearchIndexRepository repository;
@@ -174,6 +177,49 @@ class UnifiedSearchIndexQueryRepositoryImplIT {
         assertThat(result).noneMatch(s -> s.contains("축제"));
     }
 
+    @Test
+    @DisplayName("만료된 문서는 같은 키워드의 유효한 문서보다 후순위")
+    void expired_ranks_below_valid() {
+        // given - 동일 키워드, 하나는 마감 지남 / 하나는 아직 유효
+        Instant now = Instant.now();
+        repository.save(build("NOTICE", "scholarship", "장학금 신청 안내 (마감)", "내용",
+                "장학금 장학 신청", now.minus(10, ChronoUnit.DAYS), now.minus(1, ChronoUnit.DAYS)));
+        repository.save(build("NOTICE", "scholarship", "장학금 신청 안내 (진행중)", "내용",
+                "장학금 장학 신청", now.minus(10, ChronoUnit.DAYS), now.plus(10, ChronoUnit.DAYS)));
+        repository.flush();
+
+        // when
+        Page<SearchResultRow> page = repository.search(
+                "장학금", null, null, "relevance", null, 0.0d, PageRequest.of(0, 10));
+
+        // then - 유효한(진행중) 문서가 위, 만료된 문서가 아래
+        assertThat(page.getTotalElements()).isEqualTo(2);
+        assertThat(page.getContent().get(0).title()).contains("진행중");
+        assertThat(page.getContent().get(1).title()).contains("마감");
+        assertThat(page.getContent().get(0).score())
+                .isGreaterThan(page.getContent().get(1).score());
+    }
+
+    @Test
+    @DisplayName("학칙(rule, 무기한)은 만료된 일반 공지보다 상위 노출")
+    void evergreen_rule_is_surfaced() {
+        // given - 무기한 학칙(valid_until null) + 마감 지난 일반 공지
+        Instant now = Instant.now();
+        repository.save(build("NOTICE", "rule", "출결 규정", "결석 처리 기준 안내",
+                "출결 규정 결석", now.minus(400, ChronoUnit.DAYS), null));
+        repository.save(build("NOTICE", "general", "출결 행사 안내", "내용",
+                "출결 행사", now.minus(5, ChronoUnit.DAYS), now.minus(1, ChronoUnit.DAYS)));
+        repository.flush();
+
+        // when
+        Page<SearchResultRow> page = repository.search(
+                "출결", null, null, "relevance", null, 0.0d, PageRequest.of(0, 10));
+
+        // then - 학칙이 결과에 있고, 만료된 일반 공지보다 위
+        assertThat(page.getContent()).isNotEmpty();
+        assertThat(page.getContent().get(0).title()).isEqualTo("출결 규정");
+    }
+
     private UnifiedSearchIndex row(String type, String title, String content, Instant date) {
         return rowWithTokens(type, title, content, title + " " + content, date);
     }
@@ -183,17 +229,28 @@ class UnifiedSearchIndexQueryRepositoryImplIT {
                                              String content,
                                              String tokens,
                                              Instant date) {
+        return build(type, null, title, content, tokens, date, null);
+    }
+
+    private UnifiedSearchIndex build(String type,
+                                     String category,
+                                     String title,
+                                     String content,
+                                     String tokens,
+                                     Instant date,
+                                     Instant validUntil) {
         String originalId = UUID.randomUUID().toString();
         return UnifiedSearchIndex.of(
                 type + ":" + originalId,
                 originalId,
                 type,
-                null,
+                category,
                 title,
                 content,
                 null, null, null,
                 0, 0, 0.0d,
                 date,
+                validUntil,
                 tokens
         );
     }

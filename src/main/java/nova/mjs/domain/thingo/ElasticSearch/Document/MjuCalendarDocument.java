@@ -34,6 +34,9 @@ public class MjuCalendarDocument implements SearchDocument  {
     @Field(type = FieldType.Date, format = DateFormat.epoch_millis)
     private Instant date;
 
+    // 유효 마감(학사일정 종료일). null 가능.
+    private Instant endDate;
+
     @Override
     public String getType() {
         return SearchType.MJU_CALENDAR.name();
@@ -44,12 +47,19 @@ public class MjuCalendarDocument implements SearchDocument  {
         return date;
     }
 
+    @Override
+    public Instant getValidUntil() {
+        return endDate;
+    }
+
     public static MjuCalendarDocument from(MjuCalendar mjuCalendar) {
         return MjuCalendarDocument.builder()
                 .id(mjuCalendar.getId().toString())
                 .title(mjuCalendar.getDescription())
                 .content("")
                 .date(mjuCalendar.getStartDate().atStartOfDay(ZoneId.systemDefault()).toInstant())
+                .endDate(mjuCalendar.getEndDate() == null ? null
+                        : mjuCalendar.getEndDate().atTime(23, 59, 59).atZone(ZoneId.systemDefault()).toInstant())
                 .type(SearchType.MJU_CALENDAR.name())
                 .build();
     }
