@@ -41,13 +41,14 @@ const REQUIRED = ["title", "imageUrl", "category"];
 
 function onOpen() {
   SpreadsheetApp.getUi().createMenu("배너")
-    .addItem("① 시트 초기 세팅", "setupSheet")
     .addItem("이미지 업로드", "showUploadDialog")
     .addItem("발행 (검증 후 반영)", "syncBanners")
     .addToUi();
 }
 
-// 한 번만 실행: 탭/헤더/드롭다운/체크박스/날짜형식 자동 생성
+// 최초 1회만 실행 (메뉴에 없음 - Apps Script 편집기에서 직접 실행).
+// 재실행하면 드롭다운/체크박스가 코드 기본값으로 덮어써지므로 세팅 후에는 호출하지 말 것.
+// 탭/헤더/드롭다운/체크박스/날짜형식 자동 생성
 function setupSheet() {
   const ss = SpreadsheetApp.getActive();
   let sheet = ss.getSheetByName(SHEET_NAME) || ss.insertSheet(SHEET_NAME);
@@ -120,9 +121,11 @@ function syncBanners() {
     ui.alert("발행 취소 - 아래 항목을 채운 뒤 다시 발행하세요:\n\n" + errors.join("\n"));
     return;
   }
+  // 0건이면 전체 삭제 의미 - 실수 방지로 확인 후 진행 (빈 배열 전송 → DB 전체 비움)
   if (rows.length === 0) {
-    ui.alert("발행할 배너가 없습니다.");
-    return;
+    const yn = ui.alert("배너가 0건입니다. 앱에서 모든 배너를 내리시겠습니까?",
+                        ui.ButtonSet.YES_NO);
+    if (yn !== ui.Button.YES) return;
   }
 
   const res = UrlFetchApp.fetch(ENDPOINT_SYNC, {
