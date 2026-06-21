@@ -1,9 +1,10 @@
-version: '3.8'   # ← 이 줄은 최근 Compose V2에선 경고만 뜨니 삭제해도 무방
+name: mjs-backend
 
 services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.11.1
     container_name: elasticsearch
+    restart: unless-stopped
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
@@ -33,16 +34,21 @@ services:
   kibana:
     image: docker.elastic.co/kibana/kibana:8.11.1
     container_name: kibana
+    restart: unless-stopped
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
     ports:
       - "5601:5601"
+    volumes:
+      - kibana_data:/usr/share/kibana/data
     depends_on:
       - elasticsearch
     networks: [ app ]
 
   redis:
     image: redis:7.2
+    container_name: redis
+    restart: unless-stopped
     ports:
       - "6379:6379"
     networks: [ app ]
@@ -53,18 +59,20 @@ services:
 
   loki:
     image: grafana/loki:2.9.8
+    container_name: loki
+    restart: unless-stopped
     ports:
       - "3100:3100"
     volumes:
       - ./MJS-BACK-SECURITY/loki-config.yml:/etc/loki/config.yml:ro
       - loki_data:/loki
     command: -config.file=/etc/loki/config.yml
-    restart: unless-stopped
     networks: [ mon ]
-
 
   promtail:
     image: grafana/promtail:2.9.8
+    container_name: promtail
+    restart: unless-stopped
     volumes:
       - ./MJS-BACK-SECURITY/promtail-config.yml:/etc/promtail/config.yml:ro
       - /home/ubuntu/MJS_BACKEND/logs:/var/log/mjs_backend_logs:ro
@@ -72,16 +80,16 @@ services:
     depends_on:
       - loki
     command: -config.file=/etc/promtail/config.yml
-    restart: unless-stopped
     networks: [ mon ]
 
   grafana:
     image: grafana/grafana:10.4.5
+    container_name: grafana
+    restart: unless-stopped
     ports:
       - "3000:3000"
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
-      # SMTP 설정 추가
       - GF_SMTP_ENABLED=true
       - GF_SMTP_HOST=smtp.gmail.com:587
       - GF_SMTP_USER=mjsearch2025@gmail.com
@@ -89,7 +97,6 @@ services:
       - GF_SMTP_FROM_ADDRESS=mjsearch2025@gmail.com
       - GF_SMTP_FROM_NAME=Thingo 경고 메일
       - GF_SMTP_SKIP_VERIFY=true
-
     depends_on:
       - loki
     volumes:
@@ -97,27 +104,30 @@ services:
     networks: [ mon ]
 
   prometheus:
-    image: prom/prometheus:latest
+    image: prom/prometheus:v2.54.1
+    container_name: prometheus
+    restart: unless-stopped
     ports:
       - "9090:9090"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
       - ./MJS-BACK-SECURITY/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--web.enable-remote-write-receiver"
+      - "--storage.tsdb.path=/prometheus"
     networks: [ mon ]
 
-
   node_exporter:
-    image: prom/node-exporter:latest
+    image: prom/node-exporter:v1.8.2
+    container_name: node_exporter
+    restart: unless-stopped
     expose:
       - "9100"
     networks: [ mon ]
-    # host의 /proc, /sys 등을 읽기 위해 권장되는 옵션들
     pid: host
-    restart: unless-stopped
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
@@ -129,7 +139,8 @@ services:
       - "--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)"
 
   k6:
-    image: grafana/k6:latest
+    image: grafana/k6:0.53.0
+    container_name: k6
     profiles: [ "loadtest" ]
     networks: [ mon ]
     volumes:
@@ -142,16 +153,16 @@ services:
       - K6_PROMETHEUS_RW_SERVER_URL=http://prometheus:9090/api/v1/write
     command: run /scripts/notice_list.js
 
-
 volumes:
   esdata:
+  kibana_data:
   loki_data:
   grafana_data:
   promtail_positions:
+  prometheus_data:
 
 networks:
   app:
     driver: bridge
   mon:
     driver: bridge
-
