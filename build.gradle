@@ -76,6 +76,10 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+	// Testcontainers (PostgreSQL 통합 검색 테스트)
+	testImplementation 'org.testcontainers:postgresql:1.19.7'
+	testImplementation 'org.testcontainers:junit-jupiter:1.19.7'
+
 	//webclient
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
