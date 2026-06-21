@@ -168,4 +168,22 @@ public class SchedulerService {
             }
         });
     }
+
+    // 공지 조회수 경량 갱신 (업무 시간대 매시 :45, 09:45~18:45)
+    // - 전체 크롤링(crawlAllNotices, 상세 본문 포함)보다 가볍게 목록 조회수만 갱신한다.
+    // - HOT 공지 랭킹(조회수 기반, 최근 1주)을 하루 종일 신선하게 유지하는 것이 목적.
+    // - crawlAllNotices가 :00/:30에 도는 것과 부하가 겹치지 않도록 :45에 배치한다.
+    @Scheduled(cron = "0 45 9-18 * * *")
+    public void refreshNoticeViewCounts() {
+        log.info("[MJS][Scheduler] Notice view-count refresh started.");
+        CompletableFuture.runAsync(() -> {
+            try {
+                noticeCrawlingService.refreshRecentViewCounts();
+                log.info("[MJS][Scheduler] Notice view-count refresh completed.");
+            } catch (Exception e) {
+                // 카테고리 단위 실패는 Service에서 이미 격리/로깅하므로, 여기서는 작업 전체 실패만 기록한다.
+                log.error("[MJS][Scheduler] Notice view-count refresh failed.", e);
+            }
+        });
+    }
 }

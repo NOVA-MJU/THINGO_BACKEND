@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +56,20 @@ public class NoticeCrawlingService {
      * - 운영 안정성을 위해 범위를 반드시 제한한다.
      */
     private static final int DUPLICATE_WINDOW_MONTHS = 1;
+
+    /**
+     * 조회수 경량 갱신 대상 윈도우(주).
+     * - HOT 공지 집계 기간(1주)과 동일하게 맞춘다. HOT 랭킹에 반영되는 최근 공지의
+     *   조회수만 신선하게 유지하면 충분하므로 범위를 1주로 제한한다.
+     */
+    private static final int VIEWCOUNT_REFRESH_WINDOW_WEEKS = 1;
+
+    /**
+     * 조회수 갱신 시 카테고리당 최대 목록 페이지 수.
+     * - 상세 페이지를 받지 않는 경량 작업이지만, 목록 요청 자체도 무한정 돌지 않도록 상한을 둔다.
+     * - 목록은 최신순이라 최근 1주 공지는 앞쪽 1~2페이지에 모두 포함된다.
+     */
+    private static final int MAX_VIEWCOUNT_REFRESH_PAGES = 2;
 
     /**
      * 모든 공지 크롤링 진입점.
@@ -215,20 +230,7 @@ public class NoticeCrawlingService {
         String rawTitle = row.select(".artclLinkView strong").text();
         String rawLink = row.select(".artclLinkView").attr("href");
 
-        Elements tds = row.select("td");
-        String rawViewCount = "0";
-
-        if (tds.size() >= 6) {
-            rawViewCount = tds.get(5).text();
-        } else if (!tds.isEmpty()) {
-            rawViewCount = tds.last().text();
-        }
-
-        int viewCount = 0;
-        String numbersOnly = rawViewCount.replaceAll("[^0-9]", "");
-        if (!numbersOnly.isEmpty()) {
-            viewCount = Integer.parseInt(numbersOnly);
-        }
+        int viewCount = parseViewCount(row);
 
         LocalDateTime date = normalizeDate(rawDate);
         String title = normalizeTitle(rawTitle);
@@ -400,7 +402,144 @@ public class NoticeCrawlingService {
         }
     }
 
+    /* ===================== 조회수 경량 갱신 ===================== */
+
+    /**
+     * 최근 공지 조회수 경량 갱신 진입점.
+     *
+     * 설계 의도:
+     * - 전체 크롤링(fetchAllNotices)은 상세 본문까지 받아 비싸므로 자주 돌릴 수 없다.
+     * - HOT 공지 랭킹은 조회수에 민감하므로, 상세는 받지 않고 "목록의 조회수"만 긁어
+     *   기존 DB row의 viewCount만 갱신하는 경량 작업을 별도로 둔다.
+     * - 크롤링은 트랜잭션 밖(NOT_SUPPORTED)에서 수행하고, DB 반영만 별도 트랜잭션으로 처리한다.
+     */
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
+    public void refreshRecentViewCounts() {
+        // 학교 공지 조회수 갱신
+        refreshGroupViewCounts(NoticeUrlRegistry.schoolNoticeUrls());
+        // 학과 공지 조회수 갱신
+        refreshGroupViewCounts(NoticeUrlRegistry.departmentNoticeUrls());
+    }
+
+    /**
+     * 공지 그룹 단위 조회수 갱신.
+     *
+     * 실패 격리:
+     * - 특정 카테고리의 실패가 다른 카테고리로 확산되지 않도록 category 루프 안쪽에서 예외를 격리한다.
+     */
+    private void refreshGroupViewCounts(Map<String, String> noticeUrls) {
+        noticeUrls.forEach((category, path) -> {
+            try {
+                refreshSingleCategoryViewCounts(category, path);
+            } catch (Exception e) {
+                log.error("[MJS][NOTICE][VIEWCOUNT] category={} 조회수 갱신 실패. 다른 카테고리는 계속 진행합니다.", category, e);
+            }
+        });
+    }
+
+    /**
+     * 특정 카테고리 조회수 갱신.
+     *
+     * 처리 흐름:
+     * 1) 목록 페이지만 크롤링한다(상세 본문 요청 없음).
+     * 2) 최근 윈도우(1주) 안의 row만 link -> viewCount 맵에 모은다.
+     * 3) 목록은 최신순이므로 윈도우보다 오래된 row를 만나면 즉시 중단한다.
+     * 4) 모은 맵을 별도 트랜잭션에서 일괄 갱신한다.
+     *
+     * (package-private: 단위 테스트에서 카테고리 단위로 직접 검증하기 위함)
+     */
+    void refreshSingleCategoryViewCounts(String category, String path) {
+
+        LocalDateTime threshold = LocalDateTime.now().minusWeeks(VIEWCOUNT_REFRESH_WINDOW_WEEKS);
+        Map<String, Integer> linkToViewCount = new HashMap<>(64);
+
+        int page = 1;
+        boolean stop = false;
+
+        while (!stop && page <= MAX_VIEWCOUNT_REFRESH_PAGES) {
+
+            Elements rows = NoticeCrawlHelper.crawlList(path, page);
+            if (rows.isEmpty()) {
+                break;
+            }
+
+            for (Element row : rows) {
+                String rawDate = row.select("._artclTdRdate").text();
+                LocalDateTime date = normalizeDate(rawDate);
+
+                // 날짜 파싱 실패 row는 비정상 데이터로 보고 스킵한다(전체 중단 아님).
+                if (date == null) {
+                    continue;
+                }
+
+                // 최신순 목록이므로 윈도우보다 오래된 공지를 만나면 이후는 볼 필요가 없다.
+                if (date.isBefore(threshold)) {
+                    stop = true;
+                    break;
+                }
+
+                String rawLink = row.select(".artclLinkView").attr("href");
+                if (rawLink.isBlank()) {
+                    continue;
+                }
+
+                // 저장된 link와 동일한 enc 규칙으로 상세 URL을 생성해 키로 사용한다.
+                String finalUrl = SUBVIEW_BASE + encodeArtclViewToEnc(rawLink);
+                linkToViewCount.put(finalUrl, parseViewCount(row));
+            }
+
+            page++;
+        }
+
+        if (linkToViewCount.isEmpty()) {
+            return;
+        }
+
+        // DB 반영은 별도 트랜잭션으로 일괄 수행한다.
+        int updated = applicationContext
+                .getBean(NoticeCrawlingService.class)
+                .applyViewCountUpdates(category, linkToViewCount);
+
+        log.info("[MJS][NOTICE][VIEWCOUNT] category={} 조회수 갱신 {}건 / 수집 {}건",
+                category, updated, linkToViewCount.size());
+    }
+
+    /**
+     * 조회수 갱신 전용 트랜잭션.
+     *
+     * 주의:
+     * - 이 메서드 호출 시점에는 이미 목록 크롤링(네트워크 I/O)이 끝나 있어야 한다.
+     * - updateViewCount는 bulk update라 대상 row가 없으면 0을 반환(무해)하므로 존재 여부 사전 조회가 불필요하다.
+     */
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    protected int applyViewCountUpdates(String category, Map<String, Integer> linkToViewCount) {
+        int updated = 0;
+        for (Map.Entry<String, Integer> entry : linkToViewCount.entrySet()) {
+            updated += noticeRepository.updateViewCount(category, entry.getKey(), entry.getValue());
+        }
+        return updated;
+    }
+
     /* ===================== 문자열 정규화 ===================== */
+
+    /**
+     * 목록 row에서 조회수를 추출한다.
+     * - 조회수 컬럼은 보통 6번째 td(index 5)이며, 컬럼 수가 적은 변형 테이블은 마지막 td를 사용한다.
+     * - 숫자 외 문자는 제거하고, 값이 없으면 0으로 본다.
+     */
+    private int parseViewCount(Element row) {
+        Elements tds = row.select("td");
+        String rawViewCount = "0";
+
+        if (tds.size() >= 6) {
+            rawViewCount = tds.get(5).text();
+        } else if (!tds.isEmpty()) {
+            rawViewCount = tds.last().text();
+        }
+
+        String numbersOnly = rawViewCount.replaceAll("[^0-9]", "");
+        return numbersOnly.isEmpty() ? 0 : Integer.parseInt(numbersOnly);
+    }
 
     private LocalDateTime normalizeDate(String rawDate) {
         if (rawDate == null || rawDate.isBlank()) return null;

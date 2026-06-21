@@ -90,4 +90,24 @@ public interface NoticeRepository extends JpaRepository<Notice, Long> {
             @Param("threshold") LocalDateTime threshold,
             @Param("links") Collection<String> links
     );
+
+    /**
+     * 기존 공지의 조회수만 갱신.
+     *
+     * - INSERT/DELETE 없이 viewCount 컬럼만 덮어쓴다(멱등, 조회수 단조 증가).
+     * - 대상 row가 없으면 0건 반환(무해) → 존재 여부 사전 조회 불필요.
+     * - 조회수 전용 경량 스케줄러(refreshRecentViewCounts)에서 사용한다.
+     */
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("""
+        update Notice n
+        set n.viewCount = :viewCount
+        where n.category = :category
+          and n.link = :link
+    """)
+    int updateViewCount(
+            @Param("category") String category,
+            @Param("link") String link,
+            @Param("viewCount") int viewCount
+    );
 }
