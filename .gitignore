@@ -49,3 +49,20 @@ bin/
 .vscode/
 /bin/
 /logs/application.log
+
+### Local tooling / caches (로컬 전용, 추적 불필요) ###
+.gradle-local/
+.token-savior-cache.json
+.agents/
+.claude/
+.mcp.json
+skills-lock.json
+
+### Runtime data (Redis dump 등) ###
+infra/redis/data/
+
+### E2E (Playwright) - 의존성/실행 산출물만 무시, 소스는 추적 ###
+e2e/node_modules/
+e2e/test-results/
+e2e/playwright-report/
+e2e/.cache/
