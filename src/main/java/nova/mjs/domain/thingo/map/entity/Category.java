@@ -138,4 +138,19 @@ public class Category extends BaseEntity {
     public boolean isTopLevel() {
         return parent == null;
     }
+
+    /** 동기화 갱신 (code는 유지) */
+    public void update(CategoryGroup group, Category parent, String label, String subtitle,
+                       String tooltipText, String iconKey, CategoryResultType resultType,
+                       boolean quickMenu, int displayOrder) {
+        this.group = group;
+        this.parent = parent;
+        this.label = label;
+        this.subtitle = subtitle;
+        this.tooltipText = tooltipText;
+        this.iconKey = iconKey;
+        this.resultType = resultType;
+        this.quickMenu = quickMenu;
+        this.displayOrder = displayOrder;
+    }
 }

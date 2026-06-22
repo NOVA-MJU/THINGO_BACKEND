@@ -61,4 +61,10 @@ public class Floor extends BaseEntity {
                 .mapImageUrl(mapImageUrl)
                 .build();
     }
+
+    /** 동기화 갱신 (건물+라벨은 유지) */
+    public void update(int floorOrder, String mapImageUrl) {
+        this.floorOrder = floorOrder;
+        this.mapImageUrl = mapImageUrl;
+    }
 }

@@ -69,4 +69,11 @@ public class CategoryGroup extends BaseEntity {
                 .displayOrder(displayOrder)
                 .build();
     }
+
+    /** 동기화 갱신 (code는 유지) */
+    public void update(String name, String colorHex, int displayOrder) {
+        this.name = name;
+        this.colorHex = colorHex;
+        this.displayOrder = displayOrder;
+    }
 }

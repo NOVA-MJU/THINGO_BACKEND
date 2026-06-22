@@ -116,4 +116,13 @@ public class OperatingHour extends BaseEntity {
                 .closed(true)
                 .build();
     }
+
+    /** 동기화 갱신 (건물+요일은 유지) */
+    public void update(LocalTime openTime, LocalTime closeTime, boolean always24h, boolean closed, String note) {
+        this.openTime = openTime;
+        this.closeTime = closeTime;
+        this.always24h = always24h;
+        this.closed = closed;
+        this.note = note;
+    }
 }

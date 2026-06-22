@@ -18,14 +18,24 @@ import java.util.List;
  * - 칩 클릭 목록·거리 정렬·핀 렌더링이 둘을 동일하게 다룬다
  * 종류별 전용 필드(건물=강의실코드, 장소=주소)는 nullable로 두고 type으로 구분한다.
  *
+ * [code]
+ * 구글 시트 동기화의 안정적 식별 키. 재동기화 시 code로 같은 핀을 찾아 갱신(upsert)하므로
+ * 즐겨찾기가 끊기지 않는다. 모든 핀(건물/장소)은 시트에서 고유 code를 부여받는다.
+ *
  * [좌표]
  * - 건물: 직접 입력
- * - 외부 장소: 등록 시 주소를 지오코딩해 저장
+ * - 외부 장소: 등록 시 주소를 지오코딩해 저장(또는 시트에 직접 입력)
  * - 내부 장소(프린터/라운지): 자체 좌표 없이 소속 건물 좌표를 따른다 → latitude/longitude가 null일 수 있다
  *   (거리 계산 시 parentBuilding의 좌표로 대체한다)
  */
 @Entity
-@Table(name = "map_pin")
+@Table(
+        name = "map_pin",
+        uniqueConstraints = @UniqueConstraint(
+                name = "uk_map_pin_code",
+                columnNames = "code"
+        )
+)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Pin extends BaseEntity {
@@ -34,6 +44,10 @@ public class Pin extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "map_pin_id")
     private Long id;
+
+    /** 동기화 식별 코드 (시트가 부여하는 고유 slug). upsert 키 */
+    @Column(name = "code", nullable = false)
+    private String code;
 
     /** 건물인지 장소인지 */
     @Enumerated(EnumType.STRING)
@@ -102,9 +116,10 @@ public class Pin extends BaseEntity {
     private List<OperatingHour> operatingHours = new ArrayList<>();
 
     @Builder(access = AccessLevel.PRIVATE)
-    private Pin(PinType type, Category category, String name, Double latitude, Double longitude,
+    private Pin(String code, PinType type, Category category, String name, Double latitude, Double longitude,
                String imageUrl, String infoText, Integer buildingNumber, String classroomCode,
                String address, Pin parentBuilding, Floor floor) {
+        this.code = code;
         this.type = type;
         this.category = category;
         this.name = name;
@@ -122,9 +137,10 @@ public class Pin extends BaseEntity {
     /**
      * 건물 핀 생성. 강의실 코드·건물 번호 등 건물 전용 정보를 받는다.
      */
-    public static Pin ofBuilding(Category category, String name, Double latitude, Double longitude,
+    public static Pin ofBuilding(String code, Category category, String name, Double latitude, Double longitude,
                                  String imageUrl, String infoText, Integer buildingNumber, String classroomCode) {
         return Pin.builder()
+                .code(code)
                 .type(PinType.BUILDING)
                 .category(category)
                 .name(name)
@@ -140,9 +156,10 @@ public class Pin extends BaseEntity {
     /**
      * 외부 장소 핀 생성. 도로명 주소와 (지오코딩으로 얻은) 좌표를 받는다.
      */
-    public static Pin ofExternalPlace(Category category, String name, Double latitude, Double longitude,
+    public static Pin ofExternalPlace(String code, Category category, String name, Double latitude, Double longitude,
                                       String imageUrl, String infoText, String address) {
         return Pin.builder()
+                .code(code)
                 .type(PinType.PLACE)
                 .category(category)
                 .name(name)
@@ -157,9 +174,10 @@ public class Pin extends BaseEntity {
     /**
      * 건물 내부 장소 핀 생성 (프린터/라운지 등). 좌표는 소속 건물을 따르므로 받지 않는다.
      */
-    public static Pin ofInternalPlace(Category category, String name, String imageUrl, String infoText,
+    public static Pin ofInternalPlace(String code, Category category, String name, String imageUrl, String infoText,
                                       Pin parentBuilding, Floor floor) {
         return Pin.builder()
+                .code(code)
                 .type(PinType.PLACE)
                 .category(category)
                 .name(name)
@@ -168,6 +186,26 @@ public class Pin extends BaseEntity {
                 .parentBuilding(parentBuilding)
                 .floor(floor)
                 .build();
+    }
+
+    /**
+     * 동기화 갱신. code/type은 유지하고 나머지 속성만 시트 값으로 덮어쓴다.
+     * 종류와 무관한 필드(건물 전용/장소 전용)는 해당 종류가 아니면 null로 전달된다.
+     */
+    public void update(Category category, String name, Double latitude, Double longitude,
+                       String imageUrl, String infoText, Integer buildingNumber, String classroomCode,
+                       String address, Pin parentBuilding, Floor floor) {
+        this.category = category;
+        this.name = name;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.imageUrl = imageUrl;
+        this.infoText = infoText;
+        this.buildingNumber = buildingNumber;
+        this.classroomCode = classroomCode;
+        this.address = address;
+        this.parentBuilding = parentBuilding;
+        this.floor = floor;
     }
 
     /** 거리 계산에 쓸 위도. 내부 장소면 소속 건물 위도로 대체. 둘 다 없으면 null */
