@@ -95,7 +95,11 @@ public enum ErrorCode {
 
     // 배너 동기화(구글 시트 → DB) 관련 에러
     BANNER_SYNC_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "BANNER_SYNC_UNAUTHORIZED", "[MJS] 배너 동기화 토큰이 유효하지 않습니다."),
-    BANNER_SYNC_INVALID_ROW(HttpStatus.BAD_REQUEST, "BANNER_SYNC_INVALID_ROW", "[MJS] 배너 동기화 데이터에 유효하지 않은 행이 있습니다.");
+    BANNER_SYNC_INVALID_ROW(HttpStatus.BAD_REQUEST, "BANNER_SYNC_INVALID_ROW", "[MJS] 배너 동기화 데이터에 유효하지 않은 행이 있습니다."),
+
+    // 명지도(지도 건물/장소/카테고리) 관련 에러
+    MAP_PIN_NOT_FOUND(HttpStatus.NOT_FOUND, "MAP_PIN_NOT_FOUND", "[MJS] 해당 건물/장소를 찾을 수 없습니다."),
+    MAP_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "MAP_CATEGORY_NOT_FOUND", "[MJS] 해당 카테고리를 찾을 수 없습니다.");
 
     private final HttpStatus status;
     private final String error;
