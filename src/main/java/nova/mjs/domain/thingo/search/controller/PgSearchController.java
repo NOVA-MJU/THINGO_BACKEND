@@ -17,14 +17,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * PostgreSQL 기반 통합 검색 API (v2).
+ * PostgreSQL 기반 통합 검색 API.
  *
- * - 기존 ES SearchController (/api/v1/search) 와 동일한 파라미터/응답 스키마.
- * - 경로만 /api/v2/search 로 분리하여 공존.
+ * - Elasticsearch 제거 후 이 컨트롤러가 /api/v1/search 를 담당한다(요청/응답 스키마 동일).
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v2/search")
+@RequestMapping("/api/v1/search")
 public class PgSearchController {
 
     private final PgUnifiedSearchService unifiedSearchService;

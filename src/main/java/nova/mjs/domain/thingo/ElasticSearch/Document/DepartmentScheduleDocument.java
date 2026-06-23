@@ -8,13 +8,11 @@ import lombok.NoArgsConstructor;
 import nova.mjs.domain.thingo.department.entity.DepartmentSchedule;
 import nova.mjs.domain.thingo.ElasticSearch.SearchType;
 import nova.mjs.config.elasticsearch.KomoranTokenizerUtil;
-import org.springframework.data.elasticsearch.annotations.*;
 
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.List;
 
-@Document(indexName = "department_schedule_index")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,13 +28,11 @@ public class DepartmentScheduleDocument implements SearchDocument{
 
     private String department;
 
-    @Field(type = FieldType.Date, format = DateFormat.epoch_millis)
     private Instant date;
 
     // 유효 마감(학과일정 종료일). null 가능.
     private Instant endDate;
 
-    @CompletionField
     private List<String> suggest;
 
     private String type;

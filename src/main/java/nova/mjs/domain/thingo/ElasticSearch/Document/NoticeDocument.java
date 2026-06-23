@@ -9,13 +9,11 @@ import nova.mjs.domain.thingo.notice.entity.Notice;
 import nova.mjs.domain.thingo.ElasticSearch.SearchType;
 import nova.mjs.config.elasticsearch.KomoranTokenizerUtil;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.*;
 
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.List;
 
-@Document(indexName = "notice_index")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,7 +27,6 @@ public class NoticeDocument implements SearchDocument{
 
     private String content;
 
-    @Field(type = FieldType.Date, format = DateFormat.epoch_millis)
     private Instant date;
 
     private String link;

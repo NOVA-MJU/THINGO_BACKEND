@@ -9,7 +9,6 @@ import nova.mjs.domain.thingo.ElasticSearch.indexing.Preprocessor.community.Comm
 import nova.mjs.domain.thingo.ElasticSearch.SearchType;
 import nova.mjs.config.elasticsearch.KomoranTokenizerUtil;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.*;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -23,7 +22,6 @@ import java.util.List;
  * - 에디터 JSON 원문은 Elasticsearch에 저장하지 않는다.
  * - 전처리는 Document 생성 시점에 완료된다.
  */
-@Document(indexName = "community_index")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -41,7 +39,6 @@ public class CommunityDocument implements SearchDocument {
      */
     private String content;
 
-    @Field(type = FieldType.Date, format = DateFormat.epoch_millis)
     private Instant date;
 
     private String type;

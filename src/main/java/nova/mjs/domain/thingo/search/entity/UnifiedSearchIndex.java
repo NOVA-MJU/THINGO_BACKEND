@@ -187,6 +187,17 @@ public class UnifiedSearchIndex {
         this.indexedAt = Instant.now();
     }
 
+    /** 좋아요/댓글 카운트만 부분 갱신(엔티티 재저장 없이 호출되는 경로용). null 은 해당 필드 생략. */
+    public void updateCounts(Integer likeCount, Integer commentCount) {
+        if (likeCount != null) {
+            this.likeCount = likeCount;
+        }
+        if (commentCount != null) {
+            this.commentCount = commentCount;
+        }
+        this.indexedAt = Instant.now();
+    }
+
     /** 중복 collapse 시 canonical(대표) 행을 다시 노출시킨다. */
     public void activate() {
         if (!Boolean.TRUE.equals(this.active)) {

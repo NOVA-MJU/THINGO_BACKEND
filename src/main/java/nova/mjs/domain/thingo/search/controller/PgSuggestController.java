@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v2/search")
+@RequestMapping("/api/v1/search")
 public class PgSuggestController {
 
     private final PgSuggestService suggestService;

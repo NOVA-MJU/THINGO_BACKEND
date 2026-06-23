@@ -82,10 +82,7 @@ dependencies {
 	//Json parse
 	implementation 'org.json:json:20210307'
 
-	//elastic search
-//	implementation 'co.elastic.clients:elasticsearch-java:8.10.4'
-	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
-//	implementation 'org.springframework.data:spring-data-elasticsearch:5.2.1'
+	// Elasticsearch 제거: PostgreSQL 통합검색(unified_search_index)으로 전환
 
     //Email 인증
 	implementation 'org.springframework.boot:spring-boot-starter-mail'

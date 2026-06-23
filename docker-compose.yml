@@ -1,46 +1,6 @@
 version: '3.8'   # ← 이 줄은 최근 Compose V2에선 경고만 뜨니 삭제해도 무방
 
 services:
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.1
-    container_name: elasticsearch
-    environment:
-      - discovery.type=single-node
-      - xpack.security.enabled=false
-      - bootstrap.memory_lock=true
-      - ES_JAVA_OPTS=-Xms512m -Xmx512m
-    ports:
-      - "9200:9200"
-    volumes:
-      - esdata:/usr/share/elasticsearch/data
-      - ./docker/elasticsearch/userdict_ko.txt:/usr/share/elasticsearch/config/userdict_ko.txt
-      - ./docker/elasticsearch/synonyms.txt:/usr/share/elasticsearch/config/synonyms.txt
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    cap_add:
-      - IPC_LOCK
-    command: >
-      bash -c "
-        if [ ! -d /usr/share/elasticsearch/plugins/analysis-nori ]; then
-          elasticsearch-plugin install --batch analysis-nori;
-        fi &&
-        /usr/local/bin/docker-entrypoint.sh
-      "
-    networks: [ app ]
-
-  kibana:
-    image: docker.elastic.co/kibana/kibana:8.11.1
-    container_name: kibana
-    environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-    ports:
-      - "5601:5601"
-    depends_on:
-      - elasticsearch
-    networks: [ app ]
-
   redis:
     image: redis:7.2
     ports:
@@ -144,7 +104,6 @@ services:
 
 
 volumes:
-  esdata:
   loki_data:
   grafana_data:
   promtail_positions:

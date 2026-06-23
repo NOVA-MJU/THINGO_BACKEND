@@ -9,13 +9,11 @@ import nova.mjs.domain.thingo.department.entity.Department;
 import nova.mjs.domain.thingo.department.entity.StudentCouncilNotice;
 import nova.mjs.domain.thingo.ElasticSearch.SearchType;
 import nova.mjs.config.elasticsearch.KomoranTokenizerUtil;
-import org.springframework.data.elasticsearch.annotations.*;
 
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.List;
 
-@Document(indexName = "department_notice_index")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,7 +29,6 @@ public class StudentCouncilNoticeDocument implements SearchDocument{
 
     private String department;
 
-    @Field(type = FieldType.Date, format = DateFormat.epoch_millis)
     private Instant date;
 
     private String type;
