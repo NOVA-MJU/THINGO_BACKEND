@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "MJU Campus API",
+    "title": "MJU 학교생활 정보 API",
     "version": "v1.0.0",
     "description": "명지대학교 식단, 공지사항, 명대신문 기사, 학사일정, 명지방송국 유튜브 정보를 제공하는 크롤링 기반 Campus API 명세서입니다."
   },

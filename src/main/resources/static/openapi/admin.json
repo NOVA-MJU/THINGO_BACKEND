@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "MJU Admin API",
+    "title": "MJU 관리자 API",
     "version": "v1.0.0",
     "description": "명지대학교 학생회 어드민(ADMIN) 계정 등록 및 관리 기능을 위한 API 명세서입니다."
   },

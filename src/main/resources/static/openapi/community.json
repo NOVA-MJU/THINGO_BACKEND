@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "MJS Community API",
+    "title": "MJU 커뮤니티 API",
     "version": "v1.0.0",
     "description": "게시글, 댓글, 대댓글, 좋아요 기능을 지원하는 커뮤니티 API 명세서입니다."
   },
