@@ -34,6 +34,30 @@ public class News {
     @Column(nullable = false)
     private String imageUrl; //이미지
 
+    /**
+     * 명대신문 원본은 og:image 를 http(또는 protocol-relative)로 내려준다.
+     * 동일 경로가 https 로도 정상 서빙되므로(인증서 정상), 응답/색인에는 https 로 통일해 노출한다.
+     * DB 값이 http 로 적재돼 있어도 이 getter 가 https 로 보정하므로 별도 마이그레이션 없이 일관성이 유지된다.
+     * (Lombok @Getter 는 수동 getter 가 있으면 생성하지 않는다)
+     */
+    public String getImageUrl() {
+        return toHttps(imageUrl);
+    }
+
+    /** http:// 또는 // 로 시작하는 URL 을 https:// 로 정규화. 이미 https 거나 빈 값이면 그대로 둔다. */
+    public static String toHttps(String url) {
+        if (url == null || url.isBlank()) {
+            return url;
+        }
+        if (url.startsWith("http://")) {
+            return "https://" + url.substring("http://".length());
+        }
+        if (url.startsWith("//")) {
+            return "https:" + url;
+        }
+        return url;
+    }
+
     @Column(columnDefinition = "TEXT")
     private String summary; //기사 첫 문단
 

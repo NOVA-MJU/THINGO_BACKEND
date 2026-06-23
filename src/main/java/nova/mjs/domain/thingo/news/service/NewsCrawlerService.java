@@ -108,7 +108,7 @@ public class NewsCrawlerService {
             }
 
             // 3) 나머지 필드 추출
-            String imageUrl = orDefault(meta(doc, "og:image"), DEFAULT_IMAGE);
+            String imageUrl = News.toHttps(orDefault(meta(doc, "og:image"), DEFAULT_IMAGE));
             String summary = clip(meta(doc, "og:description"));
             String reporter = orDefault(meta(doc, "og:article:author"), "미상");
             LocalDateTime date = parsePublishedTime(meta(doc, "article:published_time"));
