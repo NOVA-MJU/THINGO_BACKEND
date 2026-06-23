@@ -76,6 +76,11 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+	// 통합 테스트(@Testcontainers) - 버전은 Spring Boot BOM 이 관리
+	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+	testImplementation 'org.testcontainers:junit-jupiter'
+	testImplementation 'org.testcontainers:postgresql'
+
 	//webclient
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 

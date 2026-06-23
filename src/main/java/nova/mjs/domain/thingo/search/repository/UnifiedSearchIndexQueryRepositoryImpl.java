@@ -74,8 +74,9 @@ public class UnifiedSearchIndexQueryRepositoryImpl implements UnifiedSearchIndex
      * 최신성(recency) 가중치.
      * - 학교 데이터는 최신이 매우 중요하다. 같은 키워드/관련도라도 최근 글이 위로 오도록
      *   발행일(date) 기준 지수감쇠 부스트를 점수에 더한다.
-     * - 공고류(NOTICE/DEPARTMENT_NOTICE/STUDENT_COUNCIL_NOTICE)는 최신성이 특히 중요 → 0.50,
-     *   그 외(일정/뉴스/커뮤니티 등)는 0.30.
+     * - 학사일정(MJU_CALENDAR)·공고류(NOTICE/DEPARTMENT_NOTICE/STUDENT_COUNCIL_NOTICE)는
+     *   최신성이 특히 중요 → 0.50, 그 외(뉴스/커뮤니티 등)는 0.30.
+     *   학사일정을 0.50 군에 넣어야 타입 가중치(0.15)와 합쳐져 같은 키워드에서 확실히 최상단에 온다.
      * - 반감기 30일(2,592,000초): 30일이면 절반, 60일이면 1/4, 수개월이면 사실상 0.
      * - date 는 NOT NULL. 미래 발행(드묾)은 GREATEST 로 0 클램프.
      * 주의: ts_rank(보통 0~0.3) 대비 큰 값이라 최신성이 관련도를 강하게 보정한다(의도된 설계).
@@ -87,13 +88,15 @@ public class UnifiedSearchIndexQueryRepositoryImpl implements UnifiedSearchIndex
 
     /*
      * 도메인 타입 가중치.
-     * - 학사 공지/일정 우선. 외부 콘텐츠(NEWS/BROADCAST)는 학교 공식 정보 대비 우선순위가 낮아
-     *   음수(-0.05)로 명확히 하향한다(같은 키워드면 공지·일정이 뉴스보다 위).
+     * - 학사일정(MJU_CALENDAR)을 최우선으로 노출한다(가장 높은 가중치 0.15). 학생이 가장 자주 찾는
+     *   "언제 무슨 일정인지"가 같은 키워드면 공지보다 먼저 보여야 한다.
+     * - 그 다음 학교 공지(NOTICE 0.10). 외부 콘텐츠(NEWS/BROADCAST)는 학교 공식 정보 대비
+     *   우선순위가 낮아 음수(-0.05)로 명확히 하향한다.
      */
     private static final String TYPE_WEIGHT_EXPR =
             " CASE type "
+                    + "  WHEN 'MJU_CALENDAR' THEN 0.15 "
                     + "  WHEN 'NOTICE' THEN 0.10 "
-                    + "  WHEN 'MJU_CALENDAR' THEN 0.08 "
                     + "  WHEN 'DEPARTMENT_SCHEDULE' THEN 0.06 "
                     + "  WHEN 'STUDENT_COUNCIL_NOTICE' THEN 0.05 "
                     + "  WHEN 'COMMUNITY' THEN 0.04 "
@@ -161,13 +164,14 @@ public class UnifiedSearchIndexQueryRepositoryImpl implements UnifiedSearchIndex
         // 재계산하므로 지연의 주원인이었다. trigram 은 WHERE(% 연산자, GIN 인덱스)에서 매칭에만 쓰고
         // 랭킹에서는 제거한다.
         // 제목이 모든 토큰을 포함하면 강한 가산점(본문에만 co-occur 하는 문서보다 우선).
+        // 제목 매칭은 미리 저장된 title_vector 를 사용한다(행마다 to_tsvector(title) 재파싱 제거).
         String coverageBoost = hasTsQueryAnd
-                ? " + CASE WHEN to_tsvector('simple', coalesce(title,'')) @@ to_tsquery('simple', :tsQueryAnd) "
+                ? " + CASE WHEN title_vector @@ to_tsquery('simple', :tsQueryAnd) "
                 + "        THEN 0.4 ELSE 0 END "
                 : " ";
         String ftsScore = hasTsQuery
                 ? " ts_rank(search_vector, to_tsquery('simple', :tsQuery)) * 0.6 "
-                + " + CASE WHEN to_tsvector('simple', coalesce(title,'')) @@ to_tsquery('simple', :tsQuery) "
+                + " + CASE WHEN title_vector @@ to_tsquery('simple', :tsQuery) "
                 + "        THEN 0.25 ELSE 0 END "
                 + coverageBoost
                 : " 0.0 ";
@@ -184,14 +188,22 @@ public class UnifiedSearchIndexQueryRepositoryImpl implements UnifiedSearchIndex
                 ? " (coalesce(popularity, 0) * 0.0001 " + weightExpr + hotBoostExpr + VALIDITY_WEIGHT_EXPR + RECENCY_WEIGHT_EXPR + ") "
                 : " (0.0 " + weightExpr + VALIDITY_WEIGHT_EXPR + RECENCY_WEIGHT_EXPR + ") ");
 
+        // 제목은 항상 전체를 반환한다(HighlightAll=TRUE). 키워드가 제목에 없으면(본문/토큰 매칭)
+        // MaxFragments 방식은 제목을 짧은 앞부분 조각으로 잘라버린다("[교외근로" 처럼).
+        // 제목은 짧으므로 전체를 보여주고 매칭 구간만 <em> 표시한다.
         String headlineTitle = hasTsQuery
                 ? " ts_headline('simple', coalesce(title,''), to_tsquery('simple', :tsQuery), "
-                + " 'StartSel=<em>,StopSel=</em>,MaxFragments=1,MaxWords=20,MinWords=1') "
+                + " 'StartSel=<em>,StopSel=</em>,HighlightAll=TRUE') "
                 : " title ";
 
+        // 본문 스니펫: 매칭 주변 조각 2개를 ' ... ' 로 이어 풍부한 맥락을 보여준다.
+        // - MaxFragments=2: 매칭 단어 주위 창을 최대 2개(왜 검색에 걸렸는지 보이게).
+        // - MinWords=12: 너무 짧은 조각(한두 단어) 방지 → 문장처럼 읽힘.
+        // - MaxWords=28: 조각당 상한(카드에서 과도하게 길어지지 않게, 최종 줄수는 프론트가 clamp).
+        // - 키워드가 본문에 없으면(제목/토큰 매칭) 앞부분을 리드 문구로 반환.
         String headlineContent = hasTsQuery
                 ? " ts_headline('simple', coalesce(content,''), to_tsquery('simple', :tsQuery), "
-                + " 'StartSel=<em>,StopSel=</em>,MaxFragments=1,MaxWords=30,MinWords=1') "
+                + " 'StartSel=<em>,StopSel=</em>,MaxFragments=2,MinWords=12,MaxWords=28,FragmentDelimiter= ... ') "
                 : " content ";
 
         String orderBy = switch (resolvedOrder) {

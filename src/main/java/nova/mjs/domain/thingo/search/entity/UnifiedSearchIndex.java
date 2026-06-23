@@ -90,6 +90,14 @@ public class UnifiedSearchIndex {
     @Column(name = "search_vector", columnDefinition = "tsvector", insertable = false, updatable = false)
     private String searchVector;
 
+    /**
+     * 제목 전용 tsvector. DB 트리거가 title 로부터 자동 갱신.
+     * - 랭킹 점수의 제목 매칭 부스트를 행마다 to_tsvector(title) 재파싱 없이 계산하려고 미리 저장한다.
+     * - JPA insert/update 대상 제외(트리거 관리).
+     */
+    @Column(name = "title_vector", columnDefinition = "tsvector", insertable = false, updatable = false)
+    private String titleVector;
+
     @Builder(access = AccessLevel.PRIVATE)
     private UnifiedSearchIndex(String id,
                                String originalId,

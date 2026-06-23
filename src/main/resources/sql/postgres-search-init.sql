@@ -13,6 +13,9 @@
 
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 
+-- 제목 전용 tsvector 컬럼(JPA ddl-auto 가 만들지 못한 경우 대비, 멱등).
+ALTER TABLE unified_search_index ADD COLUMN IF NOT EXISTS title_vector TSVECTOR;
+
 CREATE INDEX IF NOT EXISTS idx_usi_search_vector
     ON unified_search_index USING GIN (search_vector);
 
@@ -42,6 +45,7 @@ BEGIN
         to_tsvector('simple', coalesce(NEW.search_tokens, ''))
         || to_tsvector('simple', coalesce(NEW.title, ''))
         || to_tsvector('simple', coalesce(NEW.content, ''));
+    NEW.title_vector := to_tsvector('simple', coalesce(NEW.title, ''));
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -52,3 +56,8 @@ CREATE TRIGGER trg_usi_update_search_vector
 BEFORE INSERT OR UPDATE OF search_tokens, title, content
 ON unified_search_index
 FOR EACH ROW EXECUTE FUNCTION usi_update_search_vector();
+
+-- 기존 행 backfill(트리거는 신규/변경 행만 채운다). title_vector IS NULL 가드로 멱등.
+UPDATE unified_search_index
+   SET title_vector = to_tsvector('simple', coalesce(title, ''))
+ WHERE title_vector IS NULL;
