@@ -54,9 +54,10 @@ jobs:
           git submodule foreach --recursive 'git reset --hard || true'
           git submodule foreach --recursive 'git clean -fdx || true'
 
-          # 빌드
+          # 빌드 (상주 Gradle 데몬 정리 + 데몬 미사용으로 idle 메모리 ~600MB 절약)
           chmod +x ./gradlew || true
-          ./gradlew clean bootJar -x test
+          ./gradlew --stop || true
+          ./gradlew clean bootJar -x test --no-daemon
 
           # jar 체크
           test -f "\${JAR_PATH}" || { set +x; log "❌ JAR 미존재"; exit 1; }
