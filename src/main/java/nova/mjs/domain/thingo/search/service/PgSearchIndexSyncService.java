@@ -80,6 +80,9 @@ public class PgSearchIndexSyncService {
             repository.saveAll(desired.subList(i, end));
         }
 
+        // 트리거 의존 제거: 삽입 후 search_vector/title_vector 를 직접 재생성한다(트리거 누락 안전망).
+        repository.rebuildVectors();
+
         log.info("[PgSearch][SYNC] end. indexed={}", desired.size());
     }
 
@@ -133,6 +136,9 @@ public class PgSearchIndexSyncService {
                 repository.saveAll(news.subList(i, end));
             }
         }
+
+        // 트리거 의존 제거: 변경/삽입분의 search_vector/title_vector 를 직접 재생성한다(트리거 누락 안전망).
+        repository.rebuildVectors();
 
         log.info("[PgSearch][RECONCILE] end. new={}, updated={}, deactivated={}, unchanged={}",
                 inserted, updated, deactivated, unchanged);
