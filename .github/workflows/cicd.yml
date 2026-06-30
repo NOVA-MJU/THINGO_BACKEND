@@ -51,8 +51,10 @@ jobs:
       - name: ✅ Locate jar
         id: jar
         run: |
-          JAR=$(ls build/libs/MJS_BACKEND-*.jar | head -1)
-          test -f "$JAR" || { echo "❌ JAR 미존재"; exit 1; }
+          # 러너 체크아웃 디렉토리명(THINGO_BACKEND)이 gradle rootProject.name 이 되어
+          # 산출물명이 환경따라 달라짐. jar.enabled=false 라 bootJar 단일 jar 만 존재 -> 이름 무관 매칭.
+          JAR=$(ls build/libs/*.jar | grep -v -- '-plain\.jar$' | head -1)
+          test -f "$JAR" || { echo "❌ JAR 미존재"; ls -l build/libs/ || true; exit 1; }
           echo "path=$JAR" >> "$GITHUB_OUTPUT"
           echo "빌드 산출물: $JAR ($(du -h "$JAR" | cut -f1))"
 
