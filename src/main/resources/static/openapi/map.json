@@ -95,7 +95,6 @@
                     {
                       "code": "food",
                       "name": "식사 (F&B)",
-                      "colorHex": "#F57F36",
                       "chips": [
                         { "code": "daedong", "label": "대동명지도", "iconKey": "MyeongwolIcon", "resultType": "PLACE_LIST", "subtitle": "by. 명월", "tooltipText": "뭐 먹을지 고민이라면? 명월 Pick 맛집을 확인해보세요!" },
                         { "code": "cafeteria", "label": "학생식당", "iconKey": "CafeteriaIcon", "resultType": "PLACE_LIST", "subtitle": null, "tooltipText": null }
@@ -104,7 +103,6 @@
                     {
                       "code": "convenience",
                       "name": "편의 (Convenience)",
-                      "colorHex": "#3B82F6",
                       "chips": [
                         { "code": "printer", "label": "프린터", "iconKey": "PrinterIcon", "resultType": "PLACE_LIST", "subtitle": null, "tooltipText": null }
                       ]
@@ -542,7 +540,6 @@
         "properties": {
           "code": { "type": "string", "description": "그룹 코드", "example": "food" },
           "name": { "type": "string", "description": "그룹 이름", "example": "식사 (F&B)" },
-          "colorHex": { "type": "string", "nullable": true, "description": "그룹 아이콘 강조 색상 HEX", "example": "#F57F36" },
           "chips": { "type": "array", "description": "그룹에 속한 칩들", "items": { "$ref": "#/components/schemas/MapChip" } }
         },
         "required": ["code", "name", "chips"]

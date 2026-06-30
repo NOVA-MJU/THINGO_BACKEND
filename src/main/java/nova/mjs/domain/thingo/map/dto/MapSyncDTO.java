@@ -34,7 +34,6 @@ public class MapSyncDTO {
     public static class GroupRow {
         private String code;
         private String name;
-        private String colorHex;
         private Integer displayOrder;
     }
 

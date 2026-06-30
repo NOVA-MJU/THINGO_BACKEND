@@ -52,8 +52,6 @@ public class MapCategoryResponse {
         private final String code;
         /** 그룹 이름 (예: "식사 (F&B)") */
         private final String name;
-        /** 그룹 아이콘 색상 HEX */
-        private final String colorHex;
         /** 그룹에 속한 칩들 */
         private final List<Chip> chips;
 
@@ -61,7 +59,6 @@ public class MapCategoryResponse {
             return Group.builder()
                     .code(group.getCode())
                     .name(group.getName())
-                    .colorHex(group.getColorHex())
                     .chips(chips)
                     .build();
         }

@@ -13,8 +13,8 @@ import nova.mjs.util.entity.BaseEntity;
  * '더보기(···)'를 눌렀을 때 뜨는 전체 카테고리 화면에서 칩들을 묶는 헤더다.
  * 예) 식사(F&B), 학습·휴식(Study/Rest), 편의(Convenience)
  *
- * 칩(Category)들이 이 그룹에 소속되며, 그룹은 화면 노출 순서(displayOrder)와
- * 그룹 아이콘 색상(colorHex)을 갖는다.
+ * 칩(Category)들이 이 그룹에 소속되며, 그룹은 화면 노출 순서(displayOrder)를 갖는다.
+ * (그룹/칩 색상은 프론트가 그룹 code로 매핑하므로 서버는 색상을 저장하지 않는다)
  */
 @Entity
 @Table(
@@ -41,19 +41,14 @@ public class CategoryGroup extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    /** 그룹 아이콘 강조 색상 (HEX, 예: #F57F36). 프론트가 Tailwind 등으로 조립 */
-    @Column(name = "color_hex")
-    private String colorHex;
-
     /** 바텀시트에서 그룹이 노출되는 순서 (작을수록 위) */
     @Column(name = "display_order", nullable = false)
     private int displayOrder;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private CategoryGroup(String code, String name, String colorHex, int displayOrder) {
+    private CategoryGroup(String code, String name, int displayOrder) {
         this.code = code;
         this.name = name;
-        this.colorHex = colorHex;
         this.displayOrder = displayOrder;
     }
 
@@ -61,19 +56,17 @@ public class CategoryGroup extends BaseEntity {
      * 카테고리 그룹 생성.
      * 운영 데이터는 추후 구글 시트 동기화로 채워지며, 시드/테스트에서 이 팩토리를 사용한다.
      */
-    public static CategoryGroup of(String code, String name, String colorHex, int displayOrder) {
+    public static CategoryGroup of(String code, String name, int displayOrder) {
         return CategoryGroup.builder()
                 .code(code)
                 .name(name)
-                .colorHex(colorHex)
                 .displayOrder(displayOrder)
                 .build();
     }
 
     /** 동기화 갱신 (code는 유지) */
-    public void update(String name, String colorHex, int displayOrder) {
+    public void update(String name, int displayOrder) {
         this.name = name;
-        this.colorHex = colorHex;
         this.displayOrder = displayOrder;
     }
 }

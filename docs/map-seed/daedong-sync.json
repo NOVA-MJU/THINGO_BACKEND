@@ -1,0 +1,2525 @@
+﻿{
+    "groups":  [
+                   {
+                       "displayOrder":  1,
+                       "code":  "food",
+                       "name":  "식사 (F\u0026B)"
+                   }
+               ],
+    "categories":  [
+                       {
+                           "displayOrder":  1,
+                           "label":  "대동명지도",
+                           "code":  "daedong",
+                           "groupCode":  "food",
+                           "resultType":  "PLACE_LIST",
+                           "quickMenu":  true
+                       },
+                       {
+                           "displayOrder":  1,
+                           "label":  "한식",
+                           "code":  "daedong-kr",
+                           "groupCode":  "food",
+                           "resultType":  "PLACE_LIST",
+                           "parentCode":  "daedong"
+                       },
+                       {
+                           "displayOrder":  2,
+                           "label":  "일식",
+                           "code":  "daedong-jp",
+                           "groupCode":  "food",
+                           "resultType":  "PLACE_LIST",
+                           "parentCode":  "daedong"
+                       },
+                       {
+                           "displayOrder":  3,
+                           "label":  "중식",
+                           "code":  "daedong-cn",
+                           "groupCode":  "food",
+                           "resultType":  "PLACE_LIST",
+                           "parentCode":  "daedong"
+                       },
+                       {
+                           "displayOrder":  4,
+                           "label":  "간편식·분식",
+                           "code":  "daedong-snack",
+                           "groupCode":  "food",
+                           "resultType":  "PLACE_LIST",
+                           "parentCode":  "daedong"
+                       },
+                       {
+                           "displayOrder":  5,
+                           "label":  "고기",
+                           "code":  "daedong-meat",
+                           "groupCode":  "food",
+                           "resultType":  "PLACE_LIST",
+                           "parentCode":  "daedong"
+                       },
+                       {
+                           "displayOrder":  6,
+                           "label":  "주류",
+                           "code":  "daedong-bar",
+                           "groupCode":  "food",
+                           "resultType":  "PLACE_LIST",
+                           "parentCode":  "daedong"
+                       },
+                       {
+                           "displayOrder":  7,
+                           "label":  "카페·디저트",
+                           "code":  "daedong-cafe",
+                           "groupCode":  "food",
+                           "resultType":  "PLACE_LIST",
+                           "parentCode":  "daedong"
+                       },
+                       {
+                           "displayOrder":  8,
+                           "label":  "양식·아시안",
+                           "code":  "daedong-western",
+                           "groupCode":  "food",
+                           "resultType":  "PLACE_LIST",
+                           "parentCode":  "daedong"
+                       }
+                   ],
+    "places":  [
+                   {
+                       "name":  "삼정식당",
+                       "code":  "dd-1025414098",
+                       "latitude":  37.5796415,
+                       "address":  "서울 서대문구 거북골로 25-8",
+                       "longitude":  126.9250425,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "대명식당",
+                       "code":  "dd-18289083",
+                       "latitude":  37.5817332,
+                       "address":  "서울 서대문구 증가로20나길 33",
+                       "longitude":  126.9204625,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "다올식당",
+                       "code":  "dd-1860718912",
+                       "latitude":  37.5767091,
+                       "address":  "서울 서대문구 가재울로6길 53-55",
+                       "longitude":  126.9234475,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "기린식당",
+                       "code":  "dd-1601474310",
+                       "latitude":  37.576923,
+                       "address":  "서울 서대문구 가재울로6길 53-87",
+                       "longitude":  126.9229465,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "백련팥죽",
+                       "code":  "dd-1715174013",
+                       "latitude":  37.5769333,
+                       "address":  "서울 서대문구 가재울로10길 39",
+                       "longitude":  126.9227346,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "미식가",
+                       "code":  "dd-1643693487",
+                       "latitude":  37.5770355,
+                       "address":  "서울 서대문구 가재울로10길 41",
+                       "longitude":  126.922743,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "정가네맛집",
+                       "code":  "dd-1303536115",
+                       "latitude":  37.5777197,
+                       "address":  "서울 서대문구 증가로10길 3",
+                       "longitude":  126.9230764,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "정주보쌈",
+                       "code":  "dd-1760908956",
+                       "latitude":  37.5764466,
+                       "address":  "서울 서대문구 가재울로4길 63",
+                       "longitude":  126.9247014,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "큰손닭갈비\u0026곱창 명지대점",
+                       "code":  "dd-20518180",
+                       "latitude":  37.581955,
+                       "address":  "서울 서대문구 거북골로 8-22",
+                       "longitude":  126.9253955,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "기쁨이네",
+                       "code":  "dd-1526953217",
+                       "latitude":  37.5770219,
+                       "address":  "서울 서대문구 가재울로6길 53-87",
+                       "longitude":  126.9231168,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "한술식당 명지대점",
+                       "code":  "dd-1945558222",
+                       "latitude":  37.5813952,
+                       "address":  "서울 서대문구 명지대2길 2",
+                       "longitude":  126.925062,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "만득이네 두루치기",
+                       "code":  "dd-2007292156",
+                       "latitude":  37.5789411,
+                       "address":  "서울 서대문구 거북골로 43-12",
+                       "longitude":  126.9237181,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "뚱구순대국",
+                       "code":  "dd-1416317610",
+                       "latitude":  37.5816579,
+                       "address":  "서울 서대문구 증가로12나길 63-1",
+                       "longitude":  126.9209156,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "대빈",
+                       "code":  "dd-1854685128",
+                       "latitude":  37.5809632,
+                       "address":  "서울 서대문구 명지대길 14",
+                       "longitude":  126.9250612,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "먹으면돼지",
+                       "code":  "dd-1981922568",
+                       "latitude":  37.5789286,
+                       "address":  "서울 서대문구 거북골로 37-10",
+                       "longitude":  126.9239128,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "통김치삼겹살",
+                       "code":  "dd-1271600180",
+                       "latitude":  37.588885,
+                       "address":  "서울 은평구 응암로13길 23",
+                       "longitude":  126.9149779,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "황소식당",
+                       "code":  "dd-1809593741",
+                       "latitude":  37.5817868,
+                       "address":  "서울 서대문구 가좌로 119",
+                       "longitude":  126.9207459,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "감성낙곱새 서대문구점",
+                       "code":  "dd-1712679482",
+                       "latitude":  37.5815766,
+                       "address":  "서울 서대문구 명지대길 27",
+                       "longitude":  126.9245981,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "미자네맛반찬",
+                       "code":  "dd-37700680",
+                       "latitude":  37.58198,
+                       "address":  "서울 서대문구 명지대길 41",
+                       "longitude":  126.9241496,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "수인김치찜",
+                       "code":  "dd-35781718",
+                       "latitude":  37.5820715,
+                       "address":  "서울 서대문구 명지대1라길 2",
+                       "longitude":  126.9237052,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "화화매운갈비찜 \u0026 소불고기버섯전골 명지대점",
+                       "code":  "dd-1295326911",
+                       "latitude":  37.5818125,
+                       "address":  "서울 서대문구 명지대길 34",
+                       "longitude":  126.9246088,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "생선구이와돈까스2",
+                       "code":  "dd-774318560",
+                       "latitude":  37.5815893,
+                       "address":  "서울 서대문구 명지대2길 7",
+                       "longitude":  126.9249417,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "연희김밥 명지대",
+                       "code":  "dd-36561606",
+                       "latitude":  37.580848,
+                       "address":  "서울 서대문구 거북골로 14",
+                       "longitude":  126.9256276,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "밥은화 명지대점",
+                       "code":  "dd-1684083866",
+                       "latitude":  37.5807786,
+                       "address":  "서울 서대문구 거북골로 14",
+                       "longitude":  126.9255461,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "김밥천국 명지점",
+                       "code":  "dd-1505312636",
+                       "latitude":  37.5804965,
+                       "address":  "서울 서대문구 거북골로 20",
+                       "longitude":  126.9251354,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "투데이하우스",
+                       "code":  "dd-1671421502",
+                       "latitude":  37.5810942,
+                       "address":  "서울 서대문구 명지대길 16",
+                       "longitude":  126.9251189,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "쏘울푸드",
+                       "code":  "dd-1887405517",
+                       "latitude":  37.5817443,
+                       "address":  "서울 서대문구 명지대2길 14",
+                       "longitude":  126.925179,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "보리향기 본점",
+                       "code":  "dd-1609774904",
+                       "latitude":  37.5813189,
+                       "address":  "서울 서대문구 거북골로 8-4",
+                       "longitude":  126.9260114,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "소반",
+                       "code":  "dd-738794960",
+                       "latitude":  37.5813959,
+                       "address":  "서울 서대문구 거북골로 4",
+                       "longitude":  126.9264695,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "다래칼국수",
+                       "code":  "dd-13150719",
+                       "latitude":  37.5845304,
+                       "address":  "서울 서대문구 가좌로 141",
+                       "longitude":  126.923661,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "차고집칡냉면",
+                       "code":  "dd-1958140702",
+                       "latitude":  37.5837415,
+                       "address":  "서울특별시 서대문구 남가좌동 3-2",
+                       "longitude":  126.9230866,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "제육대가",
+                       "code":  "dd-1329155520",
+                       "latitude":  37.5839744,
+                       "address":  "서울 서대문구 명지대7길 22",
+                       "longitude":  126.9220697,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "치즈밥있슈명지대점",
+                       "code":  "dd-31222381",
+                       "latitude":  37.5827889,
+                       "address":  "서울 서대문구 명지대길 62",
+                       "longitude":  126.9236049,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "부안식당",
+                       "code":  "dd-13150835",
+                       "latitude":  37.5831068,
+                       "address":  "서울 서대문구 명지대길 68-1",
+                       "longitude":  126.9234763,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "김밥천국 명지전문대점",
+                       "code":  "dd-886375920",
+                       "latitude":  37.5845316,
+                       "address":  "서울 서대문구 가좌로 140",
+                       "longitude":  126.9241894,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "밀이삭칼국수",
+                       "code":  "dd-1539314915",
+                       "latitude":  37.5773498,
+                       "address":  "서울 서대문구 가재울로14길 29",
+                       "longitude":  126.9216954,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "동궁찜닭 명지대점",
+                       "code":  "dd-1028667705",
+                       "latitude":  37.5801559,
+                       "address":  "서울 서대문구 거북골로 19-1",
+                       "longitude":  126.9251605,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "대가감자탕뼈해장국",
+                       "code":  "dd-31564649",
+                       "latitude":  37.576648,
+                       "address":  "서울 서대문구 증가로 111",
+                       "longitude":  126.9249207,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "팔방칼국수",
+                       "code":  "dd-1836303569",
+                       "latitude":  37.5770176,
+                       "address":  "서울 서대문구 가재울로6길 53-42",
+                       "longitude":  126.9235232,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "민스키친",
+                       "code":  "dd-1095063492",
+                       "latitude":  37.5808814,
+                       "address":  "서울 서대문구 가좌로 89",
+                       "longitude":  126.9273292,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "쿡스",
+                       "code":  "dd-1101669100",
+                       "latitude":  37.5803965,
+                       "address":  "서울 서대문구 증가로10길 94",
+                       "longitude":  126.9266689,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "엄마밥상",
+                       "code":  "dd-1014918591",
+                       "latitude":  37.580785,
+                       "address":  "서울 서대문구 거북골로 11",
+                       "longitude":  126.92593,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "군산식당",
+                       "code":  "dd-21796089",
+                       "latitude":  37.5781768,
+                       "address":  "서울 서대문구 거북골로 53-18",
+                       "longitude":  126.9229896,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "일로칡냉면 명지대점",
+                       "code":  "dd-11700037",
+                       "latitude":  37.5782479,
+                       "address":  "서울 서대문구 거북골로 53-4",
+                       "longitude":  126.9224745,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "본죽\u0026비빔밥 남가좌점",
+                       "code":  "dd-1120428796",
+                       "latitude":  37.5773237,
+                       "address":  "서울 서대문구 증가로 122",
+                       "longitude":  126.9243486,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "통큰한식부페",
+                       "code":  "dd-1438663093",
+                       "latitude":  37.5772798,
+                       "address":  "서울 서대문구 증가로 131",
+                       "longitude":  126.9230275,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "킹콩부대찌개 명지대점",
+                       "code":  "dd-1364845413",
+                       "latitude":  37.5785213,
+                       "address":  "서울 서대문구 증가로10길 23",
+                       "longitude":  126.9235679,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "고인돌식당",
+                       "code":  "dd-18287122",
+                       "latitude":  37.5783083,
+                       "address":  "서울특별시 서대문구 남가좌동",
+                       "longitude":  126.9228083,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "우리식당",
+                       "code":  "dd-1220114339",
+                       "latitude":  37.5796492,
+                       "address":  "서울 서대문구 거북골로 25-8",
+                       "longitude":  126.9249399,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "봉구네가마솥순대국",
+                       "code":  "dd-36417234",
+                       "latitude":  37.5791807,
+                       "address":  "서울 서대문구 증가로10길 50",
+                       "longitude":  126.9247584,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "베가 보쌈 명지대점",
+                       "code":  "dd-1102427977",
+                       "latitude":  37.5792414,
+                       "address":  "서울 서대문구 거북골로 33-4",
+                       "longitude":  126.9240284,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "청춘보쌈",
+                       "code":  "dd-1326644451",
+                       "latitude":  37.5788381,
+                       "address":  "서울 서대문구 증가로10길 38",
+                       "longitude":  126.9242844,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "마닐로우 본점",
+                       "code":  "dd-1921315424",
+                       "latitude":  37.5791734,
+                       "address":  "서울 서대문구 거북골로 37-5",
+                       "longitude":  126.923908,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "돼지주막",
+                       "code":  "dd-1577370188",
+                       "latitude":  37.5796739,
+                       "address":  "서울 서대문구 거북골로 25-6",
+                       "longitude":  126.9247477,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "호우동 명지점",
+                       "code":  "dd-1020946950",
+                       "latitude":  37.5796904,
+                       "address":  "서울 서대문구 거북골로 29-3",
+                       "longitude":  126.924628,
+                       "categoryCode":  "daedong-kr"
+                   },
+                   {
+                       "name":  "신 부산스시",
+                       "code":  "dd-1207723079",
+                       "latitude":  37.5772302,
+                       "address":  "서울 서대문구 가재울로12길 40",
+                       "longitude":  126.9224103,
+                       "categoryCode":  "daedong-jp"
+                   },
+                   {
+                       "name":  "육회바른연어 명지대점",
+                       "code":  "dd-1378528228",
+                       "latitude":  37.5767301,
+                       "address":  "서울 서대문구 증가로 110",
+                       "longitude":  126.9252828,
+                       "categoryCode":  "daedong-jp"
+                   },
+                   {
+                       "name":  "타코야끼오늘",
+                       "code":  "dd-1036164602",
+                       "latitude":  37.5820193,
+                       "address":  "서울 서대문구 명지대길 40",
+                       "longitude":  126.9243559,
+                       "categoryCode":  "daedong-jp"
+                   },
+                   {
+                       "name":  "왕포수산",
+                       "code":  "dd-1311765086",
+                       "latitude":  37.5811823,
+                       "address":  "서울 서대문구 거북골로 8",
+                       "longitude":  126.9261622,
+                       "categoryCode":  "daedong-jp"
+                   },
+                   {
+                       "name":  "3Kg이상대광어횟집",
+                       "code":  "dd-1838620157",
+                       "latitude":  37.5810073,
+                       "address":  "서울 서대문구 거북골로 12-15",
+                       "longitude":  126.9255266,
+                       "categoryCode":  "daedong-jp"
+                   },
+                   {
+                       "name":  "핵밥 명지대점",
+                       "code":  "dd-1338958968",
+                       "latitude":  37.5798713,
+                       "address":  "서울 서대문구 거북골로 25-1",
+                       "longitude":  126.9246131,
+                       "categoryCode":  "daedong-jp"
+                   },
+                   {
+                       "name":  "여부초밥 명지대점",
+                       "code":  "dd-1940422494",
+                       "latitude":  37.5820462,
+                       "address":  "서울 서대문구 명지대길 40",
+                       "longitude":  126.9243371,
+                       "categoryCode":  "daedong-jp"
+                   },
+                   {
+                       "name":  "육초연 명지대점",
+                       "code":  "dd-1117030338",
+                       "latitude":  37.5797158,
+                       "address":  "서울 서대문구 거북골로 21-12",
+                       "longitude":  126.9250571,
+                       "categoryCode":  "daedong-jp"
+                   },
+                   {
+                       "name":  "만평우동 명지대점",
+                       "code":  "dd-1741131477",
+                       "latitude":  37.583793,
+                       "address":  "서울 서대문구 명지대길 83",
+                       "longitude":  126.9231109,
+                       "categoryCode":  "daedong-jp"
+                   },
+                   {
+                       "name":  "나베야 남가좌명지대점",
+                       "code":  "dd-1826722163",
+                       "latitude":  37.5782188,
+                       "address":  "서울 서대문구 증가로 150",
+                       "longitude":  126.9218119,
+                       "categoryCode":  "daedong-jp"
+                   },
+                   {
+                       "name":  "가타쯔무리",
+                       "code":  "dd-36351814",
+                       "latitude":  37.5832536,
+                       "address":  "서울 서대문구 명지대길 72",
+                       "longitude":  126.9234861,
+                       "categoryCode":  "daedong-jp"
+                   },
+                   {
+                       "name":  "활구팔구",
+                       "code":  "dd-1033955322",
+                       "latitude":  37.5806124,
+                       "address":  "서울 서대문구 거북골로 18",
+                       "longitude":  126.9253255,
+                       "categoryCode":  "daedong-jp"
+                   },
+                   {
+                       "name":  "스시하나에",
+                       "code":  "dd-38299775",
+                       "latitude":  37.5814958,
+                       "address":  "서울 서대문구 명지대길 24",
+                       "longitude":  126.92491,
+                       "categoryCode":  "daedong-jp"
+                   },
+                   {
+                       "name":  "긴자료코 명지대점",
+                       "code":  "dd-1122448171",
+                       "latitude":  37.5818578,
+                       "address":  "서울 서대문구 명지대2길 14",
+                       "longitude":  126.9252155,
+                       "categoryCode":  "daedong-jp"
+                   },
+                   {
+                       "name":  "소소식탁",
+                       "code":  "dd-1380694865",
+                       "latitude":  37.5833401,
+                       "address":  "서울 서대문구 명지대길 75",
+                       "longitude":  126.9231367,
+                       "categoryCode":  "daedong-jp"
+                   },
+                   {
+                       "name":  "아쯔다무라",
+                       "code":  "dd-1988507137",
+                       "latitude":  37.5786694,
+                       "address":  "서울 서대문구 증가로10길 25",
+                       "longitude":  126.9235987,
+                       "categoryCode":  "daedong-jp"
+                   },
+                   {
+                       "name":  "나라비",
+                       "code":  "dd-33876033",
+                       "latitude":  37.5791494,
+                       "address":  "서울 서대문구 거북골로 39",
+                       "longitude":  126.9235892,
+                       "categoryCode":  "daedong-jp"
+                   },
+                   {
+                       "name":  "화전 명지대점",
+                       "code":  "dd-1057511754",
+                       "latitude":  37.5792657,
+                       "address":  "서울 서대문구 거북골로 33-4",
+                       "longitude":  126.9240574,
+                       "categoryCode":  "daedong-jp"
+                   },
+                   {
+                       "name":  "김은수참치",
+                       "code":  "dd-35136448",
+                       "latitude":  37.5790294,
+                       "address":  "서울 서대문구 증가로10길 41",
+                       "longitude":  126.9242862,
+                       "categoryCode":  "daedong-jp"
+                   },
+                   {
+                       "name":  "라사천마라탕 남가좌점",
+                       "code":  "dd-1148972802",
+                       "latitude":  37.5767618,
+                       "address":  "서울 서대문구 거북골로 79",
+                       "longitude":  126.9203736,
+                       "categoryCode":  "daedong-cn"
+                   },
+                   {
+                       "name":  "산동만두",
+                       "code":  "dd-1640425134",
+                       "latitude":  37.5757725,
+                       "address":  "서울 서대문구 가재울로 53-9",
+                       "longitude":  126.9210538,
+                       "categoryCode":  "daedong-cn"
+                   },
+                   {
+                       "name":  "차푸 본점",
+                       "code":  "dd-1196618344",
+                       "latitude":  37.5769412,
+                       "address":  "서울 서대문구 남가좌동 가재울로6길 53-87",
+                       "longitude":  126.923051,
+                       "categoryCode":  "daedong-cn"
+                   },
+                   {
+                       "name":  "유진반점",
+                       "code":  "dd-1051249363",
+                       "latitude":  37.5820863,
+                       "address":  "서울 은평구 갈현로 219",
+                       "longitude":  126.9236537,
+                       "categoryCode":  "daedong-cn"
+                   },
+                   {
+                       "name":  "완푸",
+                       "code":  "dd-1200006701",
+                       "latitude":  37.578749,
+                       "address":  "서울 서대문구 증가로10길 6",
+                       "longitude":  126.9243617,
+                       "categoryCode":  "daedong-cn"
+                   },
+                   {
+                       "name":  "춘리마라탕 명지대점",
+                       "code":  "dd-1766664504",
+                       "latitude":  37.5809928,
+                       "address":  "서울 서대문구 거북골로 10",
+                       "longitude":  126.925884,
+                       "categoryCode":  "daedong-cn"
+                   },
+                   {
+                       "name":  "탕화쿵푸마라탕 명지대점",
+                       "code":  "dd-1802590743",
+                       "latitude":  37.5819465,
+                       "address":  "서울 서대문구 명지대길 38",
+                       "longitude":  126.9244898,
+                       "categoryCode":  "daedong-cn"
+                   },
+                   {
+                       "name":  "마라왕마라탕",
+                       "code":  "dd-1155499389",
+                       "latitude":  37.5808682,
+                       "address":  "서울 서대문구 거북골로 14",
+                       "longitude":  126.9256755,
+                       "categoryCode":  "daedong-cn"
+                   },
+                   {
+                       "name":  "라와마라탕 명지대점",
+                       "code":  "dd-1696016617",
+                       "latitude":  37.5807558,
+                       "address":  "서울 서대문구 명지대길 10",
+                       "longitude":  126.9251102,
+                       "categoryCode":  "daedong-cn"
+                   },
+                   {
+                       "name":  "미르중식",
+                       "code":  "dd-1574904360",
+                       "latitude":  37.5811844,
+                       "address":  "서울 서대문구 명지대길 18",
+                       "longitude":  126.9250383,
+                       "categoryCode":  "daedong-cn"
+                   },
+                   {
+                       "name":  "왕가주방",
+                       "code":  "dd-1314671448",
+                       "latitude":  37.5810864,
+                       "address":  "서울 서대문구 거북골로 10",
+                       "longitude":  126.9260002,
+                       "categoryCode":  "daedong-cn"
+                   },
+                   {
+                       "name":  "진짜루",
+                       "code":  "dd-13150826",
+                       "latitude":  37.5832491,
+                       "address":  "서울 서대문구 명지대길 73",
+                       "longitude":  126.923184,
+                       "categoryCode":  "daedong-cn"
+                   },
+                   {
+                       "name":  "다복향마라탕 명지대점",
+                       "code":  "dd-1294254055",
+                       "latitude":  37.5804344,
+                       "address":  "서울 서대문구 거북골로 17",
+                       "longitude":  126.9254037,
+                       "categoryCode":  "daedong-cn"
+                   },
+                   {
+                       "name":  "미향만두전문점",
+                       "code":  "dd-1283409062",
+                       "latitude":  37.5781456,
+                       "address":  "서울 서대문구 거북골로 57",
+                       "longitude":  126.9221003,
+                       "categoryCode":  "daedong-cn"
+                   },
+                   {
+                       "name":  "세아짬뽕",
+                       "code":  "dd-1606578305",
+                       "latitude":  37.5789704,
+                       "address":  "서울 서대문구 거북골로 37-10",
+                       "longitude":  126.9239156,
+                       "categoryCode":  "daedong-cn"
+                   },
+                   {
+                       "name":  "성연 마라탕",
+                       "code":  "dd-1337255971",
+                       "latitude":  37.5802465,
+                       "address":  "서울 서대문구 거북골로 19-1",
+                       "longitude":  126.9251904,
+                       "categoryCode":  "daedong-cn"
+                   },
+                   {
+                       "name":  "성연양꼬치",
+                       "code":  "dd-1098172339",
+                       "latitude":  37.578269,
+                       "address":  "서울 서대문구 거북골로 53-11",
+                       "longitude":  126.9229943,
+                       "categoryCode":  "daedong-cn"
+                   },
+                   {
+                       "name":  "중화루",
+                       "code":  "dd-1003791161",
+                       "latitude":  37.5781447,
+                       "address":  "서울 서대문구 증가로8길 24-1",
+                       "longitude":  126.9249625,
+                       "categoryCode":  "daedong-cn"
+                   },
+                   {
+                       "name":  "궁가",
+                       "code":  "dd-1316835112",
+                       "latitude":  37.5793676,
+                       "address":  "서울 서대문구 증가로10길 60-4",
+                       "longitude":  126.9252096,
+                       "categoryCode":  "daedong-cn"
+                   },
+                   {
+                       "name":  "짜우반점",
+                       "code":  "dd-1543191536",
+                       "latitude":  37.5796138,
+                       "address":  "서울 서대문구 거북골로 29-4",
+                       "longitude":  126.924508,
+                       "categoryCode":  "daedong-cn"
+                   },
+                   {
+                       "name":  "샹츠마라 명지대점",
+                       "code":  "dd-1498250464",
+                       "latitude":  37.5797283,
+                       "address":  "서울 서대문구 거북골로 29",
+                       "longitude":  126.9243927,
+                       "categoryCode":  "daedong-cn"
+                   },
+                   {
+                       "name":  "KFC 명지대",
+                       "code":  "dd-1398817555",
+                       "latitude":  37.5782996,
+                       "address":  "서울 서대문구 거북골로 53",
+                       "longitude":  126.9223494,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "동대문엽기떡볶이 명지대점",
+                       "code":  "dd-20818395",
+                       "latitude":  37.579465,
+                       "address":  "서울 서대문구 가좌로 102",
+                       "longitude":  126.9240813,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "얌얌샐러드",
+                       "code":  "dd-1530215863",
+                       "latitude":  37.5808279,
+                       "address":  "서울 서대문구 거북골로 11",
+                       "longitude":  126.9259968,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "신전떡볶이 명지대점",
+                       "code":  "dd-36680436",
+                       "latitude":  37.5790871,
+                       "address":  "서울 서대문구 명지대길 18",
+                       "longitude":  126.9239529,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "우리할매떡볶이 가재울점",
+                       "code":  "dd-1034553261",
+                       "latitude":  37.5767304,
+                       "address":  "서울 서대문구 거북골로 84",
+                       "longitude":  126.9197155,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "맘스터치 명지대점",
+                       "code":  "dd-1763285419",
+                       "latitude":  37.5790416,
+                       "address":  "서울 서대문구 거북골로 41",
+                       "longitude":  126.9234114,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "만두성지",
+                       "code":  "dd-2025426353",
+                       "latitude":  37.5786946,
+                       "address":  "서울 서대문구 거북골로 47",
+                       "longitude":  126.9229185,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "더김밥 명지대점",
+                       "code":  "dd-1315280135",
+                       "latitude":  37.579226,
+                       "address":  "서울 서대문구 증가로10길 47",
+                       "longitude":  126.924564,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "맥도날드 명지대점",
+                       "code":  "dd-1308535982",
+                       "latitude":  37.5799373,
+                       "address":  "서울 서대문구 거북골로 25",
+                       "longitude":  126.9247604,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "슬로우캘리 명지대점",
+                       "code":  "dd-2047894579",
+                       "latitude":  37.5797056,
+                       "address":  "서울 서대문구 거북골로 29",
+                       "longitude":  126.9244004,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "본도시락 명지대점",
+                       "code":  "dd-2079328195",
+                       "latitude":  37.5807155,
+                       "address":  "서울 서대문구 거북골로 16",
+                       "longitude":  126.9253988,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "엄마분식",
+                       "code":  "dd-1069957377",
+                       "latitude":  37.5829232,
+                       "address":  "서울 서대문구 증가로24바길 70",
+                       "longitude":  126.9192212,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "국수집",
+                       "code":  "dd-1426644127",
+                       "latitude":  37.5825545,
+                       "address":  "서울 서대문구 증가로20길 80",
+                       "longitude":  126.9191767,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "푸드박스 서대문점",
+                       "code":  "dd-1916896096",
+                       "latitude":  37.582103,
+                       "address":  "서울 서대문구 증가로20길 68-24",
+                       "longitude":  126.9199399,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "나의행복한돈까스",
+                       "code":  "dd-1514723370",
+                       "latitude":  37.5760417,
+                       "address":  "서울 서대문구 거북골로 84",
+                       "longitude":  126.9188989,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "쏭스핫도그 가재울점",
+                       "code":  "dd-1125304421",
+                       "latitude":  37.5765824,
+                       "address":  "서울 서대문구 거북골로 84",
+                       "longitude":  126.9195373,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "엄마밥상",
+                       "code":  "dd-1455376260",
+                       "latitude":  37.5768116,
+                       "address":  "서울 서대문구 가재울로14길 13",
+                       "longitude":  126.9212923,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "자마버거 가재울점",
+                       "code":  "dd-1771767894",
+                       "latitude":  37.5761596,
+                       "address":  "서울 서대문구 가재울로 73",
+                       "longitude":  126.9206754,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "호호키친",
+                       "code":  "dd-2000709398",
+                       "latitude":  37.5767918,
+                       "address":  "서울 서대문구 가재울로6길 53-36",
+                       "longitude":  126.923519,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "응급실국물떡볶이 남가좌점",
+                       "code":  "dd-1396516305",
+                       "latitude":  37.581998,
+                       "address":  "서울 서대문구 명지대길 41",
+                       "longitude":  126.9241229,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "리코브리또",
+                       "code":  "dd-1417547113",
+                       "latitude":  37.5812848,
+                       "address":  "서울 서대문구 명지대1길 6",
+                       "longitude":  126.9245726,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "미소떡볶이",
+                       "code":  "dd-294718835",
+                       "latitude":  37.5822067,
+                       "address":  "서울 서대문구 명지대3길 1",
+                       "longitude":  126.9236825,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "피자스쿨 명지대점",
+                       "code":  "dd-11839785",
+                       "latitude":  37.5807955,
+                       "address":  "서울 서대문구 거북골로 14",
+                       "longitude":  126.9255704,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "허니돈 명지대점",
+                       "code":  "dd-1012032559",
+                       "latitude":  37.5816454,
+                       "address":  "서울 서대문구 명지대2길 8",
+                       "longitude":  126.9251491,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "행복한떡볶이",
+                       "code":  "dd-1061614700",
+                       "latitude":  37.5848696,
+                       "address":  "서울 서대문구 가좌로 145",
+                       "longitude":  126.923321,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "순이네고릴라떡볶이",
+                       "code":  "dd-553841929",
+                       "latitude":  37.5804939,
+                       "address":  "서울 서대문구 거북골로 15-2",
+                       "longitude":  126.9254788,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "스텔라떡볶이 서울명지대점",
+                       "code":  "dd-1088001134",
+                       "latitude":  37.5783197,
+                       "address":  "서울 서대문구 증가로 150",
+                       "longitude":  126.9219668,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "이정희떡볶이",
+                       "code":  "dd-11856504",
+                       "latitude":  37.578083,
+                       "address":  "서울 서대문구 증가로10길 14",
+                       "longitude":  126.923309,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "자호병",
+                       "code":  "dd-1745725053",
+                       "latitude":  37.5778029,
+                       "address":  "서울 서대문구 거북골로 59-18",
+                       "longitude":  126.9228406,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "호시타코야끼 명지대점",
+                       "code":  "dd-1614890170",
+                       "latitude":  37.5777403,
+                       "address":  "서울 서대문구 증가로 140",
+                       "longitude":  126.9220356,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "담꾹 남가좌점",
+                       "code":  "dd-1006162126",
+                       "latitude":  37.5773158,
+                       "address":  "서울 서대문구 증가로 129",
+                       "longitude":  126.9232174,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "하나네김밥",
+                       "code":  "dd-1639242111",
+                       "latitude":  37.5774093,
+                       "address":  "서울 서대문구 증가로 135",
+                       "longitude":  126.92248,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "왕만두 쉐프 명지대점",
+                       "code":  "dd-1932111323",
+                       "latitude":  37.5774011,
+                       "address":  "서울특별시 서대문구 남가좌동 347-1",
+                       "longitude":  126.9223907,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "이삭토스트 명지대점",
+                       "code":  "dd-1902140274",
+                       "latitude":  37.5791337,
+                       "address":  "서울 서대문구 거북골로 39",
+                       "longitude":  126.9235188,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "엄마손떡볶이",
+                       "code":  "dd-13018229",
+                       "latitude":  37.578934,
+                       "address":  "서울 서대문구 증가로10길 37",
+                       "longitude":  126.9241615,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "써브웨이 명지대점",
+                       "code":  "dd-1819167904",
+                       "latitude":  37.580052,
+                       "address":  "서울 서대문구 거북골로 23",
+                       "longitude":  126.9248548,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "한솥도시락 명지대앞점",
+                       "code":  "dd-13376661",
+                       "latitude":  37.5798133,
+                       "address":  "서울특별시 서대문구 남가좌동 324-20",
+                       "longitude":  126.9244967,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "롯데리아 명지대학점",
+                       "code":  "dd-11824926",
+                       "latitude":  37.579624,
+                       "address":  "서울 서대문구 거북골로 31",
+                       "longitude":  126.924296,
+                       "categoryCode":  "daedong-snack"
+                   },
+                   {
+                       "name":  "KFC 명지대",
+                       "code":  "dd-1398817555",
+                       "latitude":  37.5782996,
+                       "address":  "서울 서대문구 거북골로 53",
+                       "longitude":  126.9223494,
+                       "categoryCode":  "daedong-meat"
+                   },
+                   {
+                       "name":  "족발야시장\u0026무청감자탕 남가좌점",
+                       "code":  "dd-1325275030",
+                       "latitude":  37.5770684,
+                       "address":  "서울 서대문구 증가로 117-1",
+                       "longitude":  126.9243148,
+                       "categoryCode":  "daedong-meat"
+                   },
+                   {
+                       "name":  "왕십리곱창",
+                       "code":  "dd-20909523",
+                       "latitude":  37.577985,
+                       "address":  "서울 서대문구 증가로10길 12",
+                       "longitude":  126.9233029,
+                       "categoryCode":  "daedong-meat"
+                   },
+                   {
+                       "name":  "엄마손닭갈비",
+                       "code":  "dd-1446124946",
+                       "latitude":  37.5784725,
+                       "address":  "서울 서대문구 증가로10길 21",
+                       "longitude":  126.9234692,
+                       "categoryCode":  "daedong-meat"
+                   },
+                   {
+                       "name":  "모래내곱창",
+                       "code":  "dd-13026619",
+                       "latitude":  37.5784187,
+                       "address":  "서울 서대문구 증가로10길 26",
+                       "longitude":  126.9236604,
+                       "categoryCode":  "daedong-meat"
+                   },
+                   {
+                       "name":  "구공탄",
+                       "code":  "dd-1039079229",
+                       "latitude":  37.5826517,
+                       "address":  "서울 서대문구 거북골로 12",
+                       "longitude":  126.9244869,
+                       "categoryCode":  "daedong-meat"
+                   },
+                   {
+                       "name":  "족발신선생 남가좌명지대점",
+                       "code":  "dd-1213216505",
+                       "latitude":  37.5782315,
+                       "address":  "서울 서대문구 거북골로 55",
+                       "longitude":  126.9221917,
+                       "categoryCode":  "daedong-meat"
+                   },
+                   {
+                       "name":  "명지대박곱창",
+                       "code":  "dd-1243073137",
+                       "latitude":  37.5828421,
+                       "address":  "서울 서대문구 명지대길 65",
+                       "longitude":  126.9233147,
+                       "categoryCode":  "daedong-meat"
+                   },
+                   {
+                       "name":  "화포식당 가재울뉴타운점",
+                       "code":  "dd-1572238033",
+                       "latitude":  37.5764451,
+                       "address":  "서울 서대문구 거북골로 84",
+                       "longitude":  126.9193556,
+                       "categoryCode":  "daedong-meat"
+                   },
+                   {
+                       "name":  "동래정 가재울뉴타운점",
+                       "code":  "dd-1397591202",
+                       "latitude":  37.5766336,
+                       "address":  "서울 서대문구 거북골로 84",
+                       "longitude":  126.9196038,
+                       "categoryCode":  "daedong-meat"
+                   },
+                   {
+                       "name":  "신돈갈비",
+                       "code":  "dd-1576315885",
+                       "latitude":  37.576993,
+                       "address":  "서울 서대문구 증가로 114",
+                       "longitude":  126.9249284,
+                       "categoryCode":  "daedong-meat"
+                   },
+                   {
+                       "name":  "황제정육식당 명지대점",
+                       "code":  "dd-1295903101",
+                       "latitude":  37.5770332,
+                       "address":  "서울 서대문구 증가로 116",
+                       "longitude":  126.9248271,
+                       "categoryCode":  "daedong-meat"
+                   },
+                   {
+                       "name":  "꼬꼬야 닭먹자",
+                       "code":  "dd-1980012312",
+                       "latitude":  37.5823979,
+                       "address":  "서울 서대문구 명지대길 54",
+                       "longitude":  126.9239075,
+                       "categoryCode":  "daedong-meat"
+                   },
+                   {
+                       "name":  "호식이두마리치킨 명지대점",
+                       "code":  "dd-33675291",
+                       "latitude":  37.5818463,
+                       "address":  "서울 서대문구 명지대길 35",
+                       "longitude":  126.924357,
+                       "categoryCode":  "daedong-meat"
+                   },
+                   {
+                       "name":  "삼겹아지트",
+                       "code":  "dd-1444870958",
+                       "latitude":  37.5814385,
+                       "address":  "서울 서대문구 명지대2길 2",
+                       "longitude":  126.9250884,
+                       "categoryCode":  "daedong-meat"
+                   },
+                   {
+                       "name":  "다모식당",
+                       "code":  "dd-1889514978",
+                       "latitude":  37.5768116,
+                       "address":  "서울 서대문구 증가로 110-1",
+                       "longitude":  126.9252452,
+                       "categoryCode":  "daedong-meat"
+                   },
+                   {
+                       "name":  "행운갈비",
+                       "code":  "dd-1424960818",
+                       "latitude":  37.5763658,
+                       "address":  "서울 서대문구 가재울로4길 61",
+                       "longitude":  126.9245513,
+                       "categoryCode":  "daedong-meat"
+                   },
+                   {
+                       "name":  "깡통집",
+                       "code":  "dd-18258869",
+                       "latitude":  37.579525,
+                       "address":  "서울 서대문구 증가로10길 62",
+                       "longitude":  126.9253125,
+                       "categoryCode":  "daedong-meat"
+                   },
+                   {
+                       "name":  "금정가든",
+                       "code":  "dd-21175167",
+                       "latitude":  37.579802,
+                       "address":  "서울 서대문구 증가로10길 67",
+                       "longitude":  126.925459,
+                       "categoryCode":  "daedong-meat"
+                   },
+                   {
+                       "name":  "홍가 족발집",
+                       "code":  "dd-293341203",
+                       "latitude":  37.5808073,
+                       "address":  "서울 서대문구 가좌로 86",
+                       "longitude":  126.9279137,
+                       "categoryCode":  "daedong-meat"
+                   },
+                   {
+                       "name":  "우리동네 옛날 통닭",
+                       "code":  "dd-1653756049",
+                       "latitude":  37.5810049,
+                       "address":  "서울 서대문구 가좌로 91",
+                       "longitude":  126.9272037,
+                       "categoryCode":  "daedong-meat"
+                   },
+                   {
+                       "name":  "해피소금구이",
+                       "code":  "dd-1784757163",
+                       "latitude":  37.5812126,
+                       "address":  "서울 서대문구 가좌로 95",
+                       "longitude":  126.9269471,
+                       "categoryCode":  "daedong-meat"
+                   },
+                   {
+                       "name":  "장수촌",
+                       "code":  "dd-20033096",
+                       "latitude":  37.580698,
+                       "address":  "서울 서대문구 거북골로 13",
+                       "longitude":  126.925791,
+                       "categoryCode":  "daedong-meat"
+                   },
+                   {
+                       "name":  "치킨시대 명지대점",
+                       "code":  "dd-21306327",
+                       "latitude":  37.5781337,
+                       "address":  "서울 서대문구 거북골로 53-24",
+                       "longitude":  126.9231511,
+                       "categoryCode":  "daedong-meat"
+                   },
+                   {
+                       "name":  "교촌치킨 명지대점",
+                       "code":  "dd-11802032",
+                       "latitude":  37.5780522,
+                       "address":  "서울 서대문구 거북골로 57-1",
+                       "longitude":  126.9220014,
+                       "categoryCode":  "daedong-meat"
+                   },
+                   {
+                       "name":  "삼봉옛날통닭 남가좌점",
+                       "code":  "dd-1256946097",
+                       "latitude":  37.5771297,
+                       "address":  "서울 서대문구 증가로 119",
+                       "longitude":  126.9241873,
+                       "categoryCode":  "daedong-meat"
+                   },
+                   {
+                       "name":  "푸라닭 남가좌점",
+                       "code":  "dd-1915451830",
+                       "latitude":  37.5788505,
+                       "address":  "서울 서대문구 증가로10길 35",
+                       "longitude":  126.9240356,
+                       "categoryCode":  "daedong-meat"
+                   },
+                   {
+                       "name":  "삼겹베네 명지대점",
+                       "code":  "dd-1244111561",
+                       "latitude":  37.578658,
+                       "address":  "서울 서대문구 증가로10길 36-7",
+                       "longitude":  126.9244184,
+                       "categoryCode":  "daedong-meat"
+                   },
+                   {
+                       "name":  "60계치킨 서울명지대점",
+                       "code":  "dd-1963332024",
+                       "latitude":  37.5789943,
+                       "address":  "서울 서대문구 증가로10길 46",
+                       "longitude":  126.9245112,
+                       "categoryCode":  "daedong-meat"
+                   },
+                   {
+                       "name":  "325세겹살",
+                       "code":  "dd-1401730641",
+                       "latitude":  37.5793234,
+                       "address":  "서울 서대문구 증가로10길 56",
+                       "longitude":  126.9250319,
+                       "categoryCode":  "daedong-meat"
+                   },
+                   {
+                       "name":  "와다이자카야",
+                       "code":  "dd-1297959538",
+                       "latitude":  37.5772677,
+                       "address":  "서울특별시 서대문구 남가좌동 340-33",
+                       "longitude":  126.924487,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "네코노키친",
+                       "code":  "dd-36342590",
+                       "latitude":  37.5792678,
+                       "address":  "서울 서대문구 거북골로 33-4",
+                       "longitude":  126.92403,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "봄비달빛아래",
+                       "code":  "dd-1514692712",
+                       "latitude":  37.5783189,
+                       "address":  "서울 서대문구 증가로10길 22",
+                       "longitude":  126.9235227,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "나고야살롱",
+                       "code":  "dd-1925448639",
+                       "latitude":  37.5783621,
+                       "address":  "서울 서대문구 증가로8길 42-8",
+                       "longitude":  126.925798,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "베로베로",
+                       "code":  "dd-2001500405",
+                       "latitude":  37.5798495,
+                       "address":  "서울 서대문구 거북골로 21-10",
+                       "longitude":  126.9250449,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "카페나리",
+                       "code":  "dd-1177099398",
+                       "latitude":  37.578721,
+                       "address":  "서울 서대문구 증가로10길 36-2",
+                       "longitude":  126.9241397,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "명지비어",
+                       "code":  "dd-1164477301",
+                       "latitude":  37.580968,
+                       "address":  "서울 서대문구 명지대길 14",
+                       "longitude":  126.9251027,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "오늘은한잔해",
+                       "code":  "dd-2018206623",
+                       "latitude":  37.5778261,
+                       "address":  "서울 서대문구 증가로10길 6",
+                       "longitude":  126.9232257,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "디진다",
+                       "code":  "dd-1126944432",
+                       "latitude":  37.5799301,
+                       "address":  "서울 서대문구 거북골로 21-7",
+                       "longitude":  126.9251996,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "실내포차123",
+                       "code":  "dd-1939937992",
+                       "latitude":  37.5785973,
+                       "address":  "서울 서대문구 증가로10길 32",
+                       "longitude":  126.9240168,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "맹순이포차",
+                       "code":  "dd-1816263594",
+                       "latitude":  37.5768964,
+                       "address":  "서울 서대문구 증가로 115",
+                       "longitude":  126.9245772,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "원주율",
+                       "code":  "dd-1269335393",
+                       "latitude":  37.5768746,
+                       "address":  "서울 서대문구 증가로 112",
+                       "longitude":  126.9251014,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "담너머",
+                       "code":  "dd-1584011188",
+                       "latitude":  37.5811783,
+                       "address":  "서울 서대문구 명지대1나길 1",
+                       "longitude":  126.9227767,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "핫바비큐",
+                       "code":  "dd-20832500",
+                       "latitude":  37.576716,
+                       "address":  "서울 서대문구 가재울로6길 53-65",
+                       "longitude":  126.922952,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "북가좌 거기",
+                       "code":  "dd-2026857235",
+                       "latitude":  37.5824544,
+                       "address":  "서울 서대문구 명지대길 54",
+                       "longitude":  126.9238367,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "투다리 하나로점",
+                       "code":  "dd-11763553",
+                       "latitude":  37.581203,
+                       "address":  "서울 서대문구 명지대길 18",
+                       "longitude":  126.925037,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "인쌩맥주 명지대점",
+                       "code":  "dd-1691200814",
+                       "latitude":  37.5825058,
+                       "address":  "서울 서대문구 명지대길 54",
+                       "longitude":  126.9238269,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "닭발상점 명지대점",
+                       "code":  "dd-1530891370",
+                       "latitude":  37.5824288,
+                       "address":  "서울 서대문구 명지대길 54",
+                       "longitude":  126.9238873,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "역전할머니맥주 서울명지대점",
+                       "code":  "dd-1323812622",
+                       "latitude":  37.5796516,
+                       "address":  "서울 서대문구 증가로10길 63",
+                       "longitude":  126.92527,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "꼴목포차 명지대점",
+                       "code":  "dd-1474729183",
+                       "latitude":  37.5798087,
+                       "address":  "서울 서대문구 거북골로 21-9",
+                       "longitude":  126.9252504,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "학창시절",
+                       "code":  "dd-1394535195",
+                       "latitude":  37.5803276,
+                       "address":  "서울 서대문구 거북골로 19",
+                       "longitude":  126.9252832,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "야키토리쿠모",
+                       "code":  "dd-1714410246",
+                       "latitude":  37.5800881,
+                       "address":  "서울 서대문구 거북골로 21-5",
+                       "longitude":  126.9252486,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "영이호프",
+                       "code":  "dd-20601682",
+                       "latitude":  37.58023,
+                       "address":  "서울 서대문구 거북골로 19-1",
+                       "longitude":  126.925147,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "투다리 명지대점",
+                       "code":  "dd-11762557",
+                       "latitude":  37.577961,
+                       "address":  "서울 서대문구 증가로10길 9",
+                       "longitude":  126.923133,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "청수포차",
+                       "code":  "dd-1628282363",
+                       "latitude":  37.5781893,
+                       "address":  "서울 서대문구 거북골로 53-18",
+                       "longitude":  126.922843,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "명지호프",
+                       "code":  "dd-1480444765",
+                       "latitude":  37.5772162,
+                       "address":  "서울특별시 서대문구 남가좌동 338-1",
+                       "longitude":  126.9238707,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "야키토리지중",
+                       "code":  "dd-1066508624",
+                       "latitude":  37.5776981,
+                       "address":  "서울 서대문구 증가로8길 8-1",
+                       "longitude":  126.9242989,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "완숙",
+                       "code":  "dd-851692816",
+                       "latitude":  37.5784914,
+                       "address":  "서울 서대문구 증가로10길 36-55",
+                       "longitude":  126.9245774,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "리얼펍 명지대점",
+                       "code":  "dd-1557637914",
+                       "latitude":  37.5786437,
+                       "address":  "서울 서대문구 증가로10길 36-7",
+                       "longitude":  126.9244709,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "정든밤",
+                       "code":  "dd-1551722979",
+                       "latitude":  37.5788381,
+                       "address":  "서울 서대문구 증가로10길 38",
+                       "longitude":  126.9242844,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "손가네빈대떡",
+                       "code":  "dd-20851908",
+                       "latitude":  37.5791049,
+                       "address":  "서울 서대문구 거북골로 33-10",
+                       "longitude":  126.9242245,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "어나더라운드",
+                       "code":  "dd-1951404930",
+                       "latitude":  37.5793843,
+                       "address":  "서울 서대문구 증가로10길 60-4",
+                       "longitude":  126.925162,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "술찾사",
+                       "code":  "dd-18277898",
+                       "latitude":  37.5796492,
+                       "address":  "서울 서대문구 거북골로 25-8",
+                       "longitude":  126.9249399,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "수아레",
+                       "code":  "dd-1954949456",
+                       "latitude":  37.5797613,
+                       "address":  "서울 서대문구 거북골로 25-5",
+                       "longitude":  126.9248999,
+                       "categoryCode":  "daedong-bar"
+                   },
+                   {
+                       "name":  "공차 명지대점",
+                       "code":  "dd-1834272539",
+                       "latitude":  37.5794816,
+                       "address":  "서울 서대문구 거북골로 33",
+                       "longitude":  126.9240188,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "비쿤즈",
+                       "code":  "dd-2098636921",
+                       "latitude":  37.578229,
+                       "address":  "서울 서대문구 증가로10길 18",
+                       "longitude":  126.923508,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "뚜레쥬르 남가좌점",
+                       "code":  "dd-11778935",
+                       "latitude":  37.57513,
+                       "address":  "서울 서대문구 가재울로 42",
+                       "longitude":  126.921801,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "메가MGC커피 서울명지초점",
+                       "code":  "dd-1884237240",
+                       "latitude":  37.5819585,
+                       "address":  "서울 서대문구 가좌로 102",
+                       "longitude":  126.9267394,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "아티젠",
+                       "code":  "dd-1857677996",
+                       "latitude":  37.5736335,
+                       "address":  "서울 서대문구 가재울로 6",
+                       "longitude":  126.9227644,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "카페당나귀",
+                       "code":  "dd-1684687616",
+                       "latitude":  37.574017,
+                       "address":  "서울 서대문구 가재울로 16",
+                       "longitude":  126.9224835,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "카페샘",
+                       "code":  "dd-1942375097",
+                       "latitude":  37.5733655,
+                       "address":  "서울 서대문구 홍제천로 86-1",
+                       "longitude":  126.9246222,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "더클래식",
+                       "code":  "dd-1147814025",
+                       "latitude":  37.5743319,
+                       "address":  "서울 서대문구 홍연2길 16",
+                       "longitude":  126.9281445,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "본솔커피 연희점",
+                       "code":  "dd-35689660",
+                       "latitude":  37.5747161,
+                       "address":  "서울 서대문구 증가로 82",
+                       "longitude":  126.9272353,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "이루",
+                       "code":  "dd-1982594057",
+                       "latitude":  37.5784789,
+                       "address":  "서울 서대문구 증가로8길 42-5",
+                       "longitude":  126.925977,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "스타벅스 명지대점",
+                       "code":  "dd-1837793874",
+                       "latitude":  37.5790408,
+                       "address":  "서울 서대문구 거북골로 34",
+                       "longitude":  126.9227885,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "매머드익스프레스 명지대점",
+                       "code":  "dd-1491366315",
+                       "latitude":  37.5793837,
+                       "address":  "서울 서대문구 거북골로 34",
+                       "longitude":  126.923467,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "Y3S COFFEE",
+                       "code":  "dd-2073427794",
+                       "latitude":  37.5810539,
+                       "address":  "서울 서대문구 거북골로 5",
+                       "longitude":  126.9265405,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "카페유니콘24",
+                       "code":  "dd-2013810881",
+                       "latitude":  37.5819196,
+                       "address":  "서울 서대문구 증가로24가길 42",
+                       "longitude":  126.9185461,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "도롱제과",
+                       "code":  "dd-1929810173",
+                       "latitude":  37.5830123,
+                       "address":  "서울 서대문구 증가로24바길 70",
+                       "longitude":  126.9192928,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "퍼스트브래드 북가좌점",
+                       "code":  "dd-1871574280",
+                       "latitude":  37.5824471,
+                       "address":  "서울 서대문구 증가로20길 68-53",
+                       "longitude":  126.919779,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "달리는커피 남가좌가재울점",
+                       "code":  "dd-1209246348",
+                       "latitude":  37.5762948,
+                       "address":  "서울 서대문구 거북골로 84",
+                       "longitude":  126.9191879,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "커피사피엔스 DMC에코자이점",
+                       "code":  "dd-1960996809",
+                       "latitude":  37.5770239,
+                       "address":  "서울 서대문구 거북골로 84",
+                       "longitude":  126.9200296,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "12헤르츠카페",
+                       "code":  "dd-1094289115",
+                       "latitude":  37.5768649,
+                       "address":  "서울 서대문구 거북골로 77",
+                       "longitude":  126.9204399,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "SWAN CAFE",
+                       "code":  "dd-1311135942",
+                       "latitude":  37.5762737,
+                       "address":  "서울 서대문구 가재울로 74",
+                       "longitude":  126.9209043,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "아르떼",
+                       "code":  "dd-1969331418",
+                       "latitude":  37.5757418,
+                       "address":  "서울 서대문구 가재울로8길 5-18",
+                       "longitude":  126.9220029,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "노잉로스팅하우스",
+                       "code":  "dd-1087595413",
+                       "latitude":  37.576725,
+                       "address":  "서울 서대문구 가재울로6길 53-65",
+                       "longitude":  126.9229077,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "빔봄",
+                       "code":  "dd-2038435311",
+                       "latitude":  37.5753132,
+                       "address":  "서울 서대문구 가재울로4길 31",
+                       "longitude":  126.9233112,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "늦여름베이커리",
+                       "code":  "dd-1267447093",
+                       "latitude":  37.5754726,
+                       "address":  "서울 서대문구 가재울로4길 40",
+                       "longitude":  126.9238577,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "봉맨션",
+                       "code":  "dd-1100622332",
+                       "latitude":  37.5830232,
+                       "address":  "서울 서대문구 가좌로 118",
+                       "longitude":  126.9257136,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "베이커리P67",
+                       "code":  "dd-2007769580",
+                       "latitude":  37.5783295,
+                       "address":  "서울 서대문구 증가로10길 17",
+                       "longitude":  126.9232724,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "우따필스",
+                       "code":  "dd-2026190270",
+                       "latitude":  37.5764997,
+                       "address":  "서울 서대문구 가재울로10길 25",
+                       "longitude":  126.9223368,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "요거트아이스크림의정석 가재울명지대점",
+                       "code":  "dd-1286745379",
+                       "latitude":  37.5761177,
+                       "address":  "서울 서대문구 가재울로 75-3",
+                       "longitude":  126.9205683,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "스타벅스 남가좌사거리점",
+                       "code":  "dd-1651676104",
+                       "latitude":  37.5772145,
+                       "address":  "서울 서대문구 거북골로 84",
+                       "longitude":  126.920258,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "스케네브라운",
+                       "code":  "dd-42151443",
+                       "latitude":  37.5793192,
+                       "address":  "서울 서대문구 가좌로 67",
+                       "longitude":  126.9288264,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "카페스테이 연희",
+                       "code":  "dd-2084679975",
+                       "latitude":  37.5742802,
+                       "address":  "서울 서대문구 홍제천로6길 26",
+                       "longitude":  126.9259969,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "까사드선주",
+                       "code":  "dd-1077129581",
+                       "latitude":  37.5746902,
+                       "address":  "서울 서대문구 홍제천로6길 40",
+                       "longitude":  126.926583,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "어라이크",
+                       "code":  "dd-2046240462",
+                       "latitude":  37.5743403,
+                       "address":  "서울 서대문구 홍제천로6길 23",
+                       "longitude":  126.9256591,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "카페열두시",
+                       "code":  "dd-1996783185",
+                       "latitude":  37.5812928,
+                       "address":  "서울 서대문구 거북골로 6",
+                       "longitude":  126.9263466,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "디저트39 명지대점",
+                       "code":  "dd-1747599758",
+                       "latitude":  37.5806866,
+                       "address":  "서울 서대문구 명지대길 6",
+                       "longitude":  126.9251377,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "비건 베이커리 구떼",
+                       "code":  "dd-1030945946",
+                       "latitude":  37.581915,
+                       "address":  "서울 서대문구 명지대2길 13",
+                       "longitude":  126.9250711,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "아린카페",
+                       "code":  "dd-1233485198",
+                       "latitude":  37.5817889,
+                       "address":  "서울 서대문구 명지대2길 11",
+                       "longitude":  126.9250152,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "요거트퍼플 명지대점",
+                       "code":  "dd-1120733032",
+                       "latitude":  37.5776341,
+                       "address":  "서울 서대문구 증가로 130",
+                       "longitude":  126.923224,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "커퍼티",
+                       "code":  "dd-2085339834",
+                       "latitude":  37.5816243,
+                       "address":  "서울 서대문구 명지대길 29",
+                       "longitude":  126.9244744,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "GRAP",
+                       "code":  "dd-1896032587",
+                       "latitude":  37.5838198,
+                       "address":  "서울 서대문구 명지대7길 21",
+                       "longitude":  126.9219853,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "오월의 이유",
+                       "code":  "dd-1169534350",
+                       "latitude":  37.5788144,
+                       "address":  "서울 서대문구 증가로10길 36-41",
+                       "longitude":  126.9251122,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "카페 크레이프",
+                       "code":  "dd-1791278245",
+                       "latitude":  37.5821267,
+                       "address":  "서울 서대문구 명지대3길 26",
+                       "longitude":  126.9223253,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "폴센",
+                       "code":  "dd-1922396846",
+                       "latitude":  37.5821541,
+                       "address":  "서울 서대문구 명지대3길 9",
+                       "longitude":  126.9231657,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "리퐁",
+                       "code":  "dd-1463195171",
+                       "latitude":  37.5821854,
+                       "address":  "서울 서대문구 명지대3길 7",
+                       "longitude":  126.9233718,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "데니스커피 명지대점",
+                       "code":  "dd-1311756255",
+                       "latitude":  37.5821136,
+                       "address":  "서울 서대문구 명지대1라길 2",
+                       "longitude":  126.9237034,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "모두다가치 카페",
+                       "code":  "dd-1758298341",
+                       "latitude":  37.5824823,
+                       "address":  "서울 서대문구 명지대길 50-7",
+                       "longitude":  126.9239865,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "띵똥와플 명지대점",
+                       "code":  "dd-38269023",
+                       "latitude":  37.5816877,
+                       "address":  "서울 서대문구 명지대2길 9",
+                       "longitude":  126.92497,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "백억커피 가좌점",
+                       "code":  "dd-1400038320",
+                       "latitude":  37.5824451,
+                       "address":  "서울 서대문구 명지대2길 28",
+                       "longitude":  126.9254328,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "팔공티 명지전문대점",
+                       "code":  "dd-1000419775",
+                       "latitude":  37.5830049,
+                       "address":  "서울 서대문구 가좌로 118",
+                       "longitude":  126.9257078,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "카페헤븐",
+                       "code":  "dd-1713589669",
+                       "latitude":  37.5828181,
+                       "address":  "서울 서대문구 가좌로 116",
+                       "longitude":  126.9259001,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "카페다니엘푸드",
+                       "code":  "dd-1664699452",
+                       "latitude":  37.5836307,
+                       "address":  "서울 서대문구 명지대길 83",
+                       "longitude":  126.9230852,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "카페 만월경 남가좌점",
+                       "code":  "dd-1949108670",
+                       "latitude":  37.5839082,
+                       "address":  "서울 서대문구 남가좌동 명지대길 91",
+                       "longitude":  126.9231382,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "멜로우문",
+                       "code":  "dd-1362683820",
+                       "latitude":  37.5838361,
+                       "address":  "서울 서대문구 명지대7길 13",
+                       "longitude":  126.9224339,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "글룩베이커리",
+                       "code":  "dd-1676314150",
+                       "latitude":  37.5838406,
+                       "address":  "서울 서대문구 명지대7길 19",
+                       "longitude":  126.9221023,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "투썸플레이스 서대문홍은점",
+                       "code":  "dd-1244446261",
+                       "latitude":  37.5846646,
+                       "address":  "서울 서대문구 가좌로 143",
+                       "longitude":  126.9235405,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "뚜레쥬르 충암점",
+                       "code":  "dd-1832423855",
+                       "latitude":  37.5845236,
+                       "address":  "서울 서대문구 가좌로 141",
+                       "longitude":  126.923698,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "대흥떡집",
+                       "code":  "dd-20928788",
+                       "latitude":  37.5846976,
+                       "address":  "서울 서대문구 가좌로 142",
+                       "longitude":  126.9240325,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "던킨 서대문홍은점",
+                       "code":  "dd-1361098978",
+                       "latitude":  37.585048,
+                       "address":  "서울 서대문구 가좌로 146",
+                       "longitude":  126.9237023,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "파리바게뜨 충암점",
+                       "code":  "dd-11690115",
+                       "latitude":  37.5848465,
+                       "address":  "서울 서대문구 가좌로 144",
+                       "longitude":  126.9238993,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "빽다방 명지대점",
+                       "code":  "dd-37755034",
+                       "latitude":  37.5803553,
+                       "address":  "서울 서대문구 거북골로 19",
+                       "longitude":  126.9253036,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "젤라킹",
+                       "code":  "dd-1266548812",
+                       "latitude":  37.5761965,
+                       "address":  "서울 서대문구 증가로 102",
+                       "longitude":  126.9259468,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "썸띵크",
+                       "code":  "dd-1671471877",
+                       "latitude":  37.579124,
+                       "address":  "서울 서대문구 거북골로 37-4",
+                       "longitude":  126.9237695,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "헷키",
+                       "code":  "dd-1485961242",
+                       "latitude":  37.5761853,
+                       "address":  "서울 서대문구 가재울로4길 62",
+                       "longitude":  126.9247531,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "카페 이엘",
+                       "code":  "dd-1672623556",
+                       "latitude":  37.5763079,
+                       "address":  "서울 서대문구 증가로 107",
+                       "longitude":  126.924933,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "어뮤즈 그라운드",
+                       "code":  "dd-37775955",
+                       "latitude":  37.576508,
+                       "address":  "서울 서대문구 가재울로4길 67",
+                       "longitude":  126.9247583,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "달디위드커피",
+                       "code":  "dd-1242569613",
+                       "latitude":  37.5764059,
+                       "address":  "서울 서대문구 가재울로4길 57-55",
+                       "longitude":  126.9240762,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "까페여름",
+                       "code":  "dd-34269097",
+                       "latitude":  37.5765112,
+                       "address":  "서울 서대문구 가재울로6길 53-3",
+                       "longitude":  126.9238544,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "프티누아",
+                       "code":  "dd-1303161467",
+                       "latitude":  37.5778805,
+                       "address":  "서울 서대문구 거북골로 61",
+                       "longitude":  126.9217352,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "에스페란자 로스터즈 홍은본점",
+                       "code":  "dd-37837553",
+                       "latitude":  37.5775004,
+                       "address":  "서울 서대문구 증가로4길 58-15",
+                       "longitude":  126.9287346,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "꼼데푸생",
+                       "code":  "dd-1239224526",
+                       "latitude":  37.5771072,
+                       "address":  "서울 서대문구 증가로4길 28",
+                       "longitude":  126.9268068,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "카페인중독 명지대점",
+                       "code":  "dd-1306214989",
+                       "latitude":  37.5792774,
+                       "address":  "서울 서대문구 증가로10길 60-7",
+                       "longitude":  126.9254324,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "일큐팔사츄러스",
+                       "code":  "dd-1792481071",
+                       "latitude":  37.58133,
+                       "address":  "서울 서대문구 가좌로 97",
+                       "longitude":  126.9268359,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "시냇가에심은나무",
+                       "code":  "dd-13150870",
+                       "latitude":  37.581025,
+                       "address":  "서울 서대문구 거북골로 7",
+                       "longitude":  126.9262625,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "크레페허브",
+                       "code":  "dd-1339346156",
+                       "latitude":  37.5800626,
+                       "address":  "서울 서대문구 거북골로 21-5",
+                       "longitude":  126.9251766,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "와플대학 명지대캠퍼스",
+                       "code":  "dd-1992782202",
+                       "latitude":  37.5785029,
+                       "address":  "서울 서대문구 거북골로 51",
+                       "longitude":  126.9226058,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "설빙 명지대점",
+                       "code":  "dd-1978653765",
+                       "latitude":  37.5781589,
+                       "address":  "서울 서대문구 증가로 150",
+                       "longitude":  126.9217096,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "컴포즈커피 명지대사거리점",
+                       "code":  "dd-1202274055",
+                       "latitude":  37.5779795,
+                       "address":  "서울 서대문구 증가로 150",
+                       "longitude":  126.9214427,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "메가MGC커피 명지대점",
+                       "code":  "dd-1093684876",
+                       "latitude":  37.5780796,
+                       "address":  "서울 서대문구 증가로 150",
+                       "longitude":  126.9215504,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "프에프에케이크",
+                       "code":  "dd-1339573602",
+                       "latitude":  37.5777906,
+                       "address":  "서울 서대문구 증가로10길 6",
+                       "longitude":  126.9232948,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "24시 무인 달카페",
+                       "code":  "dd-1237053267",
+                       "latitude":  37.5771948,
+                       "address":  "서울 서대문구 증가로 118",
+                       "longitude":  126.9245781,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "셀렉토커피 남가좌점",
+                       "code":  "dd-1006906261",
+                       "latitude":  37.5775754,
+                       "address":  "서울 서대문구 증가로 132",
+                       "longitude":  126.9230206,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "파리바게뜨 명지대점",
+                       "code":  "dd-18762408",
+                       "latitude":  37.5775385,
+                       "address":  "서울 서대문구 증가로 130",
+                       "longitude":  126.9233341,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "노블베이커리",
+                       "code":  "dd-1825374798",
+                       "latitude":  37.5772779,
+                       "address":  "서울 서대문구 증가로 123",
+                       "longitude":  126.9236068,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "스마일명품찹쌀꽈배기 남가좌점",
+                       "code":  "dd-1357435010",
+                       "latitude":  37.5774382,
+                       "address":  "서울 서대문구 증가로 124",
+                       "longitude":  126.9239945,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "쏘네당",
+                       "code":  "dd-1807703829",
+                       "latitude":  37.5781709,
+                       "address":  "서울 서대문구 증가로8길 21",
+                       "longitude":  126.924736,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "같이가치",
+                       "code":  "dd-1459177124",
+                       "latitude":  37.5784907,
+                       "address":  "서울 서대문구 증가로10길 36-8",
+                       "longitude":  126.9243927,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "곰곰다방",
+                       "code":  "dd-1043369174",
+                       "latitude":  37.5786944,
+                       "address":  "서울 서대문구 증가로10길 34",
+                       "longitude":  126.9240173,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "하이롱 디저트",
+                       "code":  "dd-1238945862",
+                       "latitude":  37.5787189,
+                       "address":  "서울 서대문구 증가로10길 31",
+                       "longitude":  126.9238918,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "카페 만월경 명지대점",
+                       "code":  "dd-1162088319",
+                       "latitude":  37.5782393,
+                       "address":  "서울 서대문구 거북골로 53-31",
+                       "longitude":  126.9232049,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "배스킨라빈스 남가좌점",
+                       "code":  "dd-11782478",
+                       "latitude":  37.5781372,
+                       "address":  "서울 서대문구 거북골로 57",
+                       "longitude":  126.9220772,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "플러스82 서대문점",
+                       "code":  "dd-1727042332",
+                       "latitude":  37.5784398,
+                       "address":  "서울 서대문구 증가로10길 36-55",
+                       "longitude":  126.9246239,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "발루토 핀치",
+                       "code":  "dd-1680425200",
+                       "latitude":  37.5790673,
+                       "address":  "서울 서대문구 증가로10길 48",
+                       "longitude":  126.9246208,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "국민우유집 본점",
+                       "code":  "dd-1541225537",
+                       "latitude":  37.5792727,
+                       "address":  "서울 서대문구 증가로10길 49",
+                       "longitude":  126.9246749,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "컴포즈커피 명지대정문점",
+                       "code":  "dd-1057465574",
+                       "latitude":  37.5801344,
+                       "address":  "서울 서대문구 거북골로 21",
+                       "longitude":  126.9249766,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "이디야커피 명지대점",
+                       "code":  "dd-18763492",
+                       "latitude":  37.5793982,
+                       "address":  "서울 서대문구 거북골로 35",
+                       "longitude":  126.9239488,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "투썸플레이스 명지대점",
+                       "code":  "dd-1665675029",
+                       "latitude":  37.5795473,
+                       "address":  "서울 서대문구 거북골로 31-1",
+                       "longitude":  126.9241891,
+                       "categoryCode":  "daedong-cafe"
+                   },
+                   {
+                       "name":  "명지샤브",
+                       "code":  "dd-1845907207",
+                       "latitude":  37.5797125,
+                       "address":  "서울 서대문구 증가로10길 63",
+                       "longitude":  126.9253047,
+                       "categoryCode":  "daedong-western"
+                   },
+                   {
+                       "name":  "타코볼볼 명지대점",
+                       "code":  "dd-1217440422",
+                       "latitude":  37.5797852,
+                       "address":  "서울 서대문구 거북골로 27",
+                       "longitude":  126.9245223,
+                       "categoryCode":  "daedong-western"
+                   },
+                   {
+                       "name":  "역대급피자 남가좌점",
+                       "code":  "dd-1165590032",
+                       "latitude":  37.577255,
+                       "address":  "서울 서대문구 거북골로 71",
+                       "longitude":  126.9209163,
+                       "categoryCode":  "daedong-western"
+                   },
+                   {
+                       "name":  "리코",
+                       "code":  "dd-560965419",
+                       "latitude":  37.5805419,
+                       "address":  "서울 서대문구 거북골로 20",
+                       "longitude":  126.9251596,
+                       "categoryCode":  "daedong-western"
+                   },
+                   {
+                       "name":  "라온아토",
+                       "code":  "dd-1080882333",
+                       "latitude":  37.5769127,
+                       "address":  "서울 서대문구 증가로4길 13",
+                       "longitude":  126.9259801,
+                       "categoryCode":  "daedong-western"
+                   },
+                   {
+                       "name":  "호짜",
+                       "code":  "dd-1726609401",
+                       "latitude":  37.5767125,
+                       "address":  "서울 서대문구 모래내로 263",
+                       "longitude":  126.9275092,
+                       "categoryCode":  "daedong-western"
+                   },
+                   {
+                       "name":  "피나치공 서대문홍은점",
+                       "code":  "dd-1130304585",
+                       "latitude":  37.5801058,
+                       "address":  "서울 서대문구 홍은동 ",
+                       "longitude":  126.9259151,
+                       "categoryCode":  "daedong-western"
+                   },
+                   {
+                       "name":  "꾸오레 베로",
+                       "code":  "dd-983172457",
+                       "latitude":  37.5791761,
+                       "address":  "서울 서대문구 증가로10길 60-9",
+                       "longitude":  126.9255428,
+                       "categoryCode":  "daedong-western"
+                   },
+                   {
+                       "name":  "베트남쌀국수포녹",
+                       "code":  "dd-1919582592",
+                       "latitude":  37.5799472,
+                       "address":  "서울 서대문구 거북골로 21-7",
+                       "longitude":  126.9252468,
+                       "categoryCode":  "daedong-western"
+                   },
+                   {
+                       "name":  "미분당 가좌점",
+                       "code":  "dd-1561640388",
+                       "latitude":  37.5773645,
+                       "address":  "서울 서대문구 증가로 122",
+                       "longitude":  126.9241968,
+                       "categoryCode":  "daedong-western"
+                   },
+                   {
+                       "name":  "밀",
+                       "code":  "dd-1829507635",
+                       "latitude":  37.5777105,
+                       "address":  "서울 서대문구 증가로8길 8-1",
+                       "longitude":  126.9243184,
+                       "categoryCode":  "daedong-western"
+                   },
+                   {
+                       "name":  "주인백 파스타",
+                       "code":  "dd-31161270",
+                       "latitude":  37.5795441,
+                       "address":  "서울 서대문구 증가로10길 57",
+                       "longitude":  126.9249008,
+                       "categoryCode":  "daedong-western"
+                   }
+               ]
+}

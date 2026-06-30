@@ -84,11 +84,11 @@ public class MapSyncServiceImpl implements MapSyncService {
 
             CategoryGroup group = categoryGroupRepository.findByCode(row.getCode())
                     .map(existing -> {
-                        existing.update(row.getName(), row.getColorHex(), displayOrder);
+                        existing.update(row.getName(), displayOrder);
                         return existing;
                     })
                     .orElseGet(() -> categoryGroupRepository.save(
-                            CategoryGroup.of(row.getCode(), row.getName(), row.getColorHex(), displayOrder)));
+                            CategoryGroup.of(row.getCode(), row.getName(), displayOrder)));
             context.groups.put(group.getCode(), group);
         }
         return rows.size();
@@ -118,7 +118,8 @@ public class MapSyncServiceImpl implements MapSyncService {
 
         CategoryGroup group = resolveGroup(row.getGroupCode(), index, context);
         Category parent = isBlank(row.getParentCode()) ? null : resolveCategory(row.getParentCode(), index, context);
-        CategoryResultType resultType = parseResultType(row.getResultType(), index);
+        // 하위 탭은 결과 종류를 부모에게서 상속한다(ofSubTab 규칙). 최상위 칩만 result_type을 직접 요구한다.
+        CategoryResultType resultType = parent != null ? parent.getResultType() : parseResultType(row.getResultType(), index);
         boolean quickMenu = Boolean.TRUE.equals(row.getQuickMenu());
         int displayOrder = row.getDisplayOrder() != null ? row.getDisplayOrder() : 0;
 

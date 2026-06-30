@@ -1,6 +1,8 @@
 package nova.mjs.domain.thingo.map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import nova.mjs.domain.thingo.map.dto.BuildingDetailResponse;
 import nova.mjs.domain.thingo.map.dto.MapCategoryResponse;
 import nova.mjs.domain.thingo.map.dto.MapSyncDTO;
@@ -13,6 +15,7 @@ import nova.mjs.domain.thingo.map.service.MapPinService;
 import nova.mjs.domain.thingo.map.service.MapSyncService;
 import nova.mjs.domain.thingo.map.service.MapSyncServiceImpl;
 import nova.mjs.domain.thingo.map.service.PinFavoriteService;
+import nova.mjs.domain.thingo.ElasticSearch.indexing.publisher.SearchIndexPublisher;
 import nova.mjs.domain.thingo.map.support.CampusArea;
 import nova.mjs.domain.thingo.map.support.DistanceCalculator;
 import nova.mjs.domain.thingo.map.support.OperatingStatusResolver;
@@ -74,7 +77,10 @@ import static org.assertj.core.api.Assertions.assertThat;
         PinFavoriteService.class,
         DistanceCalculator.class,
         OperatingStatusResolver.class,
-        CampusArea.class
+        CampusArea.class,
+        // 검색 기능의 JPA 엔티티 리스너(StudentCouncilNoticeEntityListener 등)가 이 빈을 요구한다.
+        // 슬라이스 컨텍스트에서 Hibernate가 리스너를 생성할 때 필요하므로 명시적으로 등록한다(맵 테스트에서 발화하지는 않음).
+        SearchIndexPublisher.class
 })
 class MapSyncE2EIT {
 
@@ -97,6 +103,7 @@ class MapSyncE2EIT {
     @Autowired MapCategoryService mapCategoryService;
     @Autowired MapPinService mapPinService;
     @Autowired PinRepository pinRepository;
+    @PersistenceContext EntityManager entityManager;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -104,9 +111,9 @@ class MapSyncE2EIT {
     private static final String SHEET_JSON = """
             {
               "groups": [
-                {"code":"food","name":"식사 (F&B)","colorHex":"#F57F36","displayOrder":1},
-                {"code":"guide","name":"건물·이동 (Map Guide)","colorHex":"#10B981","displayOrder":2},
-                {"code":"convenience","name":"편의 (Convenience)","colorHex":"#3B82F6","displayOrder":3}
+                {"code":"food","name":"식사 (F&B)","displayOrder":1},
+                {"code":"guide","name":"건물·이동 (Map Guide)","displayOrder":2},
+                {"code":"convenience","name":"편의 (Convenience)","displayOrder":3}
               ],
               "categories": [
                 {"code":"daedong","groupCode":"food","label":"대동명지도","subtitle":"by. 명월","tooltipText":"명월 Pick 맛집","iconKey":"MyeongwolIcon","resultType":"PLACE_LIST","quickMenu":true,"displayOrder":1},
@@ -140,6 +147,11 @@ class MapSyncE2EIT {
 
         // when - 동기화 실행 (시트 → DB upsert)
         MapSyncDTO.SyncResult result = mapSyncService.syncFromSheet(request);
+
+        // 적재와 조회를 분리한다: 운영에서 조회는 별도 트랜잭션이라 DB에서 새로 읽는다.
+        // 영속성 컨텍스트를 비워 이후 조회가 방금 영속화한 인스턴스의 빈 역방향 컬렉션을 보지 않고 DB를 재조회하게 한다.
+        entityManager.flush();
+        entityManager.clear();
 
         // then - 섹션별 처리 건수
         assertThat(result.getGroups()).isEqualTo(3);
