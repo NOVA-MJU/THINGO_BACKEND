@@ -36,6 +36,16 @@ public class PgSearchController {
         return ResponseEntity.ok(ApiResponse.success("Success Indexing"));
     }
 
+    /**
+     * search_vector 만 재생성하는 경량 복구 엔드포인트.
+     * 트리거 누락으로 search_vector 가 비어 키워드 검색이 0 이 될 때 즉시 복구용(truncate 없음).
+     */
+    @PostMapping("/rebuild-vectors")
+    public ResponseEntity<ApiResponse<String>> rebuildVectors() {
+        syncService.rebuildVectorsOnly();
+        return ResponseEntity.ok(ApiResponse.success("Rebuilt"));
+    }
+
     @GetMapping("/detail")
     public ResponseEntity<ApiResponse<Page<SearchResponseDTO>>> searchDetail(
             @RequestParam(required = false, defaultValue = "") String keyword,

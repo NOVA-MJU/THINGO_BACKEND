@@ -66,6 +66,21 @@ public class PgSearchIndexSyncService {
     private final PgUnifiedSearchMapper mapper;
 
     /**
+     * search_vector / title_vector 만 재생성한다(truncate/재토큰화 없음).
+     *
+     * 트리거(usi_update_search_vector) 누락으로 재색인된 행의 search_vector 가 NULL 이 되어
+     * 키워드 검색이 전부 0 이 되는 사고의 경량 복구 경로. 기존 행의 search_tokens/title/content
+     * 로부터 벡터만 다시 채우므로 수 초 내 끝나고(nginx 타임아웃 안 걸림), syncAll 의 무거운
+     * collectAll(Komoran 재토큰화)/truncate 와 무관하게 동작한다.
+     */
+    @Transactional
+    public void rebuildVectorsOnly() {
+        log.info("[PgSearch][REBUILD-VECTORS] start");
+        repository.rebuildVectors();
+        log.info("[PgSearch][REBUILD-VECTORS] done");
+    }
+
+    /**
      * 전체 재구축(운영 전용). 인덱스를 비우고 소스 전체를 다시 적재한다.
      */
     @Transactional
