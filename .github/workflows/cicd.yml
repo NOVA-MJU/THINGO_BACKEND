@@ -9,110 +9,140 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📦 Checkout
-        uses: actions/checkout@v4
-
-      - name: 🔐 SSH agent
+      # 러너에 SSH 키 2개 로드:
+      #  - SUBMODULE_SSH_KEY: 프라이빗 서브모듈(MJS-BACK-SECURITY) 읽기용 deploy key
+      #  - EC2_SSH_KEY: EC2 호스트 로그인용 .pem
+      - name: 🔐 SSH agent (submodule + EC2)
         uses: webfactory/ssh-agent@v0.9.0
         with:
-          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+          ssh-private-key: |
+            ${{ secrets.SUBMODULE_SSH_KEY }}
+            ${{ secrets.EC2_SSH_KEY }}
 
-      - name: 📝 Create remote deploy script (locally)
+      # 메인 레포만 체크아웃(서브모듈은 아래서 SSH 키로 수동 처리).
+      # submodules:false 로 둬야 checkout 의 ssh->https 토큰 rewrite 가
+      # 프라이빗 교차레포 서브모듈을 깨뜨리지 않음.
+      - name: 📦 Checkout (main repo)
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      # .gitmodules URL 이 git@github.com 형태라 ssh-agent 의 deploy key 로 인증됨.
+      # --remote: 서브모듈 main tip 추적(기존 EC2 동작과 동일하게 최신 보안설정 반영).
+      - name: 🔁 Init private submodule (SSH)
+        run: |
+          git submodule sync --recursive
+          git -c protocol.version=2 submodule update --init --recursive --remote
+          test -f MJS-BACK-SECURITY/application.yml || { echo "❌ 서브모듈 설정 누락"; exit 1; }
+
+      - name: ☕ Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+
+      # 빌드는 러너(7GB)에서 수행 -> 운영 EC2(2GB) 메모리 압박 제거.
+      - name: 🏗️ Build bootJar
+        run: |
+          chmod +x ./gradlew
+          ./gradlew clean bootJar -x test --no-daemon
+
+      - name: ✅ Locate jar
+        id: jar
+        run: |
+          JAR=$(ls build/libs/MJS_BACKEND-*.jar | head -1)
+          test -f "$JAR" || { echo "❌ JAR 미존재"; exit 1; }
+          echo "path=$JAR" >> "$GITHUB_OUTPUT"
+          echo "빌드 산출물: $JAR ($(du -h "$JAR" | cut -f1))"
+
+      # EC2 에 jar 들어갈 디렉토리 보장
+      - name: 📁 Ensure remote libs dir
+        run: |
+          ssh -o StrictHostKeyChecking=no "${{ secrets.EC2_USER }}"@"${{ secrets.EC2_HOST }}" \
+            "mkdir -p /home/ubuntu/MJS_BACKEND/build/libs"
+
+      # 완성된 jar 1개만 전송(소스/그래들 캐시 안 보냄)
+      - name: 📤 Upload jar to EC2
+        run: |
+          scp -o StrictHostKeyChecking=no "${{ steps.jar.outputs.path }}" \
+            "${{ secrets.EC2_USER }}"@"${{ secrets.EC2_HOST }}":/home/ubuntu/MJS_BACKEND/build/libs/MJS_BACKEND-0.0.1-SNAPSHOT.jar
+
+      # 원격 배포 스크립트 생성: EC2 에서는 빌드 안 함. 재시작 + 헬스체크만.
+      - name: 📝 Create remote restart script
         shell: bash
         run: |
-          cat > deploy_remote.sh <<EOS
+          cat > deploy_remote.sh <<'EOS'
           #!/usr/bin/env bash
           set -Eeuo pipefail
 
           APP_DIR="/home/ubuntu/MJS_BACKEND"
           SERVICE_NAME="MJS_BACKEND"
           APP_PORT="8080"
-          JAR_NAME="MJS_BACKEND-0.0.1-SNAPSHOT.jar"
-          JAR_PATH="\${APP_DIR}/build/libs/\${JAR_NAME}"
+          JAR_PATH="${APP_DIR}/build/libs/MJS_BACKEND-0.0.1-SNAPSHOT.jar"
+          MAX_WAIT="${MAX_WAIT:-60}"
 
-          MAX_WAIT="\${MAX_WAIT:-60}"
+          log(){ printf "\n[%(%F %T)T] %s\n" -1 "$*"; }
+          trap 'log "❌ 실패: 라인 $LINENO (명령: $BASH_COMMAND)"; exit 1' ERR
 
-          log(){ printf "\n[%(%F %T)T] %s\n" -1 "\$*"; }
-          trap 'log "❌ 실패: 라인 \$LINENO (명령: \$BASH_COMMAND)"; exit 1' ERR
+          log "who=$(whoami) host=$(hostname)"
 
-          log "who=\$(whoami) host=\$(hostname)"
-          set -x
+          # 러너가 올린 jar 확인(EC2 에서 빌드하지 않음)
+          test -f "${JAR_PATH}" || { log "❌ JAR 미존재(scp 실패?)"; exit 1; }
 
-          # github host key
-          ssh-keyscan -H github.com | sudo tee -a /etc/ssh/ssh_known_hosts > /dev/null || true
+          cd "${APP_DIR}"
 
-          cd "\${APP_DIR}"
-
-          # 최신 코드 반영
+          # 도커 모니터링 스택이 쓰는 설정 파일 동기화용(빌드는 안 함).
+          ssh-keyscan -H github.com | sudo tee -a /etc/ssh/ssh_known_hosts > /dev/null 2>&1 || true
           git fetch origin
           git checkout main
           git pull --ff-only origin main
-
-          # submodule 최신화
           git submodule sync --recursive
           git submodule update --init --recursive --remote
-          git submodule foreach --recursive 'git reset --hard || true'
-          git submodule foreach --recursive 'git clean -fdx || true'
 
-          # 빌드 (상주 Gradle 데몬 정리 + 데몬 미사용으로 idle 메모리 ~600MB 절약)
-          chmod +x ./gradlew || true
-          ./gradlew --stop || true
-          ./gradlew clean bootJar -x test --no-daemon
+          # Spring 용 env(필수)
+          echo "REDIS_PASSWORD=${REDIS_PASSWORD}" | sudo tee /home/ubuntu/.env > /dev/null
 
-          # jar 체크
-          test -f "\${JAR_PATH}" || { set +x; log "❌ JAR 미존재"; exit 1; }
-
-          # 🔥 Spring용 env (필수)
-          echo "REDIS_PASSWORD=\${REDIS_PASSWORD}" | sudo tee /home/ubuntu/.env > /dev/null
-
-          # 🔥 Spring만 재시작 (Docker 건드리지 않음)
+          # Spring 만 재시작(Docker 건드리지 않음)
           sudo systemctl daemon-reload || true
-          sudo systemctl restart "\${SERVICE_NAME}"
-
-          set +x
+          sudo systemctl restart "${SERVICE_NAME}"
 
           # 헬스체크
-          alive(){ systemctl is-active --quiet "\${SERVICE_NAME}"; }
-
+          alive(){ systemctl is-active --quiet "${SERVICE_NAME}"; }
           ready_by_log(){
-            journalctl -u "\${SERVICE_NAME}" -n 400 --no-pager 2>/dev/null | \
+            journalctl -u "${SERVICE_NAME}" -n 400 --no-pager 2>/dev/null | \
             grep -Eq "Started .* in .* seconds|Tomcat started on port|Started MjsApplication"
           }
-
           ready_by_http(){
-            curl -fsS "http://127.0.0.1:\${APP_PORT}/actuator/health" >/dev/null 2>&1
+            curl -fsS "http://127.0.0.1:${APP_PORT}/actuator/prometheus" >/dev/null 2>&1
           }
 
           log "🩺 헬스체크 시작"
-
-          for i in \$(seq 1 "\${MAX_WAIT}"); do
+          for i in $(seq 1 "${MAX_WAIT}"); do
             if ! alive; then
               log "❌ 서비스 비활성"
-              journalctl -u "\${SERVICE_NAME}" -n 200 --no-pager || true
+              journalctl -u "${SERVICE_NAME}" -n 200 --no-pager || true
               exit 1
             fi
-
             if ready_by_log || ready_by_http; then
               log "✅ 준비 완료"
               exit 0
             fi
-
             sleep 1
           done
 
           log "⚠️ 헬스체크 실패"
-          journalctl -u "\${SERVICE_NAME}" -n 200 --no-pager || true
+          journalctl -u "${SERVICE_NAME}" -n 200 --no-pager || true
           exit 1
           EOS
-
           chmod +x deploy_remote.sh
 
-      - name: 📤 Upload deploy script to EC2
+      - name: 📤 Upload restart script to EC2
         run: |
           scp -o StrictHostKeyChecking=no ./deploy_remote.sh \
             "${{ secrets.EC2_USER }}"@"${{ secrets.EC2_HOST }}":/home/ubuntu/deploy_remote.sh
 
-      - name: 🚀 Run deploy script on EC2
+      - name: 🚀 Restart Spring on EC2
         run: |
           ssh -o StrictHostKeyChecking=no "${{ secrets.EC2_USER }}"@"${{ secrets.EC2_HOST }}" \
             "REDIS_PASSWORD='${{ secrets.REDIS_PASSWORD }}' MAX_WAIT=60 bash /home/ubuntu/deploy_remote.sh"
