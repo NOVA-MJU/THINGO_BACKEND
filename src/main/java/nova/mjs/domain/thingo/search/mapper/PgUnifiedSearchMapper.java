@@ -25,6 +25,15 @@ public class PgUnifiedSearchMapper {
     private static final double COMMENT_WEIGHT = 2.0d;
     private static final long RECENCY_HALFLIFE_DAYS = 30L;
 
+    /*
+     * 학사일정 라우팅 마커.
+     * MJU_CALENDAR 제목은 행사명("동계방학","기말고사 기간")이라 "학사일정"이란 단어가 거의 없다
+     * (537건 중 1건). 그래서 "학사일정" 검색이 캘린더를 못 잡는다. 캘린더 행 토큰에 이 마커를 주입해
+     * "학사일정/학사일정표" 검색이 모든 캘린더 항목을 잡도록 한다(type 가중치 0.15 와 합쳐 최상단).
+     */
+    private static final String CALENDAR_TYPE = "MJU_CALENDAR";
+    private static final String CALENDAR_ROUTING_MARKER = " 학사일정 학사일정표 학교일정";
+
     private final DeadlineExtractor deadlineExtractor;
 
     public String buildId(SearchDocument doc) {
@@ -41,6 +50,15 @@ public class PgUnifiedSearchMapper {
         String category = doc.getCategory();
 
         String tokens = KomoranTokenizerUtil.buildSearchTokens(title, category, content);
+        // title_vector 용 제목 분해 토큰(복합어 분해 -> 제목 부스트 정상화).
+        String titleTokens = KomoranTokenizerUtil.buildTitleTokens(title);
+
+        // 학사일정은 "학사일정" 키워드로 잡히도록 마커를 검색/제목 토큰 양쪽에 주입한다.
+        if (CALENDAR_TYPE.equals(doc.getType())) {
+            tokens = tokens + CALENDAR_ROUTING_MARKER;
+            titleTokens = titleTokens + CALENDAR_ROUTING_MARKER;
+        }
+
         double popularity = computePopularity(doc.getLikeCount(), doc.getCommentCount(), doc.getInstant());
         Instant validUntil = resolveValidUntil(doc, content);
 
@@ -59,7 +77,8 @@ public class PgUnifiedSearchMapper {
                 popularity,
                 doc.getInstant(),
                 validUntil,
-                tokens
+                tokens,
+                titleTokens
         );
     }
 

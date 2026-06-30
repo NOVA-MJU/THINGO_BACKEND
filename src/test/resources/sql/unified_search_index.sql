@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS unified_search_index (
     valid_until     TIMESTAMP WITH TIME ZONE,
     indexed_at      TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
     search_tokens   TEXT,
+    title_tokens    TEXT,
     search_vector   TSVECTOR,
     title_vector    TSVECTOR
 );
@@ -41,7 +42,9 @@ BEGIN
         to_tsvector('simple', coalesce(NEW.search_tokens, ''))
         || to_tsvector('simple', coalesce(NEW.title, ''))
         || to_tsvector('simple', coalesce(NEW.content, ''));
-    NEW.title_vector := to_tsvector('simple', coalesce(NEW.title, ''));
+    NEW.title_vector :=
+        to_tsvector('simple', coalesce(NEW.title_tokens, ''))
+        || to_tsvector('simple', coalesce(NEW.title, ''));
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -49,6 +52,6 @@ $$ LANGUAGE plpgsql;
 DROP TRIGGER IF EXISTS trg_usi_update_search_vector ON unified_search_index;
 
 CREATE TRIGGER trg_usi_update_search_vector
-BEFORE INSERT OR UPDATE OF search_tokens, title, content
+BEFORE INSERT OR UPDATE OF search_tokens, title, content, title_tokens
 ON unified_search_index
 FOR EACH ROW EXECUTE FUNCTION usi_update_search_vector();

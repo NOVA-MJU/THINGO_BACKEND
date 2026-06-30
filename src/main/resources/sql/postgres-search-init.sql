@@ -16,6 +16,9 @@ CREATE EXTENSION IF NOT EXISTS pg_trgm;
 -- 제목 전용 tsvector 컬럼(JPA ddl-auto 가 만들지 못한 경우 대비, 멱등).
 ALTER TABLE unified_search_index ADD COLUMN IF NOT EXISTS title_vector TSVECTOR;
 
+-- 제목 Komoran 분해 토큰 컬럼(애플리케이션이 채움, 트리거가 title_vector 생성에 사용).
+ALTER TABLE unified_search_index ADD COLUMN IF NOT EXISTS title_tokens TEXT;
+
 CREATE INDEX IF NOT EXISTS idx_usi_search_vector
     ON unified_search_index USING GIN (search_vector);
 
@@ -45,7 +48,11 @@ BEGIN
         to_tsvector('simple', coalesce(NEW.search_tokens, ''))
         || to_tsvector('simple', coalesce(NEW.title, ''))
         || to_tsvector('simple', coalesce(NEW.content, ''));
-    NEW.title_vector := to_tsvector('simple', coalesce(NEW.title, ''));
+    -- title_vector 는 Komoran 분해 토큰(title_tokens)을 우선 사용해 복합어를 쪼갠다.
+    -- 원문 title 도 함께 넣어(|| ) 정확 표기 lexeme 도 보존한다(재색인 전 title_tokens=NULL 이면 원문만).
+    NEW.title_vector :=
+        to_tsvector('simple', coalesce(NEW.title_tokens, ''))
+        || to_tsvector('simple', coalesce(NEW.title, ''));
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -53,11 +60,13 @@ $$ LANGUAGE plpgsql;
 DROP TRIGGER IF EXISTS trg_usi_update_search_vector ON unified_search_index;
 
 CREATE TRIGGER trg_usi_update_search_vector
-BEFORE INSERT OR UPDATE OF search_tokens, title, content
+BEFORE INSERT OR UPDATE OF search_tokens, title, content, title_tokens
 ON unified_search_index
 FOR EACH ROW EXECUTE FUNCTION usi_update_search_vector();
 
 -- 기존 행 backfill(트리거는 신규/변경 행만 채운다). title_vector IS NULL 가드로 멱등.
+-- title_tokens 는 SQL 로 못 만든다(Komoran 필요) -> 재색인(/sync 또는 야간 reconcile) 시 채워진다.
+-- 그 전까지는 원문 title 기준으로라도 title_vector 를 채워 검색이 비지 않게 한다.
 UPDATE unified_search_index
    SET title_vector = to_tsvector('simple', coalesce(title, ''))
  WHERE title_vector IS NULL;

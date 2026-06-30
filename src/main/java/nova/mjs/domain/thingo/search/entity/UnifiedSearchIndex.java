@@ -84,6 +84,14 @@ public class UnifiedSearchIndex {
     private String searchTokens;
 
     /**
+     * 제목 전용 Komoran 분해 토큰. DB 트리거가 이 값으로 title_vector 를 만든다.
+     * - 한글 복합어를 분해해 저장(해외일경험 -> 해외 일경험)해야 제목 매칭 부스트가 부분어에도 발동한다.
+     * - search_tokens 와 동일하게 애플리케이션에서 채운다(트리거가 읽어 title_vector 생성).
+     */
+    @Column(name = "title_tokens", columnDefinition = "TEXT")
+    private String titleTokens;
+
+    /**
      * DB 트리거가 자동 갱신.
      * - JPA에서는 insert/update 대상 제외.
      */
@@ -115,7 +123,8 @@ public class UnifiedSearchIndex {
                                Instant date,
                                Instant validUntil,
                                Instant indexedAt,
-                               String searchTokens) {
+                               String searchTokens,
+                               String titleTokens) {
         this.id = id;
         this.originalId = originalId;
         this.type = type;
@@ -133,6 +142,7 @@ public class UnifiedSearchIndex {
         this.validUntil = validUntil;
         this.indexedAt = indexedAt;
         this.searchTokens = searchTokens;
+        this.titleTokens = titleTokens;
     }
 
     public static UnifiedSearchIndex of(String id,
@@ -149,7 +159,8 @@ public class UnifiedSearchIndex {
                                         Double popularity,
                                         Instant date,
                                         Instant validUntil,
-                                        String searchTokens) {
+                                        String searchTokens,
+                                        String titleTokens) {
         return UnifiedSearchIndex.builder()
                 .id(id)
                 .originalId(originalId)
@@ -168,6 +179,7 @@ public class UnifiedSearchIndex {
                 .validUntil(validUntil)
                 .indexedAt(Instant.now())
                 .searchTokens(searchTokens)
+                .titleTokens(titleTokens)
                 .build();
     }
 
@@ -188,6 +200,7 @@ public class UnifiedSearchIndex {
         this.validUntil = source.validUntil;
         this.indexedAt = Instant.now();
         this.searchTokens = source.searchTokens;
+        this.titleTokens = source.titleTokens;
     }
 
     public void deactivate() {
@@ -230,6 +243,7 @@ public class UnifiedSearchIndex {
                 || !Objects.equals(this.validUntil, other.validUntil)
                 || !Objects.equals(this.popularity, other.popularity)
                 || !Objects.equals(this.searchTokens, other.searchTokens)
+                || !Objects.equals(this.titleTokens, other.titleTokens)
                 || !Objects.equals(this.active, other.active);
     }
 }

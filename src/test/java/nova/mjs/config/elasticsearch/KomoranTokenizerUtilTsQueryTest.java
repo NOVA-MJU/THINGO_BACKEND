@@ -101,4 +101,48 @@ class KomoranTokenizerUtilTsQueryTest {
         // given & when & then
         assertThat(KomoranTokenizerUtil.buildTsQueryAnd("ㅎㅇ")).isEmpty();
     }
+
+    @Test
+    @DisplayName("제목 토큰(title_tokens)은 복합어를 개별 형태소로 분해한다")
+    void should_decomposeCompound_when_buildTitleTokens() {
+        // given - 붙어쓴 복합어(제목에 흔함)
+        String title = "2025년 해외일경험 지원사업 참여자 모집";
+
+        // when
+        String titleTokens = KomoranTokenizerUtil.buildTitleTokens(title);
+
+        // then - "해외"가 단독 토큰으로 떨어져야 제목 부스트가 부분어에도 발동한다
+        assertThat(titleTokens).contains("해외");
+        assertThat(titleTokens.split("\\s+")).contains("해외");
+    }
+
+    @Test
+    @DisplayName("빈/노이즈 입력의 제목 토큰은 빈 문자열")
+    void should_returnEmptyTitleTokens_when_blankOrNoise() {
+        // given & when & then
+        assertThat(KomoranTokenizerUtil.buildTitleTokens("")).isEmpty();
+        assertThat(KomoranTokenizerUtil.buildTitleTokens(null)).isEmpty();
+    }
+
+    @Test
+    @DisplayName("동의어 사전에 등록된 검색어는 OR 쿼리에 동의어가 확장된다")
+    void should_expandSynonyms_when_buildTsQuery() {
+        // given - "학식" 검색은 "학생식당" 표기 문서도 잡아야 한다
+        String tsQuery = KomoranTokenizerUtil.buildTsQuery("학식");
+
+        // then
+        assertThat(tsQuery).contains("학식");
+        assertThat(tsQuery).contains("학생식당");
+        assertThat(tsQuery).contains("|");
+    }
+
+    @Test
+    @DisplayName("AND(coverage) 쿼리는 동의어를 확장하지 않는다(정밀도 유지)")
+    void should_notExpandSynonyms_when_buildTsQueryAnd() {
+        // given & when
+        String and = KomoranTokenizerUtil.buildTsQueryAnd("학식");
+
+        // then - 원본 형태소만, 동의어 미포함
+        assertThat(and).doesNotContain("학생식당");
+    }
 }

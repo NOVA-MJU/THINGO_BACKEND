@@ -42,19 +42,20 @@ public class UnifiedSearchIndexQueryRepositoryImpl implements UnifiedSearchIndex
 
     /*
      * 카테고리 가중치 (NOTICE 도메인 한정).
-     * - 학생 검색 빈도 기준 순위: general > academic > scholarship > career > activity
-     * - rule(학칙)은 기한이 없는 evergreen 문서다. 과거엔 0.00(최하위)이라 관련 검색에서도 묻혔다.
-     *   학칙처럼 "항상 유효하고 우선 노출되어야 할" 문서를 academic 급(0.08)으로 상향한다.
-     * - keyword 매칭 점수(ts_rank*0.6 + 제목부스트, 보통 0~1)가 dominant 하도록 약 boost(<=0.10)로 유지.
+     * - 학생 체감 중요도: 일반(general)/학사(academic) 공지가 핵심. 장학(scholarship)·대외활동은
+     *   소수만 찾는데도 최신성에 밀려 상단을 점령했다. recency 를 tie-breaker 로 약화한 만큼(아래)
+     *   카테고리 격차를 키워 "일반/학사 > 장학/취업/활동"이 실제 순위에 드러나게 한다.
+     * - rule(학칙)은 기한 없는 evergreen 문서라 academic 급(0.08)으로 우대(과거 0.00 → 묻힘 방지).
+     * - keyword 매칭 점수(ts_rank*0.6 + 제목부스트 0.25~0.65)가 dominant 하도록 boost(<=0.10) 유지.
      */
     private static final String CATEGORY_WEIGHT_EXPR =
             " CASE category "
                     + "  WHEN 'general' THEN 0.10 "
-                    + "  WHEN 'academic' THEN 0.08 "
-                    + "  WHEN 'scholarship' THEN 0.06 "
-                    + "  WHEN 'career' THEN 0.04 "
-                    + "  WHEN 'activity' THEN 0.02 "
+                    + "  WHEN 'academic' THEN 0.09 "
                     + "  WHEN 'rule' THEN 0.08 "
+                    + "  WHEN 'career' THEN 0.03 "
+                    + "  WHEN 'scholarship' THEN 0.02 "
+                    + "  WHEN 'activity' THEN 0.02 "
                     + "  ELSE 0.00 "
                     + " END ";
 
@@ -71,19 +72,17 @@ public class UnifiedSearchIndexQueryRepositoryImpl implements UnifiedSearchIndex
                     + " + CASE WHEN valid_until IS NOT NULL AND valid_until >= now() THEN  0.10 ELSE 0 END ";
 
     /*
-     * 최신성(recency) 가중치.
-     * - 학교 데이터는 최신이 매우 중요하다. 같은 키워드/관련도라도 최근 글이 위로 오도록
-     *   발행일(date) 기준 지수감쇠 부스트를 점수에 더한다.
-     * - 학사일정(MJU_CALENDAR)·공고류(NOTICE/DEPARTMENT_NOTICE/STUDENT_COUNCIL_NOTICE)는
-     *   최신성이 특히 중요 → 0.50, 그 외(뉴스/커뮤니티 등)는 0.30.
-     *   학사일정을 0.50 군에 넣어야 타입 가중치(0.15)와 합쳐져 같은 키워드에서 확실히 최상단에 온다.
-     * - 반감기 30일(2,592,000초): 30일이면 절반, 60일이면 1/4, 수개월이면 사실상 0.
-     * - date 는 NOT NULL. 미래 발행(드묾)은 GREATEST 로 0 클램프.
-     * 주의: ts_rank(보통 0~0.3) 대비 큰 값이라 최신성이 관련도를 강하게 보정한다(의도된 설계).
-     *       latest/oldest 정렬은 date 기준이라 이 가중치의 영향을 받지 않는다.
+     * 최신성(recency) 가중치 — tie-breaker 수준으로 약화(관련도 우선 정책).
+     * - 과거엔 0.50(공고)이라 키워드 관련도(ts_rank*0.6, 보통 0.05~0.15)와 제목부스트(0.25/0.4)를
+     *   압도해, 검색이 사실상 "키워드 1개라도 포함 + 최신순"으로 퇴화했다(관련 없는 최신글이 상단 점령).
+     * - 이제 최신성은 "같은 관련도일 때만" 가르는 작은 가산점이다. 공고/학사일정 0.12, 그 외 0.08.
+     *   제목 매칭(0.25/0.4)이나 카테고리 격차(0.08)를 뒤집지 못하는 크기로 둔다.
+     * - 학사일정(MJU_CALENDAR) 최상단 노출은 recency 가 아니라 type 가중치(0.15)로 보장한다.
+     * - 반감기 30일(2,592,000초). date 는 NOT NULL. 미래 발행은 GREATEST 로 0 클램프.
+     * 주의: latest/oldest 정렬은 date 기준이라 이 가중치의 영향을 받지 않는다.
      */
     private static final String RECENCY_WEIGHT_EXPR =
-            " + (CASE WHEN type IN ('NOTICE','DEPARTMENT_NOTICE','STUDENT_COUNCIL_NOTICE') THEN 0.50 ELSE 0.30 END) "
+            " + (CASE WHEN type IN ('NOTICE','DEPARTMENT_NOTICE','STUDENT_COUNCIL_NOTICE','MJU_CALENDAR') THEN 0.12 ELSE 0.08 END) "
                     + " * power(0.5, GREATEST(extract(epoch FROM (now() - date)), 0) / 2592000.0) ";
 
     /*

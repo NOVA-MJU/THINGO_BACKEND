@@ -33,6 +33,7 @@ import nova.mjs.domain.thingo.ElasticSearch.indexing.publisher.SearchIndexPublis
 import nova.mjs.domain.thingo.search.indexing.PgUnifiedSearchIndexListener;
 import nova.mjs.domain.thingo.search.indexing.DeadlineExtractor;
 import nova.mjs.domain.thingo.search.mapper.PgUnifiedSearchMapper;
+import nova.mjs.config.elasticsearch.KomoranTokenizerUtil;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -299,7 +300,8 @@ class UnifiedSearchIndexQueryRepositoryImplIT {
                                            String tokens, String link, Instant date) {
         String originalId = id.substring(id.indexOf(':') + 1);
         return UnifiedSearchIndex.of(id, originalId, "NOTICE", category, title, "내용",
-                null, link, null, 0, 0, 0.0d, date, null, tokens);
+                null, link, null, 0, 0, 0.0d, date, null, tokens,
+                KomoranTokenizerUtil.buildTitleTokens(title));
     }
 
     private UnifiedSearchIndex row(String type, String title, String content, Instant date) {
@@ -333,7 +335,8 @@ class UnifiedSearchIndexQueryRepositoryImplIT {
                 0, 0, 0.0d,
                 date,
                 validUntil,
-                tokens
+                tokens,
+                KomoranTokenizerUtil.buildTitleTokens(title)
         );
     }
 }
