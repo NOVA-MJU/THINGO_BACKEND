@@ -114,6 +114,20 @@ public class SchedulerService {
         });
     }
 
+    // 명지대학교 공식 유튜브(@mjuniv) 최신 영상 동기화 (매일 02:00)
+    @Scheduled(cron = "0 0 2 * * *")
+    public void scheduledSyncOfficialYoutube() {
+        log.info("[스케쥴러] 매일 02:00 명지대 공식 유튜브 최신 영상 동기화 실행");
+        CompletableFuture.runAsync(() -> {
+            try {
+                broadcastService.syncOfficialLatest();
+                log.info("명지대 공식 유튜브 최신 영상 동기화 완료");
+            } catch (Exception e) {
+                log.error("명지대 공식 유튜브 동기화 중 오류 발생 : {}", e.getMessage(), e);
+            }
+        });
+    }
+
     //식단 데이터 크롤링 스케줄링 (매주 토, 일, 월 19:00 실행)
     //@Scheduled(cron = "0 55 22 * * 6") // 테스트 추가
     @Scheduled(cron = "0 0 22 * * 5") // 매주 금요일 22:00시 추가

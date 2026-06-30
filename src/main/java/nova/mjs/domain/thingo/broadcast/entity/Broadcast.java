@@ -30,6 +30,16 @@ public class Broadcast {
 
     private LocalDateTime publishedAt;
 
+    /**
+     * 영상 출처 구분: 방송국(BROADCAST) / 명지대 공식 유튜브(OFFICIAL).
+     * 기존 적재분은 모두 방송국이므로 컬럼 DEFAULT 'BROADCAST' 로 기존 행이 자동 백필된다.
+     * 신규 insert 는 항상 Builder 로 source 를 명시하므로 default 에 의존하지 않는다.
+     */
+    @Enumerated(EnumType.STRING)
+    @Column(name = "source", nullable = false,
+            columnDefinition = "varchar(20) default 'BROADCAST' not null")
+    private Source source;
+
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
@@ -56,5 +66,10 @@ public class Broadcast {
         }
 
         this.lastSyncedAt = syncTime;
+    }
+
+    public enum Source {
+        BROADCAST, // 명지대학교 방송국
+        OFFICIAL   // 명지대학교 공식 유튜브
     }
 }

@@ -33,7 +33,7 @@
     },
     {
       "name": "Broadcast",
-      "description": "명지대학교 방송국 영상 크롤링 및 목록 조회 기능"
+      "description": "유튜브 영상 조회/동기화. 채널 2개(명대 방송국 + 명지대 공식 @mjuniv)를 source 칩(전체/명지대공식/명대뉴스)으로 구분. 명대뉴스=명대 방송국 채널."
     },
     {
       "name": "Banner",
@@ -1097,9 +1097,20 @@
     "/broadcast": {
       "get": {
         "tags": ["Broadcast"],
-        "summary": "방송 영상 목록 조회",
-        "description": "명지대학교 방송국의 전체 영상 목록을 조회합니다. 페이지네이션 및 최신순 정렬을 지원합니다.",
+        "summary": "유튜브 영상 목록 조회 (칩: 전체/명지대공식/명대뉴스)",
+        "description": "유튜브 영상을 최신순으로 조회합니다. 프론트의 칩은 `source` 파라미터로 매핑됩니다.\n- `ALL`(기본, 미지정): 명대 방송국 + 명지대 공식, 둘 다 최신순\n- `OFFICIAL`: 명지대 공식 유튜브(@mjuniv)만\n- `BROADCAST`: 명대 방송국만 (별칭 `NEWS` 도 동일 - 칩명이 '명대뉴스')\n\n각 항목의 `source`로 어느 채널인지 구분합니다. (명대뉴스 = 명대 방송국 채널이며, 뉴스 사이트 크롤링 `/api/v1/news`와는 무관)",
         "parameters": [
+          {
+            "name": "source",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": ["ALL", "OFFICIAL", "BROADCAST", "NEWS"],
+              "default": "ALL"
+            },
+            "required": false,
+            "description": "조회할 채널 칩. ALL=전체, OFFICIAL=명지대 공식, BROADCAST=명대 방송국(NEWS 별칭 동일). 미지정 시 ALL"
+          },
           {
             "name": "page",
             "in": "query",
@@ -1154,13 +1165,15 @@
                       "data": {
                         "content": [
                           {
-                            "title": "[오디오 콘텐츠] 슬기로운 서울생활 8화",
-                            "url": "https://www.youtube.com/watch?v=3_60kdx3xKg",
-                            "thumbnailUrl": "https://i.ytimg.com/vi/3_60kdx3xKg/hqdefault.jpg",
-                            "playlistTitle": "슬기로운 서울생활",
-                            "publishedAt": "2025-07-07T06:25:40"
+                            "source": "OFFICIAL",
+                            "title": "명지대학교 2026학년도 신입생 모집 안내",
+                            "url": "https://www.youtube.com/watch?v=abcd1234",
+                            "thumbnailUrl": "https://i.ytimg.com/vi/abcd1234/hqdefault.jpg",
+                            "playlistTitle": null,
+                            "publishedAt": "2026-06-28T10:00:00"
                           },
                           {
+                            "source": "BROADCAST",
                             "title": "[제36회 백마가요제👖] 참가자 팀 비하인드",
                             "url": "https://www.youtube.com/watch?v=9WrW1sV28iA",
                             "thumbnailUrl": "https://i.ytimg.com/vi/9WrW1sV28iA/hqdefault.jpg",
@@ -1229,6 +1242,40 @@
                       "status": "API 요청 성공",
                       "data": "명지대학교 방송국 전체 영상 동기화 완료",
                       "timestamp": "2025-07-21T20:48:58.1067"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/broadcast/official/sync": {
+      "post": {
+        "tags": ["Broadcast"],
+        "summary": "명지대 공식 유튜브 최신 영상 동기화",
+        "description": "명지대학교 공식 유튜브(@mjuniv) 채널의 최신 영상(상위 50개)을 동기화합니다. 항상 최신 N개만 유지하며, 통합 뉴스 피드(GET /news?source=ALL|OFFICIAL)에서 노출됩니다.",
+        "responses": {
+          "200": {
+            "description": "동기화 완료 메시지 반환",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "API 요청 성공" },
+                    "data": { "type": "string", "example": "명지대학교 공식 유튜브 최신 영상 동기화 완료" },
+                    "timestamp": { "type": "string", "format": "date-time" }
+                  }
+                },
+                "examples": {
+                  "syncResult": {
+                    "summary": "동기화 결과 예시",
+                    "value": {
+                      "status": "API 요청 성공",
+                      "data": "명지대학교 공식 유튜브 최신 영상 동기화 완료",
+                      "timestamp": "2026-06-30T20:48:58.1067"
                     }
                   }
                 }
@@ -1448,6 +1495,12 @@
       "BroadcastItem": {
         "type": "object",
         "properties": {
+          "source": {
+            "type": "string",
+            "enum": ["BROADCAST", "OFFICIAL"],
+            "description": "채널 구분. BROADCAST=명대 방송국, OFFICIAL=명지대 공식(@mjuniv)",
+            "example": "BROADCAST"
+          },
           "title": {
             "type": "string",
             "example": "[수다학개론] EP.04 지하철 타는 법?"
