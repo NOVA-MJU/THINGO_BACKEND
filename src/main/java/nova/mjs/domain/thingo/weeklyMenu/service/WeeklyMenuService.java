@@ -5,11 +5,13 @@ import nova.mjs.util.exception.ErrorCode;
 import nova.mjs.domain.thingo.weeklyMenu.DTO.WeeklyMenuResponseDTO;
 import nova.mjs.domain.thingo.weeklyMenu.entity.WeeklyMenu;
 import nova.mjs.domain.thingo.weeklyMenu.entity.enumList.MenuCategory;
+import nova.mjs.domain.thingo.weeklyMenu.event.WeeklyMenuCrawledEvent;
 import nova.mjs.domain.thingo.weeklyMenu.exception.WeeklyMenuNotFoundException;
 import nova.mjs.domain.thingo.weeklyMenu.repository.WeeklyMenuRepository;
 import org.jsoup.*;
 import org.jsoup.nodes.*;
 import org.jsoup.select.Elements;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Log4j2
@@ -29,9 +32,11 @@ public class WeeklyMenuService {
     //5. 레퍼에 접근해서 엔티티 값을 넣어줘
 
     private final WeeklyMenuRepository menuRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public WeeklyMenuService(WeeklyMenuRepository menuRepository) {
+    public WeeklyMenuService(WeeklyMenuRepository menuRepository, ApplicationEventPublisher eventPublisher) {
         this.menuRepository = menuRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     // URL 상수 선언
@@ -118,6 +123,11 @@ public class WeeklyMenuService {
 
                 menuRepository.saveAll(weeklyMenus);
                 log.info("새로운 식단 데이터를 저장했습니다. 총 {} 개의 메뉴", weeklyMenus.size());
+
+                // 학식 알림: 크롤 성공 이벤트 발행(트랜잭션 커밋 후 알림 도메인이 수신).
+                // 같은 주 반복 크롤링 시 중복 알림은 수신측이 contentSignature 로 판별한다.
+                eventPublisher.publishEvent(
+                        new WeeklyMenuCrawledEvent(weeklyMenus.size(), buildContentSignature(weeklyMenus)));
             } else{
                 log.warn("크롤링된 데이터가 없어 기존 데이터를 삭제하지 않았습니다.");
             }
@@ -126,6 +136,18 @@ public class WeeklyMenuService {
             log.error("크롤링 오류 = {}", e.getMessage(), e);
         }
         return WeeklyMenuResponseDTO.fromEntityToList(weeklyMenus);
+    }
+
+    /**
+     * 크롤된 식단 전체의 내용 지문(날짜+끼니+메뉴 기반).
+     * 같은 주를 반복 크롤링하면 동일 값이 나와 수신측이 중복 알림을 건너뛸 수 있다.
+     */
+    private String buildContentSignature(List<WeeklyMenu> weeklyMenus) {
+        String joined = weeklyMenus.stream()
+                .map(menu -> menu.getDate() + "|" + menu.getMenuCategory() + "|" + String.join(",", menu.getMeals()))
+                .sorted()
+                .collect(Collectors.joining(";"));
+        return Integer.toHexString(joined.hashCode());
     }
 
     private MenuCategory mapCategory(String category) {

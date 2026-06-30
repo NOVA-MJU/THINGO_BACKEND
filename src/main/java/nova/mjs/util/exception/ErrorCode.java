@@ -103,7 +103,16 @@ public enum ErrorCode {
 
     // 명지도 구글 시트 동기화 관련 에러
     MAP_SYNC_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "MAP_SYNC_UNAUTHORIZED", "[MJS] 명지도 동기화 토큰이 유효하지 않습니다."),
-    MAP_SYNC_INVALID_ROW(HttpStatus.BAD_REQUEST, "MAP_SYNC_INVALID_ROW", "[MJS] 명지도 동기화 데이터에 유효하지 않은 행이 있습니다.");
+    MAP_SYNC_INVALID_ROW(HttpStatus.BAD_REQUEST, "MAP_SYNC_INVALID_ROW", "[MJS] 명지도 동기화 데이터에 유효하지 않은 행이 있습니다."),
+
+    // 키워드 알림 관련 에러 (K)
+    KEYWORD_INVALID(HttpStatus.BAD_REQUEST, "KEYWORD_INVALID", "[MJS] 올바른 형식의 키워드를 입력해 주세요."),
+    KEYWORD_CATEGORY_REQUIRED(HttpStatus.BAD_REQUEST, "KEYWORD_CATEGORY_REQUIRED", "[MJS] 알림 카테고리를 1개 이상 선택해 주세요."),
+    DUPLICATE_KEYWORD(HttpStatus.BAD_REQUEST, "DUPLICATE_KEYWORD", "[MJS] 이미 등록된 키워드입니다."),
+    KEYWORD_SUBSCRIPTION_NOT_FOUND(HttpStatus.NOT_FOUND, "KEYWORD_SUBSCRIPTION_NOT_FOUND", "[MJS] 키워드 알림 구독을 찾을 수 없습니다."),
+    NOTIFICATION_HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "NOTIFICATION_HISTORY_NOT_FOUND", "[MJS] 알림 내역을 찾을 수 없습니다."),
+    DEVICE_TOKEN_REGISTER_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "DEVICE_TOKEN_REGISTER_FAILED", "[MJS] 디바이스 토큰 등록에 실패했습니다."),
+    FCM_SEND_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "FCM_SEND_FAILED", "[MJS] 푸시 알림 전송에 실패했습니다.");
 
     private final HttpStatus status;
     private final String error;

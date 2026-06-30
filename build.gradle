@@ -99,6 +99,9 @@ dependencies {
 	// Komoran
 	implementation 'com.github.shin285:KOMORAN:3.3.9'
 
+	// FCM 푸시 (Firebase Admin) - 키워드 알림 발송
+	implementation 'com.google.firebase:firebase-admin:9.9.0'
+
 	//websocket
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
