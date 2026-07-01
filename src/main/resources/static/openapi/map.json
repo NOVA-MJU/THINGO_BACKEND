@@ -25,6 +25,10 @@
       "description": "건물/장소 즐겨찾기 토글 API. 즐겨찾기한 핀은 칩 목록에서 상단으로 정렬됩니다. 로그인 필요."
     },
     {
+      "name": "명지도 - 동기화",
+      "description": "구글 시트(운영팀) → DB 명지도 데이터 upsert. X-Sync-Token 보호, 운영자 전용."
+    },
+    {
       "name": "Bus Arrivals",
       "description": "서울 버스 실시간 도착 정보 API. 공공데이터포털 `getStationByUid`를 백엔드에서 중계하여 노선 번호, 방면, 막차 시간, 남은 시간, 정류장 수, 혼잡도, 즐겨찾기 여부를 제공합니다."
     }
@@ -517,10 +521,163 @@
           }
         }
       }
+    },
+    "/sync/map": {
+      "post": {
+        "tags": ["명지도 - 동기화"],
+        "summary": "구글 시트 → DB 명지도 동기화 (운영자 전용)",
+        "operationId": "syncMap",
+        "description": "운영팀 구글 시트(Apps Script)가 편집한 명지도 데이터를 한 번에 DB로 upsert 합니다. 조회 API가 아니라 **운영자 적재용**입니다.\n\n### 인증\n- 헤더 `X-Sync-Token` 상수시간 비교. 값 불일치 시 본문 파싱 전에 401.\n\n### 동작\n- code(그룹/카테고리/핀) 또는 (건물+층 / 건물+요일) 키로 **upsert** (재발행해도 중복 없음, 즐겨찾기 보존).\n- 처리 순서: 그룹 → 카테고리(최상위 먼저, 하위탭 나중) → 건물 → 층 → 장소 → 운영시간. 한 건이라도 검증 실패하면 전체 롤백.\n- 하위탭(parentCode 있음)은 result_type을 부모에게서 상속하므로 생략 가능. 외부 장소는 latitude/longitude를 직접 주거나 비우면 좌표 미변환.\n- v1은 추가/수정만. 시트에서 빠진 행의 자동 삭제는 하지 않습니다.",
+        "parameters": [
+          {
+            "name": "X-Sync-Token",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "동기화 공유 토큰 (서버 설정값과 일치해야 함)"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/MapSyncRequest" },
+              "example": {
+                "groups": [ { "code": "food", "name": "식사 (F&B)", "displayOrder": 1 } ],
+                "categories": [
+                  { "code": "daedong", "groupCode": "food", "label": "대동명지도", "resultType": "PLACE_LIST", "quickMenu": true, "displayOrder": 1 },
+                  { "code": "daedong-kr", "groupCode": "food", "parentCode": "daedong", "label": "한식", "displayOrder": 1 }
+                ],
+                "buildings": [ { "code": "b-jonghap", "categoryCode": "building", "name": "종합관", "latitude": 37.5802215, "longitude": 126.9225443, "buildingNumber": 1, "infoText": "구 본관" } ],
+                "floors": [ { "buildingCode": "b-jonghap", "label": "F1", "floorOrder": 1 } ],
+                "places": [ { "code": "dd-1025414098", "categoryCode": "daedong-kr", "name": "삼정식당", "latitude": 37.5796415, "longitude": 126.9250425, "address": "서울 서대문구 거북골로 25-8" } ],
+                "operatingHours": [ { "buildingCode": "b-jonghap", "dayOfWeek": "MONDAY", "openTime": "09:00", "closeTime": "22:00" } ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "섹션별 처리 건수",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "API 요청 성공",
+                  "data": { "groups": 4, "categories": 35, "buildings": 8, "floors": 0, "places": 305, "operatingHours": 0 },
+                  "timestamp": "2026-07-01T01:19:28"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "행 검증 실패 (MAP_SYNC_INVALID_ROW). 어느 섹션 몇 번째 행이 왜 틀렸는지 message에 담김. 전체 롤백"
+          },
+          "401": {
+            "description": "토큰 불일치 (MAP_SYNC_UNAUTHORIZED)"
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "MapSyncRequest": {
+        "type": "object",
+        "description": "구글 시트 6개 탭에 대응하는 동기화 본문. 각 섹션은 생략 가능(생략 시 해당 섹션 미변경).",
+        "properties": {
+          "groups": { "type": "array", "items": { "$ref": "#/components/schemas/SyncGroupRow" } },
+          "categories": { "type": "array", "items": { "$ref": "#/components/schemas/SyncCategoryRow" } },
+          "buildings": { "type": "array", "items": { "$ref": "#/components/schemas/SyncBuildingRow" } },
+          "floors": { "type": "array", "items": { "$ref": "#/components/schemas/SyncFloorRow" } },
+          "places": { "type": "array", "items": { "$ref": "#/components/schemas/SyncPlaceRow" } },
+          "operatingHours": { "type": "array", "items": { "$ref": "#/components/schemas/SyncOperatingHourRow" } }
+        }
+      },
+      "SyncGroupRow": {
+        "type": "object",
+        "description": "카테고리 대분류(그룹) 1행",
+        "required": ["code", "name"],
+        "properties": {
+          "code": { "type": "string", "example": "food" },
+          "name": { "type": "string", "example": "식사 (F&B)" },
+          "displayOrder": { "type": "integer", "example": 1 }
+        }
+      },
+      "SyncCategoryRow": {
+        "type": "object",
+        "description": "칩(카테고리) 1행. parentCode가 있으면 하위탭이며 result_type을 부모에게서 상속(생략 가능).",
+        "required": ["code", "groupCode", "label"],
+        "properties": {
+          "code": { "type": "string", "example": "daedong" },
+          "groupCode": { "type": "string", "example": "food" },
+          "parentCode": { "type": "string", "nullable": true, "description": "하위탭이면 상위 칩 코드, 최상위면 생략", "example": "daedong" },
+          "label": { "type": "string", "example": "한식" },
+          "subtitle": { "type": "string", "nullable": true, "example": "by. 명월" },
+          "tooltipText": { "type": "string", "nullable": true },
+          "iconKey": { "type": "string", "nullable": true, "example": "MyeongwolIcon" },
+          "resultType": { "type": "string", "enum": ["PLACE_LIST", "BUILDING_LIST", "BUS"], "description": "최상위 칩은 필수, 하위탭은 부모 상속(생략 가능)" },
+          "quickMenu": { "type": "boolean", "example": true },
+          "displayOrder": { "type": "integer", "example": 1 }
+        }
+      },
+      "SyncBuildingRow": {
+        "type": "object",
+        "description": "건물 1행. 위도/경도는 핀 겹침 방지를 위해 운영팀이 직접 입력.",
+        "required": ["code", "categoryCode", "name"],
+        "properties": {
+          "code": { "type": "string", "example": "b-jonghap" },
+          "categoryCode": { "type": "string", "example": "building" },
+          "name": { "type": "string", "example": "종합관" },
+          "latitude": { "type": "number", "format": "double", "example": 37.5802215 },
+          "longitude": { "type": "number", "format": "double", "example": 126.9225443 },
+          "imageUrl": { "type": "string", "nullable": true },
+          "infoText": { "type": "string", "nullable": true, "example": "구 본관" },
+          "buildingNumber": { "type": "integer", "nullable": true, "example": 1 },
+          "classroomCode": { "type": "string", "nullable": true, "example": "S1XXX" }
+        }
+      },
+      "SyncFloorRow": {
+        "type": "object",
+        "description": "건물 층 1행 (건물코드 + 층 라벨로 식별)",
+        "required": ["buildingCode", "label"],
+        "properties": {
+          "buildingCode": { "type": "string", "example": "b-jonghap" },
+          "label": { "type": "string", "example": "F1" },
+          "floorOrder": { "type": "integer", "description": "지하 음수/지상 양수", "example": 1 },
+          "mapImageUrl": { "type": "string", "nullable": true }
+        }
+      },
+      "SyncPlaceRow": {
+        "type": "object",
+        "description": "장소(비건물) 1행. 내부 장소는 parentBuildingCode+floorLabel, 외부 장소는 address 또는 latitude/longitude.",
+        "required": ["code", "categoryCode", "name"],
+        "properties": {
+          "code": { "type": "string", "example": "dd-1025414098" },
+          "categoryCode": { "type": "string", "example": "daedong-kr" },
+          "name": { "type": "string", "example": "삼정식당" },
+          "latitude": { "type": "number", "format": "double", "nullable": true, "example": 37.5796415 },
+          "longitude": { "type": "number", "format": "double", "nullable": true, "example": 126.9250425 },
+          "imageUrl": { "type": "string", "nullable": true },
+          "infoText": { "type": "string", "nullable": true },
+          "address": { "type": "string", "nullable": true, "description": "외부 장소 도로명 주소", "example": "서울 서대문구 거북골로 25-8" },
+          "parentBuildingCode": { "type": "string", "nullable": true, "description": "내부 장소면 소속 건물 코드" },
+          "floorLabel": { "type": "string", "nullable": true, "description": "내부 장소면 소속 층 라벨" }
+        }
+      },
+      "SyncOperatingHourRow": {
+        "type": "object",
+        "description": "건물 운영시간 1행 (건물코드 + 요일로 식별). 건물만 가짐.",
+        "required": ["buildingCode", "dayOfWeek"],
+        "properties": {
+          "buildingCode": { "type": "string", "example": "b-jonghap" },
+          "dayOfWeek": { "type": "string", "enum": ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"] },
+          "openTime": { "type": "string", "nullable": true, "example": "09:00" },
+          "closeTime": { "type": "string", "nullable": true, "description": "자정 넘김은 23:59", "example": "22:00" },
+          "always24h": { "type": "boolean", "nullable": true },
+          "closed": { "type": "boolean", "nullable": true },
+          "note": { "type": "string", "nullable": true }
+        }
+      },
       "MapChip": {
         "type": "object",
         "description": "칩 1개 (상단 퀵메뉴 / 전체 카테고리 공용)",
