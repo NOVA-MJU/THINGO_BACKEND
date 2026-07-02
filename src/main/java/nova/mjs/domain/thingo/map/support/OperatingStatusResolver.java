@@ -7,7 +7,10 @@ import org.springframework.stereotype.Component;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -80,5 +83,81 @@ public class OperatingStatusResolver {
 
     private int minutesOfDay(LocalTime time) {
         return time.getHour() * 60 + time.getMinute();
+    }
+
+    /** 요일 한글 라벨 (월~일). DayOfWeek.getValue() 1(월)~7(일) 대응 */
+    private static final String[] KOREAN_DAY = {"월", "화", "수", "목", "금", "토", "일"};
+
+    /**
+     * 검색 카드용 운영 상태 표시 라벨을 만든다.
+     * '운영 종료(CLOSED)'일 때는 다음 오픈 시각을 덧붙인다. (예: "운영 종료 (내일 09:00 오픈)")
+     * 나머지 상태는 기본 라벨을 그대로 쓰고, 운영시간 데이터가 없으면 null.
+     */
+    public String resolveDisplayLabel(List<OperatingHour> operatingHours, LocalDateTime now) {
+        OperatingStatus status = resolve(operatingHours, now);
+        if (status == null) {
+            return null;
+        }
+        if (status != OperatingStatus.CLOSED) {
+            return status.getLabel();
+        }
+        LocalDateTime nextOpen = resolveNextOpen(operatingHours, now);
+        if (nextOpen == null) {
+            return status.getLabel();
+        }
+        return status.getLabel() + " (" + formatNextOpen(now, nextOpen) + " 오픈)";
+    }
+
+    /**
+     * 다음 오픈 일시를 계산한다. (현재 운영 종료 상태일 때만 의미가 있다)
+     * 오늘부터 최대 7일 뒤(다음 주 같은 요일)까지 훑어 현재 시각 이후 첫 오픈 시각을 찾는다.
+     * 앞으로 7일 안에 오픈이 없으면(전부 휴무/미입력) null.
+     *
+     * @param operatingHours 요일별 운영시간
+     * @param now            현재 시각 (KST)
+     */
+    public LocalDateTime resolveNextOpen(List<OperatingHour> operatingHours, LocalDateTime now) {
+        if (operatingHours == null || operatingHours.isEmpty()) {
+            return null;
+        }
+        Map<DayOfWeek, OperatingHour> byDay = new EnumMap<>(DayOfWeek.class);
+        for (OperatingHour hour : operatingHours) {
+            byDay.put(hour.getDayOfWeek(), hour);
+        }
+
+        for (int offset = 0; offset <= 7; offset++) {
+            LocalDateTime day = now.plusDays(offset);
+            OperatingHour hour = byDay.get(day.getDayOfWeek());
+            if (hour == null || hour.isClosed()) {
+                continue;                                   // 휴무/미입력 요일은 건너뜀
+            }
+            if (hour.isAlways24h()) {
+                if (offset == 0) {
+                    continue;                               // 오늘 24시간이면 CLOSED로 오지 않음 (방어)
+                }
+                return day.toLocalDate().atStartOfDay();    // 미래 요일의 24시간 = 자정 오픈
+            }
+            if (hour.getOpenTime() == null) {
+                continue;
+            }
+            LocalDateTime openAt = day.toLocalDate().atTime(hour.getOpenTime());
+            if (openAt.isAfter(now)) {
+                return openAt;                              // 현재 이후 첫 오픈
+            }
+        }
+        return null;
+    }
+
+    /** 다음 오픈 시각을 "오늘/내일/요일 + HH:mm" 형식으로 표현 */
+    private String formatNextOpen(LocalDateTime now, LocalDateTime nextOpen) {
+        String time = String.format("%02d:%02d", nextOpen.getHour(), nextOpen.getMinute());
+        long dayDiff = ChronoUnit.DAYS.between(now.toLocalDate(), nextOpen.toLocalDate());
+        if (dayDiff == 0) {
+            return "오늘 " + time;
+        }
+        if (dayDiff == 1) {
+            return "내일 " + time;
+        }
+        return KOREAN_DAY[nextOpen.getDayOfWeek().getValue() - 1] + " " + time;
     }
 }

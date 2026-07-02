@@ -2,8 +2,8 @@
   "openapi": "3.0.1",
   "info": {
     "title": "MJU 지도·버스 API",
-    "version": "v1.1.0",
-    "description": "명지대 캠퍼스 지도 서비스 '명지도'와 주변 버스 도착 정보를 제공하는 API입니다.\n\n## 명지도란?\n명지대 캠퍼스 지도 위에 건물과 장소(맛집/편의시설 등)를 핀으로 보여주는 서비스입니다.\n지도는 프론트가 네이버 지도로 그리고, 백엔드는 핀의 좌표·정보·정렬된 목록을 내려줍니다.\n\n## 데이터 3종\n| 종류 | 설명 | 예 |\n|------|------|----|\n| 카테고리(칩) | 지도 위 핀을 묶고 필터링하는 단위. 상단 퀵메뉴 칩 + 전체 카테고리로 노출 | 대동명지도, 프린터, 라운지 |\n| 건물 | 강의실코드·층별 안내·운영시간을 가진 캠퍼스 건물 | 종합관, 방목학술정보관 |\n| 장소(비건물) | 건물 안 시설 또는 건물 밖 가게. 위치/추가정보만 가짐 | 맛집, 편의점, 프린터 |\n\n## 핵심 개념\n- **운영 상태/거리는 저장값이 아니라 요청 시점에 계산**합니다. 운영시간+현재시각으로 상태를, 사용자 좌표로 거리를 구합니다.\n- **사용자 현재 위치(lat/lng)는 프론트가 기기 GPS로 얻어 쿼리 파라미터로 전달**합니다. 백엔드는 정렬·거리 계산에만 쓰고 저장하지 않습니다.\n- 캠퍼스 반경(약 500m) 밖이거나 좌표가 없으면 거리는 표시하지 않습니다(정렬만 정문 기준).\n- **운영시간/운영상태는 건물에만** 있습니다. 장소(비건물)는 운영시간 없이 위치·추가정보만 제공합니다.\n- 즐겨찾기는 건물·장소를 핀 ID 하나로 동일하게 다룹니다.\n\n## 인증\n- 조회 API는 비로그인 가능. 로그인 시 즐겨찾기 여부가 표시되고 칩 목록에서 즐겨찾기가 상단 정렬됩니다.\n- 즐겨찾기 토글은 로그인 필요.\n\n---\n\n## 버스 도착 정보\n명지대 주변 정류장(A/B)의 서울 버스 실시간 도착 정보를 공공데이터포털에서 중계합니다. 프론트는 정류장 키(A/B)만 전달합니다."
+    "version": "v1.2.0",
+    "description": "명지대 캠퍼스 지도 서비스 '명지도'와 주변 버스 도착 정보를 제공하는 API입니다.\n\n## 명지도란?\n명지대 캠퍼스 지도 위에 건물과 장소(맛집/편의시설 등)를 핀으로 보여주는 서비스입니다.\n지도는 프론트가 네이버 지도로 그리고, 백엔드는 핀의 좌표·정보·정렬된 목록을 내려줍니다.\n\n## 데이터 3종\n| 종류 | 설명 | 예 |\n|------|------|----|\n| 카테고리(칩) | 지도 위 핀을 묶고 필터링하는 단위. 상단 퀵메뉴 칩 + 전체 카테고리로 노출 | 대동명지도, 프린터, 라운지 |\n| 건물 | 강의실코드·층별 안내·운영시간을 가진 캠퍼스 건물 | 종합관, 방목학술정보관 |\n| 장소(비건물) | 건물 안 시설 또는 건물 밖 가게. 위치/추가정보만 가짐 | 맛집, 편의점, 프린터 |\n\n## 핵심 개념\n- **운영 상태/거리는 저장값이 아니라 요청 시점에 계산**합니다. 운영시간+현재시각으로 상태를, 사용자 좌표로 거리를 구합니다.\n- **사용자 현재 위치(lat/lng)는 프론트가 기기 GPS로 얻어 쿼리 파라미터로 전달**합니다. 백엔드는 정렬·거리 계산에만 쓰고 저장하지 않습니다.\n- 캠퍼스 반경(약 500m) 밖이거나 좌표가 없으면 거리는 표시하지 않습니다(정렬만 정문 기준).\n- **운영시간/운영상태는 건물에만** 있습니다. 장소(비건물)는 운영시간 없이 위치·추가정보만 제공합니다.\n- 즐겨찾기는 건물·장소를 핀 ID 하나로 동일하게 다룹니다.\n\n## 인증\n- 조회 API는 비로그인 가능. 로그인 시 즐겨찾기 여부가 표시되고 칩 목록에서 즐겨찾기가 상단 정렬됩니다.\n- 즐겨찾기 토글은 로그인 필요.\n\n---\n\n## 버스 도착 정보\n명지대 주변 정류장(A/B)의 서울 버스 실시간 도착 정보를 공공데이터포털에서 중계합니다. 프론트는 정류장 키(A/B)만 전달합니다.\n\n## 명지도 검색\n건물/장소를 이름·카테고리로 검색합니다(초성·오타 허용, 자동완성 제공). 기존 통합검색(search 문서)과 별개이며 캠퍼스 건물/장소만 대상입니다."
   },
   "servers": [
     {
@@ -23,6 +23,10 @@
     {
       "name": "명지도 - 즐겨찾기",
       "description": "건물/장소 즐겨찾기 토글 API. 즐겨찾기한 핀은 칩 목록에서 상단으로 정렬됩니다. 로그인 필요."
+    },
+    {
+      "name": "명지도 - 검색",
+      "description": "명지도 전용 검색 API. 기존 통합검색(/search)과 별개로 캠퍼스 건물/장소만 대상으로 합니다. 건물/장소명 + 카테고리명을 매칭하며 부분일치·초성(ㅌㅆ→투썸)·오타 허용·공백/대소문자 무시를 자동 처리합니다. 결과 목록(무한 스크롤)과 자동완성을 제공합니다."
     },
     {
       "name": "명지도 - 동기화",
@@ -293,6 +297,85 @@
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/ErrorResponse" },
                 "example": { "error": "MAP_PIN_NOT_FOUND", "message": "[MJS] 해당 건물/장소를 찾을 수 없습니다.", "status": 404 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/map/search": {
+      "get": {
+        "tags": ["명지도 - 검색"],
+        "summary": "명지도 검색 (건물/장소)",
+        "operationId": "searchMap",
+        "description": "명지도 전용 검색입니다. 기존 통합검색(/search)과 별개로, 캠퍼스 건물/장소만 대상으로 합니다.\n\n### 사용 시나리오\n1. 검색창 진입 후 검색어 입력 (단어 형식)\n2. (선택) 기기 GPS 좌표(lat/lng) 함께 전달\n3. 결과 카드 목록 렌더 + 지도에 핀 표시\n4. 카드 클릭 시 `type`으로 상세 분기: `BUILDING`→건물 상세(`/map/buildings/{id}`), `PLACE`→장소 상세(`/map/places/{id}`)\n\n### 무엇을 검색하나\n- **건물/장소명**과 **카테고리명**을 함께 매칭합니다.\n\n### 검색 품질 (자동 처리)\n| 기능 | 예시 |\n|------|------|\n| 공백/기호 무시 | `투썸 플레이스` = `투썸플레이스` |\n| 부분 일치 | `종합` → 종합관 |\n| 초성 검색 | `ㅌㅆ` → 투썸플레이스 |\n| 오타 허용 | `투썹` → 투썸플레이스 |\n| 대소문자 무시 | `gs25` = `GS25` |\n\n### 정렬\n- **관련도 우선** → 동점 시 **가까운 순** → 이름순\n- 캠퍼스 반경(약 500m) 밖이면 거리는 미표시(정렬만 정문 기준), GPS 없으면 거리 null\n\n### 종류 필터\n- `type=BUILDING` 또는 `type=PLACE`로 건물/장소만 필터링. 생략 시 전체. 잘못된 값은 전체로 처리\n\n### 페이지네이션 (무한 스크롤)\n- `page`/`size`로 잘라 반환. 반환 개수가 `size`보다 작으면 마지막 페이지\n\n### 결과 카드(PinSummary) 주의\n- `operatingStatus`: 건물은 자기 운영시간, 내부 장소는 소속 건물 운영시간 상속, 외부 장소는 null. '운영 종료'면 다음 오픈 안내가 붙습니다 (예: `운영 종료 (내일 09:00 오픈)`)\n- `location`: 내부 장소는 '건물명 + 층수', 외부 장소는 도로명 주소 (프론트에서 최대 65자, 초과 시 생략 표시)\n- `distanceMeters`: 캠퍼스 안에서 GPS가 있을 때만. 그 외 null(미표시)",
+        "parameters": [
+          { "name": "keyword", "in": "query", "required": true, "description": "검색어 (건물/장소명 또는 카테고리명, 초성/오타 허용). 비면 빈 목록", "schema": { "type": "string", "example": "투썸" } },
+          { "name": "type", "in": "query", "required": false, "description": "종류 필터. 생략 시 전체", "schema": { "type": "string", "enum": ["BUILDING", "PLACE"], "example": "PLACE" } },
+          { "name": "lat", "in": "query", "required": false, "description": "사용자 현재 위도 (프론트 GPS). 없으면 거리 미계산", "schema": { "type": "number", "format": "double", "example": 37.5802 } },
+          { "name": "lng", "in": "query", "required": false, "description": "사용자 현재 경도 (프론트 GPS)", "schema": { "type": "number", "format": "double", "example": 126.9226 } },
+          { "name": "page", "in": "query", "required": false, "description": "0부터 시작하는 페이지 번호", "schema": { "type": "integer", "default": 0, "example": 0 } },
+          { "name": "size", "in": "query", "required": false, "description": "페이지 크기", "schema": { "type": "integer", "default": 20, "example": 20 } }
+        ],
+        "responses": {
+          "200": {
+            "description": "검색 결과 카드 목록 (관련도 순)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "API 요청 성공" },
+                    "data": { "type": "array", "items": { "$ref": "#/components/schemas/PinSummary" } },
+                    "timestamp": { "type": "string", "format": "date-time", "example": "2026-07-02T09:05:12" }
+                  }
+                },
+                "example": {
+                  "status": "API 요청 성공",
+                  "data": [
+                    { "id": 51, "type": "PLACE", "name": "투썸플레이스 명지대점", "categoryCode": "cafe", "iconKey": "CafeIcon", "imageUrl": "https://thingo.kr/img/place/51.jpg", "classroomCode": null, "location": "서울 서대문구 거북골로 31-1 1~3층", "favorite": false, "operatingStatus": null, "distanceMeters": 720, "latitude": 37.5806, "longitude": 126.9231 },
+                    { "id": 1, "type": "BUILDING", "name": "종합관", "categoryCode": "building", "iconKey": "BuildingIcon", "imageUrl": "https://thingo.kr/img/building/1.jpg", "classroomCode": "S1XXX", "location": null, "favorite": false, "operatingStatus": "운영중", "distanceMeters": 80, "latitude": 37.5803, "longitude": 126.9223 }
+                  ],
+                  "timestamp": "2026-07-02T09:05:12"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/map/search/suggest": {
+      "get": {
+        "tags": ["명지도 - 검색"],
+        "summary": "명지도 검색 자동완성",
+        "operationId": "suggestMap",
+        "description": "검색어를 입력하는 중 실시간으로 이름을 제안하는 경량 API입니다. 거리·운영상태는 계산하지 않아 빠릅니다.\n\n### 사용 시나리오\n1. 검색창에 글자를 입력할 때마다 호출(디바운스 권장)\n2. 제안 목록을 드롭다운으로 표시 (아이콘 + 이름)\n3. 항목 탭 시 `type`으로 상세 분기 (`id`로 상세 요청)\n\n### 매칭 규칙\n- 검색(`/map/search`)과 동일: 부분 일치 / 초성(`ㅌㅆ`) / 오타 허용 / 공백·대소문자 무시\n- `type`으로 건물/장소만 제한 가능",
+        "parameters": [
+          { "name": "keyword", "in": "query", "required": true, "description": "검색어(입력 중 문자열). 비면 빈 목록", "schema": { "type": "string", "example": "투" } },
+          { "name": "type", "in": "query", "required": false, "description": "종류 필터. 생략 시 전체", "schema": { "type": "string", "enum": ["BUILDING", "PLACE"], "example": "PLACE" } },
+          { "name": "limit", "in": "query", "required": false, "description": "최대 제안 개수", "schema": { "type": "integer", "default": 10, "example": 10 } }
+        ],
+        "responses": {
+          "200": {
+            "description": "자동완성 제안 목록 (관련도 순)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "API 요청 성공" },
+                    "data": { "type": "array", "items": { "$ref": "#/components/schemas/MapSuggestItem" } },
+                    "timestamp": { "type": "string", "format": "date-time", "example": "2026-07-02T09:05:12" }
+                  }
+                },
+                "example": {
+                  "status": "API 요청 성공",
+                  "data": [
+                    { "id": 51, "name": "투썸플레이스 명지대점", "type": "PLACE", "categoryCode": "cafe", "iconKey": "CafeIcon" },
+                    { "id": 88, "name": "투썸플레이스 남가좌점", "type": "PLACE", "categoryCode": "cafe", "iconKey": "CafeIcon" }
+                  ],
+                  "timestamp": "2026-07-02T09:05:12"
+                }
               }
             }
           }
@@ -714,12 +797,24 @@
           "classroomCode": { "type": "string", "nullable": true, "description": "예시 강의실 코드 (건물만). 장소는 null", "example": "S1XXX" },
           "location": { "type": "string", "nullable": true, "description": "위치 텍스트 (장소만: 건물명+층수 또는 주소). 건물은 null", "example": "서울 서대문구 거북골로 34" },
           "favorite": { "type": "boolean", "description": "즐겨찾기 여부 (비로그인 시 false)", "example": true },
-          "operatingStatus": { "type": "string", "nullable": true, "description": "운영 상태 한글 라벨 (건물만). 장소/운영시간 없으면 null", "enum": ["곧 운영 시작", "운영중", "곧 운영 종료", "운영 종료", "24시간 운영", "휴무"], "example": "운영중" },
+          "operatingStatus": { "type": "string", "nullable": true, "description": "운영 상태 한글 라벨. 기본값: '곧 운영 시작' / '운영중' / '곧 운영 종료' / '운영 종료' / '24시간 운영' / '휴무'. 검색(/map/search) 결과에서는 '운영 종료'에 다음 오픈 안내가 붙는다(예: '운영 종료 (내일 09:00 오픈)'). 건물은 자기 운영시간, 검색 결과의 내부 장소는 소속 건물 운영시간을 상속. 외부 장소/운영시간 없으면 null", "example": "운영중" },
           "distanceMeters": { "type": "integer", "nullable": true, "description": "현재 위치로부터 거리(미터). 캠퍼스 밖/GPS 없으면 null(미표시)", "example": 150 },
           "latitude": { "type": "number", "format": "double", "nullable": true, "description": "지도 마커용 위도. 내부 장소는 소속 건물 좌표. 좌표 없으면 null", "example": 37.5796415 },
           "longitude": { "type": "number", "format": "double", "nullable": true, "description": "지도 마커용 경도. 내부 장소는 소속 건물 좌표. 좌표 없으면 null", "example": 126.9250425 }
         },
         "required": ["id", "type", "name", "categoryCode", "favorite"]
+      },
+      "MapSuggestItem": {
+        "type": "object",
+        "description": "검색 자동완성 항목 1개 (경량). 거리·운영상태 없음.",
+        "properties": {
+          "id": { "type": "integer", "format": "int64", "description": "핀 ID (탭 시 상세 요청에 사용)", "example": 51 },
+          "name": { "type": "string", "description": "건물명/장소명", "example": "투썸플레이스 명지대점" },
+          "type": { "type": "string", "description": "종류. 프론트가 상세 화면을 분기", "enum": ["BUILDING", "PLACE"], "example": "PLACE" },
+          "categoryCode": { "type": "string", "description": "소속 카테고리 코드", "example": "cafe" },
+          "iconKey": { "type": "string", "description": "아이콘 키 (카테고리 아이콘)", "example": "CafeIcon" }
+        },
+        "required": ["id", "name", "type", "categoryCode"]
       },
       "OperatingHourLine": {
         "type": "object",
