@@ -87,13 +87,37 @@ class MapSearchMatcherTest {
         }
 
         @Test
-        @DisplayName("오타가 있어도 편집거리 유사도로 매칭된다")
+        @DisplayName("3글자 이상 검색어는 오타가 있어도 편집거리 유사도로 매칭된다")
         void should_matchDespiteTypo() {
             // given - when
-            double typo = matcher.score("투썸", "카페", "투썹");
+            double typo = matcher.score("스타벅스", "카페", "스타벅쓰");
 
             // then
             assertThat(typo).isGreaterThan(0.0);
+        }
+
+        @Test
+        @DisplayName("2글자 이하 검색어는 오타 허용을 적용하지 않는다 (동음이의어 오탐 방지)")
+        void should_notApplyFuzzy_when_queryTooShort() {
+            // given - '투썸'과 '투다'가 1글자만 달라 편집거리 유사도는 높지만, 2글자 검색어라 오타로 보지 않는다
+            // when
+            double typo = matcher.score("투다리", "주점", "투썸");
+
+            // then
+            assertThat(typo).isEqualTo(0.0);
+        }
+
+        @Test
+        @DisplayName("단어 경계를 넘어선 우연한 일치는 매칭되지 않는다 (공백 제거 전 토큰 단위 비교)")
+        void should_notMatch_acrossWordBoundary_byCoincidence() {
+            // given - '투다리 하나로점'을 공백 제거해 통으로 비교하면 '투다'가 '투썸'과 오탐될 수 있다
+            // when
+            double result1 = matcher.score("투다리 하나로점", "주점", "투썸");
+            double result2 = matcher.score("투데이하우스", "한식", "투썸");
+
+            // then
+            assertThat(result1).isEqualTo(0.0);
+            assertThat(result2).isEqualTo(0.0);
         }
 
         @Test

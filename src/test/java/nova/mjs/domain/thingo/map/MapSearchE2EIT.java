@@ -103,7 +103,7 @@ class MapSearchE2EIT {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    /** 검색 시나리오용 시트 페이로드 (건물 1 + 외부장소 2 + 내부장소 1) */
+    /** 검색 시나리오용 시트 페이로드 (건물 1 + 외부장소 3 + 내부장소 1) */
     private static final String SHEET_JSON = """
             {
               "groups": [
@@ -115,6 +115,7 @@ class MapSearchE2EIT {
                 {"code":"daedong","groupCode":"food","label":"대동명지도","iconKey":"MyeongwolIcon","resultType":"PLACE_LIST","quickMenu":true,"displayOrder":1},
                 {"code":"korean","groupCode":"food","parentCode":"daedong","label":"한식","iconKey":"KoreanFoodIcon","displayOrder":1},
                 {"code":"cafe","groupCode":"food","label":"카페","iconKey":"CafeIcon","resultType":"PLACE_LIST","quickMenu":true,"displayOrder":2},
+                {"code":"bar","groupCode":"food","label":"주점","iconKey":"BarIcon","resultType":"PLACE_LIST","quickMenu":false,"displayOrder":3},
                 {"code":"building","groupCode":"guide","label":"건물","iconKey":"BuildingIcon","resultType":"BUILDING_LIST","quickMenu":true,"displayOrder":1},
                 {"code":"printer","groupCode":"convenience","label":"프린터","iconKey":"PrinterIcon","resultType":"PLACE_LIST","quickMenu":false,"displayOrder":1}
               ],
@@ -127,7 +128,8 @@ class MapSearchE2EIT {
               "places": [
                 {"code":"p-happy","categoryCode":"korean","name":"행복식당","latitude":37.5805,"longitude":126.9230,"address":"서울 서대문구 거북골로 34","infoText":"현금만"},
                 {"code":"p-twosome","categoryCode":"cafe","name":"투썸플레이스 명지대점","latitude":37.5806,"longitude":126.9231,"address":"서울 서대문구 거북골로 31-1 1~3층","infoText":"콘센트 많음"},
-                {"code":"p-printer","categoryCode":"printer","name":"무한프린터","parentBuildingCode":"b-main","floorLabel":"F1","infoText":"흑백 50원"}
+                {"code":"p-printer","categoryCode":"printer","name":"무한프린터","parentBuildingCode":"b-main","floorLabel":"F1","infoText":"흑백 50원"},
+                {"code":"p-twodari","categoryCode":"bar","name":"투다리 하나로점","latitude":37.5812,"longitude":126.9250,"address":"서울 서대문구 명지대길 18","infoText":"단체석 있음"}
               ],
               "operatingHours": [
                 {"buildingCode":"b-main","dayOfWeek":"MONDAY","openTime":"09:00","closeTime":"18:00"},
@@ -154,14 +156,14 @@ class MapSearchE2EIT {
 
         // then - 섹션별 처리 건수
         assertThat(result.getGroups()).isEqualTo(3);
-        assertThat(result.getCategories()).isEqualTo(5);
+        assertThat(result.getCategories()).isEqualTo(6);
         assertThat(result.getBuildings()).isEqualTo(1);
         assertThat(result.getFloors()).isEqualTo(1);
-        assertThat(result.getPlaces()).isEqualTo(3);
+        assertThat(result.getPlaces()).isEqualTo(4);
         assertThat(result.getOperatingHours()).isEqualTo(2);
 
-        // 핀 총 4개 (건물1 + 장소3)
-        assertThat(pinRepository.count()).isEqualTo(4);
+        // 핀 총 5개 (건물1 + 장소4)
+        assertThat(pinRepository.count()).isEqualTo(5);
 
         // 개별 핀의 내용이 시트 값 그대로 적재됐는지 (데이터 품질)
         Pin twosome = pinRepository.findByCode("p-twosome").orElseThrow();
@@ -203,16 +205,31 @@ class MapSearchE2EIT {
     }
 
     @Test
-    @DisplayName("오타: '투썹'으로도 투썸플레이스를 찾는다")
+    @DisplayName("오타: 3글자 이상 검색어('투썹플레이스')는 오타가 있어도 투썸플레이스를 찾는다")
     void should_findDespiteTypo() throws Exception {
         // given
         syncAndClear();
 
         // when
-        List<PinSummaryResponse> results = mapSearchService.search("투썹", null, null, null, 0, 20, null);
+        List<PinSummaryResponse> results = mapSearchService.search("투썹플레이스", null, null, null, 0, 20, null);
 
         // then
         assertThat(results).extracting(PinSummaryResponse::getName).contains("투썸플레이스 명지대점");
+    }
+
+    @Test
+    @DisplayName("회귀: '투썸'(2글자) 검색은 첫 글자만 같은 무관한 장소(투다리)를 오매칭하지 않는다")
+    void should_notMatchUnrelatedPlace_when_searchingShortAbbreviation() throws Exception {
+        // given
+        syncAndClear();
+
+        // when
+        List<PinSummaryResponse> results = mapSearchService.search("투썸", null, null, null, 0, 20, null);
+
+        // then - 카페(투썸플레이스)만 나오고, 이름이 다른 '투다리 하나로점'은 섞이지 않는다
+        assertThat(results).extracting(PinSummaryResponse::getName)
+                .contains("투썸플레이스 명지대점")
+                .doesNotContain("투다리 하나로점");
     }
 
     @Test

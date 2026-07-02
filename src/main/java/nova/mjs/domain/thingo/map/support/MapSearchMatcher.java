@@ -2,6 +2,9 @@ package nova.mjs.domain.thingo.map.support;
 
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 명지도 검색어 매칭/스코어링 유틸.
  *
@@ -12,7 +15,10 @@ import org.springframework.stereotype.Component;
  * - 정규화: 소문자화 + 공백/기호 제거로 표기 흔들림 흡수 ("투썸 플레이스" == "투썸플레이스")
  * - 다중 시그널 점수: 정확일치 > 접두 > 부분포함 > 오타유사 순, 카테고리명 일치는 보조 가중
  * - 초성 검색: 입력이 초성 자모로만 구성되면(ㅌㅆ) 이름 초성 시퀀스와 부분일치
- * - 오타 허용: 편집거리(Levenshtein) 기반 word_similarity 근사 (짧은 한글 장소명에 강함)
+ * - 오타 허용: 편집거리(Levenshtein) 기반 word_similarity 근사. 이름을 공백 기준 단어(토큰)로 나눠
+ *   토큰 단위로만 비교한다(공백 제거한 덩어리를 그대로 슬라이딩하면 "투다리"가 "투썸"과 우연히
+ *   1글자만 달라 보이는 식의 오탐이 생긴다). 2글자 이하 검색어는 오타 허용을 적용하지 않는다
+ *   (짧은 문자열은 "1글자 다름"이 곧 "50% 다름"이라 오타와 동음이의어를 구분할 수 없다).
  */
 @Component
 public class MapSearchMatcher {
@@ -30,8 +36,11 @@ public class MapSearchMatcher {
     private static final int HANGUL_END = 0xD7A3;    // '힣'
     private static final int SYLLABLE_BLOCK = 588;   // 중성(21) * 종성(28)
 
-    /** 오타 허용 최소 유사도 (0~1). 1글자 오타 2글자 단어 = 0.5 통과 */
-    private static final double FUZZY_THRESHOLD = 0.5;
+    /** 오타 허용 최소 유사도 (0~1). 4글자 단어 기준 1글자 오타(0.75) 통과, 2글자 오타(0.5)는 차단 */
+    private static final double FUZZY_THRESHOLD = 0.6;
+
+    /** 오타 허용을 적용할 최소 검색어 길이. 이보다 짧으면 정확/접두/부분/초성 매칭만 사용한다 */
+    private static final int MIN_FUZZY_QUERY_LENGTH = 3;
 
     /**
      * 이름·카테고리명 대비 검색어 관련도 점수. 0 이하면 매칭 실패로 결과에서 제외한다.
@@ -72,9 +81,11 @@ public class MapSearchMatcher {
             score = 70.0;                                    // 접두 일치
         } else if (normalizedName.contains(normalizedQuery)) {
             score = 45.0;                                    // 부분 포함
-        } else {
-            double fuzzy = wordSimilarity(normalizedName, normalizedQuery);
+        } else if (normalizedQuery.length() >= MIN_FUZZY_QUERY_LENGTH) {
+            double fuzzy = wordSimilarity(name, normalizedQuery);
             score = fuzzy >= FUZZY_THRESHOLD ? 20.0 + fuzzy * 20.0 : 0.0; // 오타 유사 (20~40)
+        } else {
+            score = 0.0; // 2글자 이하 검색어는 오타 허용 미적용 (동음이의어 오탐 방지)
         }
 
         // 3. 카테고리명 일치는 보조 가중 (이름 매칭이 약할 때만 끌어올림)
@@ -134,21 +145,53 @@ public class MapSearchMatcher {
     }
 
     /**
-     * word_similarity 근사: name 안에서 query와 가장 잘 맞는 구간의 편집거리 유사도 최대값.
-     * 긴 이름에 짧은 검색어를 맞출 때 전체 길이 차이에 유사도가 눌리지 않도록 구간별로 비교한다.
+     * word_similarity 근사: 이름을 단어(토큰) 단위로 나눠 각 단어 안에서 query와 가장 잘 맞는
+     * 구간의 편집거리 유사도 최대값을 구한다. 토큰 단위로 비교하는 이유: 공백 제거한 이름
+     * 전체를 그대로 슬라이딩하면 "투다리"의 "투다"가 "투썸"과 1글자 차이로 오탐되는 식으로
+     * 단어 경계를 넘어선 우연한 일치가 섞여든다.
      */
     private double wordSimilarity(String name, String query) {
-        if (name.isEmpty() || query.isEmpty()) {
-            return 0.0;
-        }
-        if (name.length() <= query.length()) {
-            return editSimilarity(name, query);
-        }
         double best = 0.0;
-        for (int start = 0; start + query.length() <= name.length(); start++) {
-            best = Math.max(best, editSimilarity(name.substring(start, start + query.length()), query));
+        for (String token : tokenize(name)) {
+            best = Math.max(best, similarityWithinToken(token, query));
         }
         return best;
+    }
+
+    /** 한 단어(토큰) 안에서 query와 가장 잘 맞는 구간의 편집거리 유사도 최대값 */
+    private double similarityWithinToken(String token, String query) {
+        if (token.isEmpty() || query.isEmpty()) {
+            return 0.0;
+        }
+        if (token.length() <= query.length()) {
+            return editSimilarity(token, query);
+        }
+        double best = 0.0;
+        for (int start = 0; start + query.length() <= token.length(); start++) {
+            best = Math.max(best, editSimilarity(token.substring(start, start + query.length()), query));
+        }
+        return best;
+    }
+
+    /** 공백/기호를 경계로 나눈 단어 목록 (소문자화 + 한글 음절·영숫자만 남김) */
+    private List<String> tokenize(String text) {
+        if (text == null) {
+            return List.of();
+        }
+        List<String> tokens = new ArrayList<>();
+        StringBuilder cur = new StringBuilder();
+        for (char c : text.toLowerCase().toCharArray()) {
+            if (isHangulSyllable(c) || Character.isDigit(c) || (c >= 'a' && c <= 'z')) {
+                cur.append(c);
+            } else if (cur.length() > 0) {
+                tokens.add(cur.toString());
+                cur.setLength(0);
+            }
+        }
+        if (cur.length() > 0) {
+            tokens.add(cur.toString());
+        }
+        return tokens;
     }
 
     /** 편집거리 기반 유사도 (0~1) */
