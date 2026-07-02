@@ -216,7 +216,9 @@ public class MapPinService {
                 location,
                 favorite,
                 pin.getType() == PinType.BUILDING ? statusLabel(pin, now) : null, // 운영 상태는 건물에만
-                displayDistance);
+                displayDistance,
+                pin.resolveLatitude(),   // 내부 장소는 소속 건물 좌표로 대체
+                pin.resolveLongitude());
     }
 
     /** 화면에 표시할 거리(미터). 캠퍼스 안일 때만 계산, 그 외 null */

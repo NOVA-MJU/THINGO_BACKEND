@@ -37,11 +37,15 @@ public class PinSummaryResponse {
     private final String operatingStatus;
     /** 현재 위치로부터의 거리(미터). 캠퍼스 밖이거나 GPS 없으면 null(미표시) */
     private final Integer distanceMeters;
+    /** 지도 마커용 위도. 내부 장소는 소속 건물 좌표로 대체. 좌표 없으면 null */
+    private final Double latitude;
+    /** 지도 마커용 경도. 내부 장소는 소속 건물 좌표로 대체. 좌표 없으면 null */
+    private final Double longitude;
 
     public static PinSummaryResponse of(Long id, String type, String name, String categoryCode,
                                         String iconKey, String imageUrl, String classroomCode,
                                         String location, boolean favorite, String operatingStatus,
-                                        Integer distanceMeters) {
+                                        Integer distanceMeters, Double latitude, Double longitude) {
         return PinSummaryResponse.builder()
                 .id(id)
                 .type(type)
@@ -54,6 +58,8 @@ public class PinSummaryResponse {
                 .favorite(favorite)
                 .operatingStatus(operatingStatus)
                 .distanceMeters(distanceMeters)
+                .latitude(latitude)
+                .longitude(longitude)
                 .build();
     }
 }

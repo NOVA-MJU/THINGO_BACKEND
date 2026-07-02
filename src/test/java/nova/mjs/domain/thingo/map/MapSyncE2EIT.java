@@ -180,6 +180,9 @@ class MapSyncE2EIT {
         assertThat(buildings.get(0).getName()).isEqualTo("종합관");
         assertThat(buildings.get(0).getClassroomCode()).isEqualTo("S1XXX");
         assertThat(buildings.get(0).getDistanceMeters()).isNull();
+        // 지도 마커용 좌표가 응답에 노출된다
+        assertThat(buildings.get(0).getLatitude()).isEqualTo(37.5803);
+        assertThat(buildings.get(0).getLongitude()).isEqualTo(126.9223);
 
         // 4) 칩 클릭(대동명지도) - 하위탭(한식) 장소까지 포함 → 행복식당
         List<PinSummaryResponse> daedongPins = mapPinService.getPinsByCategory("daedong", null, null, 0, 20, null);
@@ -194,6 +197,8 @@ class MapSyncE2EIT {
         Pin building = pinRepository.findByCode("b-main").orElseThrow();
         BuildingDetailResponse detail = mapPinService.getBuildingDetail(building.getId(), null, null, null);
         assertThat(detail.getName()).isEqualTo("종합관");
+        assertThat(detail.getLatitude()).isEqualTo(37.5803);
+        assertThat(detail.getLongitude()).isEqualTo(126.9223);
         assertThat(detail.getWeeklyOperatingHours()).hasSize(2);
         assertThat(detail.getCategoryTabs()).extracting(BuildingDetailResponse.CategoryTab::getCode)
                 .containsExactly("printer");
@@ -209,11 +214,14 @@ class MapSyncE2EIT {
         assertThat(placeDetail.getName()).isEqualTo("행복식당");
         assertThat(placeDetail.getLocation()).isEqualTo("서울 서대문구 거북골로 34");
         assertThat(placeDetail.getInfoText()).isEqualTo("현금만");
+        assertThat(placeDetail.getLatitude()).isEqualTo(37.5805);   // 외부 장소는 자체 좌표
+        assertThat(placeDetail.getLongitude()).isEqualTo(126.9230);
 
-        // 8) 장소 상세(내부) - 위치는 건물명 + 층수
+        // 8) 장소 상세(내부) - 위치는 건물명 + 층수, 좌표는 소속 건물 좌표 상속
         Pin printer = pinRepository.findByCode("p-printer").orElseThrow();
         PlaceDetailResponse internalDetail = mapPinService.getPlaceDetail(printer.getId(), null, null, null);
         assertThat(internalDetail.getLocation()).isEqualTo("종합관 F1");
+        assertThat(internalDetail.getLatitude()).isEqualTo(37.5803);  // 내부 장소는 건물 좌표
     }
 
     @Test

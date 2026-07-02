@@ -23,6 +23,10 @@ public class PlaceDetailResponse {
     private final boolean favorite;
     /** 현재 위치로부터의 거리(미터). 캠퍼스 밖/GPS 없으면 null */
     private final Integer distanceMeters;
+    /** 지도 마커용 위도. 내부 장소는 소속 건물 좌표로 대체. 좌표 없으면 null */
+    private final Double latitude;
+    /** 지도 마커용 경도. 내부 장소는 소속 건물 좌표로 대체. 좌표 없으면 null */
+    private final Double longitude;
     /** 위치 텍스트 (내부: 건물명+층수, 외부: 도로명주소) */
     private final String location;
     /** 추가 정보(i) 텍스트 */
@@ -37,6 +41,8 @@ public class PlaceDetailResponse {
                 .imageUrl(place.getImageUrl())
                 .favorite(favorite)
                 .distanceMeters(distanceMeters)
+                .latitude(place.resolveLatitude())
+                .longitude(place.resolveLongitude())
                 .location(location)
                 .infoText(place.getInfoText())
                 .build();

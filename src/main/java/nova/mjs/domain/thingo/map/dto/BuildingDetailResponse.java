@@ -31,6 +31,10 @@ public class BuildingDetailResponse {
     private final String operatingStatus;
     /** 현재 위치로부터의 거리(미터). 캠퍼스 밖/GPS 없으면 null */
     private final Integer distanceMeters;
+    /** 지도 마커용 위도. 좌표 없으면 null */
+    private final Double latitude;
+    /** 지도 마커용 경도. 좌표 없으면 null */
+    private final Double longitude;
     /** 기타 안내(i) 텍스트 */
     private final String infoText;
     /** 요일별 운영시간 (토글에 나열) */
@@ -53,6 +57,8 @@ public class BuildingDetailResponse {
                 .favorite(favorite)
                 .operatingStatus(operatingStatus)
                 .distanceMeters(distanceMeters)
+                .latitude(building.resolveLatitude())
+                .longitude(building.resolveLongitude())
                 .infoText(building.getInfoText())
                 .weeklyOperatingHours(weeklyOperatingHours)
                 .categoryTabs(categoryTabs)

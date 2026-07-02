@@ -715,7 +715,9 @@
           "location": { "type": "string", "nullable": true, "description": "위치 텍스트 (장소만: 건물명+층수 또는 주소). 건물은 null", "example": "서울 서대문구 거북골로 34" },
           "favorite": { "type": "boolean", "description": "즐겨찾기 여부 (비로그인 시 false)", "example": true },
           "operatingStatus": { "type": "string", "nullable": true, "description": "운영 상태 한글 라벨 (건물만). 장소/운영시간 없으면 null", "enum": ["곧 운영 시작", "운영중", "곧 운영 종료", "운영 종료", "24시간 운영", "휴무"], "example": "운영중" },
-          "distanceMeters": { "type": "integer", "nullable": true, "description": "현재 위치로부터 거리(미터). 캠퍼스 밖/GPS 없으면 null(미표시)", "example": 150 }
+          "distanceMeters": { "type": "integer", "nullable": true, "description": "현재 위치로부터 거리(미터). 캠퍼스 밖/GPS 없으면 null(미표시)", "example": 150 },
+          "latitude": { "type": "number", "format": "double", "nullable": true, "description": "지도 마커용 위도. 내부 장소는 소속 건물 좌표. 좌표 없으면 null", "example": 37.5796415 },
+          "longitude": { "type": "number", "format": "double", "nullable": true, "description": "지도 마커용 경도. 내부 장소는 소속 건물 좌표. 좌표 없으면 null", "example": 126.9250425 }
         },
         "required": ["id", "type", "name", "categoryCode", "favorite"]
       },
@@ -776,6 +778,8 @@
           "favorite": { "type": "boolean", "example": false },
           "operatingStatus": { "type": "string", "nullable": true, "description": "운영 상태 한글 라벨", "enum": ["곧 운영 시작", "운영중", "곧 운영 종료", "운영 종료", "24시간 운영", "휴무"], "example": "운영중" },
           "distanceMeters": { "type": "integer", "nullable": true, "example": 240 },
+          "latitude": { "type": "number", "format": "double", "nullable": true, "description": "지도 마커용 위도", "example": 37.5807286 },
+          "longitude": { "type": "number", "format": "double", "nullable": true, "description": "지도 마커용 경도", "example": 126.9243805 },
           "infoText": { "type": "string", "nullable": true, "description": "기타 안내 텍스트", "example": "06:00~00:00 운영" },
           "weeklyOperatingHours": { "type": "array", "description": "요일별 운영시간 (토글에 나열)", "items": { "$ref": "#/components/schemas/OperatingHourLine" } },
           "categoryTabs": { "type": "array", "description": "카테고리 필터 탭 (건물 안 장소들의 카테고리에서 유도)", "items": { "$ref": "#/components/schemas/BuildingCategoryTab" } },
@@ -794,6 +798,8 @@
           "imageUrl": { "type": "string", "nullable": true, "example": "https://thingo.kr/img/place/51.jpg" },
           "favorite": { "type": "boolean", "example": true },
           "distanceMeters": { "type": "integer", "nullable": true, "example": 150 },
+          "latitude": { "type": "number", "format": "double", "nullable": true, "description": "지도 마커용 위도. 내부 장소는 소속 건물 좌표", "example": 37.5796415 },
+          "longitude": { "type": "number", "format": "double", "nullable": true, "description": "지도 마커용 경도. 내부 장소는 소속 건물 좌표", "example": 126.9250425 },
           "location": { "type": "string", "nullable": true, "description": "위치 (내부: 건물명+층수, 외부: 도로명주소)", "example": "서울 서대문구 거북골로 34" },
           "infoText": { "type": "string", "nullable": true, "description": "추가 정보 텍스트", "example": "현금 결제만 가능, 단체석 보유" }
         },
