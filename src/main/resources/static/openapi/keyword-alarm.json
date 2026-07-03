@@ -3,7 +3,7 @@
   "info": {
     "title": "MJU 키워드 알림 API",
     "version": "v1.0.0",
-    "description": "등록한 키워드가 들어간 새 글(공지/학사일정/게시판 제목)이 올라오면 FCM 푸시로 알려준다. 학식은 새 메뉴가 뜨면 구독자 전원에게 방송한다."
+    "description": "# 🔔 키워드 알림, 3분만에 이해하기\n\n**한 줄 요약 —** 중고나라 키워드 알림과 똑같습니다. 관심 키워드를 등록해두면, 그 단어가 들어간 새 글이 올라올 때 앱으로 푸시가 옵니다.\n\n## 등장인물 3명\n- 📱 **앱(내 폰)** — 알림 받을 기기를 서버에 등록\n- 🖥️ **서버** — 새로 들어온 글을 키워드와 대조하고 발송 (크롤링·매칭·발송은 전부 서버가 담당)\n- 🚚 **FCM** — 실제로 폰까지 알림을 배달해 주는 택배기사\n\n## 전체 흐름\n1. 앱에서 알림 권한 허용 → FCM 토큰 발급\n2. `POST /device-tokens` — 그 토큰을 등록 (이 기기로 보내주세요)\n3. `POST /keyword-alarms` — 관심 키워드 + 카테고리 등록\n4. (서버) 새 공지·학사일정·게시판 글이 들어오면 **제목**을 키워드와 대조\n5. 걸리면 그 사용자의 **모든 기기로 FCM 푸시** 발송 + 알림함에 저장\n6. 앱은 푸시를 받거나 `GET /notifications` 로 알림함 확인\n\n## 프론트 호출 순서 (실전)\n1. 로그인 (JWT 발급)\n2. `POST /device-tokens` — 바디 { fcmToken, platform: ANDROID | IOS | WEB }\n3. `GET /keyword-alarms/recommended` — 추천 키워드 보여주기 (로그인 불필요)\n4. `POST /keyword-alarms` — 바디 { keyword, categories } 로 구독\n5. 알림함 조회 `GET /notifications` · 읽음 `PATCH /notifications/{id}/read` · 전체읽음 `PATCH /notifications/read-all`\n6. 로그아웃/알림끄기 `DELETE /device-tokens?fcmToken=...`\n\n## 꼭 기억할 것\n- **토큰만 등록하면 알림이 안 옵니다** — 키워드까지 등록해야 옵니다. (예외: 학식 `CAFETERIA`는 키워드 없이, 새 메뉴가 뜨면 구독자 전원에게 방송)\n- **제목 접두 매칭** — `장학` 등록 → `장학금 신청 안내`도 걸림\n- 키워드는 **공백 제외 1~5글자**\n- 토큰 등록은 **멱등** — 같은 토큰을 다시 보내도 안전 (자동 갱신, 다른 계정이면 현재 계정으로 재배정)\n- 카테고리: `NOTICE`(공지) · `MJU_CALENDAR`(학사일정) · `COMMUNITY`(게시판) 은 키워드 매칭 / `CAFETERIA`(학식) 은 전체 방송\n- `recommended` 를 뺀 모든 API는 **JWT 필요** (`Authorization: Bearer ...`)"
   },
   "servers": [
     { "url": "https://api.thingo.kr/api/v1" }
