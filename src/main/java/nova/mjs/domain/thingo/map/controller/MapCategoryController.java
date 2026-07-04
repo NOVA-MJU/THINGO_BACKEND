@@ -2,9 +2,7 @@ package nova.mjs.domain.thingo.map.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import nova.mjs.domain.thingo.map.dto.MapCategoryResponse;
 import nova.mjs.domain.thingo.map.dto.PinSummaryResponse;
-import nova.mjs.domain.thingo.map.service.MapCategoryService;
 import nova.mjs.domain.thingo.map.service.MapPinService;
 import nova.mjs.util.response.ApiResponse;
 import nova.mjs.util.security.UserPrincipal;
@@ -17,9 +15,9 @@ import java.util.List;
  * 명지도 카테고리(칩) 컨트롤러.
  *
  * [제공 API]
- * 1. GET /api/v1/map/categories/quick        - 상단 퀵메뉴 칩 목록
- * 2. GET /api/v1/map/categories              - 전체 카테고리 (더보기 바텀시트, 그룹별)
- * 3. GET /api/v1/map/categories/{code}/pins  - 특정 칩 클릭 시 장소/건물 목록
+ * 1. GET /api/v1/map/categories/{code}/pins  - 특정 칩 클릭 시 장소/건물 목록
+ *
+ * 전체 카테고리 목록/상단 퀵메뉴 구성은 프론트가 자체 보유(onClick 매핑)하므로 백엔드는 제공하지 않는다.
  *
  * [인증]
  * - 모두 비로그인 가능. 로그인 시 즐겨찾기 마킹/상단 정렬이 적용된다.
@@ -30,26 +28,7 @@ import java.util.List;
 @RequestMapping("/api/v1/map")
 public class MapCategoryController {
 
-    private final MapCategoryService mapCategoryService;
     private final MapPinService mapPinService;
-
-    /**
-     * 상단 퀵메뉴 칩 목록 조회.
-     * 메인 홈 진입 시 가로 스크롤 칩 바를 그리는 데 사용한다.
-     */
-    @GetMapping("/categories/quick")
-    public ApiResponse<List<MapCategoryResponse.Chip>> getQuickChips() {
-        return ApiResponse.success(mapCategoryService.getQuickChips());
-    }
-
-    /**
-     * 전체 카테고리 조회 ('더보기' 바텀시트).
-     * 그룹(식사/학습·휴식/편의)별로 칩을 묶어 반환한다.
-     */
-    @GetMapping("/categories")
-    public ApiResponse<List<MapCategoryResponse.Group>> getAllCategories() {
-        return ApiResponse.success(mapCategoryService.getAllGroups());
-    }
 
     /**
      * 특정 칩을 눌렀을 때 보여줄 장소/건물 목록.

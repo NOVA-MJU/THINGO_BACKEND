@@ -3,7 +3,7 @@
   "info": {
     "title": "MJU 지도·버스 API",
     "version": "v1.2.0",
-    "description": "명지대 캠퍼스 지도 서비스 '명지도'와 주변 버스 도착 정보를 제공하는 API입니다.\n\n## 명지도란?\n명지대 캠퍼스 지도 위에 건물과 장소(맛집/편의시설 등)를 핀으로 보여주는 서비스입니다.\n지도는 프론트가 네이버 지도로 그리고, 백엔드는 핀의 좌표·정보·정렬된 목록을 내려줍니다.\n\n## 데이터 3종\n| 종류 | 설명 | 예 |\n|------|------|----|\n| 카테고리(칩) | 지도 위 핀을 묶고 필터링하는 단위. 상단 퀵메뉴 칩 + 전체 카테고리로 노출 | 대동명지도, 프린터, 라운지 |\n| 건물 | 강의실코드·층별 안내·운영시간을 가진 캠퍼스 건물 | 종합관, 방목학술정보관 |\n| 장소(비건물) | 건물 안 시설 또는 건물 밖 가게. 위치/추가정보만 가짐 | 맛집, 편의점, 프린터 |\n\n## 핵심 개념\n- **운영 상태/거리는 저장값이 아니라 요청 시점에 계산**합니다. 운영시간+현재시각으로 상태를, 사용자 좌표로 거리를 구합니다.\n- **사용자 현재 위치(lat/lng)는 프론트가 기기 GPS로 얻어 쿼리 파라미터로 전달**합니다. 백엔드는 정렬·거리 계산에만 쓰고 저장하지 않습니다.\n- 캠퍼스 반경(약 500m) 밖이거나 좌표가 없으면 거리는 표시하지 않습니다(정렬만 정문 기준).\n- **운영시간/운영상태는 건물에만** 있습니다. 장소(비건물)는 운영시간 없이 위치·추가정보만 제공합니다.\n- 즐겨찾기는 건물·장소를 핀 ID 하나로 동일하게 다룹니다.\n\n## 인증\n- 조회 API는 비로그인 가능. 로그인 시 즐겨찾기 여부가 표시되고 칩 목록에서 즐겨찾기가 상단 정렬됩니다.\n- 즐겨찾기 토글은 로그인 필요.\n\n---\n\n## 버스 도착 정보\n명지대 주변 정류장(A/B)의 서울 버스 실시간 도착 정보를 공공데이터포털에서 중계합니다. 프론트는 정류장 키(A/B)만 전달합니다.\n\n## 명지도 검색\n건물/장소를 이름·카테고리로 검색합니다(초성·오타 허용, 자동완성 제공). 기존 통합검색(search 문서)과 별개이며 캠퍼스 건물/장소만 대상입니다."
+    "description": "명지대 캠퍼스 지도 서비스 '명지도'와 주변 버스 도착 정보를 제공하는 API입니다.\n\n## 명지도란?\n명지대 캠퍼스 지도 위에 건물과 장소(맛집/편의시설 등)를 핀으로 보여주는 서비스입니다.\n지도는 프론트가 네이버 지도로 그리고, 백엔드는 핀의 좌표·정보·정렬된 목록을 내려줍니다.\n\n## 데이터 3종\n| 종류 | 설명 | 예 |\n|------|------|----|\n| 카테고리(칩) | 지도 위 핀을 묶고 필터링하는 단위. 상단 퀵메뉴/전체 목록은 프론트가 자체 관리하고, 백엔드는 칩 클릭 시 목록만 제공 | 대동명지도, 프린터, 라운지 |\n| 건물 | 강의실코드·층별 안내·운영시간을 가진 캠퍼스 건물 | 종합관, 방목학술정보관 |\n| 장소(비건물) | 건물 안 시설 또는 건물 밖 가게. 위치/추가정보만 가짐 | 맛집, 편의점, 프린터 |\n\n## 핵심 개념\n- **운영 상태/거리는 저장값이 아니라 요청 시점에 계산**합니다. 운영시간+현재시각으로 상태를, 사용자 좌표로 거리를 구합니다.\n- **사용자 현재 위치(lat/lng)는 프론트가 기기 GPS로 얻어 쿼리 파라미터로 전달**합니다. 백엔드는 정렬·거리 계산에만 쓰고 저장하지 않습니다.\n- 캠퍼스 반경(약 500m) 밖이거나 좌표가 없으면 거리는 표시하지 않습니다(정렬만 정문 기준).\n- **운영시간/운영상태는 건물에만** 있습니다. 장소(비건물)는 운영시간 없이 위치·추가정보만 제공합니다.\n- 즐겨찾기는 건물·장소를 핀 ID 하나로 동일하게 다룹니다.\n\n## 인증\n- 조회 API는 비로그인 가능. 로그인 시 즐겨찾기 여부가 표시되고 칩 목록에서 즐겨찾기가 상단 정렬됩니다.\n- 즐겨찾기 토글은 로그인 필요.\n\n---\n\n## 버스 도착 정보\n명지대 주변 정류장(A/B)의 서울 버스 실시간 도착 정보를 공공데이터포털에서 중계합니다. 프론트는 정류장 키(A/B)만 전달합니다.\n\n## 명지도 검색\n건물/장소를 이름·카테고리로 검색합니다(초성·오타 허용, 자동완성 제공). 기존 통합검색(search 문서)과 별개이며 캠퍼스 건물/장소만 대상입니다."
   },
   "servers": [
     {
@@ -14,7 +14,7 @@
   "tags": [
     {
       "name": "명지도 - 카테고리",
-      "description": "지도 위 핀을 묶는 칩(카테고리) API. 상단 퀵메뉴 칩, 전체 카테고리(더보기), 칩 클릭 시 장소/건물 목록을 제공합니다. 칩은 '이름 + 부제 + 결과 종류'를 가지며, 대동명지도처럼 하위 탭(한식/중식)을 갖는 칩도 있습니다."
+      "description": "지도 위 핀을 묶는 칩(카테고리) 클릭 시 장소/건물 목록 API. 상단 퀵메뉴/전체 카테고리 구성은 프론트가 자체 보유(onClick 매핑)하므로 백엔드는 제공하지 않습니다. 대동명지도처럼 하위 탭(한식/중식)을 갖는 칩도 있습니다."
     },
     {
       "name": "명지도 - 건물/장소",
@@ -38,92 +38,6 @@
     }
   ],
   "paths": {
-    "/map/categories/quick": {
-      "get": {
-        "tags": ["명지도 - 카테고리"],
-        "summary": "상단 퀵메뉴 칩 목록 조회",
-        "operationId": "getQuickChips",
-        "description": "메인 홈 최상단의 가로 스크롤 칩 바를 그릴 때 사용합니다.\n\n### 사용 시나리오\n1. 명지도 화면 진입\n2. 이 API로 퀵메뉴 칩 목록을 받아 가로 스크롤로 렌더\n3. 칩을 누르면 `code`로 `/map/categories/{code}/pins`를 호출해 목록을 띄움\n   - 단, `resultType=BUS`인 칩(버스)은 목록 대신 버스 화면(`/bus/arrivals`)으로 이동\n\n칩 노출 순서는 운영자가 조정하며 응답 순서를 그대로 따르면 됩니다.",
-        "responses": {
-          "200": {
-            "description": "퀵메뉴 칩 목록",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": { "type": "string", "example": "API 요청 성공" },
-                    "data": {
-                      "type": "array",
-                      "items": { "$ref": "#/components/schemas/MapChip" }
-                    },
-                    "timestamp": { "type": "string", "format": "date-time", "example": "2026-06-22T09:05:12" }
-                  }
-                },
-                "example": {
-                  "status": "API 요청 성공",
-                  "data": [
-                    { "code": "bus", "label": "버스", "iconKey": "BusIcon", "resultType": "BUS", "subtitle": null, "tooltipText": null },
-                    { "code": "daedong", "label": "대동명지도", "iconKey": "MyeongwolIcon", "resultType": "PLACE_LIST", "subtitle": "by. 명월", "tooltipText": "뭐 먹을지 고민이라면? 명월 Pick 맛집을 확인해보세요!" },
-                    { "code": "printer", "label": "프린터", "iconKey": "PrinterIcon", "resultType": "PLACE_LIST", "subtitle": null, "tooltipText": null }
-                  ],
-                  "timestamp": "2026-06-22T09:05:12"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/map/categories": {
-      "get": {
-        "tags": ["명지도 - 카테고리"],
-        "summary": "전체 카테고리 조회 (더보기 바텀시트)",
-        "operationId": "getAllCategories",
-        "description": "'더보기(···)' 버튼을 눌렀을 때 뜨는 전체 카테고리 바텀시트를 그릴 때 사용합니다.\n\n### 사용 시나리오\n1. 퀵메뉴 우측 '더보기' 클릭\n2. 이 API로 그룹(식사/학습·휴식/편의)별 칩 묶음을 받아 섹션으로 렌더\n3. 칩 클릭 시 `/map/categories/{code}/pins` 호출 (또는 `resultType=BUS`면 버스 화면)\n\n각 그룹은 헤더 이름과 강조 색상(colorHex, HEX값)을 가집니다. 프론트가 색을 Tailwind 등으로 조립하세요.",
-        "responses": {
-          "200": {
-            "description": "그룹별 카테고리 목록",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": { "type": "string", "example": "API 요청 성공" },
-                    "data": {
-                      "type": "array",
-                      "items": { "$ref": "#/components/schemas/MapCategoryGroup" }
-                    },
-                    "timestamp": { "type": "string", "format": "date-time", "example": "2026-06-22T09:05:12" }
-                  }
-                },
-                "example": {
-                  "status": "API 요청 성공",
-                  "data": [
-                    {
-                      "code": "food",
-                      "name": "식사 (F&B)",
-                      "chips": [
-                        { "code": "daedong", "label": "대동명지도", "iconKey": "MyeongwolIcon", "resultType": "PLACE_LIST", "subtitle": "by. 명월", "tooltipText": "뭐 먹을지 고민이라면? 명월 Pick 맛집을 확인해보세요!" },
-                        { "code": "cafeteria", "label": "학생식당", "iconKey": "CafeteriaIcon", "resultType": "PLACE_LIST", "subtitle": null, "tooltipText": null }
-                      ]
-                    },
-                    {
-                      "code": "convenience",
-                      "name": "편의 (Convenience)",
-                      "chips": [
-                        { "code": "printer", "label": "프린터", "iconKey": "PrinterIcon", "resultType": "PLACE_LIST", "subtitle": null, "tooltipText": null }
-                      ]
-                    }
-                  ],
-                  "timestamp": "2026-06-22T09:05:12"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/map/categories/{code}/pins": {
       "get": {
         "tags": ["명지도 - 카테고리"],
@@ -760,29 +674,6 @@
           "closed": { "type": "boolean", "nullable": true },
           "note": { "type": "string", "nullable": true }
         }
-      },
-      "MapChip": {
-        "type": "object",
-        "description": "칩 1개 (상단 퀵메뉴 / 전체 카테고리 공용)",
-        "properties": {
-          "code": { "type": "string", "description": "칩 코드. 칩 클릭 시 이 코드로 목록을 요청", "example": "daedong" },
-          "label": { "type": "string", "description": "칩 표시 이름", "example": "대동명지도" },
-          "iconKey": { "type": "string", "description": "아이콘 키 (프론트 아이콘 레지스트리가 매핑)", "example": "MyeongwolIcon" },
-          "resultType": { "type": "string", "description": "클릭 결과 종류", "enum": ["PLACE_LIST", "BUILDING_LIST", "BUS"], "example": "PLACE_LIST" },
-          "subtitle": { "type": "string", "nullable": true, "description": "부제/출처 (예: by. 명월). 없으면 null", "example": "by. 명월" },
-          "tooltipText": { "type": "string", "nullable": true, "description": "메인 홈 툴팁 문구. 없으면 null", "example": "뭐 먹을지 고민이라면? 명월 Pick 맛집을 확인해보세요!" }
-        },
-        "required": ["code", "label", "resultType"]
-      },
-      "MapCategoryGroup": {
-        "type": "object",
-        "description": "전체 카테고리 바텀시트의 한 그룹 (헤더 + 칩 목록)",
-        "properties": {
-          "code": { "type": "string", "description": "그룹 코드", "example": "food" },
-          "name": { "type": "string", "description": "그룹 이름", "example": "식사 (F&B)" },
-          "chips": { "type": "array", "description": "그룹에 속한 칩들", "items": { "$ref": "#/components/schemas/MapChip" } }
-        },
-        "required": ["code", "name", "chips"]
       },
       "PinSummary": {
         "type": "object",

@@ -4,13 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import nova.mjs.domain.thingo.map.dto.BuildingDetailResponse;
-import nova.mjs.domain.thingo.map.dto.MapCategoryResponse;
 import nova.mjs.domain.thingo.map.dto.MapSyncDTO;
 import nova.mjs.domain.thingo.map.dto.PinSummaryResponse;
 import nova.mjs.domain.thingo.map.dto.PlaceDetailResponse;
 import nova.mjs.domain.thingo.map.entity.Pin;
 import nova.mjs.domain.thingo.map.repository.PinRepository;
-import nova.mjs.domain.thingo.map.service.MapCategoryService;
 import nova.mjs.domain.thingo.map.service.MapPinService;
 import nova.mjs.domain.thingo.map.service.MapSyncService;
 import nova.mjs.domain.thingo.map.service.MapSyncServiceImpl;
@@ -51,7 +49,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * 실제 요청 경로를 일회용 실 DB로 검증한다:
  *  1) 구글 시트와 동일한 JSON을 역직렬화해 동기화(MapSyncService)로 DB에 적재
- *  2) 카테고리/건물/장소 조회 API(MapCategoryService, MapPinService)가 적재한 데이터를 올바르게 반환하는지 확인
+ *  2) 건물/장소 조회 API(MapPinService)가 적재한 데이터를 올바르게 반환하는지 확인
  *
  * 앱 전체 기동(ES/Mongo/Redis)을 피하기 위해 기존 통합테스트와 동일하게 슬라이스 + 자동설정 제외를 사용한다.
  */
@@ -72,7 +70,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import({
         MapSyncServiceImpl.class,
-        MapCategoryService.class,
         MapPinService.class,
         PinFavoriteService.class,
         DistanceCalculator.class,
@@ -100,7 +97,6 @@ class MapSyncE2EIT {
     }
 
     @Autowired MapSyncService mapSyncService;
-    @Autowired MapCategoryService mapCategoryService;
     @Autowired MapPinService mapPinService;
     @Autowired PinRepository pinRepository;
     @PersistenceContext EntityManager entityManager;
@@ -161,20 +157,7 @@ class MapSyncE2EIT {
         assertThat(result.getPlaces()).isEqualTo(2);
         assertThat(result.getOperatingHours()).isEqualTo(2);
 
-        // 1) 퀵메뉴 칩 - quickMenu=true 인 최상위 칩만 (daedong, building). korean(하위탭)/printer 제외
-        List<MapCategoryResponse.Chip> quickChips = mapCategoryService.getQuickChips();
-        assertThat(quickChips).extracting(MapCategoryResponse.Chip::getCode)
-                .containsExactlyInAnyOrder("daedong", "building");
-
-        // 2) 전체 카테고리 - 그룹 3개, food 그룹 칩에는 daedong만(한식은 하위탭이라 제외)
-        List<MapCategoryResponse.Group> groups = mapCategoryService.getAllGroups();
-        assertThat(groups).extracting(MapCategoryResponse.Group::getCode)
-                .containsExactly("food", "guide", "convenience");
-        MapCategoryResponse.Group food = groups.stream()
-                .filter(g -> g.getCode().equals("food")).findFirst().orElseThrow();
-        assertThat(food.getChips()).extracting(MapCategoryResponse.Chip::getCode).containsExactly("daedong");
-
-        // 3) 건물 목록 - 종합관 1개, 강의실코드 노출, GPS 없으니 거리 null
+        // 1) 건물 목록 - 종합관 1개, 강의실코드 노출, GPS 없으니 거리 null
         List<PinSummaryResponse> buildings = mapPinService.getBuildings(null, null, null);
         assertThat(buildings).hasSize(1);
         assertThat(buildings.get(0).getName()).isEqualTo("종합관");
@@ -184,16 +167,16 @@ class MapSyncE2EIT {
         assertThat(buildings.get(0).getLatitude()).isEqualTo(37.5803);
         assertThat(buildings.get(0).getLongitude()).isEqualTo(126.9223);
 
-        // 4) 칩 클릭(대동명지도) - 하위탭(한식) 장소까지 포함 → 행복식당
+        // 2) 칩 클릭(대동명지도) - 하위탭(한식) 장소까지 포함 → 행복식당
         List<PinSummaryResponse> daedongPins = mapPinService.getPinsByCategory("daedong", null, null, 0, 20, null);
         assertThat(daedongPins).extracting(PinSummaryResponse::getName).contains("행복식당");
         assertThat(daedongPins).allSatisfy(p -> assertThat(p.getType()).isEqualTo("PLACE"));
 
-        // 5) 칩 클릭(건물) - BUILDING_LIST → 종합관
+        // 3) 칩 클릭(건물) - BUILDING_LIST → 종합관
         List<PinSummaryResponse> buildingPins = mapPinService.getPinsByCategory("building", null, null, 0, 20, null);
         assertThat(buildingPins).extracting(PinSummaryResponse::getName).containsExactly("종합관");
 
-        // 6) 건물 상세 - 운영시간 2건, 카테고리 탭에 프린터, 층 2개(F1에 무한프린터)
+        // 4) 건물 상세 - 운영시간 2건, 카테고리 탭에 프린터, 층 2개(F1에 무한프린터)
         Pin building = pinRepository.findByCode("b-main").orElseThrow();
         BuildingDetailResponse detail = mapPinService.getBuildingDetail(building.getId(), null, null, null);
         assertThat(detail.getName()).isEqualTo("종합관");
@@ -208,7 +191,7 @@ class MapSyncE2EIT {
         assertThat(firstFloor.getPlaces()).extracting(BuildingDetailResponse.PlaceBrief::getName)
                 .containsExactly("무한프린터");
 
-        // 7) 장소 상세(외부) - 위치는 도로명주소, 운영시간 필드 없음(건물 전용)
+        // 5) 장소 상세(외부) - 위치는 도로명주소, 운영시간 필드 없음(건물 전용)
         Pin happy = pinRepository.findByCode("p-happy").orElseThrow();
         PlaceDetailResponse placeDetail = mapPinService.getPlaceDetail(happy.getId(), null, null, null);
         assertThat(placeDetail.getName()).isEqualTo("행복식당");
@@ -217,7 +200,7 @@ class MapSyncE2EIT {
         assertThat(placeDetail.getLatitude()).isEqualTo(37.5805);   // 외부 장소는 자체 좌표
         assertThat(placeDetail.getLongitude()).isEqualTo(126.9230);
 
-        // 8) 장소 상세(내부) - 위치는 건물명 + 층수, 좌표는 소속 건물 좌표 상속
+        // 6) 장소 상세(내부) - 위치는 건물명 + 층수, 좌표는 소속 건물 좌표 상속
         Pin printer = pinRepository.findByCode("p-printer").orElseThrow();
         PlaceDetailResponse internalDetail = mapPinService.getPlaceDetail(printer.getId(), null, null, null);
         assertThat(internalDetail.getLocation()).isEqualTo("종합관 F1");
