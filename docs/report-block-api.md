@@ -7,7 +7,7 @@
 
 > 모든 응답은 공통 래퍼로 감싼다: `{ "status": "...", "data": <실제값>, "timestamp": "..." }`
 > 전부 **로그인 필요**(헤더 `Authorization: Bearer <accessToken>`).
-> OpenAPI 명세: `static/openapi/report-block.json`
+> OpenAPI 명세: `static/openapi/auth.json` (인증·회원 명세 최상단에 신고/차단 포함)
 
 ---
 
