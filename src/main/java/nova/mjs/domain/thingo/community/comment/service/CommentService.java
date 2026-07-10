@@ -3,6 +3,7 @@ package nova.mjs.domain.thingo.community.comment.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import nova.mjs.domain.thingo.ElasticSearch.indexing.update.SearchIndexUpdateService;
+import nova.mjs.domain.thingo.block.service.BlockQueryService;
 import nova.mjs.domain.thingo.community.comment.DTO.CommentResponseDto;
 import nova.mjs.domain.thingo.community.comment.entity.Comment;
 import nova.mjs.domain.thingo.community.comment.exception.CommentNotFoundException;
@@ -30,6 +31,7 @@ public class CommentService {
     private final CommunityBoardRepository communityBoardRepository;
     private final CommentLikeRepository commentLikeRepository;
     private final SearchIndexUpdateService searchIndexUpdateService;
+    private final BlockQueryService blockQueryService;
 
     public List<CommentResponseDto.CommentSummaryDto> getCommentsByBoard(
             UUID boardUuid,
@@ -48,10 +50,14 @@ public class CommentService {
 
         Member me = null;
         Set<UUID> likedSet = Collections.emptySet();
+        Set<Long> hiddenMemberIds = Collections.emptySet();
 
         if (email != null) {
             me = memberRepository.findByEmail(email).orElse(null);
             if (me != null) {
+                // 차단(양방향) 사용자 작성 댓글은 숨긴다
+                hiddenMemberIds = blockQueryService.getHiddenMemberIds(me.getId());
+
                 List<UUID> commentUuids =
                         allComments.stream().map(Comment::getUuid).toList();
                 likedSet = commentLikeRepository.findByMemberAndComment_UuidIn(me, commentUuids).stream()
@@ -62,14 +68,18 @@ public class CommentService {
 
         Member finalMe = me;
         Set<UUID> finalLikedSet = likedSet;
+        Set<Long> finalHiddenMemberIds = hiddenMemberIds;
 
         return topLevelComments.stream()
+                // 차단 사용자가 작성한 최상위 댓글(스레드)은 통째로 숨김
+                .filter(comment -> !finalHiddenMemberIds.contains(comment.getMember().getId()))
                 .map(comment ->
                         CommentResponseDto.CommentSummaryDto.fromEntityWithReplies(
                                 comment,
                                 finalLikedSet.contains(comment.getUuid()),
                                 finalLikedSet,
-                                finalMe
+                                finalMe,
+                                finalHiddenMemberIds
                         )
                 )
                 .toList();

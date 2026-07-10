@@ -34,5 +34,5 @@ public interface CommunityBoardService {
     void deleteBoard(UUID uuid, String email);
 
     // HOT 게시판 조회 (페이지/사이즈는 프론트 지정, 기본 size=7)
-    List<CommunityBoardResponse.SummaryDTO> getHotBoards(Pageable pageable);
+    List<CommunityBoardResponse.SummaryDTO> getHotBoards(Pageable pageable, String email);
 }

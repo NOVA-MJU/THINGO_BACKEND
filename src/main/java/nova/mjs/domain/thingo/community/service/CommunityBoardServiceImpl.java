@@ -2,6 +2,7 @@ package nova.mjs.domain.thingo.community.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import nova.mjs.domain.thingo.block.service.BlockQueryService;
 import nova.mjs.domain.thingo.community.DTO.BoardsQueryResult;
 import nova.mjs.domain.thingo.community.DTO.CommunityBoardRequest;
 import nova.mjs.domain.thingo.community.DTO.CommunityBoardResponse;
@@ -47,6 +48,7 @@ public class CommunityBoardServiceImpl implements CommunityBoardService {
     private final MemberRepository memberRepository;
     private final MemberQueryService memberQueryService;
     private final S3Service s3Service;
+    private final BlockQueryService blockQueryService;
 
     private final String boardPostPrefix = S3DomainType.COMMUNITY_POST.getPrefix();
 
@@ -62,11 +64,16 @@ public class CommunityBoardServiceImpl implements CommunityBoardService {
 
         BoardsQueryResult boardQueryResult = loadBoardsQueryResult(pageable, email, communityCategoryRaw);
 
+        // 차단(양방향) 사용자가 작성한 글은 목록에서 숨긴다
+        Set<Long> hiddenMemberIds = resolveHiddenMemberIds(email);
+
         List<CommunityBoardResponse.SummaryDTO> popularDTOs =
-                toSummaryDTOs(boardQueryResult.popularBoards(), boardQueryResult.likedUuids(), true);
+                toSummaryDTOs(filterHiddenAuthors(boardQueryResult.popularBoards(), hiddenMemberIds),
+                        boardQueryResult.likedUuids(), true);
 
         List<CommunityBoardResponse.SummaryDTO> generalDTOs =
-                toSummaryDTOs(boardQueryResult.generalBoardsPage().getContent(), boardQueryResult.likedUuids(), false);
+                toSummaryDTOs(filterHiddenAuthors(boardQueryResult.generalBoardsPage().getContent(), hiddenMemberIds),
+                        boardQueryResult.likedUuids(), false);
 
         List<CommunityBoardResponse.SummaryDTO> merged = new ArrayList<>(popularDTOs.size() + generalDTOs.size());
         merged.addAll(popularDTOs);
@@ -267,6 +274,32 @@ public class CommunityBoardServiceImpl implements CommunityBoardService {
         }
     }
 
+    /**
+     * 로그인 사용자 기준 차단(양방향) 숨김 대상 member id 집합.
+     * 비로그인/미존재 사용자는 빈 집합.
+     */
+    private Set<Long> resolveHiddenMemberIds(String email) {
+        if (email == null) {
+            return Collections.emptySet();
+        }
+        return memberRepository.findByEmail(email)
+                .map(member -> blockQueryService.getHiddenMemberIds(member.getId()))
+                .orElse(Collections.emptySet());
+    }
+
+    /**
+     * 차단 대상 작성자의 게시글을 걸러낸다.
+     */
+    private List<CommunityBoard> filterHiddenAuthors(List<CommunityBoard> boards, Set<Long> hiddenMemberIds) {
+        if (hiddenMemberIds.isEmpty()) {
+            return boards;
+        }
+        return boards.stream()
+                .filter(board -> board.getAuthor() == null
+                        || !hiddenMemberIds.contains(board.getAuthor().getId()))
+                .toList();
+    }
+
     private Set<UUID> findLikedUuids(String email, List<UUID> boardUuids) {
         if (email == null || boardUuids.isEmpty()) {
             return Collections.emptySet();
@@ -339,6 +372,11 @@ public class CommunityBoardServiceImpl implements CommunityBoardService {
                     false,
                     false
             );
+        }
+
+        // 차단(양방향) 사용자의 글은 상세에서도 접근 불가로 숨긴다
+        if (isHiddenAuthor(board, member)) {
+            throw new CommunityNotFoundException();
         }
 
         boolean isLiked = communityLikeRepository.findByMemberAndCommunityBoard(member, board).isPresent();
@@ -447,8 +485,11 @@ public class CommunityBoardServiceImpl implements CommunityBoardService {
      * - 슬라이딩 윈도우(예: 최근 2주) 정책은 일별 집계 테이블 도입 후 별도 적용 예정.
      */
     @Override
-    public List<CommunityBoardResponse.SummaryDTO> getHotBoards(Pageable pageable) {
-        List<CommunityBoard> hotBoards = communityBoardRepository.findHotBoards(pageable);
+    public List<CommunityBoardResponse.SummaryDTO> getHotBoards(Pageable pageable, String email) {
+        // 차단(양방향) 사용자가 작성한 글은 HOT 목록에서도 숨긴다
+        Set<Long> hiddenMemberIds = resolveHiddenMemberIds(email);
+        List<CommunityBoard> hotBoards =
+                filterHiddenAuthors(communityBoardRepository.findHotBoards(pageable), hiddenMemberIds);
 
         List<CommunityBoardResponse.SummaryDTO> result = new ArrayList<>();
         for (CommunityBoard board : hotBoards) {
@@ -481,6 +522,17 @@ public class CommunityBoardServiceImpl implements CommunityBoardService {
                         false
                 )
         );
+    }
+
+    /**
+     * 뷰어 기준으로 이 글의 작성자가 차단(양방향) 대상인지.
+     */
+    private boolean isHiddenAuthor(CommunityBoard board, Member viewer) {
+        if (board.getAuthor() == null) {
+            return false;
+        }
+        return blockQueryService.getHiddenMemberIds(viewer.getId())
+                .contains(board.getAuthor().getId());
     }
 
     private boolean canDelete(CommunityBoard board, Member member) {

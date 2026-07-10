@@ -75,6 +75,19 @@ public class CommentResponseDto {
                                                               boolean isLiked,
                                                               Set<UUID> likedSet,
                                                               Member me) {
+            return fromEntityWithReplies(comment, isLiked, likedSet, me, Set.of());
+        }
+
+        /**
+         * 부모 댓글 + 자식(depth=1)까지 변환하되, 차단 사용자의 대댓글은 제외한다.
+         *
+         * @param hiddenMemberIds 차단 등으로 숨겨야 할 작성자 member id 집합
+         */
+        public static CommentSummaryDto fromEntityWithReplies(Comment comment,
+                                                              boolean isLiked,
+                                                              Set<UUID> likedSet,
+                                                              Member me,
+                                                              Set<Long> hiddenMemberIds) {
             boolean commentIsAuthor = me != null && comment.getMember().getId().equals(me.getId());
 
             CommentSummaryDto.CommentSummaryDtoBuilder builder = CommentSummaryDto.builder()
@@ -87,8 +100,10 @@ public class CommentResponseDto {
                     .isLiked(isLiked)
                     .commentIsAuthor(commentIsAuthor); // ✅
 
-            // 자식 댓글 변환 (depth=1)
+            // 자식 댓글 변환 (depth=1) - 차단 사용자의 대댓글은 숨김
             List<CommentSummaryDto> replyDtos = comment.getReplies().stream()
+                    .filter(child -> hiddenMemberIds == null
+                            || !hiddenMemberIds.contains(child.getMember().getId()))
                     .map(child -> {
                         boolean childIsLiked = (likedSet != null && likedSet.contains(child.getUuid()));
                         boolean childIsAuthor = me != null && child.getMember().getId().equals(me.getId());

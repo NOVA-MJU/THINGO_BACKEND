@@ -13,10 +13,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestHeaderException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -124,6 +126,21 @@ public class GlobalExceptionHandler {
         String message = String.format("[%s]의 [%s] 필드는 null일 수 없습니다.", entity, property);
 
         return createErrorResponseEntity(HttpStatus.BAD_REQUEST, "NULL_PROPERTY", message);
+    }
+
+    // 정적 리소스(예: /openapi/*.json, swagger-ui) 미존재 → 404
+    // (Exception.class 캐치올보다 우선 매칭되어 404를 500으로 바꾸지 않도록 함)
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNoResourceFoundException(NoResourceFoundException ex) {
+        log.warn("정적 리소스를 찾을 수 없습니다: {}", ex.getMessage());
+        return createErrorResponseEntity(HttpStatus.NOT_FOUND, "RESOURCE_NOT_FOUND", ex.getMessage());
+    }
+
+    // 필수 요청 파라미터 누락 → 400 (기존엔 캐치올로 500 처리되던 문제 수정)
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<ErrorResponse> handleMissingServletRequestParameterException(MissingServletRequestParameterException ex) {
+        log.warn("필수 요청 파라미터 누락: {}", ex.getMessage());
+        return createErrorResponseEntity(HttpStatus.BAD_REQUEST, "MISSING_PARAMETER", ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)

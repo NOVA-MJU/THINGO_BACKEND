@@ -164,10 +164,13 @@ public class CommunityBoardController {
     @GetMapping("/hot")
     public ResponseEntity<ApiResponse<List<CommunityBoardResponse.SummaryDTO>>> getHotBoards(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "7") int size
+            @RequestParam(defaultValue = "7") int size,
+            @AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
+        String email = (userPrincipal != null) ? userPrincipal.getUsername() : null;
+
         Pageable pageable = PageRequest.of(page, size);
-        List<CommunityBoardResponse.SummaryDTO> response = communityBoardService.getHotBoards(pageable);
+        List<CommunityBoardResponse.SummaryDTO> response = communityBoardService.getHotBoards(pageable, email);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(ApiResponse.success(response));
