@@ -80,7 +80,6 @@ public class Member extends BaseEntity {
                 .name(memberDTO.getName())
                 .email(memberDTO.getEmail())
                 .password(encodePassword)
-                .gender(Gender.fromString(memberDTO.getGender())) // 대소문자 변환
                 .nickname(memberDTO.getNickname())
                 .profileImageUrl(memberDTO.getProfileImageUrl())
                 .college(memberDTO.getCollege())

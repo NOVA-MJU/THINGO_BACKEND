@@ -72,9 +72,6 @@ public class MemberDTO {
         @NotBlank(message = "닉네임은 필수입니다.")
         private String nickname;
 
-        @NotNull(message = "성별은 필수입니다.")
-        private String gender;
-
         private DepartmentName departmentName;
 
         @NotNull(message = "단과대 정보는 필수입니다.")
