@@ -85,6 +85,10 @@ public class MemberDTO {
         private String studentNumber;
 
         private String profileImageUrl;
+
+        @NotNull(message = "개인정보 처리방침 동의 여부는 필수입니다.")
+        @AssertTrue(message = "개인정보 처리방침에 동의해야 가입할 수 있습니다.")
+        private Boolean privacyAgreed; // 개인정보 처리방침 동의 여부 (가입하려면 true)
     }
 
 

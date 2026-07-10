@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 
@@ -78,6 +79,11 @@ public class MemberCommandServiceImpl implements MemberCommandService {
         UUID userId = newMember.getUuid();
         String email = newMember.getEmail();
         String role = String.valueOf(newMember.getRole());// Member 엔티티에 role 필드가 있어야 함
+
+        // 개인정보 처리방침 동의 감사 로그 (uuid, 동의 여부, 동의 시간)
+        LocalDateTime privacyAgreedAt = LocalDateTime.now();
+        log.info("[회원가입][개인정보 동의] uuid={}, privacyAgreed={}, agreedAt={}",
+                userId, request.getPrivacyAgreed(), privacyAgreedAt);
 
         // Access Token & Refresh Token 생성
         String accessToken = jwtUtil.generateAccessToken(userId, email, role);
