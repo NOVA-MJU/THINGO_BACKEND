@@ -80,9 +80,6 @@ public class MentorDTO {
         @NotBlank(message = "닉네임은 필수입니다.")
         private String nickname;
 
-        @NotNull(message = "성별은 필수입니다.")
-        private String gender;
-
         @NotNull(message = "학과 정보는 필수입니다.")
         private DepartmentName departmentName;
 
@@ -102,7 +99,6 @@ public class MentorDTO {
     public static class MemberUpdateRequestDTO {
         private String name;
         private String nickname;
-        private String gender; // "MALE", "FEMALE", "OTHERS"
         private DepartmentName departmentName;
         private String studentNumber;
         private String profileImageUrl;

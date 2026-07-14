@@ -42,9 +42,6 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
-
     private String nickname;
 
     @Enumerated(EnumType.STRING)
@@ -57,18 +54,6 @@ public class Member extends BaseEntity {
 
 
     private String studentNumber;
-
-    public enum Gender {
-        MALE, FEMALE, OTHERS;
-
-        public static Gender fromString(String value) {
-            try {
-                return Gender.valueOf(value.toUpperCase());
-            } catch (IllegalArgumentException | NullPointerException e) {
-                throw new IllegalArgumentException("Invalid gender value: " + value);
-            }
-        }
-    }
 
     public enum Role {
         USER, ADMIN, OPERATOR, MENTOR
@@ -96,14 +81,13 @@ public class Member extends BaseEntity {
         this.college = getOrDefault(memberDTO.getCollege(), this.college);
         this.studentNumber = getOrDefault(memberDTO.getStudentNumber(), this.studentNumber);
         this.profileImageUrl = getOrDefault(memberDTO.getProfileImageUrl(), this.profileImageUrl);
-        this.gender = memberDTO.getGender() != null ? Gender.fromString(memberDTO.getGender()) : this.gender;
     }
 
 
     // ============ 어드민 계정 =============== //
 
 
-    // 초기 어드민 계정을 생성할 경우, UUID, 이메일, 임시 비밀버호, 역할, 성별은 제공한다.
+    // 초기 어드민 계정을 생성할 경우, UUID, 이메일, 임시 비밀버호, 역할은 제공한다.
     public static Member createAdminInit(AdminDTO.StudentCouncilInitRegistrationRequestDTO memberDTO, String encodePassword) {
         return Member.builder()
                 .uuid(UUID.randomUUID()) // UUID 자동 생성\
@@ -113,7 +97,6 @@ public class Member extends BaseEntity {
                 .college(memberDTO.getCollege())
                 .departmentName(memberDTO.getDepartmentName())
                 .role(Role.ADMIN)
-                .gender(Gender.OTHERS)
                 .studentNumber("NONE")
                 .build();
     }

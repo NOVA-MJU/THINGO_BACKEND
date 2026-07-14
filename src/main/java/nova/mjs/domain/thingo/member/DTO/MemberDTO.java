@@ -22,7 +22,6 @@ public class MemberDTO {
     private String name;
     private String email;
     private String profileImageUrl;
-    private String gender;
     private String nickname;
     private College college;
     private DepartmentName departmentName;
@@ -39,7 +38,6 @@ public class MemberDTO {
                 .uuid(member.getUuid())
                 .name(member.getName())
                 .email(member.getEmail())
-                .gender(String.valueOf(member.getGender()))
                 .nickname(member.getNickname())
                 .college(member.getCollege())
                 .departmentName(member.getDepartmentName())
@@ -97,7 +95,6 @@ public class MemberDTO {
     public static class MemberUpdateRequestDTO {
         private String name;
         private String nickname;
-        private String gender; // "MALE", "FEMALE", "OTHERS"
         private College college;
         private DepartmentName departmentName;
         private String studentNumber;

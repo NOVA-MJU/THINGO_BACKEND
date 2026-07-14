@@ -54,7 +54,7 @@ nickname = memberQueryService.getMemberByUuid(userUuid).getNickname();
    ↳ 응답받은 `profileImageUrl` 사용
 6. **최종 회원가입** `POST /members`
    • DTO: `MemberDTO.MemberRegistrationRequestDTO`
-   • 필수: 이름·이메일·비밀번호·닉네임·성별·학과·단과대·학번
+   • 필수: 이름·이메일·비밀번호·닉네임·학과·단과대·학번
    • 비밀번호는 BCrypt 해시 저장
 
 ---
