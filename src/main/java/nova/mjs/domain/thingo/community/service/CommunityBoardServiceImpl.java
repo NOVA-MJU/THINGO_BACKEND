@@ -15,6 +15,9 @@ import nova.mjs.domain.thingo.community.repository.CommunityBoardRepository;
 import nova.mjs.domain.thingo.member.entity.Member;
 import nova.mjs.domain.thingo.member.repository.MemberRepository;
 import nova.mjs.domain.thingo.member.service.query.MemberQueryService;
+import nova.mjs.domain.thingo.report.entity.ReportTargetType;
+import nova.mjs.domain.thingo.report.service.ReportQueryService;
+import nova.mjs.util.profanity.ProfanityFilter;
 import nova.mjs.util.s3.S3DomainType;
 import nova.mjs.util.s3.S3Service;
 import org.springframework.data.domain.*;
@@ -49,6 +52,8 @@ public class CommunityBoardServiceImpl implements CommunityBoardService {
     private final MemberQueryService memberQueryService;
     private final S3Service s3Service;
     private final BlockQueryService blockQueryService;
+    private final ReportQueryService reportQueryService;
+    private final ProfanityFilter profanityFilter;
 
     private final String boardPostPrefix = S3DomainType.COMMUNITY_POST.getPrefix();
 
@@ -66,13 +71,15 @@ public class CommunityBoardServiceImpl implements CommunityBoardService {
 
         // 차단(양방향) 사용자가 작성한 글은 목록에서 숨긴다
         Set<Long> hiddenMemberIds = resolveHiddenMemberIds(email);
+        // 내가 신고한 글은 L2 임계 도달 전이라도 내 목록에서 즉시 숨긴다(자가 숨김)
+        Set<UUID> selfReportedUuids = resolveSelfReportedUuids(email);
 
         List<CommunityBoardResponse.SummaryDTO> popularDTOs =
-                toSummaryDTOs(filterHiddenAuthors(boardQueryResult.popularBoards(), hiddenMemberIds),
+                toSummaryDTOs(filterVisible(boardQueryResult.popularBoards(), hiddenMemberIds, selfReportedUuids),
                         boardQueryResult.likedUuids(), true);
 
         List<CommunityBoardResponse.SummaryDTO> generalDTOs =
-                toSummaryDTOs(filterHiddenAuthors(boardQueryResult.generalBoardsPage().getContent(), hiddenMemberIds),
+                toSummaryDTOs(filterVisible(boardQueryResult.generalBoardsPage().getContent(), hiddenMemberIds, selfReportedUuids),
                         boardQueryResult.likedUuids(), false);
 
         List<CommunityBoardResponse.SummaryDTO> merged = new ArrayList<>(popularDTOs.size() + generalDTOs.size());
@@ -300,6 +307,32 @@ public class CommunityBoardServiceImpl implements CommunityBoardService {
                 .toList();
     }
 
+    /**
+     * 로그인 사용자 기준 자가 신고(L1.5) 숨김 대상 targetUuid 집합.
+     * 비로그인/미존재 사용자는 빈 집합.
+     */
+    private Set<UUID> resolveSelfReportedUuids(String email) {
+        if (email == null) {
+            return Collections.emptySet();
+        }
+        return memberRepository.findByEmail(email)
+                .map(member -> reportQueryService.getSelfReportedTargetUuids(member.getId(), ReportTargetType.BOARD))
+                .orElse(Collections.emptySet());
+    }
+
+    /**
+     * 차단(양방향) 작성자 글 + 내가 신고한 글을 함께 걸러낸다.
+     */
+    private List<CommunityBoard> filterVisible(List<CommunityBoard> boards, Set<Long> hiddenMemberIds, Set<UUID> selfReportedUuids) {
+        List<CommunityBoard> afterBlock = filterHiddenAuthors(boards, hiddenMemberIds);
+        if (selfReportedUuids.isEmpty()) {
+            return afterBlock;
+        }
+        return afterBlock.stream()
+                .filter(board -> !selfReportedUuids.contains(board.getUuid()))
+                .toList();
+    }
+
     private Set<UUID> findLikedUuids(String email, List<UUID> boardUuids) {
         if (email == null || boardUuids.isEmpty()) {
             return Collections.emptySet();
@@ -348,6 +381,11 @@ public class CommunityBoardServiceImpl implements CommunityBoardService {
     public CommunityBoardResponse.DetailDTO getBoardDetail(UUID uuid, String email) {
         CommunityBoard board = getExistingBoard(uuid);
 
+        // 신고 누적 자동 숨김(L2) 글은 상세에서도 존재하지 않는 것으로 취급한다(운영자 전용 API로만 접근)
+        if (board.isHidden()) {
+            throw new CommunityNotFoundException();
+        }
+
         int likeCount = board.getLikeCount();
         int commentCount = board.getCommentCount();
 
@@ -379,6 +417,11 @@ public class CommunityBoardServiceImpl implements CommunityBoardService {
             throw new CommunityNotFoundException();
         }
 
+        // 내가 신고한 글은 L2 임계 도달 전이라도 내 화면에서 즉시 접근 불가로 숨긴다(자가 숨김)
+        if (reportQueryService.getSelfReportedTargetUuids(member.getId(), ReportTargetType.BOARD).contains(board.getUuid())) {
+            throw new CommunityNotFoundException();
+        }
+
         boolean isLiked = communityLikeRepository.findByMemberAndCommunityBoard(member, board).isPresent();
         boolean canEdit = canEdit(board, member);
         boolean canDelete = canDelete(board, member);
@@ -406,10 +449,11 @@ public class CommunityBoardServiceImpl implements CommunityBoardService {
                 ? request.getCommunityCategory()
                 : CommunityCategory.FREE;
 
+        // 비속어 마스킹(L1): 저장 직전 제목/본문/미리보기의 명백한 욕설을 *로 치환한다
         CommunityBoard board = CommunityBoard.create(
-                request.getTitle(),
-                request.getContent(),
-                request.getContentPreview(),
+                profanityFilter.mask(request.getTitle()),
+                profanityFilter.mask(request.getContent()),
+                profanityFilter.mask(request.getContentPreview()),
                 category,
                 published,
                 author
@@ -436,10 +480,11 @@ public class CommunityBoardServiceImpl implements CommunityBoardService {
             throw new IllegalArgumentException("작성자만 수정할 수 있습니다.");
         }
 
+        // 비속어 마스킹(L1): 수정 본문도 저장 직전 마스킹한다(null은 update에서 무시)
         board.update(
-                request.getTitle(),
-                request.getContent(),
-                request.getContentPreview(),
+                profanityFilter.mask(request.getTitle()),
+                profanityFilter.mask(request.getContent()),
+                profanityFilter.mask(request.getContentPreview()),
                 request.getCommunityCategory(),
                 request.getPublished()
         );
@@ -486,10 +531,11 @@ public class CommunityBoardServiceImpl implements CommunityBoardService {
      */
     @Override
     public List<CommunityBoardResponse.SummaryDTO> getHotBoards(Pageable pageable, String email) {
-        // 차단(양방향) 사용자가 작성한 글은 HOT 목록에서도 숨긴다
+        // 차단(양방향) 사용자가 작성한 글 + 내가 신고한 글은 HOT 목록에서도 숨긴다
         Set<Long> hiddenMemberIds = resolveHiddenMemberIds(email);
+        Set<UUID> selfReportedUuids = resolveSelfReportedUuids(email);
         List<CommunityBoard> hotBoards =
-                filterHiddenAuthors(communityBoardRepository.findHotBoards(pageable), hiddenMemberIds);
+                filterVisible(communityBoardRepository.findHotBoards(pageable), hiddenMemberIds, selfReportedUuids);
 
         List<CommunityBoardResponse.SummaryDTO> result = new ArrayList<>();
         for (CommunityBoard board : hotBoards) {

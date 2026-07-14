@@ -31,6 +31,7 @@ public class CommunityBoardResponse {
         private int likeCount;
         private int commentCount;
         private String author;
+        private UUID authorUuid;
         private boolean isLiked;
         private boolean popular;
 
@@ -49,6 +50,7 @@ public class CommunityBoardResponse {
                     .likeCount(likeCount)
                     .commentCount(commentCount)
                     .author(e.getAuthor() != null ? e.getAuthor().getNickname() : "Unknown")
+                    .authorUuid(e.getAuthor() != null ? e.getAuthor().getUuid() : null)
                     .isLiked(liked)
                     .build();
         }
@@ -68,6 +70,7 @@ public class CommunityBoardResponse {
                     .likeCount(likeCount)
                     .commentCount(commentCount)
                     .author(e.getAuthor() != null ? e.getAuthor().getNickname() : "Unknown")
+                    .authorUuid(e.getAuthor() != null ? e.getAuthor().getUuid() : null)
                     .isLiked(liked)
                     .popular(popular)
                     .build();
@@ -91,6 +94,7 @@ public class CommunityBoardResponse {
     private int likeCount;
     private int commentCount;
     private String author;
+    private UUID authorUuid;
     private boolean isLiked;
     private boolean canEdit;
     private boolean canDelete;
@@ -111,6 +115,7 @@ public class CommunityBoardResponse {
                 .likeCount(likeCount)
                 .commentCount(commentCount)
                 .author(e.getAuthor() != null ? e.getAuthor().getNickname() : "Unknown")
+                .authorUuid(e.getAuthor() != null ? e.getAuthor().getUuid() : null)
                 .isLiked(liked)
                 .canEdit(canEdit)
                 .canDelete(canDelete)
@@ -133,6 +138,7 @@ public class CommunityBoardResponse {
                 .likeCount(likeCount)
                 .commentCount(commentCount)
                 .author(e.getAuthor() != null ? e.getAuthor().getNickname() : "Unknown")
+                .authorUuid(e.getAuthor() != null ? e.getAuthor().getUuid() : null)
                 .isLiked(liked)
                 .build();
         }

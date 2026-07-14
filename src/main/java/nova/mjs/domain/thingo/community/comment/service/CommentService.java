@@ -16,6 +16,9 @@ import nova.mjs.domain.thingo.community.repository.CommunityBoardRepository;
 import nova.mjs.domain.thingo.member.entity.Member;
 import nova.mjs.domain.thingo.member.exception.MemberNotFoundException;
 import nova.mjs.domain.thingo.member.repository.MemberRepository;
+import nova.mjs.domain.thingo.report.entity.ReportTargetType;
+import nova.mjs.domain.thingo.report.service.ReportQueryService;
+import nova.mjs.util.profanity.ProfanityFilter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +35,8 @@ public class CommentService {
     private final CommentLikeRepository commentLikeRepository;
     private final SearchIndexUpdateService searchIndexUpdateService;
     private final BlockQueryService blockQueryService;
+    private final ReportQueryService reportQueryService;
+    private final ProfanityFilter profanityFilter;
 
     public List<CommentResponseDto.CommentSummaryDto> getCommentsByBoard(
             UUID boardUuid,
@@ -51,12 +56,15 @@ public class CommentService {
         Member me = null;
         Set<UUID> likedSet = Collections.emptySet();
         Set<Long> hiddenMemberIds = Collections.emptySet();
+        Set<UUID> selfReportedUuids = Collections.emptySet();
 
         if (email != null) {
             me = memberRepository.findByEmail(email).orElse(null);
             if (me != null) {
                 // 차단(양방향) 사용자 작성 댓글은 숨긴다
                 hiddenMemberIds = blockQueryService.getHiddenMemberIds(me.getId());
+                // 내가 신고한 댓글은 L2 임계 도달 전이라도 즉시 숨긴다(자가 숨김)
+                selfReportedUuids = reportQueryService.getSelfReportedTargetUuids(me.getId(), ReportTargetType.COMMENT);
 
                 List<UUID> commentUuids =
                         allComments.stream().map(Comment::getUuid).toList();
@@ -69,17 +77,23 @@ public class CommentService {
         Member finalMe = me;
         Set<UUID> finalLikedSet = likedSet;
         Set<Long> finalHiddenMemberIds = hiddenMemberIds;
+        Set<UUID> finalSelfReportedUuids = selfReportedUuids;
 
         return topLevelComments.stream()
+                // 신고 누적 자동 숨김(L2) 댓글은 스레드째 숨김
+                .filter(comment -> !comment.isHidden())
                 // 차단 사용자가 작성한 최상위 댓글(스레드)은 통째로 숨김
                 .filter(comment -> !finalHiddenMemberIds.contains(comment.getMember().getId()))
+                // 내가 신고한 최상위 댓글(스레드)은 즉시 숨김
+                .filter(comment -> !finalSelfReportedUuids.contains(comment.getUuid()))
                 .map(comment ->
                         CommentResponseDto.CommentSummaryDto.fromEntityWithReplies(
                                 comment,
                                 finalLikedSet.contains(comment.getUuid()),
                                 finalLikedSet,
                                 finalMe,
-                                finalHiddenMemberIds
+                                finalHiddenMemberIds,
+                                finalSelfReportedUuids
                         )
                 )
                 .toList();
@@ -94,8 +108,9 @@ public class CommentService {
         Member member = getExistingMember(email);
         CommunityBoard board = getExistingBoard(boardUuid);
 
+        // 비속어 마스킹(L1): 저장 직전 댓글 내용의 명백한 욕설을 *로 치환한다
         Comment saved = commentRepository.save(
-                Comment.create(board, member, content)
+                Comment.create(board, member, profanityFilter.mask(content))
         );
 
         communityBoardRepository.increaseCommentCount(boardUuid);
@@ -123,8 +138,9 @@ public class CommentService {
 
         Member member = getExistingMember(email);
 
+        // 비속어 마스킹(L1): 대댓글 내용도 저장 직전 마스킹한다
         Comment saved = commentRepository.save(
-                Comment.createReply(parent, member, content)
+                Comment.createReply(parent, member, profanityFilter.mask(content))
         );
 
         UUID boardUuid = parent.getCommunityBoard().getUuid();

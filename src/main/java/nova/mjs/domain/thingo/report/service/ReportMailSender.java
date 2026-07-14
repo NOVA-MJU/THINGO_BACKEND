@@ -59,7 +59,10 @@ public class ReportMailSender {
     }
 
     private String buildSubject(ReportCreatedEvent event) {
-        return "[MJS 신고] " + event.getTargetTypeLabel() + " - " + event.getReasonLabel();
+        // 제목에도 누적 신고 횟수를 노출해 심각도를 한눈에 파악하게 한다
+        return "[MJS 신고] " + event.getTargetTypeLabel()
+                + " - " + event.getReasonLabel()
+                + " (누적 " + event.getTargetReportCount() + "회)";
     }
 
     private String buildBody(ReportCreatedEvent event) {
@@ -77,6 +80,8 @@ public class ReportMailSender {
                 + row("신고자 UUID", event.getReporterUuid().toString())
                 + row("대상 유형", escape(event.getTargetTypeLabel()))
                 + row("대상 UUID", event.getTargetUuid().toString())
+                + row("누적 신고 횟수", "이번이 " + event.getTargetReportCount() + "번째 신고 (서로 다른 신고자 "
+                        + event.getDistinctReporterCount() + "명)")
                 + row("신고 사유", escape(event.getReasonLabel()) + " (" + event.getReasonName() + ")")
                 + row("사유 설명", escape(event.getReasonDescription()))
                 + row("기타 상세", etc)

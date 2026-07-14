@@ -2,6 +2,7 @@ package nova.mjs.domain.thingo.community.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import nova.mjs.domain.thingo.ElasticSearch.EntityListner.CommunityEntityListener;
 import nova.mjs.domain.thingo.community.comment.entity.Comment;
 import nova.mjs.domain.thingo.community.entity.enumList.CommunityCategory;
@@ -85,6 +86,18 @@ public class CommunityBoard extends BaseEntity {
     @Column
     private LocalDateTime publishedAt;
 
+    /**
+     * 신고 누적으로 인한 자동 숨김 여부 (L2)
+     *
+     * - true 이면 목록/상세/HOT/인기글 등 모든 조회에서 제외한다.
+     * - 뷰어와 무관한 전역 숨김이라 조회 쿼리 WHERE 로 거른다(차단과 다름).
+     * - 운영자만 별도 API 로 확인/복원할 수 있다.
+     */
+    @Builder.Default
+    @ColumnDefault("false")
+    @Column(nullable = false)
+    private Boolean hidden = false;
+
     @Builder.Default
     @OneToMany(mappedBy = "communityBoard", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CommunityLike> communityLikes = new ArrayList<>();
@@ -162,6 +175,27 @@ public class CommunityBoard extends BaseEntity {
             this.viewCount = 0;
         }
         this.viewCount++;
+    }
+
+    /**
+     * 신고 임계 초과로 게시글을 자동 숨김 처리한다 (L2).
+     */
+    public void hideByReport() {
+        this.hidden = true;
+    }
+
+    /**
+     * 운영자 검토 후 숨김을 해제한다 (L2).
+     */
+    public void restore() {
+        this.hidden = false;
+    }
+
+    /**
+     * 현재 숨김 상태인지 여부. (null 방어)
+     */
+    public boolean isHidden() {
+        return Boolean.TRUE.equals(this.hidden);
     }
 
 }

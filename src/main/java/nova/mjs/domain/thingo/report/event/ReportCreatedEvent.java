@@ -32,9 +32,17 @@ public class ReportCreatedEvent {
     private final String reasonDescription;
     private final String etcDetail;
 
+    /** 이 대상에 접수된 누적 신고 건수(이번 신고 포함) = "이번이 몇 번째 신고인지" */
+    private final long targetReportCount;
+    /** 이 대상을 신고한 서로 다른 신고자 수(자동 숨김 임계 판단값) */
+    private final long distinctReporterCount;
+
     private final LocalDateTime createdAt;
 
-    public static ReportCreatedEvent of(Report report, Member reporter) {
+    public static ReportCreatedEvent of(Report report,
+                                        Member reporter,
+                                        long targetReportCount,
+                                        long distinctReporterCount) {
         return ReportCreatedEvent.builder()
                 .reportUuid(report.getUuid())
                 .reporterName(reporter.getName())
@@ -47,6 +55,8 @@ public class ReportCreatedEvent {
                 .reasonLabel(report.getReason().getLabel())
                 .reasonDescription(report.getReason().getDescription())
                 .etcDetail(report.getEtcDetail())
+                .targetReportCount(targetReportCount)
+                .distinctReporterCount(distinctReporterCount)
                 .createdAt(report.getCreatedAt())
                 .build();
     }

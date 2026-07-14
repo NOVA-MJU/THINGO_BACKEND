@@ -1,6 +1,7 @@
 package nova.mjs.domain.thingo.community.comment.entity;
 import lombok.*;
 import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnDefault;
 import nova.mjs.domain.thingo.community.comment.likes.entity.CommentLike;
 import nova.mjs.util.entity.BaseEntity;
 import nova.mjs.domain.thingo.community.entity.CommunityBoard;
@@ -56,6 +57,15 @@ public class Comment extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String previewContent; // 댓글 미리보기
 
+    /**
+     * 신고 누적으로 인한 자동 숨김 여부 (L2)
+     * - true 이면 댓글 목록 조회에서 제외한다(대댓글 포함).
+     */
+    @Builder.Default
+    @ColumnDefault("false")
+    @Column(nullable = false)
+    private Boolean hidden = false;
+
 
     public static Comment create(CommunityBoard communityBoard, Member member, String content) {
         return Comment.builder()
@@ -99,5 +109,26 @@ public class Comment extends BaseEntity {
         if (this.likeCount > 0) {
             this.likeCount--;
         }
+    }
+
+    /**
+     * 신고 임계 초과로 댓글을 자동 숨김 처리한다 (L2).
+     */
+    public void hideByReport() {
+        this.hidden = true;
+    }
+
+    /**
+     * 운영자 검토 후 숨김을 해제한다 (L2).
+     */
+    public void restore() {
+        this.hidden = false;
+    }
+
+    /**
+     * 현재 숨김 상태인지 여부. (null 방어)
+     */
+    public boolean isHidden() {
+        return Boolean.TRUE.equals(this.hidden);
     }
 }

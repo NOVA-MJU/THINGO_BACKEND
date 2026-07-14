@@ -45,6 +45,11 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     Optional<Comment> findByUuid(UUID uuid);
 
     /**
+     * 신고 누적으로 자동 숨김된 댓글 목록 (운영자 검토 큐, L2).
+     */
+    List<Comment> findByHiddenTrueOrderByCreatedAtDesc();
+
+    /**
      * UUID + 게시글 UUID로 댓글 단건 조회
      * - 요청 경로의 boardUUID/commentUUID 일치성 검증용
      */

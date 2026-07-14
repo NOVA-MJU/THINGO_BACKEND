@@ -37,6 +37,13 @@ public interface CommunityBoardRepository extends JpaRepository<CommunityBoard, 
 
     Optional<CommunityBoard> findByUuid(UUID uuid);
 
+    /**
+     * 신고 누적으로 자동 숨김된 게시글 목록 (운영자 검토 큐, L2).
+     * author 를 함께 로딩해 목록 변환 시 N+1 을 막는다.
+     */
+    @EntityGraph(attributePaths = "author")
+    List<CommunityBoard> findByHiddenTrueOrderByCreatedAtDesc();
+
     @Query("""
         SELECT cb
         FROM CommunityBoard cb
@@ -66,6 +73,7 @@ public interface CommunityBoardRepository extends JpaRepository<CommunityBoard, 
         FROM CommunityBoard b
         WHERE b.publishedAt >= :after
           AND b.published = true
+          AND b.hidden = false
         ORDER BY b.likeCount DESC, b.createdAt DESC
     """)
     List<CommunityBoard> findTop3PopularBoards(
@@ -78,6 +86,7 @@ public interface CommunityBoardRepository extends JpaRepository<CommunityBoard, 
         FROM CommunityBoard b
         WHERE b.publishedAt >= :after
           AND b.published = true
+          AND b.hidden = false
           AND b.category = :category
         ORDER BY b.likeCount DESC, b.createdAt DESC
     """)
@@ -105,6 +114,7 @@ public interface CommunityBoardRepository extends JpaRepository<CommunityBoard, 
         SELECT c
         FROM CommunityBoard c
         WHERE c.published = true
+          AND c.hidden = false
         ORDER BY (c.viewCount + 2 * c.likeCount) DESC, c.createdAt DESC
     """)
     List<CommunityBoard> findHotBoards(Pageable pageable);
@@ -118,6 +128,7 @@ public interface CommunityBoardRepository extends JpaRepository<CommunityBoard, 
     @Query("""
         SELECT b
         FROM CommunityBoard b
+        WHERE b.hidden = false
     """)
     Page<CommunityBoard> findAllWithAuthor(Pageable pageable);
 
@@ -125,7 +136,8 @@ public interface CommunityBoardRepository extends JpaRepository<CommunityBoard, 
     @Query("""
         SELECT b
         FROM CommunityBoard b
-        WHERE b.uuid NOT IN :excluded
+        WHERE b.hidden = false
+          AND b.uuid NOT IN :excluded
     """)
     Page<CommunityBoard> findAllWithAuthorExcluding(
             @Param("excluded") List<UUID> excluded,
@@ -136,7 +148,8 @@ public interface CommunityBoardRepository extends JpaRepository<CommunityBoard, 
     @Query("""
         SELECT b
         FROM CommunityBoard b
-        WHERE b.category = :category
+        WHERE b.hidden = false
+          AND b.category = :category
     """)
     Page<CommunityBoard> findAllWithAuthorByCategory(
             @Param("category") CommunityCategory category,
@@ -147,7 +160,8 @@ public interface CommunityBoardRepository extends JpaRepository<CommunityBoard, 
     @Query("""
         SELECT b
         FROM CommunityBoard b
-        WHERE b.category = :category
+        WHERE b.hidden = false
+          AND b.category = :category
           AND b.uuid NOT IN :excluded
     """)
     Page<CommunityBoard> findAllWithAuthorByCategoryExcluding(
