@@ -96,9 +96,11 @@ jobs:
 
           # 도커 모니터링 스택이 쓰는 설정 파일 동기화용(빌드는 안 함).
           ssh-keyscan -H github.com | sudo tee -a /etc/ssh/ssh_known_hosts > /dev/null 2>&1 || true
+          # EC2 로컬 클론은 배포 커밋의 일회성 미러일 뿐이라 로컬 커밋을 보존하지 않는다.
+          # ff-only 는 로컬/원격이 갈라지면 영구히 막히므로 원격 tip 으로 강제 동기화.
           git fetch origin
-          git checkout main
-          git pull --ff-only origin main
+          git checkout -B main origin/main
+          git reset --hard origin/main
           git submodule sync --recursive
           git submodule update --init --recursive --remote
 
