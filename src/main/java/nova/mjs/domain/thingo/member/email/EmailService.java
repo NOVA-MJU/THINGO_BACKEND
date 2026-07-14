@@ -1,9 +1,11 @@
 package nova.mjs.domain.thingo.member.email;
 
 import jakarta.mail.MessagingException;
+import jakarta.mail.SendFailedException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import nova.mjs.domain.thingo.member.exception.EmailIsInvalidException;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -68,6 +70,14 @@ public class EmailService {
             helper.setText(html, true); // true = HTML (반드시 인라인 추가보다 먼저 호출)
             attachInlineImages(helper);
             mailSender.send(message);
+        } catch (org.springframework.mail.MailSendException e) {
+            // SMTP 서버가 수신자 주소를 즉시 거부(SendFailedException)한 경우 = 실존하지 않는 이메일
+            if (isRecipientRejected(e)) {
+                log.warn("인증 메일 수신자 거부 - email: {}", maskEmail(email));
+                throw new EmailIsInvalidException();
+            }
+            log.error("인증 메일 발송 실패 - email: {}", maskEmail(email), e);
+            throw new IllegalStateException("인증 메일 발송에 실패했습니다.", e);
         } catch (MessagingException e) {
             log.error("인증 메일 발송 실패 - email: {}", maskEmail(email), e);
             throw new IllegalStateException("인증 메일 발송에 실패했습니다.", e);
@@ -86,6 +96,14 @@ public class EmailService {
             }
             helper.addInline(image.getKey(), resource);
         }
+    }
+
+    /** MailSendException 원인이 SendFailedException(수신자 주소 거부)인지 확인 */
+    private boolean isRecipientRejected(org.springframework.mail.MailSendException e) {
+        if (e.getCause() instanceof SendFailedException) {
+            return true;
+        }
+        return e.getFailedMessages().values().stream().anyMatch(cause -> cause instanceof SendFailedException);
     }
 
     /** 인증 메일 HTML 템플릿 로드(최초 1회 캐시) */
