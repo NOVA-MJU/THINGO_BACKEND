@@ -834,6 +834,7 @@
           "likeCount": { "type": "integer" },
           "commentCount": { "type": "integer" },
           "author": { "type": "string" },
+          "authorUuid": { "type": "string", "format": "uuid", "nullable": true, "description": "작성자 회원 UUID. 사용자 차단(POST /api/v1/blocks) 요청 시 targetMemberUuid로 사용" },
           "liked": { "type": "boolean" },
           "canEdit": { "type": "boolean" },
           "canDelete": { "type": "boolean" },
