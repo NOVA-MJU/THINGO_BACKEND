@@ -1,0 +1,12 @@
+{
+  "name": "mjs-map-e2e",
+  "private": true,
+  "version": "1.0.0",
+  "description": "명지도 API Playwright E2E (운영 서버 대상 읽기/에러 경로 검증)",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0"
+  }
+}

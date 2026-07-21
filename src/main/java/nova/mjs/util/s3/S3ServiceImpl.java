@@ -2,15 +2,23 @@ package nova.mjs.util.s3;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import nova.mjs.util.exception.ErrorCode;
+import nova.mjs.util.exception.request.RequestException;
+import nova.mjs.util.s3.dto.S3PresignDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
+import software.amazon.awssdk.services.s3.presigner.model.PresignedPutObjectRequest;
+import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -26,12 +34,27 @@ import java.util.UUID;
 public class S3ServiceImpl implements S3Service {
 
     private final S3Client s3Client;
+    private final S3Presigner s3Presigner;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
     @Value("${cloud.aws.cloudfront.url}")
     private String cloudFrontUrl;
+
+    /** 프리사인 업로드 상한(50MB) 및 유효시간(5분) */
+    private static final long MAX_PRESIGN_SIZE = 50L * 1024 * 1024;
+    private static final Duration PRESIGN_TTL = Duration.ofMinutes(5);
+
+    /** 허용 Content-Type → 확장자. 영상(mp4/mov/webm) + 이미지(jpg/png/webp) */
+    private static final Map<String, String> EXTENSION_BY_CONTENT_TYPE = Map.of(
+            "video/mp4", ".mp4",
+            "video/quicktime", ".mov",
+            "video/webm", ".webm",
+            "image/jpeg", ".jpg",
+            "image/png", ".png",
+            "image/webp", ".webp"
+    );
 
     /**
      * S3에 파일 업로드 (파일명은 SHA-256 해시 기반으로 생성)
@@ -62,6 +85,44 @@ public class S3ServiceImpl implements S3Service {
         }
 
         return cloudFrontUrl + "/" + fileUrl;
+    }
+
+    /**
+     * 프리사인 PUT URL 발급. Content-Type 허용 목록/용량 검증 후
+     * {prefix}{uuid}{ext} 키로 5분짜리 PUT URL을 만든다. 서버는 바이트를 거치지 않는다.
+     */
+    @Override
+    public S3PresignDto.Response presignPut(S3PresignDto.Request request) {
+        // 1. Content-Type 허용 검증
+        String extension = EXTENSION_BY_CONTENT_TYPE.get(request.getContentType());
+        if (extension == null) {
+            throw new RequestException(ErrorCode.S3_PRESIGN_UNSUPPORTED_TYPE);
+        }
+        // 2. 용량 검증(0 이하/상한 초과 거부)
+        if (request.getFileSize() <= 0 || request.getFileSize() > MAX_PRESIGN_SIZE) {
+            throw new RequestException(ErrorCode.S3_PRESIGN_SIZE_EXCEEDED);
+        }
+
+        // 3. 키 생성 + 프리사인 PUT 발급
+        String key = request.getDomain().getPrefix() + UUID.randomUUID() + extension;
+        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                .bucket(bucket)
+                .key(key)
+                .contentType(request.getContentType())
+                .build();
+        PutObjectPresignRequest presignRequest = PutObjectPresignRequest.builder()
+                .signatureDuration(PRESIGN_TTL)
+                .putObjectRequest(putObjectRequest)
+                .build();
+        PresignedPutObjectRequest presigned = s3Presigner.presignPutObject(presignRequest);
+
+        log.info("[S3 프리사인 발급] key: {}", key);
+
+        return S3PresignDto.Response.builder()
+                .uploadUrl(presigned.url().toString())
+                .fileUrl(cloudFrontUrl + "/" + key)
+                .expiresInSeconds(PRESIGN_TTL.getSeconds())
+                .build();
     }
 
     @Override

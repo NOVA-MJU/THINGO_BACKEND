@@ -1,0 +1,425 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "MJU 명지도 리뷰 API",
+    "version": "v1.0.0",
+    "description": "명지도 장소(PLACE) 리뷰 기능. 키워드 태그 + 본문 + 사진/영상 후기, 좋아요 토글, 영상 프리사인 업로드, 신고/차단/자동숨김 연동을 다룹니다.\n\n공통 응답 래퍼: { \"status\": \"API 요청 성공\", \"data\": <값>, \"timestamp\": \"...\" }\n오류 응답: { \"status\": <int>, \"error\": <코드>, \"message\": <메시지> }\n\n조회(목록/상세/미디어/키워드)는 비로그인 허용(로그인 시 isLiked/isMine 부가). 작성/삭제/좋아요/프리사인은 로그인 필요. 운영자 검토 API는 OPERATOR 권한 필요."
+  },
+  "servers": [
+    { "url": "https://api.thingo.kr/api/v1" }
+  ],
+  "tags": [
+    { "name": "Review", "description": "리뷰 작성/조회/삭제" },
+    { "name": "ReviewLike", "description": "리뷰 좋아요 토글(알림 없음)" },
+    { "name": "ReviewMeta", "description": "미디어 스트립 / 키워드 카탈로그" },
+    { "name": "ReviewUpload", "description": "영상 프리사인 직접 업로드" },
+    { "name": "ReviewModeration", "description": "신고 자동 숨김 리뷰 운영자 검토(OPERATOR)" }
+  ],
+  "security": [ { "bearerAuth": [] } ],
+  "paths": {
+    "/reviews": {
+      "post": {
+        "tags": ["Review"],
+        "summary": "리뷰 작성",
+        "description": "PLACE 타입 장소에만 작성 가능(동아리방 club-room / 흡연부스 smoking 제외). 키워드 1~5개 필수, '적절한 키워드 없음(NONE_APPROPRIATE)'은 단독 선택만 허용, 비F&B 장소는 F&B 전용 키워드 선택 불가. 본문 최대 400자(비속어 자동 마스킹). 미디어 0~10개(사전 업로드된 URL). 성공 시 작성된 리뷰 상세를 반환합니다.",
+        "security": [ { "bearerAuth": [] } ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ReviewCreateRequest" },
+              "examples": {
+                "example": {
+                  "summary": "사진 1 + 영상 1 첨부",
+                  "value": {
+                    "pinId": 123,
+                    "keywords": ["TASTY", "VALUE", "KIND"],
+                    "content": "가성비 최고. 학식보다 낫다.",
+                    "media": [
+                      { "url": "https://thingo.kr/static/images/reviews/ab12.png", "mediaType": "IMAGE" },
+                      { "url": "https://thingo.kr/static/images/reviews/cd34.mp4", "mediaType": "VIDEO" }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "작성 성공",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ApiSuccess_ReviewDetail" } } }
+          },
+          "400": {
+            "description": "검증 실패",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+                "examples": {
+                  "category": { "summary": "리뷰 불가 장소", "value": { "status": 400, "error": "REVIEW_NOT_ALLOWED_FOR_CATEGORY", "message": "[MJS] 해당 장소는 리뷰를 작성할 수 없습니다." } },
+                  "keywordCount": { "summary": "키워드 개수", "value": { "status": 400, "error": "REVIEW_KEYWORD_COUNT_INVALID", "message": "[MJS] 키워드는 1개 이상 5개 이하로 선택해야 합니다." } },
+                  "keywordCombo": { "summary": "적절없음 단독", "value": { "status": 400, "error": "REVIEW_KEYWORD_COMBINATION_INVALID", "message": "[MJS] '적절한 키워드 없음'은 단독으로만 선택할 수 있습니다." } },
+                  "keywordCategory": { "summary": "F&B 전용 키워드", "value": { "status": 400, "error": "REVIEW_KEYWORD_NOT_ALLOWED_FOR_CATEGORY", "message": "[MJS] 해당 장소에서 사용할 수 없는 키워드입니다." } },
+                  "mediaLimit": { "summary": "미디어 초과", "value": { "status": 400, "error": "REVIEW_MEDIA_LIMIT_EXCEEDED", "message": "[MJS] 사진·영상은 최대 10개까지 첨부할 수 있습니다." } },
+                  "malformed": { "summary": "잘못된 enum/본문", "value": { "status": 400, "error": "MALFORMED_REQUEST_BODY", "message": "[MJS] 요청 본문 형식이 올바르지 않습니다. (필드 타입/enum 값을 확인해 주세요)" } },
+                  "validation": { "summary": "필수값 검증", "value": { "status": 400, "error": "VALIDATION_FAILED", "message": "content : 공백일 수 없습니다" } }
+                }
+              }
+            }
+          },
+          "403": { "description": "미인증", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
+          "404": {
+            "description": "장소 없음",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" }, "examples": { "pin": { "value": { "status": 404, "error": "MAP_PIN_NOT_FOUND", "message": "[MJS] 해당 건물/장소를 찾을 수 없습니다." } } } } }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Review"],
+        "summary": "장소별 리뷰 목록(최신순)",
+        "description": "특정 장소의 리뷰를 최신순(createdAt DESC)으로 페이지 조회합니다. 자동 숨김(hidden) 리뷰는 제외되며, 로그인 시 차단한(양방향) 사용자의 리뷰도 제외됩니다. 로그인 시 isLiked/isMine이 계산됩니다.",
+        "security": [],
+        "parameters": [
+          { "name": "pinId", "in": "query", "required": true, "schema": { "type": "integer", "format": "int64" }, "description": "장소(Pin) id" },
+          { "name": "sort", "in": "query", "schema": { "type": "string", "default": "latest", "enum": ["latest"] }, "description": "정렬(현재 최신순만)" },
+          { "name": "page", "in": "query", "schema": { "type": "integer", "default": 0, "minimum": 0 } },
+          { "name": "size", "in": "query", "schema": { "type": "integer", "default": 10, "minimum": 1 } }
+        ],
+        "responses": {
+          "200": {
+            "description": "목록",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ApiSuccess_ReviewPage" },
+                "examples": {
+                  "example": {
+                    "value": {
+                      "status": "API 요청 성공",
+                      "data": {
+                        "content": [
+                          {
+                            "reviewUuid": "aaaabbbb-cccc-dddd-eeee-ffff00001111",
+                            "author": { "nickname": "길동", "profileImageUrl": null },
+                            "keywords": [ { "code": "TASTY", "emoji": "🤤", "label": "맛있음" }, { "code": "VALUE", "emoji": "🐷", "label": "가성비" } ],
+                            "content": "가성비 최고. 학식보다 낫다.",
+                            "media": [ { "url": "https://thingo.kr/static/images/reviews/ab12.png", "mediaType": "IMAGE", "sortOrder": 0 } ],
+                            "likeCount": 3,
+                            "isLiked": false,
+                            "isMine": false,
+                            "createdAt": "2026-07-14T12:30:00"
+                          }
+                        ],
+                        "totalElements": 42,
+                        "totalPages": 5,
+                        "number": 0,
+                        "size": 10
+                      },
+                      "timestamp": "2026-07-14T12:30:05"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "pinId 누락", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" }, "examples": { "missing": { "value": { "status": 400, "error": "MISSING_PARAMETER", "message": "Required request parameter 'pinId' ... is not present" } } } } } }
+        }
+      }
+    },
+    "/reviews/{reviewUuid}": {
+      "get": {
+        "tags": ["Review"],
+        "summary": "리뷰 단건 상세",
+        "description": "리뷰 상세를 조회합니다. 존재하지 않거나, 자동 숨김(hidden) 상태이거나, 차단 관계인 작성자의 리뷰는 404 REVIEW_NOT_FOUND로 숨깁니다.",
+        "security": [],
+        "parameters": [ { "name": "reviewUuid", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } } ],
+        "responses": {
+          "200": { "description": "상세", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ApiSuccess_ReviewDetail" } } } },
+          "404": { "description": "없음/숨김/차단", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" }, "examples": { "notFound": { "value": { "status": 404, "error": "REVIEW_NOT_FOUND", "message": "[MJS] 요청한 리뷰를 찾을 수 없습니다." } } } } } }
+        }
+      },
+      "delete": {
+        "tags": ["Review"],
+        "summary": "리뷰 삭제",
+        "description": "작성자 또는 OPERATOR만 삭제할 수 있습니다. 첨부 미디어는 S3에서 정리되고 하드 삭제됩니다.",
+        "security": [ { "bearerAuth": [] } ],
+        "parameters": [ { "name": "reviewUuid", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } } ],
+        "responses": {
+          "204": { "description": "삭제 성공(본문 없음)" },
+          "403": { "description": "권한 없음", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" }, "examples": { "forbidden": { "value": { "status": 403, "error": "REVIEW_FORBIDDEN", "message": "[MJS] 리뷰를 삭제할 권한이 없습니다." } } } } } },
+          "404": { "description": "없음", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
+    },
+    "/reviews/{reviewUuid}/like": {
+      "post": {
+        "tags": ["ReviewLike"],
+        "summary": "좋아요 토글",
+        "description": "좋아요가 없으면 추가(+1, liked=true), 있으면 취소(-1, liked=false). 알림은 발송하지 않습니다(정책: 알림은 학교 공식 정보 전용).",
+        "security": [ { "bearerAuth": [] } ],
+        "parameters": [ { "name": "reviewUuid", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } } ],
+        "responses": {
+          "200": { "description": "토글 결과", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ApiSuccess_LikeResult" }, "examples": { "liked": { "value": { "status": "API 요청 성공", "data": { "liked": true, "likeCount": 4 }, "timestamp": "2026-07-14T12:30:00" } } } } } },
+          "403": { "description": "미인증", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
+          "404": { "description": "리뷰 없음", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
+    },
+    "/reviews/media": {
+      "get": {
+        "tags": ["ReviewMeta"],
+        "summary": "장소 상세 상단 사진·영상 스트립",
+        "description": "최신 리뷰부터 미디어를 평탄화해 limit개까지 반환합니다. 자동 숨김/차단 사용자 미디어는 제외됩니다. 클릭 시 프론트는 reviewUuid 상세로 이동합니다.",
+        "security": [],
+        "parameters": [
+          { "name": "pinId", "in": "query", "required": true, "schema": { "type": "integer", "format": "int64" } },
+          { "name": "limit", "in": "query", "schema": { "type": "integer", "default": 10, "minimum": 1 } }
+        ],
+        "responses": {
+          "200": { "description": "미디어 배열", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ApiSuccess_MediaStripList" }, "examples": { "example": { "value": { "status": "API 요청 성공", "data": [ { "reviewUuid": "aaaabbbb-cccc-dddd-eeee-ffff00001111", "url": "https://thingo.kr/static/images/reviews/cd34.mp4", "mediaType": "VIDEO", "sortOrder": 0 } ], "timestamp": "2026-07-14T12:30:00" } } } } } }
+        }
+      }
+    },
+    "/reviews/keywords": {
+      "get": {
+        "tags": ["ReviewMeta"],
+        "summary": "작성 화면용 키워드 카탈로그",
+        "description": "리뷰 작성 화면이 보여줄 키워드 목록을 그룹별로 반환합니다. pinId가 F&B 장소면 F&B 전용 키워드(음식/가격 그룹 + '어른 식사 대접')를 포함하고, 비F&B면 제외합니다. pinId를 생략하면 전체(F&B 포함) 카탈로그를 반환합니다.",
+        "security": [],
+        "parameters": [ { "name": "pinId", "in": "query", "required": false, "schema": { "type": "integer", "format": "int64" } } ],
+        "responses": {
+          "200": { "description": "카탈로그", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ApiSuccess_KeywordCatalog" }, "examples": { "example": { "value": { "status": "API 요청 성공", "data": { "isFnb": true, "groups": [ { "group": "FOOD_PRICE", "label": "음식/가격", "keywords": [ { "code": "TASTY", "emoji": "🤤", "label": "맛있음" } ] }, { "group": "MOOD", "label": "분위기", "keywords": [] }, { "group": "ETC", "label": "기타", "keywords": [] } ] }, "timestamp": "2026-07-14T12:30:00" } } } } } },
+          "404": { "description": "장소 없음", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" }, "examples": { "pin": { "value": { "status": 404, "error": "MAP_PIN_NOT_FOUND", "message": "[MJS] 해당 건물/장소를 찾을 수 없습니다." } } } } } }
+        }
+      }
+    },
+    "/s3/presign": {
+      "post": {
+        "tags": ["ReviewUpload"],
+        "summary": "영상 프리사인 PUT URL 발급",
+        "description": "영상 등 대용량 미디어를 S3에 직접 업로드하기 위한 프리사인 PUT URL을 발급합니다. 앱 서버는 바이트를 거치지 않습니다. 허용 Content-Type: video/mp4, video/quicktime, video/webm, image/jpeg, image/png, image/webp. 상한 50MB, 유효시간 5분. 발급받은 uploadUrl로 직접 PUT한 뒤, fileUrl을 리뷰 작성 요청 media[].url에 담습니다.",
+        "security": [ { "bearerAuth": [] } ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PresignRequest" }, "examples": { "video": { "value": { "domain": "REVIEW_MEDIA", "contentType": "video/mp4", "fileSize": 12582912 } } } } }
+        },
+        "responses": {
+          "200": { "description": "발급 성공", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ApiSuccess_Presign" }, "examples": { "example": { "value": { "status": "API 요청 성공", "data": { "uploadUrl": "https://s3-thingo.s3.ap-northeast-2.amazonaws.com/static/images/reviews/uuid.mp4?X-Amz-...", "fileUrl": "https://thingo.kr/static/images/reviews/uuid.mp4", "expiresInSeconds": 300 }, "timestamp": "2026-07-14T12:30:00" } } } } } },
+          "400": { "description": "형식/용량 위반", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" }, "examples": { "type": { "value": { "status": 400, "error": "S3_PRESIGN_UNSUPPORTED_TYPE", "message": "[MJS] 지원하지 않는 파일 형식입니다." } }, "size": { "value": { "status": 400, "error": "S3_PRESIGN_SIZE_EXCEEDED", "message": "[MJS] 파일 용량이 허용 범위를 초과했습니다." } } } } } },
+          "403": { "description": "미인증", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
+    },
+    "/reviews/moderation/hidden": {
+      "get": {
+        "tags": ["ReviewModeration"],
+        "summary": "자동 숨김된 리뷰 목록(운영자)",
+        "description": "신고 누적 임계(기본 5명) 초과로 자동 숨김된 리뷰 목록을 최신순으로 반환합니다. OPERATOR 권한 필요.",
+        "security": [ { "bearerAuth": [] } ],
+        "responses": {
+          "200": { "description": "숨김 리뷰 목록", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ApiSuccess_ReviewSummaryList" } } } },
+          "403": { "description": "권한 없음", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
+    },
+    "/reviews/moderation/{reviewUuid}/restore": {
+      "patch": {
+        "tags": ["ReviewModeration"],
+        "summary": "리뷰 숨김 해제(운영자)",
+        "description": "운영자 검토 후 자동 숨김된 리뷰를 정상 복원합니다. OPERATOR 권한 필요.",
+        "security": [ { "bearerAuth": [] } ],
+        "parameters": [ { "name": "reviewUuid", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } } ],
+        "responses": {
+          "200": { "description": "복원 성공", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ApiSuccess_Void" } } } },
+          "403": { "description": "권한 없음", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
+          "404": { "description": "리뷰 없음", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": { "type": "http", "scheme": "bearer", "bearerFormat": "JWT" }
+    },
+    "schemas": {
+      "ReviewKeywordCode": {
+        "type": "string",
+        "description": "리뷰 키워드 코드. F&B 전용(fbOnly)은 음식/가격 6개 + ADULT_MEAL.",
+        "enum": [
+          "TASTY", "REVISIT", "VALUE", "GENEROUS", "FRESH", "NOT_BAD",
+          "CLEAN_LOOK", "COZY", "GOOD_VIBE", "LUXURIOUS", "FOCUS", "SOLO_DINING",
+          "KIND", "HYGIENIC", "CLEAN_RESTROOM", "GROUP_OK", "ADULT_MEAL", "NONE_APPROPRIATE"
+        ]
+      },
+      "MediaType": { "type": "string", "enum": ["IMAGE", "VIDEO"] },
+      "ReviewCreateRequest": {
+        "type": "object",
+        "required": ["pinId", "keywords", "content"],
+        "properties": {
+          "pinId": { "type": "integer", "format": "int64", "description": "리뷰 대상 장소 id (PLACE, 동아리방/흡연부스 제외)" },
+          "keywords": { "type": "array", "minItems": 1, "maxItems": 5, "items": { "$ref": "#/components/schemas/ReviewKeywordCode" }, "description": "1~5개. NONE_APPROPRIATE는 단독. 비F&B는 fbOnly 키워드 불가." },
+          "content": { "type": "string", "maxLength": 400, "description": "본문 평문(비속어 자동 마스킹)" },
+          "media": { "type": "array", "maxItems": 10, "items": { "$ref": "#/components/schemas/MediaItemRequest" } }
+        }
+      },
+      "MediaItemRequest": {
+        "type": "object",
+        "required": ["url", "mediaType"],
+        "properties": {
+          "url": { "type": "string", "description": "사전 업로드된 CloudFront URL (https://thingo.kr/...)" },
+          "mediaType": { "$ref": "#/components/schemas/MediaType" }
+        }
+      },
+      "KeywordTag": {
+        "type": "object",
+        "properties": {
+          "code": { "type": "string" },
+          "emoji": { "type": "string" },
+          "label": { "type": "string" }
+        }
+      },
+      "MediaInfo": {
+        "type": "object",
+        "properties": {
+          "url": { "type": "string" },
+          "mediaType": { "$ref": "#/components/schemas/MediaType" },
+          "sortOrder": { "type": "integer" }
+        }
+      },
+      "AuthorInfo": {
+        "type": "object",
+        "properties": {
+          "nickname": { "type": "string" },
+          "profileImageUrl": { "type": "string", "nullable": true }
+        }
+      },
+      "ReviewSummary": {
+        "type": "object",
+        "properties": {
+          "reviewUuid": { "type": "string", "format": "uuid" },
+          "author": { "$ref": "#/components/schemas/AuthorInfo" },
+          "keywords": { "type": "array", "items": { "$ref": "#/components/schemas/KeywordTag" }, "description": "표시용 태그. NONE_APPROPRIATE만 선택한 경우 빈 배열." },
+          "content": { "type": "string" },
+          "media": { "type": "array", "items": { "$ref": "#/components/schemas/MediaInfo" } },
+          "likeCount": { "type": "integer" },
+          "isLiked": { "type": "boolean" },
+          "isMine": { "type": "boolean" },
+          "createdAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "ReviewDetail": {
+        "type": "object",
+        "properties": {
+          "reviewUuid": { "type": "string", "format": "uuid" },
+          "pinId": { "type": "integer", "format": "int64" },
+          "author": { "$ref": "#/components/schemas/AuthorInfo" },
+          "keywords": { "type": "array", "items": { "$ref": "#/components/schemas/KeywordTag" } },
+          "content": { "type": "string" },
+          "media": { "type": "array", "items": { "$ref": "#/components/schemas/MediaInfo" } },
+          "likeCount": { "type": "integer" },
+          "isLiked": { "type": "boolean" },
+          "isMine": { "type": "boolean" },
+          "canDelete": { "type": "boolean" },
+          "createdAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "MediaStripItem": {
+        "type": "object",
+        "properties": {
+          "reviewUuid": { "type": "string", "format": "uuid" },
+          "url": { "type": "string" },
+          "mediaType": { "$ref": "#/components/schemas/MediaType" },
+          "sortOrder": { "type": "integer" }
+        }
+      },
+      "LikeResult": {
+        "type": "object",
+        "properties": {
+          "liked": { "type": "boolean" },
+          "likeCount": { "type": "integer" }
+        }
+      },
+      "GroupCatalog": {
+        "type": "object",
+        "properties": {
+          "group": { "type": "string", "enum": ["FOOD_PRICE", "MOOD", "ETC"] },
+          "label": { "type": "string" },
+          "keywords": { "type": "array", "items": { "$ref": "#/components/schemas/KeywordTag" } }
+        }
+      },
+      "KeywordCatalog": {
+        "type": "object",
+        "properties": {
+          "isFnb": { "type": "boolean" },
+          "groups": { "type": "array", "items": { "$ref": "#/components/schemas/GroupCatalog" } }
+        }
+      },
+      "PresignRequest": {
+        "type": "object",
+        "required": ["domain", "contentType"],
+        "properties": {
+          "domain": { "type": "string", "enum": ["REVIEW_MEDIA"], "description": "S3 도메인 타입(영상은 REVIEW_MEDIA)" },
+          "contentType": { "type": "string", "description": "MIME 타입", "enum": ["video/mp4", "video/quicktime", "video/webm", "image/jpeg", "image/png", "image/webp"] },
+          "fileSize": { "type": "integer", "format": "int64", "description": "바이트. 최대 52428800(50MB)" }
+        }
+      },
+      "PresignResponse": {
+        "type": "object",
+        "properties": {
+          "uploadUrl": { "type": "string", "description": "프리사인 PUT URL(S3 직접 업로드)" },
+          "fileUrl": { "type": "string", "description": "최종 CloudFront URL(리뷰 저장용)" },
+          "expiresInSeconds": { "type": "integer", "format": "int64" }
+        }
+      },
+      "ReviewPage": {
+        "type": "object",
+        "properties": {
+          "content": { "type": "array", "items": { "$ref": "#/components/schemas/ReviewSummary" } },
+          "totalElements": { "type": "integer", "format": "int64" },
+          "totalPages": { "type": "integer" },
+          "number": { "type": "integer" },
+          "size": { "type": "integer" }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "integer", "description": "HTTP 상태 코드" },
+          "error": { "type": "string", "description": "오류 코드" },
+          "message": { "type": "string", "description": "오류 메시지" }
+        }
+      },
+      "ApiSuccess_ReviewDetail": {
+        "type": "object",
+        "properties": { "status": { "type": "string" }, "data": { "$ref": "#/components/schemas/ReviewDetail" }, "timestamp": { "type": "string", "format": "date-time" } }
+      },
+      "ApiSuccess_ReviewPage": {
+        "type": "object",
+        "properties": { "status": { "type": "string" }, "data": { "$ref": "#/components/schemas/ReviewPage" }, "timestamp": { "type": "string", "format": "date-time" } }
+      },
+      "ApiSuccess_ReviewSummaryList": {
+        "type": "object",
+        "properties": { "status": { "type": "string" }, "data": { "type": "array", "items": { "$ref": "#/components/schemas/ReviewSummary" } }, "timestamp": { "type": "string", "format": "date-time" } }
+      },
+      "ApiSuccess_LikeResult": {
+        "type": "object",
+        "properties": { "status": { "type": "string" }, "data": { "$ref": "#/components/schemas/LikeResult" }, "timestamp": { "type": "string", "format": "date-time" } }
+      },
+      "ApiSuccess_MediaStripList": {
+        "type": "object",
+        "properties": { "status": { "type": "string" }, "data": { "type": "array", "items": { "$ref": "#/components/schemas/MediaStripItem" } }, "timestamp": { "type": "string", "format": "date-time" } }
+      },
+      "ApiSuccess_KeywordCatalog": {
+        "type": "object",
+        "properties": { "status": { "type": "string" }, "data": { "$ref": "#/components/schemas/KeywordCatalog" }, "timestamp": { "type": "string", "format": "date-time" } }
+      },
+      "ApiSuccess_Presign": {
+        "type": "object",
+        "properties": { "status": { "type": "string" }, "data": { "$ref": "#/components/schemas/PresignResponse" }, "timestamp": { "type": "string", "format": "date-time" } }
+      },
+      "ApiSuccess_Void": {
+        "type": "object",
+        "properties": { "status": { "type": "string" }, "data": { "type": "object", "nullable": true }, "timestamp": { "type": "string", "format": "date-time" } }
+      }
+    }
+  }
+}

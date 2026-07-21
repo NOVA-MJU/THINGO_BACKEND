@@ -32,6 +32,13 @@ public interface PinRepository extends JpaRepository<Pin, Long> {
     Optional<Pin> findByCode(String code);
 
     /**
+     * 리뷰 도메인 등 타 도메인이 카테고리/그룹까지 즉시 필요할 때 쓰는 단건 조회.
+     * (리뷰 작성 시 type/카테고리 코드/그룹 코드(F&B 판정)를 트랜잭션 밖에서도 안전하게 접근)
+     */
+    @Query("select p from Pin p join fetch p.category c join fetch c.group where p.id = :id")
+    Optional<Pin> findByIdWithCategoryGroup(@Param("id") Long id);
+
+    /**
      * 검색용 전체 핀 조회. 관련도 스코어링/카드 구성에 필요한 연관을 fetch join으로 함께 로딩한다.
      * (카테고리는 이름·라벨·아이콘, 소속 건물/층은 내부 장소의 위치·운영시간 상속에 쓰인다)
      * 캠퍼스 규모(핀 수백 개)라 전체를 메모리에 올려 스코어링해도 충분하다.

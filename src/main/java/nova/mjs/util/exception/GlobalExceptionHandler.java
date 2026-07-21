@@ -7,6 +7,7 @@ import org.hibernate.PropertyValueException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -55,6 +56,14 @@ public class GlobalExceptionHandler {
             return createErrorResponseEntity(HttpStatus.BAD_REQUEST, "INVALID_UUID", errorMessage);
         }
         return createErrorResponseEntity(HttpStatus.BAD_REQUEST, "TYPE_MISMATCH", ex.getMessage());
+    }
+
+    // 본문 파싱 실패(깨진 JSON, 잘못된 enum 값 등) → 500 대신 400으로 정돈
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
+        log.warn("요청 본문 해석 실패: {}", ex.getMessage());
+        return createErrorResponseEntity(HttpStatus.BAD_REQUEST, "MALFORMED_REQUEST_BODY",
+                "[MJS] 요청 본문 형식이 올바르지 않습니다. (필드 타입/enum 값을 확인해 주세요)");
     }
 
     // 형식에 맞지 않는 요청

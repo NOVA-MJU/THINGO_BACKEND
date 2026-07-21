@@ -55,6 +55,8 @@ public enum ErrorCode {
 
     // S3 이미지 증록 에러
     S3_IMAGE_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "S3_IMAGE_UPLOAD_FAILED", "[MJS] S3 이미지 업로드에서 에러가 발생하였습니다."),
+    S3_PRESIGN_UNSUPPORTED_TYPE(HttpStatus.BAD_REQUEST, "S3_PRESIGN_UNSUPPORTED_TYPE", "[MJS] 지원하지 않는 파일 형식입니다."),
+    S3_PRESIGN_SIZE_EXCEEDED(HttpStatus.BAD_REQUEST, "S3_PRESIGN_SIZE_EXCEEDED", "[MJS] 파일 용량이 허용 범위를 초과했습니다."),
     
     
     // 회원 에러(M)
@@ -119,7 +121,17 @@ public enum ErrorCode {
 
     // 차단(Block) 관련 에러 (BL)
     BLOCK_SELF_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "BLOCK_SELF_NOT_ALLOWED", "[MJS] 자기 자신은 차단할 수 없습니다."),
-    BLOCK_NOT_FOUND(HttpStatus.NOT_FOUND, "BLOCK_NOT_FOUND", "[MJS] 차단 내역을 찾을 수 없습니다.");
+    BLOCK_NOT_FOUND(HttpStatus.NOT_FOUND, "BLOCK_NOT_FOUND", "[MJS] 차단 내역을 찾을 수 없습니다."),
+
+    // 명지도 리뷰(Review) 관련 에러 (RV)
+    REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "REVIEW_NOT_FOUND", "[MJS] 요청한 리뷰를 찾을 수 없습니다."),
+    REVIEW_FORBIDDEN(HttpStatus.FORBIDDEN, "REVIEW_FORBIDDEN", "[MJS] 리뷰를 삭제할 권한이 없습니다."),
+    REVIEW_NOT_ALLOWED_FOR_CATEGORY(HttpStatus.BAD_REQUEST, "REVIEW_NOT_ALLOWED_FOR_CATEGORY", "[MJS] 해당 장소는 리뷰를 작성할 수 없습니다."),
+    REVIEW_KEYWORD_COUNT_INVALID(HttpStatus.BAD_REQUEST, "REVIEW_KEYWORD_COUNT_INVALID", "[MJS] 키워드는 1개 이상 5개 이하로 선택해야 합니다."),
+    REVIEW_KEYWORD_COMBINATION_INVALID(HttpStatus.BAD_REQUEST, "REVIEW_KEYWORD_COMBINATION_INVALID", "[MJS] '적절한 키워드 없음'은 단독으로만 선택할 수 있습니다."),
+    REVIEW_KEYWORD_NOT_ALLOWED_FOR_CATEGORY(HttpStatus.BAD_REQUEST, "REVIEW_KEYWORD_NOT_ALLOWED_FOR_CATEGORY", "[MJS] 해당 장소에서 사용할 수 없는 키워드입니다."),
+    REVIEW_MEDIA_LIMIT_EXCEEDED(HttpStatus.BAD_REQUEST, "REVIEW_MEDIA_LIMIT_EXCEEDED", "[MJS] 사진·영상은 최대 10개까지 첨부할 수 있습니다."),
+    REVIEW_MEDIA_INVALID(HttpStatus.BAD_REQUEST, "REVIEW_MEDIA_INVALID", "[MJS] 유효하지 않은 미디어 요청입니다.");
 
     private final HttpStatus status;
     private final String error;

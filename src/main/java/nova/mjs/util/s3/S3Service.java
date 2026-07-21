@@ -1,5 +1,6 @@
 package nova.mjs.util.s3;
 
+import nova.mjs.util.s3.dto.S3PresignDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -23,6 +24,15 @@ public interface S3Service {
      * @throws IOException 파일 읽기/업로드 중 오류 발생 시
      */
     String uploadFile(MultipartFile file, S3DomainType domainType) throws IOException;
+
+    /**
+     * 프리사인 PUT URL을 발급합니다(영상 등 대용량 직접 업로드용).
+     * 서버는 바이트를 거치지 않고, 클라이언트가 반환된 uploadUrl로 S3에 직접 PUT합니다.
+     *
+     * @param request 도메인/Content-Type/파일크기
+     * @return uploadUrl(프리사인 PUT) + fileUrl(최종 CloudFront URL) + 만료시간
+     */
+    S3PresignDto.Response presignPut(S3PresignDto.Request request);
 
     /**
      * 지정한 S3 Key의 객체 존재 여부를 확인합니다.

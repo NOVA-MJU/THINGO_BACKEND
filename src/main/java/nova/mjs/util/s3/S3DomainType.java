@@ -17,7 +17,8 @@ public enum S3DomainType {
     DEPARTMENT_SCHEDULE("static/images/departments/schedules/"),
     STUDENT_COUNCIL_NOTICE("static/image/departments/student-council/notice"),
     BANNER("static/images/banners/"),
-    MAP("static/images/map/");
+    MAP("static/images/map/"),
+    REVIEW_MEDIA("static/images/reviews/");
 
     private final String prefix;
 
