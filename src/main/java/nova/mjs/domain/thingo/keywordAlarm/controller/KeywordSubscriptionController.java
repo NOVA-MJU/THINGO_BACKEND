@@ -17,11 +17,12 @@ import java.util.List;
  * 키워드 알림 설정 컨트롤러 (화면 06-2-3).
  *
  * [제공 API]
- * - POST   /api/v1/keyword-alarms             - 키워드 등록 (로그인 필요)
- * - GET    /api/v1/keyword-alarms             - 내 키워드 목록 (로그인 필요)
- * - PATCH  /api/v1/keyword-alarms/{id}        - 카테고리 수정 (로그인 필요)
- * - DELETE /api/v1/keyword-alarms/{id}        - 키워드 삭제 (로그인 필요)
- * - GET    /api/v1/keyword-alarms/recommended - 추천 키워드(고정값)
+ * - POST   /api/v1/keyword-alarms              - 키워드 등록 (로그인 필요)
+ * - GET    /api/v1/keyword-alarms              - 내 키워드 목록 (로그인 필요)
+ * - PATCH  /api/v1/keyword-alarms/{id}         - 키워드/카테고리 수정 (로그인 필요)
+ * - PATCH  /api/v1/keyword-alarms/{id}/enabled - 알림 on/off (로그인 필요)
+ * - DELETE /api/v1/keyword-alarms/{id}         - 키워드 삭제 (로그인 필요)
+ * - GET    /api/v1/keyword-alarms/recommended  - 추천 키워드(고정값)
  */
 @Slf4j
 @RestController
@@ -51,16 +52,28 @@ public class KeywordSubscriptionController {
         return ApiResponse.success(keywordSubscriptionService.getMySubscriptions(userPrincipal.getUsername()));
     }
 
-    /** 카테고리 수정 */
+    /** 키워드/카테고리 수정 (키워드 + 카테고리 전체 교체) */
     @PreAuthorize("isAuthenticated()")
     @PatchMapping("/{id}")
-    public ApiResponse<KeywordSubscriptionDTO.Response.Detail> updateCategories(
+    public ApiResponse<KeywordSubscriptionDTO.Response.Detail> update(
             @PathVariable("id") Long id,
-            @Valid @RequestBody KeywordSubscriptionDTO.Request.UpdateCategories request,
+            @Valid @RequestBody KeywordSubscriptionDTO.Request.Update request,
             @AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
         log.info("[키워드 알림 수정] email={}, id={}", userPrincipal.getUsername(), id);
-        return ApiResponse.success(keywordSubscriptionService.updateCategories(userPrincipal.getUsername(), id, request));
+        return ApiResponse.success(keywordSubscriptionService.update(userPrincipal.getUsername(), id, request));
+    }
+
+    /** 키워드 알림 on/off (스위치) */
+    @PreAuthorize("isAuthenticated()")
+    @PatchMapping("/{id}/enabled")
+    public ApiResponse<KeywordSubscriptionDTO.Response.Detail> updateEnabled(
+            @PathVariable("id") Long id,
+            @Valid @RequestBody KeywordSubscriptionDTO.Request.UpdateEnabled request,
+            @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
+        log.info("[키워드 알림 on/off] email={}, id={}, enabled={}", userPrincipal.getUsername(), id, request.getEnabled());
+        return ApiResponse.success(keywordSubscriptionService.updateEnabled(userPrincipal.getUsername(), id, request));
     }
 
     /** 키워드 삭제 */

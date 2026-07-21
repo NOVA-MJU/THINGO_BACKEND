@@ -78,18 +78,48 @@ public class KeywordSubscriptionService {
     }
 
     /**
-     * 구독의 알림 카테고리를 교체한다.
+     * 구독의 키워드와 알림 카테고리를 교체한다.
+     *
+     * INSERT-only 매칭이라 키워드 변경은 과거 콘텐츠에 소급되지 않고 이후 신규 콘텐츠부터 적용된다.
      */
     @Transactional
-    public KeywordSubscriptionDTO.Response.Detail updateCategories(
-            String email, Long subscriptionId, KeywordSubscriptionDTO.Request.UpdateCategories request) {
+    public KeywordSubscriptionDTO.Response.Detail update(
+            String email, Long subscriptionId, KeywordSubscriptionDTO.Request.Update request) {
         // 1. 회원 + 소유 구독 조회(소유권 동시 검증)
         Member member = findMember(email);
         KeywordSubscription subscription = findOwnedSubscription(subscriptionId, member);
 
-        // 2. 카테고리 교체
+        // 2. 키워드 정규화(앞뒤 공백 제거). @Pattern 으로 내부 공백은 이미 차단됨.
+        String keyword = request.getKeyword().trim();
+
+        // 3. 키워드가 바뀌는 경우에만 (member, keyword) 중복 재검사(자기 자신은 그대로 통과)
+        if (!keyword.equals(subscription.getKeyword())
+                && keywordSubscriptionRepository.existsByMemberAndKeyword(member, keyword)) {
+            throw new DuplicateKeywordException();
+        }
+
+        // 4. 키워드 + 카테고리 교체
+        subscription.changeKeyword(keyword);
         subscription.updateCategories(request.getCategories());
-        log.info("키워드 알림 카테고리 수정 - email={}, id={}, categories={}", email, subscriptionId, request.getCategories());
+        log.info("키워드 알림 수정 - email={}, id={}, keyword={}, categories={}",
+                email, subscriptionId, keyword, request.getCategories());
+
+        return KeywordSubscriptionDTO.Response.Detail.from(subscription);
+    }
+
+    /**
+     * 구독의 알림 on/off 를 변경한다. off 면 발송 경로에서 제외되고, 구독과 과거 알림 내역은 유지된다.
+     */
+    @Transactional
+    public KeywordSubscriptionDTO.Response.Detail updateEnabled(
+            String email, Long subscriptionId, KeywordSubscriptionDTO.Request.UpdateEnabled request) {
+        // 1. 회원 + 소유 구독 조회(소유권 동시 검증)
+        Member member = findMember(email);
+        KeywordSubscription subscription = findOwnedSubscription(subscriptionId, member);
+
+        // 2. on/off 반영
+        subscription.changeEnabled(request.getEnabled());
+        log.info("키워드 알림 on/off 변경 - email={}, id={}, enabled={}", email, subscriptionId, request.getEnabled());
 
         return KeywordSubscriptionDTO.Response.Detail.from(subscription);
     }

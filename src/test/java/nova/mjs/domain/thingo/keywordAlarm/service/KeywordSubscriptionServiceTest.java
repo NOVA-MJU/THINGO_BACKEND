@@ -59,6 +59,19 @@ class KeywordSubscriptionServiceTest {
         return request;
     }
 
+    private KeywordSubscriptionDTO.Request.Update updateRequest(String keyword, Set<AlarmCategory> categories) {
+        KeywordSubscriptionDTO.Request.Update request = new KeywordSubscriptionDTO.Request.Update();
+        ReflectionTestUtils.setField(request, "keyword", keyword);
+        ReflectionTestUtils.setField(request, "categories", categories);
+        return request;
+    }
+
+    private KeywordSubscriptionDTO.Request.UpdateEnabled enabledRequest(boolean enabled) {
+        KeywordSubscriptionDTO.Request.UpdateEnabled request = new KeywordSubscriptionDTO.Request.UpdateEnabled();
+        ReflectionTestUtils.setField(request, "enabled", enabled);
+        return request;
+    }
+
     @Test
     @DisplayName("키워드 앞뒤 공백을 제거하고 저장한다")
     void should_trim키워드_when_등록시() {
@@ -120,23 +133,89 @@ class KeywordSubscriptionServiceTest {
     }
 
     @Test
-    @DisplayName("카테고리 수정 시 구독의 카테고리가 교체된다")
-    void should_replace카테고리_when_수정시() {
+    @DisplayName("수정 시 키워드가 그대로면 중복검사 없이 카테고리가 교체된다")
+    void should_replace카테고리_when_키워드동일_수정시() {
         // given
         Member member = 회원();
         KeywordSubscription subscription = 구독(10L, member, "장학", Set.of(AlarmCategory.NOTICE));
         given(memberRepository.findByEmail(EMAIL)).willReturn(Optional.of(member));
         given(keywordSubscriptionRepository.findByIdAndMember(10L, member)).willReturn(Optional.of(subscription));
 
-        KeywordSubscriptionDTO.Request.UpdateCategories request = new KeywordSubscriptionDTO.Request.UpdateCategories();
-        ReflectionTestUtils.setField(request, "categories", Set.of(AlarmCategory.MJU_CALENDAR, AlarmCategory.COMMUNITY));
-
         // when
-        KeywordSubscriptionDTO.Response.Detail result = keywordSubscriptionService.updateCategories(EMAIL, 10L, request);
+        KeywordSubscriptionDTO.Response.Detail result = keywordSubscriptionService.update(
+                EMAIL, 10L, updateRequest("장학", Set.of(AlarmCategory.MJU_CALENDAR, AlarmCategory.COMMUNITY)));
 
-        // then
+        // then - 키워드 동일 -> 중복검사 미호출, 카테고리만 교체
+        assertThat(result.getKeyword()).isEqualTo("장학");
         assertThat(result.getCategories())
                 .containsExactlyInAnyOrder(AlarmCategory.MJU_CALENDAR, AlarmCategory.COMMUNITY);
+        verify(keywordSubscriptionRepository, never())
+                .existsByMemberAndKeyword(org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.any());
+    }
+
+    @Test
+    @DisplayName("수정 시 키워드를 유일한 값으로 바꾸면 키워드가 교체된다")
+    void should_change키워드_when_수정시() {
+        // given
+        Member member = 회원();
+        KeywordSubscription subscription = 구독(10L, member, "장학", Set.of(AlarmCategory.NOTICE));
+        given(memberRepository.findByEmail(EMAIL)).willReturn(Optional.of(member));
+        given(keywordSubscriptionRepository.findByIdAndMember(10L, member)).willReturn(Optional.of(subscription));
+        given(keywordSubscriptionRepository.existsByMemberAndKeyword(member, "수강신청")).willReturn(false);
+
+        // when
+        KeywordSubscriptionDTO.Response.Detail result = keywordSubscriptionService.update(
+                EMAIL, 10L, updateRequest(" 수강신청 ", Set.of(AlarmCategory.NOTICE)));
+
+        // then - 앞뒤 공백 제거 + 키워드 교체
+        assertThat(result.getKeyword()).isEqualTo("수강신청");
+    }
+
+    @Test
+    @DisplayName("수정 시 이미 등록한 다른 키워드로 바꾸면 DuplicateKeywordException")
+    void should_throwDuplicate_when_수정_키워드중복시() {
+        // given
+        Member member = 회원();
+        KeywordSubscription subscription = 구독(10L, member, "장학", Set.of(AlarmCategory.NOTICE));
+        given(memberRepository.findByEmail(EMAIL)).willReturn(Optional.of(member));
+        given(keywordSubscriptionRepository.findByIdAndMember(10L, member)).willReturn(Optional.of(subscription));
+        given(keywordSubscriptionRepository.existsByMemberAndKeyword(member, "수강신청")).willReturn(true);
+
+        // when & then
+        assertThatThrownBy(() -> keywordSubscriptionService.update(
+                EMAIL, 10L, updateRequest("수강신청", Set.of(AlarmCategory.NOTICE))))
+                .isInstanceOf(DuplicateKeywordException.class);
+    }
+
+    @Test
+    @DisplayName("on/off 수정 시 enabled 값이 반영된다")
+    void should_toggle_enabled_when_수정시() {
+        // given
+        Member member = 회원();
+        KeywordSubscription subscription = 구독(10L, member, "장학", Set.of(AlarmCategory.NOTICE));
+        given(memberRepository.findByEmail(EMAIL)).willReturn(Optional.of(member));
+        given(keywordSubscriptionRepository.findByIdAndMember(10L, member)).willReturn(Optional.of(subscription));
+
+        // when
+        KeywordSubscriptionDTO.Response.Detail result =
+                keywordSubscriptionService.updateEnabled(EMAIL, 10L, enabledRequest(false));
+
+        // then
+        assertThat(result.isEnabled()).isFalse();
+        assertThat(subscription.isEnabled()).isFalse();
+    }
+
+    @Test
+    @DisplayName("타인의 구독을 on/off 하려 하면 NotFound로 차단된다")
+    void should_throwNotFound_when_타인구독_onoff시() {
+        // given
+        Member member = 회원();
+        given(memberRepository.findByEmail(EMAIL)).willReturn(Optional.of(member));
+        given(keywordSubscriptionRepository.findByIdAndMember(99L, member)).willReturn(Optional.empty());
+
+        // when & then
+        assertThatThrownBy(() -> keywordSubscriptionService.updateEnabled(EMAIL, 99L, enabledRequest(false)))
+                .isInstanceOf(KeywordSubscriptionNotFoundException.class);
     }
 
     @Test

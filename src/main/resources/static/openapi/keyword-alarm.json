@@ -3,7 +3,7 @@
   "info": {
     "title": "MJU 키워드 알림 API",
     "version": "v1.0.0",
-    "description": "# 🔔 키워드 알림, 3분만에 이해하기\n\n**한 줄 요약 —** 중고나라 키워드 알림과 똑같습니다. 관심 키워드를 등록해두면, 그 단어가 들어간 새 글이 올라올 때 앱으로 푸시가 옵니다.\n\n## 등장인물 3명\n- 📱 **앱(내 폰)** — 알림 받을 기기를 서버에 등록\n- 🖥️ **서버** — 새로 들어온 글을 키워드와 대조하고 발송 (크롤링·매칭·발송은 전부 서버가 담당)\n- 🚚 **FCM** — 실제로 폰까지 알림을 배달해 주는 택배기사\n\n## 전체 흐름\n1. 앱에서 알림 권한 허용 → FCM 토큰 발급\n2. `POST /device-tokens` — 그 토큰을 등록 (이 기기로 보내주세요)\n3. `POST /keyword-alarms` — 관심 키워드 + 카테고리 등록\n4. (서버) 새 공지·학사일정·게시판 글이 들어오면 **제목**을 키워드와 대조\n5. 걸리면 그 사용자의 **모든 기기로 FCM 푸시** 발송 + 알림함에 저장\n6. 앱은 푸시를 받거나 `GET /notifications` 로 알림함 확인\n\n## 프론트 호출 순서 (실전)\n1. 로그인 (JWT 발급)\n2. `POST /device-tokens` — 바디 { fcmToken, platform: ANDROID | IOS | WEB }\n3. `GET /keyword-alarms/recommended` — 추천 키워드 보여주기 (로그인 불필요)\n4. `POST /keyword-alarms` — 바디 { keyword, categories } 로 구독\n5. 알림함 조회 `GET /notifications` · 읽음 `PATCH /notifications/{id}/read` · 전체읽음 `PATCH /notifications/read-all`\n6. 로그아웃/알림끄기 `DELETE /device-tokens?fcmToken=...`\n\n## 꼭 기억할 것\n- **토큰만 등록하면 알림이 안 옵니다** — 키워드까지 등록해야 옵니다. (예외: 학식 `CAFETERIA`는 키워드 없이, 새 메뉴가 뜨면 구독자 전원에게 방송)\n- **제목 접두 매칭** — `장학` 등록 → `장학금 신청 안내`도 걸림\n- 키워드는 **공백 제외 1~5글자**\n- 토큰 등록은 **멱등** — 같은 토큰을 다시 보내도 안전 (자동 갱신, 다른 계정이면 현재 계정으로 재배정)\n- 카테고리: `NOTICE`(공지) · `MJU_CALENDAR`(학사일정) · `COMMUNITY`(게시판) 은 키워드 매칭 / `CAFETERIA`(학식) 은 전체 방송\n- `recommended` 를 뺀 모든 API는 **JWT 필요** (`Authorization: Bearer ...`)"
+    "description": "# 🔔 키워드 알림, 3분만에 이해하기\n\n**한 줄 요약 —** 중고나라 키워드 알림과 똑같습니다. 관심 키워드를 등록해두면, 그 단어가 들어간 새 글이 올라올 때 앱으로 푸시가 옵니다.\n\n## 등장인물 3명\n- 📱 **앱(내 폰)** — 알림 받을 기기를 서버에 등록\n- 🖥️ **서버** — 새로 들어온 글을 키워드와 대조하고 발송 (크롤링·매칭·발송은 전부 서버가 담당)\n- 🚚 **FCM** — 실제로 폰까지 알림을 배달해 주는 택배기사\n\n## 전체 흐름\n1. 앱에서 알림 권한 허용 → FCM 토큰 발급\n2. `POST /device-tokens` — 그 토큰을 등록 (이 기기로 보내주세요)\n3. `POST /keyword-alarms` — 관심 키워드 + 카테고리 등록\n4. (서버) 새 공지·학사일정·게시판 글이 들어오면 **제목**을 키워드와 대조\n5. 걸리면 그 사용자의 **모든 기기로 FCM 푸시** 발송 + 알림함에 저장\n6. 앱은 푸시를 받거나 `GET /notifications` 로 알림함 확인\n\n## 프론트 호출 순서 (실전)\n1. 로그인 (JWT 발급)\n2. `POST /device-tokens` — 바디 { fcmToken, platform: ANDROID | IOS | WEB }\n3. `GET /keyword-alarms/recommended` — 추천 키워드 보여주기 (로그인 불필요)\n4. `POST /keyword-alarms` — 바디 { keyword, categories } 로 구독\n5. 알림함 조회 `GET /notifications` · 읽음 `PATCH /notifications/{id}/read` · 전체읽음 `PATCH /notifications/read-all`\n6. 로그아웃/알림끄기 `DELETE /device-tokens?fcmToken=...`\n\n## 꼭 기억할 것\n- **토큰만 등록하면 알림이 안 옵니다** — 키워드까지 등록해야 옵니다. (예외: 학식 `CAFETERIA`는 키워드 없이, 새 메뉴가 뜨면 구독자 전원에게 방송)\n- **제목 접두 매칭** — `장학` 등록 → `장학금 신청 안내`도 걸림\n- 키워드는 **공백 제외 1~5글자**\n- 토큰 등록은 **멱등** — 같은 토큰을 다시 보내도 안전 (자동 갱신, 다른 계정이면 현재 계정으로 재배정)\n- 카테고리: `NOTICE`(공지) · `MJU_CALENDAR`(학사일정) · `COMMUNITY`(게시판) 은 키워드 매칭 / `CAFETERIA`(학식) 은 전체 방송\n- **키워드 수정** — `PATCH /keyword-alarms/{id}` 는 { keyword, categories } 전체 교체 (둘 다 필수). 바뀐 키워드는 이후 새 글부터 적용\n- **알림 on/off** — `PATCH /keyword-alarms/{id}/enabled` 바디 { enabled } 로 키워드별 스위치. 끄면 발송만 멈추고 구독·과거 알림함은 유지. 목록 응답의 `enabled` 로 현재 상태 확인\n- `recommended` 를 뺀 모든 API는 **JWT 필요** (`Authorization: Bearer ...`)"
   },
   "servers": [
     { "url": "https://api.thingo.kr/api/v1" }
@@ -56,7 +56,8 @@
     "/keyword-alarms/{id}": {
       "patch": {
         "tags": ["KeywordAlarm"],
-        "summary": "카테고리 수정",
+        "summary": "키워드/카테고리 수정",
+        "description": "키워드 + 카테고리를 함께 전체 교체한다(둘 다 필수). 키워드를 바꾸는 경우 (내 계정 안에서) 중복이면 400. 매칭은 INSERT-only 라 바뀐 키워드는 이후 새 글부터 적용되고 과거 글에는 소급되지 않는다.",
         "security": [ { "Authorization": [] } ],
         "parameters": [
           { "name": "id", "in": "path", "required": true, "schema": { "type": "integer", "format": "int64" } }
@@ -65,8 +66,8 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/UpdateCategoriesRequest" },
-              "example": { "categories": ["NOTICE"] }
+              "schema": { "$ref": "#/components/schemas/UpdateKeywordRequest" },
+              "example": { "keyword": "장학금", "categories": ["NOTICE", "COMMUNITY"] }
             }
           }
         },
@@ -74,6 +75,10 @@
           "200": {
             "description": "수정 성공",
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ApiSuccess_KeywordDetail" } } }
+          },
+          "400": {
+            "description": "검증 실패('올바른 형식의 키워드를 입력해 주세요.') 또는 중복('이미 등록된 키워드입니다.')",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } }
           },
           "404": {
             "description": "구독 없음 또는 타인 구독('키워드 알림 구독을 찾을 수 없습니다.')",
@@ -95,6 +100,40 @@
           },
           "404": {
             "description": "구독 없음 또는 타인 구독",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } }
+          }
+        }
+      }
+    },
+    "/keyword-alarms/{id}/enabled": {
+      "patch": {
+        "tags": ["KeywordAlarm"],
+        "summary": "알림 on/off",
+        "description": "키워드별 알림 스위치. false 로 끄면 이후 발송(키워드 매칭 + 학식 방송)에서 제외되고, 구독과 과거 알림함 내역은 그대로 유지된다. 멱등(같은 값 재전송 안전).",
+        "security": [ { "Authorization": [] } ],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer", "format": "int64" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateEnabledRequest" },
+              "example": { "enabled": false }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "변경 성공(수정된 구독 반환)",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ApiSuccess_KeywordDetail" } } }
+          },
+          "400": {
+            "description": "검증 실패('알림 활성 여부(enabled)를 지정해 주세요.')",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } }
+          },
+          "404": {
+            "description": "구독 없음 또는 타인 구독('키워드 알림 구독을 찾을 수 없습니다.')",
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } }
           }
         }
@@ -244,14 +283,34 @@
           }
         }
       },
-      "UpdateCategoriesRequest": {
+      "UpdateKeywordRequest": {
         "type": "object",
-        "required": ["categories"],
+        "required": ["keyword", "categories"],
+        "description": "키워드 + 카테고리 전체 교체(둘 다 필수)",
         "properties": {
+          "keyword": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 5,
+            "pattern": "^\\S+$",
+            "description": "공백 제외 1~5글자",
+            "example": "장학금"
+          },
           "categories": {
             "type": "array",
             "minItems": 1,
             "items": { "$ref": "#/components/schemas/AlarmCategory" }
+          }
+        }
+      },
+      "UpdateEnabledRequest": {
+        "type": "object",
+        "required": ["enabled"],
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "description": "true=알림 켬, false=알림 끔",
+            "example": false
           }
         }
       },
@@ -269,6 +328,7 @@
           "id": { "type": "integer", "format": "int64", "example": 12 },
           "keyword": { "type": "string", "example": "장학" },
           "categories": { "type": "array", "items": { "$ref": "#/components/schemas/AlarmCategory" } },
+          "enabled": { "type": "boolean", "description": "알림 on/off (false 면 발송 제외, 구독은 유지)", "example": true },
           "createdAt": { "type": "string", "format": "date-time", "example": "2026-06-30T19:40:00" }
         }
       },

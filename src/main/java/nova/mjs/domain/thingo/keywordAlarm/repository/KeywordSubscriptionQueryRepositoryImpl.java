@@ -36,6 +36,7 @@ public class KeywordSubscriptionQueryRepositoryImpl implements KeywordSubscripti
             JOIN keyword_subscription_category c
                  ON c.keyword_subscription_id = ks.keyword_subscription_id
             WHERE c.category = :category
+              AND ks.enabled = true
               AND %1$s <> ''
               AND to_tsvector('simple', cast(:docTokens AS text))
                   @@ to_tsquery('simple', %1$s || ':*')

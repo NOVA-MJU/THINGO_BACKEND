@@ -44,6 +44,13 @@ public class KeywordSubscription extends BaseEntity {
     private String keyword;
 
     /**
+     * 알림 on/off. false 면 발송 경로(키워드 매칭/학식 방송)에서 제외된다(구독은 유지).
+     * 기존 row 는 ddl-auto 가 default true 로 채운다.
+     */
+    @Column(name = "enabled", nullable = false, columnDefinition = "boolean not null default true")
+    private boolean enabled = true;
+
+    /**
      * 알림을 받을 카테고리 집합(1개 이상). 값이 적고 고정적이라 별도 엔티티 대신 @ElementCollection 사용.
      */
     @ElementCollection(fetch = FetchType.LAZY)
@@ -79,6 +86,20 @@ public class KeywordSubscription extends BaseEntity {
      */
     public void updateCategories(Set<AlarmCategory> categories) {
         this.categories = new LinkedHashSet<>(categories);
+    }
+
+    /**
+     * 감시 키워드를 교체한다. 중복(member, keyword) 검사는 호출부(서비스)가 책임진다.
+     */
+    public void changeKeyword(String keyword) {
+        this.keyword = keyword;
+    }
+
+    /**
+     * 알림 on/off 를 변경한다. 구독 자체는 유지하고 발송 대상 여부만 바꾼다.
+     */
+    public void changeEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     /**

@@ -186,6 +186,40 @@ class KeywordSubscriptionRepositoryIT {
     }
 
     @Test
+    @DisplayName("enabled=false 구독은 키워드 매칭에서 제외된다")
+    void should_not_match_when_disabled() {
+        // given
+        Member member = 영속회원("off-match@mju.ac.kr");
+        KeywordSubscription subscription = KeywordSubscription.of(member, "장학", Set.of(AlarmCategory.NOTICE));
+        subscription.changeEnabled(false);
+        repository.saveAndFlush(subscription);
+        String docTokens = KomoranTokenizerUtil.buildSearchTokens("2026 교내 장학금 신청 안내", null, "장학금 신청 안내");
+
+        // when & then - off 면 발송 대상 아님
+        assertThat(repository.findMatchingSubscriptions("NOTICE", docTokens)).isEmpty();
+    }
+
+    @Test
+    @DisplayName("enabled=false 학식 구독은 방송 대상에서 제외된다")
+    void should_exclude_disabled_cafeteria() {
+        // given
+        Member on = 영속회원("caf-on@mju.ac.kr");
+        Member off = 영속회원("caf-off@mju.ac.kr");
+        repository.saveAndFlush(KeywordSubscription.of(on, "학식알림", Set.of(AlarmCategory.CAFETERIA)));
+        KeywordSubscription disabled = KeywordSubscription.of(off, "학식끔", Set.of(AlarmCategory.CAFETERIA));
+        disabled.changeEnabled(false);
+        repository.saveAndFlush(disabled);
+        em.clear();
+
+        // when
+        List<KeywordSubscription> result = repository.findByCategoryWithMember(AlarmCategory.CAFETERIA);
+
+        // then - on 상태만
+        assertThat(result).hasSize(1);
+        assertThat(result.get(0).getMember().getEmail()).isEqualTo("caf-on@mju.ac.kr");
+    }
+
+    @Test
     @DisplayName("findByIdAndMember 는 소유자에게만 구독을 반환한다")
     void should_return_only_for_owner() {
         // given

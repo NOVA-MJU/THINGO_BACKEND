@@ -25,9 +25,9 @@ public interface KeywordSubscriptionRepository
     @EntityGraph(attributePaths = "categories")
     Optional<KeywordSubscription> findByIdAndMember(Long id, Member member);
 
-    /** 방송형 카테고리(예: 학식) 구독 전체 - 회원 함께 로딩(키워드 무관 발송용) */
+    /** 방송형 카테고리(예: 학식) 구독 전체 - 회원 함께 로딩(키워드 무관 발송용, on 상태만) */
     @Query("select distinct ks from KeywordSubscription ks "
             + "join fetch ks.member "
-            + "join ks.categories c where c = :category")
+            + "join ks.categories c where c = :category and ks.enabled = true")
     List<KeywordSubscription> findByCategoryWithMember(@Param("category") AlarmCategory category);
 }
