@@ -1,0 +1,2063 @@
+{
+  "floors": [
+    {
+      "buildingCode": "b-admin",
+      "label": "F1",
+      "floorOrder": 1
+    },
+    {
+      "buildingCode": "b-admin",
+      "label": "F5",
+      "floorOrder": 5
+    },
+    {
+      "buildingCode": "b-dorm",
+      "label": "F1",
+      "floorOrder": 1
+    },
+    {
+      "buildingCode": "b-intl",
+      "label": "B1",
+      "floorOrder": -1
+    },
+    {
+      "buildingCode": "b-intl",
+      "label": "F1",
+      "floorOrder": 1
+    },
+    {
+      "buildingCode": "b-intl",
+      "label": "F2",
+      "floorOrder": 2
+    },
+    {
+      "buildingCode": "b-intl",
+      "label": "F3",
+      "floorOrder": 3
+    },
+    {
+      "buildingCode": "b-intl",
+      "label": "F4",
+      "floorOrder": 4
+    },
+    {
+      "buildingCode": "b-intl",
+      "label": "F5",
+      "floorOrder": 5
+    },
+    {
+      "buildingCode": "b-intl",
+      "label": "F6",
+      "floorOrder": 6
+    },
+    {
+      "buildingCode": "b-intl",
+      "label": "F7",
+      "floorOrder": 7
+    },
+    {
+      "buildingCode": "b-intl",
+      "label": "F8",
+      "floorOrder": 8
+    },
+    {
+      "buildingCode": "b-intl",
+      "label": "F9",
+      "floorOrder": 9
+    },
+    {
+      "buildingCode": "b-jonghap",
+      "label": "B1",
+      "floorOrder": -1
+    },
+    {
+      "buildingCode": "b-jonghap",
+      "label": "F1",
+      "floorOrder": 1
+    },
+    {
+      "buildingCode": "b-jonghap",
+      "label": "F10",
+      "floorOrder": 10
+    },
+    {
+      "buildingCode": "b-jonghap",
+      "label": "F2",
+      "floorOrder": 2
+    },
+    {
+      "buildingCode": "b-jonghap",
+      "label": "F3",
+      "floorOrder": 3
+    },
+    {
+      "buildingCode": "b-jonghap",
+      "label": "F4",
+      "floorOrder": 4
+    },
+    {
+      "buildingCode": "b-jonghap",
+      "label": "F5",
+      "floorOrder": 5
+    },
+    {
+      "buildingCode": "b-jonghap",
+      "label": "F6",
+      "floorOrder": 6
+    },
+    {
+      "buildingCode": "b-jonghap",
+      "label": "F7",
+      "floorOrder": 7
+    },
+    {
+      "buildingCode": "b-jonghap",
+      "label": "F8",
+      "floorOrder": 8
+    },
+    {
+      "buildingCode": "b-jonghap",
+      "label": "F9",
+      "floorOrder": 9
+    },
+    {
+      "buildingCode": "b-library",
+      "label": "B2",
+      "floorOrder": -2
+    },
+    {
+      "buildingCode": "b-library",
+      "label": "B3",
+      "floorOrder": -3
+    },
+    {
+      "buildingCode": "b-library",
+      "label": "F1",
+      "floorOrder": 1
+    },
+    {
+      "buildingCode": "b-library",
+      "label": "F2",
+      "floorOrder": 2
+    },
+    {
+      "buildingCode": "b-library",
+      "label": "F3",
+      "floorOrder": 3
+    },
+    {
+      "buildingCode": "b-library",
+      "label": "F4",
+      "floorOrder": 4
+    },
+    {
+      "buildingCode": "b-mcc",
+      "label": "F1",
+      "floorOrder": 1
+    },
+    {
+      "buildingCode": "b-mcc",
+      "label": "F2",
+      "floorOrder": 2
+    },
+    {
+      "buildingCode": "b-mcc",
+      "label": "F3",
+      "floorOrder": 3
+    },
+    {
+      "buildingCode": "b-mcc",
+      "label": "F4",
+      "floorOrder": 4
+    },
+    {
+      "buildingCode": "b-student",
+      "label": "B1",
+      "floorOrder": -1
+    },
+    {
+      "buildingCode": "b-student",
+      "label": "F1",
+      "floorOrder": 1
+    },
+    {
+      "buildingCode": "b-student",
+      "label": "F10",
+      "floorOrder": 10
+    },
+    {
+      "buildingCode": "b-student",
+      "label": "F2",
+      "floorOrder": 2
+    },
+    {
+      "buildingCode": "b-student",
+      "label": "F3",
+      "floorOrder": 3
+    },
+    {
+      "buildingCode": "b-student",
+      "label": "F4",
+      "floorOrder": 4
+    },
+    {
+      "buildingCode": "b-student",
+      "label": "F5",
+      "floorOrder": 5
+    },
+    {
+      "buildingCode": "b-student",
+      "label": "F6",
+      "floorOrder": 6
+    },
+    {
+      "buildingCode": "b-student",
+      "label": "F7",
+      "floorOrder": 7
+    },
+    {
+      "buildingCode": "b-student",
+      "label": "F8",
+      "floorOrder": 8
+    },
+    {
+      "buildingCode": "b-student",
+      "label": "F9",
+      "floorOrder": 9
+    }
+  ],
+  "places": [
+    {
+      "code": "p-cafeteria-b-student-01",
+      "categoryCode": "cafeteria",
+      "name": "학생식당",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F3"
+    },
+    {
+      "code": "p-restaurant-b-mcc-01",
+      "categoryCode": "restaurant",
+      "name": "애슐리퀸즈",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-cafe-b-mcc-01",
+      "categoryCode": "cafe",
+      "name": "매머드커피",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-cafe-b-mcc-02",
+      "categoryCode": "cafe",
+      "name": "스타벅스",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-cafe-b-mcc-03",
+      "categoryCode": "cafe",
+      "name": "베이커리 랩",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-cafe-b-student-04",
+      "categoryCode": "cafe",
+      "name": "리에또 커피",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F3"
+    },
+    {
+      "code": "p-truck-ext-01",
+      "categoryCode": "truck",
+      "name": "통닭트럭",
+      "infoText": "a.k.a. 통트 \n매주 수/금 22시~재료 소진 시 마감",
+      "latitude": 37.5801278,
+      "longitude": 126.9215957
+    },
+    {
+      "code": "p-truck-ext-02",
+      "categoryCode": "truck",
+      "name": "꼬치트럭",
+      "infoText": null,
+      "latitude": 37.5801278,
+      "longitude": 126.9215957
+    },
+    {
+      "code": "p-convenience-store-b-admin-01",
+      "categoryCode": "convenience-store",
+      "name": "세븐일레븐",
+      "infoText": null,
+      "parentBuildingCode": "b-admin",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-convenience-store-b-mcc-02",
+      "categoryCode": "convenience-store",
+      "name": "세븐일레븐",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F2"
+    },
+    {
+      "code": "p-convenience-store-b-jonghap-03",
+      "categoryCode": "convenience-store",
+      "name": "이마트24",
+      "infoText": null,
+      "parentBuildingCode": "b-jonghap",
+      "floorLabel": "F4"
+    },
+    {
+      "code": "p-convenience-store-b-student-04",
+      "categoryCode": "convenience-store",
+      "name": "이마트24",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F3"
+    },
+    {
+      "code": "p-convenience-store-b-dorm-05",
+      "categoryCode": "convenience-store",
+      "name": "세븐일레븐",
+      "infoText": null,
+      "parentBuildingCode": "b-dorm",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-convenience-store-b-mcc-06",
+      "categoryCode": "convenience-store",
+      "name": "이마트에브리데이",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-convenience-store-b-mcc-07",
+      "categoryCode": "convenience-store",
+      "name": "다이소",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-convenience-store-b-mcc-08",
+      "categoryCode": "convenience-store",
+      "name": "올리브영",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-lounge-b-student-01",
+      "categoryCode": "lounge",
+      "name": "명지 스터디 라운지",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F4"
+    },
+    {
+      "code": "p-lounge-b-mcc-02",
+      "categoryCode": "lounge",
+      "name": "휴식공간",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F2"
+    },
+    {
+      "code": "p-lounge-b-mcc-03",
+      "categoryCode": "lounge",
+      "name": "휴식공간",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F3"
+    },
+    {
+      "code": "p-lounge-b-mcc-04",
+      "categoryCode": "lounge",
+      "name": "휴식공간",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F4"
+    },
+    {
+      "code": "p-reading-room-b-library-01",
+      "categoryCode": "reading-room",
+      "name": "대학원열람실",
+      "infoText": null,
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-reading-room-b-library-02",
+      "categoryCode": "reading-room",
+      "name": "노트북열람실",
+      "infoText": null,
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-reading-room-b-library-03",
+      "categoryCode": "reading-room",
+      "name": "자유열람실",
+      "infoText": null,
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-reading-room-b-library-04",
+      "categoryCode": "reading-room",
+      "name": "일반열람실1",
+      "infoText": null,
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-reading-room-b-library-05",
+      "categoryCode": "reading-room",
+      "name": "일반열람실2",
+      "infoText": null,
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-reading-room-b-library-06",
+      "categoryCode": "reading-room",
+      "name": "디지털정보자료실1",
+      "infoText": null,
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F3"
+    },
+    {
+      "code": "p-reading-room-b-library-07",
+      "categoryCode": "reading-room",
+      "name": "열람코너",
+      "infoText": null,
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F4"
+    },
+    {
+      "code": "p-study-room-b-student-01",
+      "categoryCode": "study-room",
+      "name": "스터디룸1",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F4"
+    },
+    {
+      "code": "p-study-room-b-student-02",
+      "categoryCode": "study-room",
+      "name": "스터디룸2",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F4"
+    },
+    {
+      "code": "p-study-room-b-student-03",
+      "categoryCode": "study-room",
+      "name": "스터디룸3",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F4"
+    },
+    {
+      "code": "p-study-room-b-student-04",
+      "categoryCode": "study-room",
+      "name": "스터디룸4",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F4"
+    },
+    {
+      "code": "p-study-room-b-student-05",
+      "categoryCode": "study-room",
+      "name": "스터디룸5",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F4"
+    },
+    {
+      "code": "p-study-room-b-library-06",
+      "categoryCode": "study-room",
+      "name": "스터디룸1",
+      "infoText": null,
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F2"
+    },
+    {
+      "code": "p-study-room-b-library-07",
+      "categoryCode": "study-room",
+      "name": "스터디룸2",
+      "infoText": null,
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F2"
+    },
+    {
+      "code": "p-study-room-b-library-08",
+      "categoryCode": "study-room",
+      "name": "스터디룸3",
+      "infoText": null,
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F2"
+    },
+    {
+      "code": "p-study-room-b-library-09",
+      "categoryCode": "study-room",
+      "name": "스터디룸4",
+      "infoText": null,
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F2"
+    },
+    {
+      "code": "p-study-room-b-library-10",
+      "categoryCode": "study-room",
+      "name": "스터디룸5",
+      "infoText": null,
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F2"
+    },
+    {
+      "code": "p-study-room-b-library-11",
+      "categoryCode": "study-room",
+      "name": "스터디룸6",
+      "infoText": null,
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F2"
+    },
+    {
+      "code": "p-study-room-b-library-12",
+      "categoryCode": "study-room",
+      "name": "스터디룸7",
+      "infoText": "전자칠판 등 장비 추가",
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F2"
+    },
+    {
+      "code": "p-study-room-b-library-13",
+      "categoryCode": "study-room",
+      "name": "스터디룸8",
+      "infoText": "전자칠판 등 장비 추가",
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F2"
+    },
+    {
+      "code": "p-study-room-b-library-14",
+      "categoryCode": "study-room",
+      "name": "스터디룸9",
+      "infoText": null,
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F2"
+    },
+    {
+      "code": "p-study-room-b-library-15",
+      "categoryCode": "study-room",
+      "name": "스터디룸10",
+      "infoText": null,
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F2"
+    },
+    {
+      "code": "p-study-room-b-library-16",
+      "categoryCode": "study-room",
+      "name": "스터디룸11",
+      "infoText": null,
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F2"
+    },
+    {
+      "code": "p-study-room-b-library-17",
+      "categoryCode": "study-room",
+      "name": "스터디룸12",
+      "infoText": "전자칠판 등 장비 추가",
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F2"
+    },
+    {
+      "code": "p-study-room-b-library-18",
+      "categoryCode": "study-room",
+      "name": "스터디룸13",
+      "infoText": "전자칠판 등 장비 추가",
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F2"
+    },
+    {
+      "code": "p-study-room-b-library-19",
+      "categoryCode": "study-room",
+      "name": "스터디룸14",
+      "infoText": "전자칠판 등 장비 추가",
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F2"
+    },
+    {
+      "code": "p-gym-ext-01",
+      "categoryCode": "gym",
+      "name": "운동장",
+      "infoText": null,
+      "latitude": 37.5795181,
+      "longitude": 126.9226788
+    },
+    {
+      "code": "p-gym-ext-02",
+      "categoryCode": "gym",
+      "name": "농구장",
+      "infoText": null,
+      "latitude": 37.5795181,
+      "longitude": 126.9226788
+    },
+    {
+      "code": "p-gym-b-mcc-03",
+      "categoryCode": "gym",
+      "name": "다목적 체육관",
+      "infoText": "농구 1코트, 배드민턴 4코트, 탁구대 4대, 피크볼 2코트\n이용방법: '서울시 공공서비스 예약시스템'을 통해 사전 예약 후 이용 가능",
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-gym-b-mcc-04",
+      "categoryCode": "gym",
+      "name": "스크린파크골프장",
+      "infoText": "스크린 골프 4타석\n이용방법: 현장 키오스크를 통해 당일 접수 가능",
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-gym-b-mcc-05",
+      "categoryCode": "gym",
+      "name": "건강과땀",
+      "infoText": "헬스장",
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F2"
+    },
+    {
+      "code": "p-break-room-b-student-01",
+      "categoryCode": "break-room",
+      "name": "남자 휴게실",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F4"
+    },
+    {
+      "code": "p-break-room-b-student-02",
+      "categoryCode": "break-room",
+      "name": "여자 휴게실",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F4"
+    },
+    {
+      "code": "p-break-room-b-student-03",
+      "categoryCode": "break-room",
+      "name": "휴게공간1",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F4"
+    },
+    {
+      "code": "p-break-room-b-student-04",
+      "categoryCode": "break-room",
+      "name": "휴게공간2",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F4"
+    },
+    {
+      "code": "p-break-room-b-student-05",
+      "categoryCode": "break-room",
+      "name": "휴게공간3",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F4"
+    },
+    {
+      "code": "p-break-room-b-student-06",
+      "categoryCode": "break-room",
+      "name": "휴게공간4",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F4"
+    },
+    {
+      "code": "p-terrace-ext-01",
+      "categoryCode": "terrace",
+      "name": "종합관 앞 테라스",
+      "infoText": null,
+      "latitude": 37.5802215,
+      "longitude": 126.9225443
+    },
+    {
+      "code": "p-terrace-ext-02",
+      "categoryCode": "terrace",
+      "name": "MCC 3층 테라스",
+      "infoText": null,
+      "latitude": 37.5795181,
+      "longitude": 126.9226788
+    },
+    {
+      "code": "p-terrace-ext-03",
+      "categoryCode": "terrace",
+      "name": "도서관 앞 테라스",
+      "infoText": null,
+      "latitude": 37.5807286,
+      "longitude": 126.9243805
+    },
+    {
+      "code": "p-terrace-ext-04",
+      "categoryCode": "terrace",
+      "name": "도서관 3층 테라스",
+      "infoText": null,
+      "latitude": 37.5807286,
+      "longitude": 126.9243805
+    },
+    {
+      "code": "p-club-room-b-student-01",
+      "categoryCode": "club-room",
+      "name": "파인",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "B1"
+    },
+    {
+      "code": "p-club-room-b-student-02",
+      "categoryCode": "club-room",
+      "name": "인해극단",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "B1"
+    },
+    {
+      "code": "p-club-room-b-student-03",
+      "categoryCode": "club-room",
+      "name": "화이트홀스",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "B1"
+    },
+    {
+      "code": "p-club-room-b-student-04",
+      "categoryCode": "club-room",
+      "name": "디비전",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F6"
+    },
+    {
+      "code": "p-club-room-b-student-05",
+      "categoryCode": "club-room",
+      "name": "MIRS",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F6"
+    },
+    {
+      "code": "p-club-room-b-student-06",
+      "categoryCode": "club-room",
+      "name": "RCY",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F6"
+    },
+    {
+      "code": "p-club-room-b-student-07",
+      "categoryCode": "club-room",
+      "name": "그림패시만화",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F6"
+    },
+    {
+      "code": "p-club-room-b-student-08",
+      "categoryCode": "club-room",
+      "name": "농어민후생연구회 흙",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F6"
+    },
+    {
+      "code": "p-club-room-b-student-09",
+      "categoryCode": "club-room",
+      "name": "코아",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F6"
+    },
+    {
+      "code": "p-club-room-b-student-10",
+      "categoryCode": "club-room",
+      "name": "너나들이",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F6"
+    },
+    {
+      "code": "p-club-room-b-student-11",
+      "categoryCode": "club-room",
+      "name": "극예술연구회 알",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F6"
+    },
+    {
+      "code": "p-club-room-b-student-12",
+      "categoryCode": "club-room",
+      "name": "명지서법연구회",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F6"
+    },
+    {
+      "code": "p-club-room-b-student-13",
+      "categoryCode": "club-room",
+      "name": "명지챌린저스",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F6"
+    },
+    {
+      "code": "p-club-room-b-student-14",
+      "categoryCode": "club-room",
+      "name": "키비탄",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F6"
+    },
+    {
+      "code": "p-club-room-b-student-15",
+      "categoryCode": "club-room",
+      "name": "비주얼",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F6"
+    },
+    {
+      "code": "p-club-room-b-student-16",
+      "categoryCode": "club-room",
+      "name": "포토랩",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F6"
+    },
+    {
+      "code": "p-club-room-b-student-17",
+      "categoryCode": "club-room",
+      "name": "나이너스",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F7"
+    },
+    {
+      "code": "p-club-room-b-student-18",
+      "categoryCode": "club-room",
+      "name": "흑풍",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F7"
+    },
+    {
+      "code": "p-club-room-b-student-19",
+      "categoryCode": "club-room",
+      "name": "나라오르다",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F7"
+    },
+    {
+      "code": "p-club-room-b-student-20",
+      "categoryCode": "club-room",
+      "name": "오버행",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F7"
+    },
+    {
+      "code": "p-club-room-b-student-21",
+      "categoryCode": "club-room",
+      "name": "MJTA",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F7"
+    },
+    {
+      "code": "p-club-room-b-student-22",
+      "categoryCode": "club-room",
+      "name": "무릉도원",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F7"
+    },
+    {
+      "code": "p-club-room-b-student-23",
+      "categoryCode": "club-room",
+      "name": "주리랑",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F7"
+    },
+    {
+      "code": "p-club-room-b-student-24",
+      "categoryCode": "club-room",
+      "name": "FC명지",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F7"
+    },
+    {
+      "code": "p-club-room-b-student-25",
+      "categoryCode": "club-room",
+      "name": "콕콕콕",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F7"
+    },
+    {
+      "code": "p-club-room-b-student-26",
+      "categoryCode": "club-room",
+      "name": "통해",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F7"
+    },
+    {
+      "code": "p-club-room-b-student-27",
+      "categoryCode": "club-room",
+      "name": "PTPI",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F7"
+    },
+    {
+      "code": "p-club-room-b-student-28",
+      "categoryCode": "club-room",
+      "name": "UBF",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F7"
+    },
+    {
+      "code": "p-club-room-b-student-29",
+      "categoryCode": "club-room",
+      "name": "CFM",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F7"
+    },
+    {
+      "code": "p-club-room-b-student-30",
+      "categoryCode": "club-room",
+      "name": "MGH",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F7"
+    },
+    {
+      "code": "p-club-room-b-student-31",
+      "categoryCode": "club-room",
+      "name": "TIME",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F7"
+    },
+    {
+      "code": "p-club-room-b-student-32",
+      "categoryCode": "club-room",
+      "name": "실로암",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F7"
+    },
+    {
+      "code": "p-club-room-b-student-33",
+      "categoryCode": "club-room",
+      "name": "인액터스",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F8"
+    },
+    {
+      "code": "p-club-room-b-student-34",
+      "categoryCode": "club-room",
+      "name": "COW",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F8"
+    },
+    {
+      "code": "p-club-room-b-intl-35",
+      "categoryCode": "club-room",
+      "name": "씨네메이션",
+      "infoText": null,
+      "parentBuildingCode": "b-intl",
+      "floorLabel": "B1"
+    },
+    {
+      "code": "p-club-room-b-intl-36",
+      "categoryCode": "club-room",
+      "name": "CCC",
+      "infoText": null,
+      "parentBuildingCode": "b-intl",
+      "floorLabel": "B1"
+    },
+    {
+      "code": "p-printer-b-jonghap-01",
+      "categoryCode": "printer",
+      "name": "preprint",
+      "infoText": "명지대 스마트 출력 서비스",
+      "parentBuildingCode": "b-jonghap",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-printer-b-student-02",
+      "categoryCode": "printer",
+      "name": "preprint",
+      "infoText": "명지대 스마트 출력 서비스",
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F4"
+    },
+    {
+      "code": "p-printer-b-intl-03",
+      "categoryCode": "printer",
+      "name": "preprint",
+      "infoText": "명지대 스마트 출력 서비스",
+      "parentBuildingCode": "b-intl",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-printer-b-library-04",
+      "categoryCode": "printer",
+      "name": "프린터",
+      "infoText": null,
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-printer-b-library-05",
+      "categoryCode": "printer",
+      "name": "프린터",
+      "infoText": null,
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F3"
+    },
+    {
+      "code": "p-printer-b-student-06",
+      "categoryCode": "printer",
+      "name": "학생복지실",
+      "infoText": "총학생회 프린트사업\n월-목 10:00-18:00\n금 10:00-15:00",
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F5"
+    },
+    {
+      "code": "p-certificate-kiosk-b-jonghap-01",
+      "categoryCode": "certificate-kiosk",
+      "name": "자동증명발급기",
+      "infoText": null,
+      "parentBuildingCode": "b-jonghap",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-certificate-kiosk-b-admin-02",
+      "categoryCode": "certificate-kiosk",
+      "name": "자동증명발급기",
+      "infoText": null,
+      "parentBuildingCode": "b-admin",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-bank-b-student-01",
+      "categoryCode": "bank",
+      "name": "새마을금고",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-bank-b-admin-02",
+      "categoryCode": "bank",
+      "name": "하나은행",
+      "infoText": null,
+      "parentBuildingCode": "b-admin",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-bank-b-admin-03",
+      "categoryCode": "bank",
+      "name": "하나은행 ATM",
+      "infoText": null,
+      "parentBuildingCode": "b-admin",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-bank-b-admin-04",
+      "categoryCode": "bank",
+      "name": "명지새마을금고 ATM",
+      "infoText": null,
+      "parentBuildingCode": "b-admin",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-bank-b-admin-05",
+      "categoryCode": "bank",
+      "name": "KB국민은행 ATM",
+      "infoText": null,
+      "parentBuildingCode": "b-admin",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-bank-b-admin-06",
+      "categoryCode": "bank",
+      "name": "SC제일은행 ATM",
+      "infoText": null,
+      "parentBuildingCode": "b-admin",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-mail-b-student-01",
+      "categoryCode": "mail",
+      "name": "우편취급국",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-smoking-ext-01",
+      "categoryCode": "smoking",
+      "name": "흡연부스",
+      "infoText": "a.k.a. 종합관 뒷골목",
+      "latitude": 37.5802215,
+      "longitude": 126.9225443
+    },
+    {
+      "code": "p-smoking-ext-02",
+      "categoryCode": "smoking",
+      "name": "흡연부스",
+      "infoText": "a.k.a. 담배나무",
+      "latitude": 37.5803346,
+      "longitude": 126.9234212
+    },
+    {
+      "code": "p-smoking-ext-03",
+      "categoryCode": "smoking",
+      "name": "흡연구역",
+      "infoText": null,
+      "latitude": 37.5795181,
+      "longitude": 126.9226788
+    },
+    {
+      "code": "p-smoking-ext-04",
+      "categoryCode": "smoking",
+      "name": "흡연구역",
+      "infoText": null,
+      "latitude": 37.5801766,
+      "longitude": 126.9242742
+    },
+    {
+      "code": "p-power-bank-b-jonghap-01",
+      "categoryCode": "power-bank",
+      "name": "충전돼지",
+      "infoText": null,
+      "parentBuildingCode": "b-jonghap",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-power-bank-b-student-02",
+      "categoryCode": "power-bank",
+      "name": "충전돼지",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F3"
+    },
+    {
+      "code": "p-power-bank-b-mcc-03",
+      "categoryCode": "power-bank",
+      "name": "충전돼지",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F3"
+    },
+    {
+      "code": "p-restroom-b-jonghap-01",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-jonghap",
+      "floorLabel": "B1"
+    },
+    {
+      "code": "p-restroom-b-jonghap-02",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-jonghap",
+      "floorLabel": "B1"
+    },
+    {
+      "code": "p-restroom-b-jonghap-03",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-jonghap",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-restroom-b-jonghap-04",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-jonghap",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-restroom-b-jonghap-05",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-jonghap",
+      "floorLabel": "F2"
+    },
+    {
+      "code": "p-restroom-b-jonghap-06",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-jonghap",
+      "floorLabel": "F2"
+    },
+    {
+      "code": "p-restroom-b-jonghap-07",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-jonghap",
+      "floorLabel": "F3"
+    },
+    {
+      "code": "p-restroom-b-jonghap-08",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-jonghap",
+      "floorLabel": "F3"
+    },
+    {
+      "code": "p-restroom-b-jonghap-09",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-jonghap",
+      "floorLabel": "F4"
+    },
+    {
+      "code": "p-restroom-b-jonghap-10",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-jonghap",
+      "floorLabel": "F4"
+    },
+    {
+      "code": "p-restroom-b-jonghap-11",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-jonghap",
+      "floorLabel": "F5"
+    },
+    {
+      "code": "p-restroom-b-jonghap-12",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-jonghap",
+      "floorLabel": "F5"
+    },
+    {
+      "code": "p-restroom-b-jonghap-13",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-jonghap",
+      "floorLabel": "F6"
+    },
+    {
+      "code": "p-restroom-b-jonghap-14",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-jonghap",
+      "floorLabel": "F6"
+    },
+    {
+      "code": "p-restroom-b-jonghap-15",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-jonghap",
+      "floorLabel": "F7"
+    },
+    {
+      "code": "p-restroom-b-jonghap-16",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-jonghap",
+      "floorLabel": "F7"
+    },
+    {
+      "code": "p-restroom-b-jonghap-17",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-jonghap",
+      "floorLabel": "F8"
+    },
+    {
+      "code": "p-restroom-b-jonghap-18",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-jonghap",
+      "floorLabel": "F8"
+    },
+    {
+      "code": "p-restroom-b-jonghap-19",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-jonghap",
+      "floorLabel": "F9"
+    },
+    {
+      "code": "p-restroom-b-jonghap-20",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-jonghap",
+      "floorLabel": "F9"
+    },
+    {
+      "code": "p-restroom-b-jonghap-21",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-jonghap",
+      "floorLabel": "F10"
+    },
+    {
+      "code": "p-restroom-b-jonghap-22",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-jonghap",
+      "floorLabel": "F10"
+    },
+    {
+      "code": "p-restroom-b-student-23",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-restroom-b-student-24",
+      "categoryCode": "restroom",
+      "name": "장애인화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-restroom-b-student-25",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-restroom-b-student-26",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F2"
+    },
+    {
+      "code": "p-restroom-b-student-27",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F2"
+    },
+    {
+      "code": "p-restroom-b-student-28",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F4"
+    },
+    {
+      "code": "p-restroom-b-student-29",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F4"
+    },
+    {
+      "code": "p-restroom-b-student-30",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F5"
+    },
+    {
+      "code": "p-restroom-b-student-31",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F5"
+    },
+    {
+      "code": "p-restroom-b-student-32",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F6"
+    },
+    {
+      "code": "p-restroom-b-student-33",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F6"
+    },
+    {
+      "code": "p-restroom-b-student-34",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F7"
+    },
+    {
+      "code": "p-restroom-b-student-35",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F7"
+    },
+    {
+      "code": "p-restroom-b-student-36",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F8"
+    },
+    {
+      "code": "p-restroom-b-student-37",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F8"
+    },
+    {
+      "code": "p-restroom-b-student-38",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F9"
+    },
+    {
+      "code": "p-restroom-b-student-39",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F9"
+    },
+    {
+      "code": "p-restroom-b-student-40",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F10"
+    },
+    {
+      "code": "p-restroom-b-student-41",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-student",
+      "floorLabel": "F10"
+    },
+    {
+      "code": "p-restroom-b-intl-42",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-intl",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-restroom-b-intl-43",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-intl",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-restroom-b-intl-44",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-intl",
+      "floorLabel": "F2"
+    },
+    {
+      "code": "p-restroom-b-intl-45",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-intl",
+      "floorLabel": "F2"
+    },
+    {
+      "code": "p-restroom-b-intl-46",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-intl",
+      "floorLabel": "F3"
+    },
+    {
+      "code": "p-restroom-b-intl-47",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-intl",
+      "floorLabel": "F3"
+    },
+    {
+      "code": "p-restroom-b-intl-48",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-intl",
+      "floorLabel": "F4"
+    },
+    {
+      "code": "p-restroom-b-intl-49",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-intl",
+      "floorLabel": "F4"
+    },
+    {
+      "code": "p-restroom-b-intl-50",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-intl",
+      "floorLabel": "F5"
+    },
+    {
+      "code": "p-restroom-b-intl-51",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-intl",
+      "floorLabel": "F5"
+    },
+    {
+      "code": "p-restroom-b-intl-52",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-intl",
+      "floorLabel": "F6"
+    },
+    {
+      "code": "p-restroom-b-intl-53",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-intl",
+      "floorLabel": "F6"
+    },
+    {
+      "code": "p-restroom-b-intl-54",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-intl",
+      "floorLabel": "F7"
+    },
+    {
+      "code": "p-restroom-b-intl-55",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-intl",
+      "floorLabel": "F7"
+    },
+    {
+      "code": "p-restroom-b-intl-56",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-intl",
+      "floorLabel": "F8"
+    },
+    {
+      "code": "p-restroom-b-intl-57",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-intl",
+      "floorLabel": "F8"
+    },
+    {
+      "code": "p-restroom-b-intl-58",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-intl",
+      "floorLabel": "F9"
+    },
+    {
+      "code": "p-restroom-b-intl-59",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-intl",
+      "floorLabel": "F9"
+    },
+    {
+      "code": "p-restroom-b-admin-60",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-admin",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-restroom-b-admin-61",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-admin",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-restroom-b-admin-62",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-admin",
+      "floorLabel": "F5"
+    },
+    {
+      "code": "p-restroom-b-admin-63",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-admin",
+      "floorLabel": "F5"
+    },
+    {
+      "code": "p-restroom-b-library-64",
+      "categoryCode": "restroom",
+      "name": "여자화장실1",
+      "infoText": null,
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-restroom-b-library-65",
+      "categoryCode": "restroom",
+      "name": "남자화장실1",
+      "infoText": null,
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-restroom-b-library-66",
+      "categoryCode": "restroom",
+      "name": "여자화장실2",
+      "infoText": null,
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-restroom-b-library-67",
+      "categoryCode": "restroom",
+      "name": "남자화장실1",
+      "infoText": null,
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-restroom-b-library-68",
+      "categoryCode": "restroom",
+      "name": "여자장애인화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-restroom-b-library-69",
+      "categoryCode": "restroom",
+      "name": "남자장애인화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-restroom-b-library-70",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F2"
+    },
+    {
+      "code": "p-restroom-b-library-71",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F2"
+    },
+    {
+      "code": "p-restroom-b-library-72",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F3"
+    },
+    {
+      "code": "p-restroom-b-library-73",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F3"
+    },
+    {
+      "code": "p-restroom-b-library-74",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F4"
+    },
+    {
+      "code": "p-restroom-b-library-75",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-library",
+      "floorLabel": "F4"
+    },
+    {
+      "code": "p-restroom-b-mcc-76",
+      "categoryCode": "restroom",
+      "name": "남자화장실1",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-restroom-b-mcc-77",
+      "categoryCode": "restroom",
+      "name": "여자화장실1",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-restroom-b-mcc-78",
+      "categoryCode": "restroom",
+      "name": "남자화장실2",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-restroom-b-mcc-79",
+      "categoryCode": "restroom",
+      "name": "여자화장실2",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-restroom-b-mcc-80",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-restroom-b-mcc-81",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-restroom-b-mcc-82",
+      "categoryCode": "restroom",
+      "name": "남자화장실1",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F2"
+    },
+    {
+      "code": "p-restroom-b-mcc-83",
+      "categoryCode": "restroom",
+      "name": "여자화장실1",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F2"
+    },
+    {
+      "code": "p-restroom-b-mcc-84",
+      "categoryCode": "restroom",
+      "name": "남자화장실2",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F2"
+    },
+    {
+      "code": "p-restroom-b-mcc-85",
+      "categoryCode": "restroom",
+      "name": "여자화장실2",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F2"
+    },
+    {
+      "code": "p-restroom-b-mcc-86",
+      "categoryCode": "restroom",
+      "name": "여자&여자장애인화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F2"
+    },
+    {
+      "code": "p-restroom-b-mcc-87",
+      "categoryCode": "restroom",
+      "name": "남자&남자장애인화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F2"
+    },
+    {
+      "code": "p-restroom-b-mcc-88",
+      "categoryCode": "restroom",
+      "name": "여자&여자장애인화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F3"
+    },
+    {
+      "code": "p-restroom-b-mcc-89",
+      "categoryCode": "restroom",
+      "name": "남자&남자장애인화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F3"
+    },
+    {
+      "code": "p-restroom-b-mcc-90",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F3"
+    },
+    {
+      "code": "p-restroom-b-mcc-91",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F3"
+    },
+    {
+      "code": "p-restroom-b-mcc-92",
+      "categoryCode": "restroom",
+      "name": "남자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F4"
+    },
+    {
+      "code": "p-restroom-b-mcc-93",
+      "categoryCode": "restroom",
+      "name": "여자화장실",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F4"
+    },
+    {
+      "code": "p-parking-b-library-01",
+      "categoryCode": "parking",
+      "name": "도서관 지하주차장",
+      "infoText": "외부인 이용 가능, 정문 (행정동 옆)+후문 (도서관 출입구)",
+      "parentBuildingCode": "b-library",
+      "floorLabel": "B2"
+    },
+    {
+      "code": "p-parking-b-library-02",
+      "categoryCode": "parking",
+      "name": "도서관 지하주차장",
+      "infoText": "외부인 이용 가능, 정문 (행정동 옆)+후문 (도서관 출입구)",
+      "parentBuildingCode": "b-library",
+      "floorLabel": "B3"
+    },
+    {
+      "code": "p-parking-b-mcc-03",
+      "categoryCode": "parking",
+      "name": "MCC 지상 주차장",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F1"
+    },
+    {
+      "code": "p-parking-b-mcc-04",
+      "categoryCode": "parking",
+      "name": "MCC 지상 주차장",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F2"
+    },
+    {
+      "code": "p-parking-b-mcc-05",
+      "categoryCode": "parking",
+      "name": "MCC 야외 주차장",
+      "infoText": null,
+      "parentBuildingCode": "b-mcc",
+      "floorLabel": "F4"
+    },
+    {
+      "code": "p-campus-entrance-ext-01",
+      "categoryCode": "campus-entrance",
+      "name": "인문캠퍼스 정문",
+      "infoText": null,
+      "latitude": 37.5801278,
+      "longitude": 126.9215957
+    },
+    {
+      "code": "p-campus-entrance-ext-02",
+      "categoryCode": "campus-entrance",
+      "name": "인문캠퍼스 서문",
+      "infoText": null,
+      "latitude": 37.5801278,
+      "longitude": 126.9215957
+    },
+    {
+      "code": "p-campus-entrance-ext-03",
+      "categoryCode": "campus-entrance",
+      "name": "인문캠퍼스 후문",
+      "infoText": "a.k.a. 도서관 후문",
+      "latitude": 37.5801278,
+      "longitude": 126.9215957
+    },
+    {
+      "code": "p-campus-entrance-ext-04",
+      "categoryCode": "campus-entrance",
+      "name": "생활관 후문",
+      "infoText": "a.k.a. 담벼락 후문",
+      "latitude": 37.5808614,
+      "longitude": 126.9229762
+    },
+    {
+      "code": "p-campus-entrance-ext-05",
+      "categoryCode": "campus-entrance",
+      "name": "MCC관 출입구",
+      "infoText": null,
+      "latitude": 37.5795181,
+      "longitude": 126.9226788
+    },
+    {
+      "code": "p-building-entrance-ext-01",
+      "categoryCode": "building-entrance",
+      "name": "국제관 3층 출입구",
+      "infoText": null,
+      "latitude": 37.580761,
+      "longitude": 126.9238108
+    },
+    {
+      "code": "p-building-entrance-ext-02",
+      "categoryCode": "building-entrance",
+      "name": "학생회관 3층 출입구",
+      "infoText": null,
+      "latitude": 37.5803346,
+      "longitude": 126.9234212
+    },
+    {
+      "code": "p-corridor-ext-01",
+      "categoryCode": "corridor",
+      "name": "종합관-생활관 연결 통로",
+      "infoText": null,
+      "latitude": 37.5802215,
+      "longitude": 126.9225443
+    },
+    {
+      "code": "p-corridor-ext-02",
+      "categoryCode": "corridor",
+      "name": "종합관-학생회관 연결 통로",
+      "infoText": "a.k.a. 학관 구름다리",
+      "latitude": 37.5802215,
+      "longitude": 126.9225443
+    },
+    {
+      "code": "p-corridor-ext-03",
+      "categoryCode": "corridor",
+      "name": "국제관-생활관 연결 통로",
+      "infoText": null,
+      "latitude": 37.580761,
+      "longitude": 126.9238108
+    },
+    {
+      "code": "p-corridor-ext-04",
+      "categoryCode": "corridor",
+      "name": "외부 연결 통로",
+      "infoText": "a.k.a. 도서관 구름다리",
+      "latitude": 37.5807286,
+      "longitude": 126.9243805
+    },
+    {
+      "code": "p-shortcut-ext-01",
+      "categoryCode": "shortcut",
+      "name": "후문 지름길",
+      "infoText": null,
+      "latitude": 37.5802215,
+      "longitude": 126.9225443
+    }
+  ]
+}

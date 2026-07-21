@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <title>FCM 수신 테스트</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 720px; margin: 40px auto; padding: 0 16px; }
+    button { padding: 10px 16px; font-size: 15px; cursor: pointer; }
+    textarea { width: 100%; height: 120px; margin-top: 12px; font-family: monospace; font-size: 12px; }
+    #log { background: #111; color: #0f0; padding: 12px; border-radius: 8px; min-height: 80px; white-space: pre-wrap; font-family: monospace; font-size: 13px; }
+    .step { color: #555; }
+  </style>
+</head>
+<body>
+  <h2>FCM 푸시 수신 테스트</h2>
+  <p class="step">1) 아래 firebaseConfig 와 VAPID_KEY 를 Firebase 콘솔 값으로 채운다.<br/>
+     2) 이 폴더를 로컬 서버로 띄워 http://localhost 로 연다(아래 안내).<br/>
+     3) "알림 허용 + 토큰 발급" 클릭 → 토큰 복사 → 백엔드로 발송.</p>
+
+  <button id="enable">알림 허용 + 토큰 발급</button>
+  <textarea id="token" readonly placeholder="여기에 FCM 토큰이 표시됩니다"></textarea>
+
+  <h3>수신 로그</h3>
+  <div id="log">대기 중...</div>
+
+  <!-- Firebase compat SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script>
+  <script>
+    // ▼▼▼ Firebase 콘솔 > 프로젝트 설정 > 일반 > 내 앱(웹) 에서 복사 ▼▼▼
+    const firebaseConfig = {
+      apiKey: "AIzaSyBkwTKC0-0JwA_-g73S_hzGXZnVpFhhDhI",
+      authDomain: "thingo-8eee1.firebaseapp.com",
+      projectId: "thingo-8eee1",
+      storageBucket: "thingo-8eee1.firebasestorage.app",
+      messagingSenderId: "650247693575",
+      appId: "1:650247693575:web:fd7989e00989aea7b191a2"
+    };
+    // ▼ Firebase 콘솔 > 프로젝트 설정 > 클라우드 메시징 > 웹 푸시 인증서(Web Push certificates) 키쌍
+    const VAPID_KEY = "BDi4sNL0irCgtRcA9AhF3lUFSx_Oq9kh4u0B-J624fFcZlCPuI5bu6IuOkFkqeR7mb6ak-b_R3hmVod88HXwMNY";
+    // ▲▲▲ 위 값들만 채우면 됨 ▲▲▲
+
+    const log = (m) => { document.getElementById('log').textContent = m + "\n" + document.getElementById('log').textContent; };
+
+    firebase.initializeApp(firebaseConfig);
+    const messaging = firebase.messaging();
+
+    document.getElementById('enable').onclick = async () => {
+      try {
+        const reg = await navigator.serviceWorker.register('./firebase-messaging-sw.js');
+        const permission = await Notification.requestPermission();
+        if (permission !== 'granted') { log('알림 권한 거부됨'); return; }
+        const token = await messaging.getToken({ vapidKey: VAPID_KEY, serviceWorkerRegistration: reg });
+        document.getElementById('token').value = token;
+        log('토큰 발급 완료. 복사해서 백엔드로 발송하세요.');
+      } catch (e) {
+        log('에러: ' + e.message);
+      }
+    };
+
+    // 포그라운드(페이지 열려있을 때) 수신
+    messaging.onMessage((payload) => {
+      log('[수신] ' + JSON.stringify(payload.notification || payload.data));
+      if (payload.notification) {
+        new Notification(payload.notification.title, { body: payload.notification.body });
+      }
+    });
+  </script>
+</body>
+</html>

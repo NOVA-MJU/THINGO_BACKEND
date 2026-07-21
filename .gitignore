@@ -66,3 +66,12 @@ e2e/node_modules/
 e2e/test-results/
 e2e/playwright-report/
 e2e/.cache/
+
+### 로컬 자료/노트 (레포에 넣지 않음) ###
+# 대용량 원본 사진(핀 이미지는 S3에 업로드하여 사용)
+/명지도 건물, 내부 장도 대표 사진/
+# 개인 셋업 노트
+/AI_SETUP 설명.md
+# 검색 관련도 평가 산출물(재생성 가능)
+docs/search-eval/eval-results*.json
+docs/search-eval/eval-results*.md

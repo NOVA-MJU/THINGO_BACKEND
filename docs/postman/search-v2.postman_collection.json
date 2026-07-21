@@ -1,0 +1,194 @@
+{
+  "info": {
+    "name": "MJS Search v2 (PostgreSQL FTS)",
+    "description": "PostgreSQL FTS 기반 통합 검색 API 컬렉션.\n\n사용법\n1. Postman 에서 Import -> File 로 이 파일 선택\n2. Environment 에 baseUrl 변수 설정 (예: http://localhost:8080 또는 https://api.thingo.kr)\n3. 필요 시 jwtToken 변수에 액세스 토큰 입력\n4. 각 요청 Send",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "jwtToken",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{jwtToken}}", "type": "string" }
+    ]
+  },
+  "item": [
+    {
+      "name": "01. 통합 인덱스 전체 재구축 (운영 전용)",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v2/search/sync",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v2", "search", "sync"]
+        },
+        "description": "원본 도메인 7개를 순회하여 unified_search_index TRUNCATE + bulk insert.\n실행 중 검색 빈 결과 가능. 1000건 batch.\n\n응답:\n{\n  \"status\": \"API 요청 성공\",\n  \"data\": \"Success Indexing\",\n  \"timestamp\": \"...\"\n}"
+      },
+      "response": []
+    },
+    {
+      "name": "02. 검색 - keyword 만 (전체 통합)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v2/search/detail?keyword=장학금",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v2", "search", "detail"],
+          "query": [
+            { "key": "keyword", "value": "장학금" }
+          ]
+        },
+        "description": "기본 검색. order=relevance, page=0, size=10."
+      }
+    },
+    {
+      "name": "03. 검색 - keyword + type 필터",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v2/search/detail?keyword=장학금&type=NOTICE",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v2", "search", "detail"],
+          "query": [
+            { "key": "keyword", "value": "장학금" },
+            { "key": "type", "value": "NOTICE" }
+          ]
+        },
+        "description": "NOTICE 탭만 검색."
+      }
+    },
+    {
+      "name": "04. 검색 - keyword + type + category",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v2/search/detail?keyword=장학금&type=NOTICE&category=scholarship",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v2", "search", "detail"],
+          "query": [
+            { "key": "keyword", "value": "장학금" },
+            { "key": "type", "value": "NOTICE" },
+            { "key": "category", "value": "scholarship" }
+          ]
+        },
+        "description": "NOTICE + scholarship 카테고리 교집합 (AND)."
+      }
+    },
+    {
+      "name": "05. 검색 - 최신순 (order=latest)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v2/search/detail?keyword=장학금&type=NEWS&order=latest",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v2", "search", "detail"],
+          "query": [
+            { "key": "keyword", "value": "장학금" },
+            { "key": "type", "value": "NEWS" },
+            { "key": "order", "value": "latest" }
+          ]
+        },
+        "description": "관련도 무시, date DESC 정렬."
+      }
+    },
+    {
+      "name": "06. 검색 - 페이지 이동 (page=1)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v2/search/detail?keyword=기숙사&page=1&size=10",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v2", "search", "detail"],
+          "query": [
+            { "key": "keyword", "value": "기숙사" },
+            { "key": "page", "value": "1" },
+            { "key": "size", "value": "10" }
+          ]
+        },
+        "description": "두 번째 페이지 10개."
+      }
+    },
+    {
+      "name": "07. 검색 - keyword 비움 (필터+정렬 목록 조회)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v2/search/detail?type=NOTICE&order=latest&size=20",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v2", "search", "detail"],
+          "query": [
+            { "key": "type", "value": "NOTICE" },
+            { "key": "order", "value": "latest" },
+            { "key": "size", "value": "20" }
+          ]
+        },
+        "description": "keyword 없음. NOTICE 최신 20건 목록."
+      }
+    },
+    {
+      "name": "08. 검색 - 오타 (pg_trgm 유사도)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v2/search/detail?keyword=장학금금",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v2", "search", "detail"],
+          "query": [
+            { "key": "keyword", "value": "장학금금" }
+          ]
+        },
+        "description": "오타 입력. trigram similarity 로 매칭되는지 확인."
+      }
+    },
+    {
+      "name": "09. 자동완성 (suggest)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v2/search/suggest?keyword=장학",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v2", "search", "suggest"],
+          "query": [
+            { "key": "keyword", "value": "장학" }
+          ]
+        },
+        "description": "prefix + word_similarity 자동완성 후보 최대 10건."
+      }
+    },
+    {
+      "name": "10. 자동완성 - 빈 keyword (빈 배열 반환)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v2/search/suggest?keyword=",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v2", "search", "suggest"],
+          "query": [
+            { "key": "keyword", "value": "" }
+          ]
+        },
+        "description": "엣지 케이스: 빈 keyword. data: [] 반환 기대."
+      }
+    }
+  ]
+}
