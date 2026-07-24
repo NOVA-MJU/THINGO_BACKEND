@@ -150,7 +150,7 @@
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/ApiSuccess_StringList" },
-                "example": { "status": "API 요청 성공", "data": ["중간고사", "기말고사", "해외탐방", "해외봉사", "수강신청"], "timestamp": "2026-06-30T19:40:00" }
+                "example": { "status": "API 요청 성공", "data": ["중간고사", "기말고사", "해외탐방", "해외봉사", "수강신청", "졸업유예"], "timestamp": "2026-06-30T19:40:00" }
               }
             }
           }

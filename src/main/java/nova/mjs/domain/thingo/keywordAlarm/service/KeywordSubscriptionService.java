@@ -31,7 +31,7 @@ public class KeywordSubscriptionService {
 
     /** 화면 6번 추천 키워드(고정값). 운영 변경 여지를 위해 API 로 노출한다. */
     private static final List<String> RECOMMENDED_KEYWORDS =
-            List.of("중간고사", "기말고사", "해외탐방", "해외봉사", "수강신청");
+            List.of("중간고사", "기말고사", "해외탐방", "해외봉사", "수강신청", "졸업유예");
 
     private final KeywordSubscriptionRepository keywordSubscriptionRepository;
     private final MemberRepository memberRepository;

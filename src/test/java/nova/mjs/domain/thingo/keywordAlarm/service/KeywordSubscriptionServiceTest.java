@@ -219,13 +219,13 @@ class KeywordSubscriptionServiceTest {
     }
 
     @Test
-    @DisplayName("추천 키워드는 고정 5개를 반환한다")
+    @DisplayName("추천 키워드는 고정 6개를 반환한다")
     void should_return추천키워드_when_조회시() {
         // when
         List<String> recommended = keywordSubscriptionService.getRecommendedKeywords();
 
         // then
         assertThat(recommended)
-                .containsExactly("중간고사", "기말고사", "해외탐방", "해외봉사", "수강신청");
+                .containsExactly("중간고사", "기말고사", "해외탐방", "해외봉사", "수강신청", "졸업유예");
     }
 }
