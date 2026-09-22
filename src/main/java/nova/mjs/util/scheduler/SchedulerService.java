@@ -3,6 +3,8 @@ package nova.mjs.util.scheduler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nova.mjs.domain.thingo.broadcast.service.BroadcastService;
+import nova.mjs.domain.thingo.calendar.service.MjuCalendarService;
+import nova.mjs.domain.thingo.keywordAlarm.indexing.MissedAlarmBackfillService;
 import nova.mjs.domain.thingo.news.service.NewsService;
 import nova.mjs.domain.thingo.notice.exception.NoticeCrawlingException;
 import nova.mjs.domain.thingo.notice.service.NoticeCrawlingService;
@@ -30,6 +32,8 @@ public class SchedulerService {
     private final NoticeCrawlingService noticeCrawlingService;
     private final BroadcastService broadcastService;
     private final PgSearchIndexSyncService pgSearchIndexSyncService;
+    private final MjuCalendarService mjuCalendarService;
+    private final MissedAlarmBackfillService missedAlarmBackfillService;
 
     // 검색 인덱스 정합성 보정 (매일 04:00, 저트래픽 시간대)
     // - 평상시 반영은 도메인 변경 이벤트(AFTER_COMMIT)가 담당.
@@ -45,6 +49,37 @@ public class SchedulerService {
                 log.info("검색 인덱스 정합성 보정 완료");
             } catch (Exception e) {
                 log.error("검색 인덱스 정합성 보정 실패 : {}", e.getMessage(), e);
+            }
+        });
+    }
+
+    // 알림 backfill (매일 04:10, reconcile 직후)
+    // - reconcile 은 인덱스에 직접 upsert 하고 이벤트를 발행하지 않아 알림이 누락된다.
+    // - 최근 색인분을 다시 매칭에 태워 메운다. 중복은 기존 dedup 이 막는다.
+    @Scheduled(cron = "0 10 4 * * *")
+    public void scheduledAlarmBackfill() {
+        log.info("[스케쥴러] 매일 04:10 알림 backfill 실행");
+        CompletableFuture.runAsync(() -> {
+            try {
+                missedAlarmBackfillService.backfill();
+            } catch (Exception e) {
+                log.error("알림 backfill 실패 : {}", e.getMessage(), e);
+            }
+        });
+    }
+
+    // 학사일정 동기화 (매주 월 03:00)
+    // - 학사일정은 연 단위 데이터라 잦은 크롤이 불필요하다. 2026-08-05 이후 갱신이 멈춰 있었음.
+    // - refresh 는 자연키 기준 멱등이라 변경분만 반영된다(구독자 반복 알림 없음).
+    @Scheduled(cron = "0 0 3 * * MON")
+    public void scheduledRefreshCalendar() {
+        int currentYear = java.time.Year.now().getValue();
+        log.info("[스케쥴러] 매주 월 03:00 학사일정 동기화 실행 ({}~{})", currentYear, currentYear + 1);
+        CompletableFuture.runAsync(() -> {
+            try {
+                mjuCalendarService.refresh(currentYear, currentYear + 1);
+            } catch (Exception e) {
+                log.error("학사일정 동기화 실패 : {}", e.getMessage(), e);
             }
         });
     }

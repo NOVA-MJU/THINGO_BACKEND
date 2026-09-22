@@ -149,10 +149,67 @@ class KeywordSubscriptionRepositoryIT {
         String docTokens = KomoranTokenizerUtil.buildSearchTokens("2026 교내 장학금 신청 안내", null, "장학금 신청 안내");
 
         // when
-        List<KeywordMatch> matches = repository.findMatchingSubscriptions("NOTICE", docTokens);
+        List<KeywordMatch> matches = repository.findMatchingSubscriptions(
+                "NOTICE", docTokens, "2026 교내 장학금 신청 안내");
 
         // then
         assertThat(matches).extracting(KeywordMatch::keyword).contains("장학");
+    }
+
+    @Test
+    @DisplayName("복합어 보조 매칭: 형태소가 쪼갠 '수강신청'을 원문 제목으로 잡는다")
+    void should_match_compound_keyword_by_title() {
+        // given - 형태소 분석이 제목을 '수강'/'신청' 으로 쪼개 접두 tsquery 가 '수강신청' 을 놓치는 상황
+        Member member = 영속회원("compound@mju.ac.kr");
+        repository.saveAndFlush(KeywordSubscription.of(member, "수강신청", Set.of(AlarmCategory.NOTICE)));
+        String title = "2025학년도 동계 계절수업 안내(수강신청 및 등록)";
+        String docTokens = "2025 학년 동계 계절 수업 안내 수강 신청 등록";
+
+        // when & then
+        assertThat(repository.findMatchingSubscriptions("NOTICE", docTokens, title))
+                .extracting(KeywordMatch::keyword)
+                .contains("수강신청");
+    }
+
+    @Test
+    @DisplayName("중위 삽입 매칭: '해외탐방' 구독이 '해외문화탐방' 공지를 잡는다")
+    void should_match_keyword_with_infix() {
+        // given
+        Member member = 영속회원("infix@mju.ac.kr");
+        repository.saveAndFlush(KeywordSubscription.of(member, "해외탐방", Set.of(AlarmCategory.NOTICE)));
+        String title = "2026학년도 동계 AI·전공융합 해외문화탐방 참가자 선발 안내";
+        String docTokens = "2026 학년 동계 ai 전공 융합 해외 문화 탐방 참가자 선발 안내";
+
+        // when & then
+        assertThat(repository.findMatchingSubscriptions("NOTICE", docTokens, title))
+                .extracting(KeywordMatch::keyword)
+                .contains("해외탐방");
+    }
+
+    @Test
+    @DisplayName("중위 삽입 매칭은 단어 경계를 지킨다('수강신청' != '재수강 ... 신청원서')")
+    void should_respect_word_boundary_in_infix_match() {
+        // given
+        Member member = 영속회원("boundary@mju.ac.kr");
+        repository.saveAndFlush(KeywordSubscription.of(member, "수강신청", Set.of(AlarmCategory.NOTICE)));
+        String title = "2026학년도 1학기 재수강 처리 신청원서 제출 안내";
+        String docTokens = "2026 학년 1 학기 재 수강 처리 신청 원서 제출 안내";
+
+        // when & then
+        assertThat(repository.findMatchingSubscriptions("NOTICE", docTokens, title)).isEmpty();
+    }
+
+    @Test
+    @DisplayName("2글자 키워드는 제목 부분일치로 확장하지 않는다('공지' != '인공지능')")
+    void should_not_substring_match_short_keyword() {
+        // given
+        Member member = 영속회원("short@mju.ac.kr");
+        repository.saveAndFlush(KeywordSubscription.of(member, "공지", Set.of(AlarmCategory.NOTICE)));
+        String title = "[인공지능·소프트웨어융합대학 교학팀] 계약직원 채용";
+        String docTokens = "인공 지능 소프트웨어 융합 대학 교학팀 계약 직원 채용";
+
+        // when & then
+        assertThat(repository.findMatchingSubscriptions("NOTICE", docTokens, title)).isEmpty();
     }
 
     @Test
@@ -163,7 +220,7 @@ class KeywordSubscriptionRepositoryIT {
                 member, "졸업", "GRADUATION", Set.of(AlarmCategory.NOTICE)));
         String docTokens = KomoranTokenizerUtil.buildSearchTokens("졸업 안내", null, "");
 
-        assertThat(repository.findMatchingSubscriptions("NOTICE", docTokens)).isEmpty();
+        assertThat(repository.findMatchingSubscriptions("NOTICE", docTokens, "졸업 안내")).isEmpty();
         assertThat(repository.findMatchingTopicSubscriptions(
                 AlarmCategory.NOTICE, Set.of("GRADUATION", "GRADUATION_DEFERRAL")))
                 .singleElement()
@@ -182,7 +239,7 @@ class KeywordSubscriptionRepositoryIT {
         String docTokens = KomoranTokenizerUtil.buildSearchTokens("장학금 안내", null, "장학금");
 
         // when & then
-        assertThat(repository.findMatchingSubscriptions("COMMUNITY", docTokens)).isEmpty();
+        assertThat(repository.findMatchingSubscriptions("COMMUNITY", docTokens, "장학금 안내")).isEmpty();
     }
 
     @Test
@@ -214,7 +271,8 @@ class KeywordSubscriptionRepositoryIT {
         String docTokens = KomoranTokenizerUtil.buildSearchTokens("2026 교내 장학금 신청 안내", null, "장학금 신청 안내");
 
         // when & then - off 면 발송 대상 아님
-        assertThat(repository.findMatchingSubscriptions("NOTICE", docTokens)).isEmpty();
+        assertThat(repository.findMatchingSubscriptions(
+                "NOTICE", docTokens, "2026 교내 장학금 신청 안내")).isEmpty();
     }
 
     @Test

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -41,15 +42,18 @@ public class CafeteriaAlarmService {
     private final NotificationHistoryRepository notificationHistoryRepository;
     private final DeviceTokenRepository deviceTokenRepository;
     private final RedisTemplate<String, String> keywordRedisTemplate;
+    private final AlarmMetrics alarmMetrics;
 
     public CafeteriaAlarmService(KeywordSubscriptionRepository keywordSubscriptionRepository,
                                  NotificationHistoryRepository notificationHistoryRepository,
                                  DeviceTokenRepository deviceTokenRepository,
-                                 @Qualifier("keywordRedisTemplate") RedisTemplate<String, String> keywordRedisTemplate) {
+                                 @Qualifier("keywordRedisTemplate") RedisTemplate<String, String> keywordRedisTemplate,
+                                 AlarmMetrics alarmMetrics) {
         this.keywordSubscriptionRepository = keywordSubscriptionRepository;
         this.notificationHistoryRepository = notificationHistoryRepository;
         this.deviceTokenRepository = deviceTokenRepository;
         this.keywordRedisTemplate = keywordRedisTemplate;
+        this.alarmMetrics = alarmMetrics;
     }
 
     /**
@@ -59,10 +63,12 @@ public class CafeteriaAlarmService {
      * @param signature 식단 내용 지문(직전과 같으면 발송 생략)
      * @return 회원별 FCM 발송 단위 목록
      */
-    @Transactional
+    // 호출부(WeeklyMenuAlarmListener)가 AFTER_COMMIT 단계 -> 완료된 트랜잭션에 참여하면 저장이 실패한다.
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public List<FcmDispatch> broadcastIfNew(int menuCount, String signature) {
-        // 1. 변경 감지: 직전 지문과 같으면(같은 주 반복 크롤링) 알림 생략
-        if (!isNewSignature(signature)) {
+        // 1. 변경 감지: 직전 지문과 같으면(같은 주 반복 크롤링) 알림 생략.
+        //    지문 갱신은 내역 적재가 끝난 뒤에 한다(먼저 갱신하면 저장 실패 시 그 주 학식은 영영 못 나간다).
+        if (isSameAsLastSignature(signature)) {
             log.info("[학식알림] 내용 변경 없음 - 발송 생략");
             return List.of();
         }
@@ -100,27 +106,39 @@ public class CafeteriaAlarmService {
             } catch (DataIntegrityViolationException e) {
                 // (회원, 지문) 유일 제약 위반 = 이미 발송됨. 안전하게 스킵.
                 log.debug("학식 중복 알림 스킵 - memberId={}, signature={}", member.getId(), signature);
+            } catch (RuntimeException e) {
+                alarmMetrics.failed("cafeteria");
+                log.error("[학식알림] 내역 저장 실패 - memberId={}, signature={}", member.getId(), signature, e);
+                throw e; // 지문을 갱신하지 않고 빠져나가 다음 크롤에서 재시도되게 한다
             }
         }
+
+        // 5. 여기까지 왔으면 적재 성공 -> 지문 갱신(같은 주 반복 크롤링 무시)
+        markSignature(signature);
+        alarmMetrics.dispatched(dispatches.size());
         log.info("[학식알림] 발송 단위 {}건 - menuCount={}", dispatches.size(), menuCount);
         return dispatches;
     }
 
     /**
-     * 직전 지문과 비교해 새 내용이면 갱신 후 true. Redis 장애 시에는 true 를 반환하고
+     * 직전 지문과 같은지만 본다(갱신하지 않음). Redis 장애 시에는 false(=진행)를 반환하고
      * (회원, 지문) DB 유일 제약에 dedup 을 맡긴다.
      */
-    private boolean isNewSignature(String signature) {
+    private boolean isSameAsLastSignature(String signature) {
         try {
-            String previous = keywordRedisTemplate.opsForValue().get(SIGNATURE_KEY);
-            if (signature.equals(previous)) {
-                return false;
-            }
-            keywordRedisTemplate.opsForValue().set(SIGNATURE_KEY, signature);
-            return true;
+            return signature.equals(keywordRedisTemplate.opsForValue().get(SIGNATURE_KEY));
         } catch (Exception e) {
             log.warn("Redis signature 비교 실패, DB 제약으로 진행", e);
-            return true;
+            return false;
+        }
+    }
+
+    /** 내역 적재가 끝난 뒤에만 호출한다. */
+    private void markSignature(String signature) {
+        try {
+            keywordRedisTemplate.opsForValue().set(SIGNATURE_KEY, signature);
+        } catch (Exception e) {
+            log.warn("Redis signature 갱신 실패 - DB 제약이 중복을 막는다", e);
         }
     }
 

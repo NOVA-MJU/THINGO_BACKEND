@@ -26,6 +26,9 @@ public interface MjuCalendarRepository extends JpaRepository<MjuCalendar, Long> 
 
     Page<MjuCalendar> findByYear(int year, Pageable pageable);
 
+    /** 멱등 갱신(refresh)용 - 해당 연도의 현재 저장분 전체 */
+    List<MjuCalendar> findByYear(int year);
+
     // 디데이용: 아직 끝나지 않은 일정(종료일 >= 기준일)만, 임박순 정렬
     List<MjuCalendar> findByEndDateGreaterThanEqualOrderByStartDateAscEndDateAscIdAsc(LocalDate today);
 }

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import nova.mjs.domain.thingo.ElasticSearch.Document.SearchDocument;
 import nova.mjs.domain.thingo.ElasticSearch.indexing.event.EntityIndexEvent;
 import nova.mjs.domain.thingo.keywordAlarm.entity.AlarmCategory;
+import nova.mjs.domain.thingo.keywordAlarm.service.AlarmMetrics;
 import nova.mjs.domain.thingo.keywordAlarm.service.KeywordMatchingService;
 import nova.mjs.domain.thingo.keywordAlarm.service.fcm.FcmDispatch;
 import nova.mjs.domain.thingo.keywordAlarm.service.fcm.FcmSender;
@@ -30,6 +31,7 @@ public class KeywordAlarmIndexListener {
 
     private final KeywordMatchingService keywordMatchingService;
     private final FcmSender fcmSender;
+    private final AlarmMetrics alarmMetrics;
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void on(EntityIndexEvent<? extends SearchDocument> event) {
@@ -58,6 +60,7 @@ public class KeywordAlarmIndexListener {
                 log.info("[키워드알림] 발송 단위 {}건 - type={}, id={}", dispatches.size(), doc.getType(), doc.getId());
             }
         } catch (Exception e) {
+            alarmMetrics.failed("listener");
             log.error("[키워드알림] 매칭/발송 실패 - type={}, id={}", doc.getType(), doc.getId(), e);
         }
     }

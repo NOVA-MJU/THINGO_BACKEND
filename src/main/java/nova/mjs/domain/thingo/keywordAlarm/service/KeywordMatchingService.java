@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
@@ -50,19 +51,22 @@ public class KeywordMatchingService {
     private final MemberRepository memberRepository;
     private final RedisTemplate<String, String> keywordRedisTemplate;
     private final NoticeSemanticClassifier noticeSemanticClassifier;
+    private final AlarmMetrics alarmMetrics;
 
     public KeywordMatchingService(KeywordSubscriptionRepository keywordSubscriptionRepository,
                                   NotificationHistoryRepository notificationHistoryRepository,
                                   DeviceTokenRepository deviceTokenRepository,
                                   MemberRepository memberRepository,
                                   @Qualifier("keywordRedisTemplate") RedisTemplate<String, String> keywordRedisTemplate,
-                                  NoticeSemanticClassifier noticeSemanticClassifier) {
+                                  NoticeSemanticClassifier noticeSemanticClassifier,
+                                  AlarmMetrics alarmMetrics) {
         this.keywordSubscriptionRepository = keywordSubscriptionRepository;
         this.notificationHistoryRepository = notificationHistoryRepository;
         this.deviceTokenRepository = deviceTokenRepository;
         this.memberRepository = memberRepository;
         this.keywordRedisTemplate = keywordRedisTemplate;
         this.noticeSemanticClassifier = noticeSemanticClassifier;
+        this.alarmMetrics = alarmMetrics;
     }
 
     /**
@@ -72,7 +76,10 @@ public class KeywordMatchingService {
      *
      * @return 회원별 FCM 발송 단위 목록 (기기 토큰이 없는 회원은 제외)
      */
-    @Transactional
+    // 호출부(KeywordAlarmIndexListener)가 AFTER_COMMIT 단계라 원본 트랜잭션은 이미 커밋된 상태다.
+    // REQUIRED 로 두면 그 완료된 트랜잭션에 참여해 saveAndFlush 가
+    // "no transaction is in progress" 로 실패한다(PgUnifiedSearchIndexListener 와 동일한 이유로 REQUIRES_NEW).
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public List<FcmDispatch> matchAndCollect(SearchDocument doc) {
         // 1. MVP 카테고리(NOTICE/MJU_CALENDAR/COMMUNITY) 외 콘텐츠는 알림 대상 아님
         AlarmCategory category = AlarmCategory.fromSearchType(doc.getType()).orElse(null);
@@ -87,7 +94,8 @@ public class KeywordMatchingService {
         long startedAt = System.currentTimeMillis();
         String searchIndexId = buildSearchIndexId(doc.getType(), doc.getId());
         List<KeywordMatch> matches = new ArrayList<>(
-                keywordSubscriptionRepository.findMatchingSubscriptions(category.name(), docTokens));
+                keywordSubscriptionRepository.findMatchingSubscriptions(
+                        category.name(), docTokens, doc.getTitle()));
         NoticeSemanticMetadata semantics = noticeSemanticClassifier.classify(
                 doc.getTitle(), doc.getContent(), null);
         Set<String> expandedTopicIds = semantics.expandedTopicIds();
@@ -132,8 +140,15 @@ public class KeywordMatchingService {
             } catch (DataIntegrityViolationException e) {
                 // (회원, 콘텐츠) 유일 제약 위반 = 이미 발송됨(권위 dedup). 안전하게 스킵.
                 log.debug("중복 알림 스킵 - memberId={}, searchIndexId={}", match.memberId(), searchIndexId);
+            } catch (RuntimeException e) {
+                // 저장 실패. claim 을 그대로 두면 TTL 7일 동안 재시도조차 막히므로 되돌린다.
+                releaseDedup(match.memberId(), searchIndexId);
+                alarmMetrics.matchFailed();
+                log.error("[키워드알림] 내역 저장 실패 - memberId={}, searchIndexId={}",
+                        match.memberId(), searchIndexId, e);
             }
         }
+        alarmMetrics.dispatched(dispatches.size());
         return dispatches;
     }
 
@@ -149,6 +164,15 @@ public class KeywordMatchingService {
         } catch (Exception e) {
             log.warn("Redis dedup 실패, DB 제약으로 진행 - key={}", key, e);
             return true;
+        }
+    }
+
+    /** 저장이 실패한 claim 을 되돌린다(되돌리지 않으면 TTL 동안 재시도 불가). */
+    private void releaseDedup(Long memberId, String searchIndexId) {
+        try {
+            keywordRedisTemplate.delete(DEDUP_KEY_PREFIX + memberId + ":" + searchIndexId);
+        } catch (Exception e) {
+            log.warn("Redis dedup 해제 실패 - memberId={}, searchIndexId={}", memberId, searchIndexId, e);
         }
     }
 

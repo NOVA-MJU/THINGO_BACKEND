@@ -5,10 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import nova.mjs.domain.thingo.keywordAlarm.dto.ManualAlarmDTO;
 import nova.mjs.domain.thingo.keywordAlarm.entity.AlarmCategory;
 import nova.mjs.domain.thingo.keywordAlarm.entity.DeviceToken;
+import nova.mjs.domain.thingo.keywordAlarm.entity.KeywordSubscription;
 import nova.mjs.domain.thingo.keywordAlarm.entity.NotificationHistory;
 import nova.mjs.domain.thingo.keywordAlarm.exception.AlarmSourceNotFoundException;
 import nova.mjs.domain.thingo.keywordAlarm.exception.DeviceTokenNotFoundException;
+import nova.mjs.domain.thingo.keywordAlarm.exception.KeywordSubscriptionNotFoundException;
 import nova.mjs.domain.thingo.keywordAlarm.repository.DeviceTokenRepository;
+import nova.mjs.domain.thingo.keywordAlarm.repository.KeywordSubscriptionRepository;
 import nova.mjs.domain.thingo.keywordAlarm.repository.NotificationHistoryRepository;
 import nova.mjs.domain.thingo.keywordAlarm.service.fcm.FcmDispatch;
 import nova.mjs.domain.thingo.keywordAlarm.service.fcm.FcmSender;
@@ -30,17 +33,18 @@ import java.util.Map;
  *
  * 자동 키워드 매칭(KeywordMatchingService)과 달리, 새 콘텐츠 유입이 아니라
  * "특정 회원 + 특정 키워드"로 과거에 색인된 콘텐츠 1건을 골라 즉시 FCM 푸시를 보낸다.
- * (예: 데모/운영 점검용으로 '멘토' 키워드의 과거 공지 1건을 한 사용자에게 발송)
+ * (예: 운영 점검용으로 '해외봉사' 구독자에게 해당 키워드의 과거 공지 1건을 재발송)
+ *
+ * 키워드는 대상 회원이 실제로 등록(enabled)한 것이어야 한다. 점검용이라도 구독하지 않은 키워드로
+ * 보내면 사용자 알림함에 본인이 등록한 적 없는 키워드의 알림이 남는다.
  */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ManualKeywordAlarmService {
 
-    /** 실제 구독과 무관한 수동 발송임을 나타내는 중립 구독 id (NotificationHistory.ofActivity 와 동일 규약) */
-    private static final long MANUAL_SUBSCRIPTION_ID = 0L;
-
     private final MemberRepository memberRepository;
+    private final KeywordSubscriptionRepository keywordSubscriptionRepository;
     private final UnifiedSearchIndexRepository unifiedSearchIndexRepository;
     private final DeviceTokenRepository deviceTokenRepository;
     private final NotificationHistoryRepository notificationHistoryRepository;
@@ -50,6 +54,7 @@ public class ManualKeywordAlarmService {
      * 대상 회원에게 키워드 매칭 과거 콘텐츠 1건을 FCM 으로 발송한다.
      *
      * @throws MemberNotFoundException     대상 이메일의 회원이 없음
+     * @throws KeywordSubscriptionNotFoundException 대상이 그 키워드를 등록하지 않았거나 알림을 꺼둠
      * @throws AlarmSourceNotFoundException 키워드에 매칭되는 활성 콘텐츠가 없음
      * @throws DeviceTokenNotFoundException 대상 회원의 등록 기기 토큰이 없음(보낼 곳이 없음)
      */
@@ -61,12 +66,21 @@ public class ManualKeywordAlarmService {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(MemberNotFoundException::new);
 
-        // 2. 발송할 과거 콘텐츠 1건.
+        // 2. 대상이 실제로 등록한 키워드만 허용한다.
+        //    (운영 점검용이라도 구독하지 않은 키워드로 보내면 사용자 알림함에 남의 키워드가 쌓인다)
+        KeywordSubscription subscription = keywordSubscriptionRepository
+                .findByMemberOrderByIdDesc(member).stream()
+                .filter(KeywordSubscription::isEnabled)
+                .filter(candidate -> normalize(candidate.getKeyword()).equals(normalize(keyword)))
+                .findFirst()
+                .orElseThrow(KeywordSubscriptionNotFoundException::new);
+
+        // 3. 발송할 과거 콘텐츠 1건.
         //    - searchIndexId 를 주면 그 콘텐츠를 정확히 지정(마케팅: 특정 캠페인 공지 선택).
         //    - 없으면 키워드가 제목에 포함된 활성 콘텐츠 중 최신 1건 자동 선택.
         UnifiedSearchIndex doc = resolveSource(searchIndexId, keyword);
 
-        // 3. 대상 회원의 기기 토큰(없으면 보낼 곳이 없음)
+        // 4. 대상 회원의 기기 토큰(없으면 보낼 곳이 없음)
         List<String> tokens = deviceTokenRepository.findByMember(member).stream()
                 .map(DeviceToken::getFcmToken)
                 .toList();
@@ -74,14 +88,14 @@ public class ManualKeywordAlarmService {
             throw new DeviceTokenNotFoundException();
         }
 
-        // 4. 알림함 기록(같은 회원+콘텐츠는 유일 제약 -> 이미 있으면 그 기록을 재사용해 재발송 허용)
+        // 5. 알림함 기록(같은 회원+콘텐츠는 유일 제약 -> 이미 있으면 그 기록을 재사용해 재발송 허용)
         NotificationHistory history = notificationHistoryRepository
                 .findByMemberAndSearchIndexId(member, doc.getId())
                 .orElseGet(() -> notificationHistoryRepository.saveAndFlush(
-                        NotificationHistory.of(member, MANUAL_SUBSCRIPTION_ID, keyword,
+                        NotificationHistory.of(member, subscription.getId(), subscription.getKeyword(),
                                 doc.getId(), doc.getTitle(), doc.getLink(), doc.getType())));
 
-        // 5. FCM 발송(키워드 알림 스타일: "'키워드' 키워드 새 소식" / 본문=콘텐츠 제목). @Async 로 비동기 처리.
+        // 6. FCM 발송(키워드 알림 스타일: "'키워드' 키워드 새 소식" / 본문=콘텐츠 제목). @Async 로 비동기 처리.
         FcmDispatch dispatch = new FcmDispatch(tokens, keyword, doc.getTitle(),
                 buildData(doc, history.getId()));
         fcmSender.sendAll(dispatch);
@@ -134,6 +148,11 @@ public class ManualKeywordAlarmService {
                 .replace("\\", "\\\\")
                 .replace("%", "\\%")
                 .replace("_", "\\_");
+    }
+
+    /** 키워드 비교용 정규화: 공백/기호 제거 + 소문자 */
+    private String normalize(String value) {
+        return value == null ? "" : value.replaceAll("[^0-9a-zA-Z가-힣]", "").toLowerCase();
     }
 
     private String nz(String v) {

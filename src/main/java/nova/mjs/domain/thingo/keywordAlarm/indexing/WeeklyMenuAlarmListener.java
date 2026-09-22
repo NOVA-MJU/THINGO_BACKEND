@@ -2,6 +2,7 @@ package nova.mjs.domain.thingo.keywordAlarm.indexing;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import nova.mjs.domain.thingo.keywordAlarm.service.AlarmMetrics;
 import nova.mjs.domain.thingo.keywordAlarm.service.CafeteriaAlarmService;
 import nova.mjs.domain.thingo.keywordAlarm.service.fcm.FcmDispatch;
 import nova.mjs.domain.thingo.keywordAlarm.service.fcm.FcmSender;
@@ -25,6 +26,7 @@ public class WeeklyMenuAlarmListener {
 
     private final CafeteriaAlarmService cafeteriaAlarmService;
     private final FcmSender fcmSender;
+    private final AlarmMetrics alarmMetrics;
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void on(WeeklyMenuCrawledEvent event) {
@@ -39,6 +41,7 @@ public class WeeklyMenuAlarmListener {
             // 2. FCM 발송(트랜잭션 밖, 비동기)
             dispatches.forEach(fcmSender::sendAll);
         } catch (Exception e) {
+            alarmMetrics.failed("cafeteria-listener");
             log.error("[학식알림] 방송 실패 - menuCount={}", event.menuCount(), e);
         }
     }

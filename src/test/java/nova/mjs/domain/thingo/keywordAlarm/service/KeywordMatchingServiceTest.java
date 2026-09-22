@@ -48,7 +48,8 @@ class KeywordMatchingServiceTest {
     private KeywordMatchingService service() {
         return new KeywordMatchingService(keywordSubscriptionRepository, notificationHistoryRepository,
                 deviceTokenRepository, memberRepository, keywordRedisTemplate,
-                new NoticeSemanticClassifier(new TopicCatalog()));
+                new NoticeSemanticClassifier(new TopicCatalog()),
+                new AlarmMetrics(new io.micrometer.core.instrument.simple.SimpleMeterRegistry()));
     }
 
     private SearchDocument doc(String id, String type, String title, String content) {
@@ -75,7 +76,7 @@ class KeywordMatchingServiceTest {
     @DisplayName("매칭 시 내역을 저장하고 기기 토큰으로 발송 단위를 만든다")
     void should_save_history_and_collect_tokens() {
         // given - NOTICE 문서가 "장학" 구독과 매칭
-        given(keywordSubscriptionRepository.findMatchingSubscriptions(eq("NOTICE"), anyString()))
+        given(keywordSubscriptionRepository.findMatchingSubscriptions(eq("NOTICE"), anyString(), anyString()))
                 .willReturn(List.of(new KeywordMatch(10L, 1L, "장학")));
         given(keywordRedisTemplate.opsForValue()).willReturn(valueOperations);
         given(valueOperations.setIfAbsent(anyString(), eq("1"), any(Duration.class))).willReturn(true);
@@ -101,7 +102,7 @@ class KeywordMatchingServiceTest {
     @DisplayName("한 콘텐츠가 한 회원의 키워드 여러 개에 걸려도 알림은 1건으로 합친다")
     void should_merge_per_member() {
         // given - 같은 회원(1L)의 "장학", "신청" 두 구독이 모두 매칭
-        given(keywordSubscriptionRepository.findMatchingSubscriptions(eq("NOTICE"), anyString()))
+        given(keywordSubscriptionRepository.findMatchingSubscriptions(eq("NOTICE"), anyString(), anyString()))
                 .willReturn(List.of(
                         new KeywordMatch(10L, 1L, "장학"),
                         new KeywordMatch(11L, 1L, "신청")));
@@ -126,7 +127,7 @@ class KeywordMatchingServiceTest {
     @Test
     @DisplayName("Redis dedup 가 이미 발송됨을 알리면 내역을 저장하지 않는다")
     void should_skip_when_dedup_hit() {
-        given(keywordSubscriptionRepository.findMatchingSubscriptions(eq("NOTICE"), anyString()))
+        given(keywordSubscriptionRepository.findMatchingSubscriptions(eq("NOTICE"), anyString(), anyString()))
                 .willReturn(List.of(new KeywordMatch(10L, 1L, "장학")));
         given(keywordRedisTemplate.opsForValue()).willReturn(valueOperations);
         given(valueOperations.setIfAbsent(anyString(), eq("1"), any(Duration.class))).willReturn(false);
@@ -140,7 +141,7 @@ class KeywordMatchingServiceTest {
     @Test
     @DisplayName("상위 Topic 구독은 하위 Topic으로 분류된 신규 공지와 매칭한다")
     void should_match_parent_topic_subscription() {
-        given(keywordSubscriptionRepository.findMatchingSubscriptions(eq("NOTICE"), anyString()))
+        given(keywordSubscriptionRepository.findMatchingSubscriptions(eq("NOTICE"), anyString(), anyString()))
                 .willReturn(List.of());
         given(keywordSubscriptionRepository.findMatchingTopicSubscriptions(
                 eq(nova.mjs.domain.thingo.keywordAlarm.entity.AlarmCategory.NOTICE), any()))

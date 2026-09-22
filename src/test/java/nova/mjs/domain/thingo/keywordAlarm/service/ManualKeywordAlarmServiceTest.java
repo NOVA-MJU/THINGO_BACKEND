@@ -3,10 +3,14 @@ package nova.mjs.domain.thingo.keywordAlarm.service;
 import nova.mjs.domain.thingo.keywordAlarm.dto.ManualAlarmDTO;
 import nova.mjs.domain.thingo.keywordAlarm.entity.DevicePlatform;
 import nova.mjs.domain.thingo.keywordAlarm.entity.DeviceToken;
+import nova.mjs.domain.thingo.keywordAlarm.entity.AlarmCategory;
+import nova.mjs.domain.thingo.keywordAlarm.entity.KeywordSubscription;
 import nova.mjs.domain.thingo.keywordAlarm.entity.NotificationHistory;
 import nova.mjs.domain.thingo.keywordAlarm.exception.AlarmSourceNotFoundException;
 import nova.mjs.domain.thingo.keywordAlarm.exception.DeviceTokenNotFoundException;
+import nova.mjs.domain.thingo.keywordAlarm.exception.KeywordSubscriptionNotFoundException;
 import nova.mjs.domain.thingo.keywordAlarm.repository.DeviceTokenRepository;
+import nova.mjs.domain.thingo.keywordAlarm.repository.KeywordSubscriptionRepository;
 import nova.mjs.domain.thingo.keywordAlarm.repository.NotificationHistoryRepository;
 import nova.mjs.domain.thingo.keywordAlarm.service.fcm.FcmDispatch;
 import nova.mjs.domain.thingo.keywordAlarm.service.fcm.FcmSender;
@@ -26,6 +30,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,6 +44,7 @@ import static org.mockito.Mockito.verify;
 class ManualKeywordAlarmServiceTest {
 
     @Mock private MemberRepository memberRepository;
+    @Mock private KeywordSubscriptionRepository keywordSubscriptionRepository;
     @Mock private UnifiedSearchIndexRepository unifiedSearchIndexRepository;
     @Mock private DeviceTokenRepository deviceTokenRepository;
     @Mock private NotificationHistoryRepository notificationHistoryRepository;
@@ -51,6 +57,15 @@ class ManualKeywordAlarmServiceTest {
 
     private Member 회원(Long id) {
         return Member.builder().id(id).email(EMAIL).build();
+    }
+
+    /** 대상이 그 키워드를 실제로 구독 중인 상태를 만든다(수동 발송 전제 조건) */
+    private void 구독중(Member member, String keyword) {
+        KeywordSubscription subscription =
+                KeywordSubscription.of(member, keyword, Set.of(AlarmCategory.NOTICE));
+        ReflectionTestUtils.setField(subscription, "id", 42L);
+        given(keywordSubscriptionRepository.findByMemberOrderByIdDesc(member))
+                .willReturn(List.of(subscription));
     }
 
     private UnifiedSearchIndex 공지(String title) {
@@ -67,6 +82,7 @@ class ManualKeywordAlarmServiceTest {
         Member member = 회원(1L);
         UnifiedSearchIndex doc = 공지("2024 멘토링 프로그램 멘토 모집");
         given(memberRepository.findByEmail(EMAIL)).willReturn(Optional.of(member));
+        구독중(member, KEYWORD);
         given(unifiedSearchIndexRepository.findLatestActiveByTitleKeyword(any(), any()))
                 .willReturn(Optional.of(doc));
         given(deviceTokenRepository.findByMember(member))
@@ -103,6 +119,7 @@ class ManualKeywordAlarmServiceTest {
         Member member = 회원(1L);
         UnifiedSearchIndex doc = 공지("2024-2 멘토링 발대식 안내");
         given(memberRepository.findByEmail(EMAIL)).willReturn(Optional.of(member));
+        구독중(member, KEYWORD);
         given(unifiedSearchIndexRepository.findById("NOTICE:100")).willReturn(Optional.of(doc));
         given(deviceTokenRepository.findByMember(member))
                 .willReturn(List.of(DeviceToken.of(member, "tok-1", DevicePlatform.ANDROID)));
@@ -129,6 +146,7 @@ class ManualKeywordAlarmServiceTest {
                 "NOTICE:100", doc.getTitle(), doc.getLink(), doc.getType());
         ReflectionTestUtils.setField(existing, "id", 77L);
         given(memberRepository.findByEmail(EMAIL)).willReturn(Optional.of(member));
+        구독중(member, KEYWORD);
         given(unifiedSearchIndexRepository.findLatestActiveByTitleKeyword(any(), any()))
                 .willReturn(Optional.of(doc));
         given(deviceTokenRepository.findByMember(member))
@@ -144,6 +162,33 @@ class ManualKeywordAlarmServiceTest {
     }
 
     @Test
+    @DisplayName("대상이 등록하지 않은 키워드면 발송하지 않는다(알림함 오염 방지)")
+    void should_reject_unsubscribed_keyword() {
+        Member member = 회원(1L);
+        given(memberRepository.findByEmail(EMAIL)).willReturn(Optional.of(member));
+        given(keywordSubscriptionRepository.findByMemberOrderByIdDesc(member)).willReturn(List.of());
+
+        assertThatThrownBy(() -> service.send(EMAIL, KEYWORD, null))
+                .isInstanceOf(KeywordSubscriptionNotFoundException.class);
+        verify(notificationHistoryRepository, never()).saveAndFlush(any());
+        verify(fcmSender, never()).sendAll(any());
+    }
+
+    @Test
+    @DisplayName("구독이 꺼져(enabled=false) 있으면 발송하지 않는다")
+    void should_reject_disabled_subscription() {
+        Member member = 회원(1L);
+        KeywordSubscription off = KeywordSubscription.of(member, KEYWORD, Set.of(AlarmCategory.NOTICE));
+        off.changeEnabled(false);
+        given(memberRepository.findByEmail(EMAIL)).willReturn(Optional.of(member));
+        given(keywordSubscriptionRepository.findByMemberOrderByIdDesc(member)).willReturn(List.of(off));
+
+        assertThatThrownBy(() -> service.send(EMAIL, KEYWORD, null))
+                .isInstanceOf(KeywordSubscriptionNotFoundException.class);
+        verify(fcmSender, never()).sendAll(any());
+    }
+
+    @Test
     @DisplayName("대상 회원이 없으면 MemberNotFoundException")
     void should_throw_when_member_missing() {
         given(memberRepository.findByEmail(EMAIL)).willReturn(Optional.empty());
@@ -156,7 +201,9 @@ class ManualKeywordAlarmServiceTest {
     @Test
     @DisplayName("키워드에 매칭되는 과거 콘텐츠가 없으면 AlarmSourceNotFoundException")
     void should_throw_when_no_content() {
-        given(memberRepository.findByEmail(EMAIL)).willReturn(Optional.of(회원(1L)));
+        Member member = 회원(1L);
+        given(memberRepository.findByEmail(EMAIL)).willReturn(Optional.of(member));
+        구독중(member, KEYWORD);
         given(unifiedSearchIndexRepository.findLatestActiveByTitleKeyword(any(), any()))
                 .willReturn(Optional.empty());
 
@@ -170,6 +217,7 @@ class ManualKeywordAlarmServiceTest {
     void should_throw_when_no_device_token() {
         Member member = 회원(1L);
         given(memberRepository.findByEmail(EMAIL)).willReturn(Optional.of(member));
+        구독중(member, KEYWORD);
         given(unifiedSearchIndexRepository.findLatestActiveByTitleKeyword(any(), any()))
                 .willReturn(Optional.of(공지("멘토 모집")));
         given(deviceTokenRepository.findByMember(member)).willReturn(List.of());

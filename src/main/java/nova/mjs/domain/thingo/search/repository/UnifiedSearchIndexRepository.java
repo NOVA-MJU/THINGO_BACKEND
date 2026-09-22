@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,4 +76,28 @@ public interface UnifiedSearchIndexRepository
 
     /** 동일 link 중복 collapse 용. 같은 원문 링크를 가진 모든 행(활성/비활성 포함). */
     List<UnifiedSearchIndex> findByLink(String link);
+
+    /**
+     * 알림 backfill 후보: 최근 색인된 알림 대상 콘텐츠.
+     *
+     * reconcile(매일 04:00)은 인덱스에 직접 upsert 하고 이벤트를 발행하지 않아,
+     * 실시간 경로를 놓친 콘텐츠는 검색에는 뜨지만 알림은 영영 나가지 않는다.
+     * 그 누락분을 다시 매칭에 태우기 위한 조회다.
+     *
+     * @param since   색인 시각 하한 (이 시각 이후 색인된 행만)
+     * @param minDate 콘텐츠 날짜 하한 (오래된 게시물 대량 소급 발송 방지)
+     */
+    @Query(value = """
+            SELECT * FROM unified_search_index
+            WHERE active = true
+              AND type IN (:types)
+              AND indexed_at >= :since
+              AND date >= :minDate
+            ORDER BY indexed_at
+            LIMIT :maxRows
+            """, nativeQuery = true)
+    List<UnifiedSearchIndex> findAlarmBackfillCandidates(@Param("types") List<String> types,
+                                                         @Param("since") Instant since,
+                                                         @Param("minDate") Instant minDate,
+                                                         @Param("maxRows") int maxRows);
 }

@@ -52,14 +52,58 @@ public class MjuCalendarService {
         return result.map(MjuCalendarDTO::fromEntity);
     }
 
+    /**
+     * 학사일정을 크롤 결과와 동기화한다(멱등).
+     *
+     * 전체 삭제 후 재삽입하면 변한 게 없어도 매번 id 가 바뀌고 INSERT 이벤트가 전부 다시 발생한다
+     * -> 검색 인덱스 전량 교체 + 학사일정 구독자에게 같은 일정이 반복 알림된다.
+     * 그래서 (연도, 시작일, 종료일, 설명)을 자연키로 보고 신규만 저장하고 사라진 것만 지운다.
+     */
     @Transactional
     public void refresh(int fromYear, int toYear) {
-        calendarRepository.deleteAll();  // 전체 초기화 후 재갱신
         for (int currentYear = fromYear; currentYear <= toYear; currentYear++) {
-            List<MjuCalendarDTO> list = crawlYear(currentYear);
-            list.forEach(dto -> calendarRepository.save(MjuCalendar.create(dto)));
-            log.info("{}학년도 일정 {}건 저장 완료", currentYear, list.size());
+            List<MjuCalendarDTO> crawled = crawlYear(currentYear);
+            if (crawled.isEmpty()) {
+                // 크롤 실패/구조 변경을 전량 삭제로 오해하지 않는다.
+                log.warn("{}학년도 일정 크롤 결과 0건 - 기존 데이터 유지", currentYear);
+                continue;
+            }
+
+            Map<String, MjuCalendarDTO> desired = new LinkedHashMap<>();
+            crawled.forEach(dto -> desired.put(naturalKey(dto.getYear(), dto.getStartDate(),
+                    dto.getEndDate(), dto.getDescription()), dto));
+
+            List<MjuCalendar> existing = calendarRepository.findByYear(currentYear);
+            Set<String> existingKeys = new HashSet<>();
+            List<MjuCalendar> removed = new ArrayList<>();
+            for (MjuCalendar entity : existing) {
+                String key = naturalKey(entity.getYear(), entity.getStartDate(),
+                        entity.getEndDate(), entity.getDescription());
+                existingKeys.add(key);
+                if (!desired.containsKey(key)) {
+                    removed.add(entity);
+                }
+            }
+
+            List<MjuCalendar> added = desired.entrySet().stream()
+                    .filter(entry -> !existingKeys.contains(entry.getKey()))
+                    .map(entry -> MjuCalendar.create(entry.getValue()))
+                    .toList();
+
+            if (!removed.isEmpty()) {
+                calendarRepository.deleteAll(removed);
+            }
+            if (!added.isEmpty()) {
+                calendarRepository.saveAll(added);
+            }
+            log.info("{}학년도 일정 동기화 - 크롤 {}건, 신규 {}건, 삭제 {}건, 유지 {}건",
+                    currentYear, crawled.size(), added.size(), removed.size(),
+                    existing.size() - removed.size());
         }
+    }
+
+    private String naturalKey(int year, LocalDate startDate, LocalDate endDate, String description) {
+        return year + "|" + startDate + "|" + endDate + "|" + (description == null ? "" : description.trim());
     }
 
     private List<MjuCalendarDTO> crawlYear(int year) {

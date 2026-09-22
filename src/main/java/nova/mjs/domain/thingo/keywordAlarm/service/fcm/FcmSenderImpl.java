@@ -7,6 +7,7 @@ import com.google.firebase.messaging.MessagingErrorCode;
 import com.google.firebase.messaging.Notification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import nova.mjs.domain.thingo.keywordAlarm.service.AlarmMetrics;
 import nova.mjs.domain.thingo.keywordAlarm.service.DeviceTokenService;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.scheduling.annotation.Async;
@@ -27,6 +28,7 @@ public class FcmSenderImpl implements FcmSender {
     /** FirebaseMessaging 빈이 없을 수 있어(로컬/테스트) ObjectProvider 로 선택 주입 */
     private final ObjectProvider<FirebaseMessaging> firebaseMessagingProvider;
     private final DeviceTokenService deviceTokenService;
+    private final AlarmMetrics alarmMetrics;
 
     @Async
     @Override
@@ -54,6 +56,7 @@ public class FcmSenderImpl implements FcmSender {
                     .build();
             try {
                 messaging.send(message);
+                alarmMetrics.fcmSent();
             } catch (FirebaseMessagingException e) {
                 handleSendFailure(token, e);
             }
@@ -65,6 +68,7 @@ public class FcmSenderImpl implements FcmSender {
      */
     private void handleSendFailure(String token, FirebaseMessagingException e) {
         MessagingErrorCode code = e.getMessagingErrorCode();
+        alarmMetrics.fcmFailed(code == null ? null : code.name());
         if (code == MessagingErrorCode.UNREGISTERED || code == MessagingErrorCode.INVALID_ARGUMENT) {
             log.info("[FCM] 무효 토큰 정리 - code={}", code);
             deviceTokenService.deleteByToken(token);

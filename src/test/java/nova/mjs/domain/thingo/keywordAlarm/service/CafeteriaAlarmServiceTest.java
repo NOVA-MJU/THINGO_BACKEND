@@ -40,7 +40,8 @@ class CafeteriaAlarmServiceTest {
 
     private CafeteriaAlarmService service() {
         return new CafeteriaAlarmService(keywordSubscriptionRepository, notificationHistoryRepository,
-                deviceTokenRepository, keywordRedisTemplate);
+                deviceTokenRepository, keywordRedisTemplate,
+                new AlarmMetrics(new io.micrometer.core.instrument.simple.SimpleMeterRegistry()));
     }
 
     private Member 회원(Long id) {
