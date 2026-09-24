@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 public interface NotificationHistoryRepository extends JpaRepository<NotificationHistory, Long> {
@@ -30,6 +32,10 @@ public interface NotificationHistoryRepository extends JpaRepository<Notificatio
     Optional<NotificationHistory> findByMemberAndSearchIndexId(Member member, String searchIndexId);
 
     long countByMemberAndReadFalse(Member member);
+
+    /** 교차게시 중복 판정용 - 회원이 최근(since 이후) 받은 알림 제목 */
+    @Query("select n.title from NotificationHistory n where n.member.id = :memberId and n.sentAt >= :since")
+    List<String> findRecentTitles(@Param("memberId") Long memberId, @Param("since") Instant since);
 
     /** 읽지 않은 알림 일괄 읽음 처리, 변경 건수 반환 */
     @Modifying(clearAutomatically = true)

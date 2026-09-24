@@ -99,6 +99,37 @@ class KeywordMatchingServiceTest {
     }
 
     @Test
+    @DisplayName("같은 공지가 다른 게시판에 별도 글로 올라오면(교차게시) 최근 받은 회원에게 다시 보내지 않는다")
+    void should_skip_cross_posted_notice() {
+        // given - 회원 1이 "[진로취업지원팀] ..." 을 이미 받았고, 같은 공지가 부서명 없이 다른 게시판에 또 올라옴
+        given(keywordSubscriptionRepository.findMatchingSubscriptions(eq("NOTICE"), anyString(), anyString()))
+                .willReturn(List.of(new KeywordMatch(37L, 1L, "모집")));
+        given(notificationHistoryRepository.findRecentTitles(eq(1L), any(Instant.class)))
+                .willReturn(List.of("[진로취업지원팀] 2026 선배와의 취업멘토링 참여학생 모집(10월)"));
+
+        // when
+        List<FcmDispatch> result = service().matchAndCollect(
+                doc("2921", "NOTICE", "2026 선배와의 취업멘토링 참여학생 모집(10월)", "본문"));
+
+        // then - 내역 저장/발송 없음, Redis claim 도 하지 않음
+        assertThat(result).isEmpty();
+        verify(notificationHistoryRepository, never()).saveAndFlush(any(NotificationHistory.class));
+        verifyNoInteractions(keywordRedisTemplate);
+    }
+
+    @Test
+    @DisplayName("제목 비교 키는 앞머리 [..] 와 공백·기호 차이를 무시한다")
+    void core_title_ignores_prefix_and_symbols() {
+        assertThat(KeywordMatchingService.coreTitle("[혁신사업-에너지 소재 사업단] 2026학년도 에너지 소재 전문가 특강(6차)"))
+                .isEqualTo(KeywordMatchingService.coreTitle("2026학년도 에너지 소재 전문가 특강 (6차)"));
+        assertThat(KeywordMatchingService.coreTitle("[A][B] 모집 안내"))
+                .isEqualTo(KeywordMatchingService.coreTitle("모집안내"));
+        // 본문 제목이 다르면 다른 공지
+        assertThat(KeywordMatchingService.coreTitle("[학생지원팀] 해외봉사 합격자 안내"))
+                .isNotEqualTo(KeywordMatchingService.coreTitle("[학생지원팀] 해외봉사 참가자 선발 안내"));
+    }
+
+    @Test
     @DisplayName("한 콘텐츠가 한 회원의 키워드 여러 개에 걸려도 알림은 1건으로 합친다")
     void should_merge_per_member() {
         // given - 같은 회원(1L)의 "장학", "신청" 두 구독이 모두 매칭

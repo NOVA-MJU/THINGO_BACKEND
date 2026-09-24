@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -44,6 +45,9 @@ public class KeywordMatchingService {
     /** 같은 (구독, 콘텐츠) 재알림 차단 캐시 TTL */
     private static final Duration DEDUP_TTL = Duration.ofDays(7);
     private static final String DEDUP_KEY_PREFIX = "kwalarm:dedup:";
+
+    /** 교차게시(같은 공지를 다른 게시판에 별도 글로 게시) 중복 판정 기간 */
+    private static final Duration CROSS_POST_WINDOW = Duration.ofDays(3);
 
     private final KeywordSubscriptionRepository keywordSubscriptionRepository;
     private final NotificationHistoryRepository notificationHistoryRepository;
@@ -121,6 +125,10 @@ public class KeywordMatchingService {
         // 5. 회원마다 dedup -> 내역 저장 -> 기기 토큰 수집
         List<FcmDispatch> dispatches = new ArrayList<>();
         for (KeywordMatch match : representativeByMember.values()) {
+            if (isCrossPostDuplicate(match.memberId(), doc.getTitle())) {
+                log.debug("교차게시 중복 스킵 - memberId={}, searchIndexId={}", match.memberId(), searchIndexId);
+                continue;
+            }
             if (!claimDedup(match.memberId(), searchIndexId)) {
                 continue; // Redis 가 이미 발송됨을 확인 -> 스킵
             }
@@ -165,6 +173,33 @@ public class KeywordMatchingService {
             log.warn("Redis dedup 실패, DB 제약으로 진행 - key={}", key, e);
             return true;
         }
+    }
+
+    /**
+     * 학교가 같은 공지를 여러 게시판에 별도 글로 올리면 링크/ID 가 달라 (회원, 콘텐츠) dedup 에 걸리지 않는다.
+     * 앞의 [부서명] 을 떼고 비교한 제목이 최근 3일 안에 받은 알림과 같으면 같은 공지로 본다.
+     * (예: "[진로취업지원팀] 선배와의 취업멘토링 모집" / "선배와의 취업멘토링 모집")
+     */
+    private boolean isCrossPostDuplicate(Long memberId, String title) {
+        String core = coreTitle(title);
+        if (core.isEmpty()) {
+            return false;
+        }
+        return notificationHistoryRepository
+                .findRecentTitles(memberId, Instant.now().minus(CROSS_POST_WINDOW))
+                .stream()
+                .map(KeywordMatchingService::coreTitle)
+                .anyMatch(core::equals);
+    }
+
+    /** 제목 비교 키: 앞머리 [..] 묶음 제거 + 영숫자/한글만 + 소문자 */
+    static String coreTitle(String title) {
+        if (title == null) {
+            return "";
+        }
+        return title.replaceFirst("^\\s*(\\[[^\\]]*\\]\\s*)+", "")
+                .replaceAll("[^0-9a-zA-Z가-힣]", "")
+                .toLowerCase();
     }
 
     /** 저장이 실패한 claim 을 되돌린다(되돌리지 않으면 TTL 동안 재시도 불가). */
