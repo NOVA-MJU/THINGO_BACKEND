@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import nova.mjs.domain.thingo.ElasticSearch.indexing.publisher.SearchIndexPublisher;
+import nova.mjs.domain.thingo.map.dto.BuildingDetailResponse;
+import nova.mjs.domain.thingo.map.dto.MapCategoryResponse;
 import nova.mjs.domain.thingo.map.dto.MapSuggestResponse;
 import nova.mjs.domain.thingo.map.dto.MapSyncDTO;
 import nova.mjs.domain.thingo.map.dto.PinSummaryResponse;
@@ -391,6 +393,29 @@ class MapSearchE2EIT {
 
         assertThat(suggestion.getType()).isEqualTo("FLOOR_MAP");
         assertThat(suggestion.getLink()).contains("floorLabel=F3", "placeId=" + suggestion.getId(), "target=S1353");
+    }
+
+    @Test
+    @DisplayName("강의실(classroom)은 검색 전용이라 칩 목록·건물 탭·층별 시설 목록에 나오지 않는다")
+    void should_hideFloorPlanOnlyCategory_fromChipsAndBuildingDetail() throws Exception {
+        syncAndClear();
+        Long buildingId = pinRepository.findByCode("b-main").orElseThrow().getId();
+
+        assertThat(mapPinService.getCategories())
+                .flatExtracting(MapCategoryResponse::getChips)
+                .extracting(MapCategoryResponse.Chip::getCode)
+                .doesNotContain("classroom");
+        assertThat(mapPinService.getBuildingCategoryTabs(buildingId))
+                .extracting(BuildingDetailResponse.CategoryTab::getCode)
+                .contains("printer")
+                .doesNotContain("classroom");
+        assertThat(mapPinService.getBuildingDetail(buildingId, null, null, null).getFloors())
+                .flatExtracting(BuildingDetailResponse.FloorPlaces::getPlaces)
+                .extracting(BuildingDetailResponse.PlaceBrief::getName)
+                .doesNotContain("강의실 S1353");
+
+        // 검색으로는 여전히 찾을 수 있다
+        assertThat(search("S1353")).extracting(PinSummaryResponse::getName).containsExactly("강의실 S1353");
     }
 
     @Test
