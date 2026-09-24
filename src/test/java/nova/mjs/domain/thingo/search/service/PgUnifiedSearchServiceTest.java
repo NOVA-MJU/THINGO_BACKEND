@@ -4,6 +4,7 @@ import nova.mjs.domain.thingo.realtimeKeyword.RealtimeKeywordService;
 import nova.mjs.domain.thingo.map.entity.Category;
 import nova.mjs.domain.thingo.map.entity.Floor;
 import nova.mjs.domain.thingo.map.entity.Pin;
+import nova.mjs.domain.thingo.map.entity.PinType;
 import nova.mjs.domain.thingo.map.repository.PinRepository;
 import nova.mjs.domain.thingo.search.dto.SearchResponseDTO;
 import nova.mjs.domain.thingo.search.dto.SearchResultRow;
@@ -63,6 +64,7 @@ class PgUnifiedSearchServiceTest {
 
         when(pinRepository.findByIndoorCodeIgnoreCase("S1353")).thenReturn(Optional.of(room));
         when(room.getId()).thenReturn(353L);
+        when(room.getType()).thenReturn(PinType.PLACE);
         when(room.getIndoorCode()).thenReturn("S1353");
         when(room.getName()).thenReturn("강의실 S1353");
         when(room.getParentBuilding()).thenReturn(building);
@@ -77,7 +79,7 @@ class PgUnifiedSearchServiceTest {
 
         SearchResponseDTO item = result.getContent().get(0);
         assertThat(item.getType()).isEqualTo("map");
-        assertThat(item.getLink()).isEqualTo("/maps/floor?buildingId=2&floorLabel=F4&target=S1353");
+        assertThat(item.getLink()).isEqualTo("/maps/floor?buildingId=2&floorLabel=F4&placeId=353&target=S1353");
         verifyNoInteractions(repository);
     }
 

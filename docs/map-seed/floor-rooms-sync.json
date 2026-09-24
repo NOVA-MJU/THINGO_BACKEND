@@ -1,0 +1,7023 @@
+{
+ "categories": [
+  {
+   "code": "classroom",
+   "groupCode": "guide",
+   "label": "강의실·호실",
+   "iconKey": "ClassroomIcon",
+   "resultType": "PLACE_LIST",
+   "quickMenu": false,
+   "displayOrder": 99
+  }
+ ],
+ "floors": [
+  {
+   "buildingCode": "b-admin",
+   "label": "B1",
+   "floorOrder": -1
+  },
+  {
+   "buildingCode": "b-library",
+   "label": "B1",
+   "floorOrder": -1
+  }
+ ],
+ "places": [
+  {
+   "code": "r-b-jonghap-B1-행정학전공",
+   "categoryCode": "classroom",
+   "name": "행정학 전공",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "B1"
+  },
+  {
+   "code": "r-b-jonghap-B1-일어일문학전공",
+   "categoryCode": "classroom",
+   "name": "일어일문학전공",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "B1"
+  },
+  {
+   "code": "r-b-jonghap-B1-미술사학과",
+   "categoryCode": "classroom",
+   "name": "미술사학과",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "B1"
+  },
+  {
+   "code": "r-b-jonghap-B1-문예창작학과",
+   "categoryCode": "classroom",
+   "name": "문예창작학과",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "B1"
+  },
+  {
+   "code": "r-b-jonghap-B1-정치외교학전공",
+   "categoryCode": "classroom",
+   "name": "정치외교학전공",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "B1"
+  },
+  {
+   "code": "r-b-jonghap-B1-재직자공동학회실",
+   "categoryCode": "classroom",
+   "name": "재직자공동 학회실",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "B1"
+  },
+  {
+   "code": "r-b-jonghap-B1-아동학전공",
+   "categoryCode": "classroom",
+   "name": "아동학전공",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "B1"
+  },
+  {
+   "code": "r-b-jonghap-B1-법학과",
+   "categoryCode": "classroom",
+   "name": "법학과",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "B1"
+  },
+  {
+   "code": "r-b-jonghap-B1-S1006",
+   "categoryCode": "classroom",
+   "name": "S1006",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "B1",
+   "indoorCode": "S1006"
+  },
+  {
+   "code": "r-b-jonghap-B1-경제학전공",
+   "categoryCode": "classroom",
+   "name": "경제학전공",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "B1"
+  },
+  {
+   "code": "r-b-jonghap-B1-응용통계학전공",
+   "categoryCode": "classroom",
+   "name": "응용통계학전공",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "B1"
+  },
+  {
+   "code": "r-b-jonghap-B1-S1003",
+   "categoryCode": "classroom",
+   "name": "S1003",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "B1",
+   "indoorCode": "S1003"
+  },
+  {
+   "code": "r-b-jonghap-B1-전공자유학부",
+   "categoryCode": "classroom",
+   "name": "전공 자유학부",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "B1"
+  },
+  {
+   "code": "r-b-jonghap-B1-디지털콘텐츠디자인학과",
+   "categoryCode": "classroom",
+   "name": "디지털콘텐츠 디자인학과",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "B1"
+  },
+  {
+   "code": "r-b-jonghap-B1-사학과",
+   "categoryCode": "classroom",
+   "name": "사학과",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "B1"
+  },
+  {
+   "code": "r-b-jonghap-B1-아랍지역학전공",
+   "categoryCode": "classroom",
+   "name": "아랍지역학전공",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "B1"
+  },
+  {
+   "code": "r-b-jonghap-B1-문헌정보학전공",
+   "categoryCode": "classroom",
+   "name": "문헌정보학전공",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "B1"
+  },
+  {
+   "code": "r-b-jonghap-B1-철학과",
+   "categoryCode": "classroom",
+   "name": "철학과",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "B1"
+  },
+  {
+   "code": "r-b-jonghap-B1-국어국문학전공",
+   "categoryCode": "classroom",
+   "name": "국어국문학전공",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "B1"
+  },
+  {
+   "code": "r-b-jonghap-B1-청소년지도학전공",
+   "categoryCode": "classroom",
+   "name": "청소년지도학 전공",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "B1"
+  },
+  {
+   "code": "r-b-jonghap-B1-중어중문학전공",
+   "categoryCode": "classroom",
+   "name": "중어중문학전공",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "B1"
+  },
+  {
+   "code": "r-b-jonghap-B1-영어영문학전공",
+   "categoryCode": "classroom",
+   "name": "영어 영문학 전공",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "B1"
+  },
+  {
+   "code": "r-b-jonghap-B1-본관지하연습실",
+   "categoryCode": "classroom",
+   "name": "본관 지하연습실",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "B1"
+  },
+  {
+   "code": "r-b-jonghap-B1-S1017",
+   "categoryCode": "classroom",
+   "name": "S1017",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "B1",
+   "indoorCode": "S1017"
+  },
+  {
+   "code": "r-b-jonghap-B1-샤워장",
+   "categoryCode": "classroom",
+   "name": "샤워장",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "B1"
+  },
+  {
+   "code": "r-b-jonghap-B1-S1019",
+   "categoryCode": "classroom",
+   "name": "S1019",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "B1",
+   "indoorCode": "S1019"
+  },
+  {
+   "code": "r-b-jonghap-F1-S1133",
+   "categoryCode": "classroom",
+   "name": "S1133",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F1",
+   "indoorCode": "S1133"
+  },
+  {
+   "code": "r-b-jonghap-F1-S1135",
+   "categoryCode": "classroom",
+   "name": "S1135",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F1",
+   "indoorCode": "S1135"
+  },
+  {
+   "code": "r-b-jonghap-F1-방목기초교육대학잉글리쉬카페",
+   "categoryCode": "classroom",
+   "name": "방목기초교육대학 잉글리쉬카페",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-jonghap-F1-S1128",
+   "categoryCode": "classroom",
+   "name": "S1128",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F1",
+   "indoorCode": "S1128"
+  },
+  {
+   "code": "r-b-jonghap-F1-S1125",
+   "categoryCode": "classroom",
+   "name": "S1125",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F1",
+   "indoorCode": "S1125"
+  },
+  {
+   "code": "r-b-jonghap-F1-S1124",
+   "categoryCode": "classroom",
+   "name": "S1124",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F1",
+   "indoorCode": "S1124"
+  },
+  {
+   "code": "r-b-jonghap-F1-S1122",
+   "categoryCode": "classroom",
+   "name": "S1122",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F1",
+   "indoorCode": "S1122"
+  },
+  {
+   "code": "r-b-jonghap-F1-경비실",
+   "categoryCode": "classroom",
+   "name": "경비실",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-jonghap-F1-교수휴게실",
+   "categoryCode": "classroom",
+   "name": "교수휴게실",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-jonghap-F1-S1150",
+   "categoryCode": "classroom",
+   "name": "S1150",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F1",
+   "indoorCode": "S1150"
+  },
+  {
+   "code": "r-b-jonghap-F1-S1154",
+   "categoryCode": "classroom",
+   "name": "S1154",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F1",
+   "indoorCode": "S1154"
+  },
+  {
+   "code": "r-b-jonghap-F1-S1159",
+   "categoryCode": "classroom",
+   "name": "S1159",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F1",
+   "indoorCode": "S1159"
+  },
+  {
+   "code": "r-b-jonghap-F1-기도실",
+   "categoryCode": "classroom",
+   "name": "기도실",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-jonghap-F1-S1110",
+   "categoryCode": "classroom",
+   "name": "S1110",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F1",
+   "indoorCode": "S1110"
+  },
+  {
+   "code": "r-b-jonghap-F1-S1106",
+   "categoryCode": "classroom",
+   "name": "S1106",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F1",
+   "indoorCode": "S1106"
+  },
+  {
+   "code": "r-b-jonghap-F1-S1105",
+   "categoryCode": "classroom",
+   "name": "S1105",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F1",
+   "indoorCode": "S1105"
+  },
+  {
+   "code": "r-b-jonghap-F1-S1103",
+   "categoryCode": "classroom",
+   "name": "S1103",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F1",
+   "indoorCode": "S1103"
+  },
+  {
+   "code": "r-b-jonghap-F1-S1101",
+   "categoryCode": "classroom",
+   "name": "S1101",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F1",
+   "indoorCode": "S1101"
+  },
+  {
+   "code": "r-b-jonghap-F1-S1145",
+   "categoryCode": "classroom",
+   "name": "S1145",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F1",
+   "indoorCode": "S1145"
+  },
+  {
+   "code": "r-b-jonghap-F1-방목기초교육대학교학팀",
+   "categoryCode": "classroom",
+   "name": "방목기초 교육대학 교학팀",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-jonghap-F10-S11033",
+   "categoryCode": "classroom",
+   "name": "S11033",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F10",
+   "indoorCode": "S11033"
+  },
+  {
+   "code": "r-b-jonghap-F10-S11037",
+   "categoryCode": "classroom",
+   "name": "S11037",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F10",
+   "indoorCode": "S11037"
+  },
+  {
+   "code": "r-b-jonghap-F10-S11038",
+   "categoryCode": "classroom",
+   "name": "S11038",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F10",
+   "indoorCode": "S11038"
+  },
+  {
+   "code": "r-b-jonghap-F10-S11039",
+   "categoryCode": "classroom",
+   "name": "S11039",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F10",
+   "indoorCode": "S11039"
+  },
+  {
+   "code": "r-b-jonghap-F10-S11041",
+   "categoryCode": "classroom",
+   "name": "S11041",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F10",
+   "indoorCode": "S11041"
+  },
+  {
+   "code": "r-b-jonghap-F10-S11031",
+   "categoryCode": "classroom",
+   "name": "S11031",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F10",
+   "indoorCode": "S11031"
+  },
+  {
+   "code": "r-b-jonghap-F10-S11030",
+   "categoryCode": "classroom",
+   "name": "S11030",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F10",
+   "indoorCode": "S11030"
+  },
+  {
+   "code": "r-b-jonghap-F10-S11029",
+   "categoryCode": "classroom",
+   "name": "S11029",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F10",
+   "indoorCode": "S11029"
+  },
+  {
+   "code": "r-b-jonghap-F10-S11028",
+   "categoryCode": "classroom",
+   "name": "S11028",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F10",
+   "indoorCode": "S11028"
+  },
+  {
+   "code": "r-b-jonghap-F10-S11027",
+   "categoryCode": "classroom",
+   "name": "S11027",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F10",
+   "indoorCode": "S11027"
+  },
+  {
+   "code": "r-b-jonghap-F10-S11025",
+   "categoryCode": "classroom",
+   "name": "S11025",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F10",
+   "indoorCode": "S11025"
+  },
+  {
+   "code": "r-b-jonghap-F10-S11024",
+   "categoryCode": "classroom",
+   "name": "S11024",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F10",
+   "indoorCode": "S11024"
+  },
+  {
+   "code": "r-b-jonghap-F10-S11023",
+   "categoryCode": "classroom",
+   "name": "S11023",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F10",
+   "indoorCode": "S11023"
+  },
+  {
+   "code": "r-b-jonghap-F10-S11021",
+   "categoryCode": "classroom",
+   "name": "S11021",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F10",
+   "indoorCode": "S11021"
+  },
+  {
+   "code": "r-b-jonghap-F10-S11019",
+   "categoryCode": "classroom",
+   "name": "S11019",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F10",
+   "indoorCode": "S11019"
+  },
+  {
+   "code": "r-b-jonghap-F10-S11001",
+   "categoryCode": "classroom",
+   "name": "채플관",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F10",
+   "indoorCode": "S11001"
+  },
+  {
+   "code": "r-b-jonghap-F10-S11045",
+   "categoryCode": "classroom",
+   "name": "S11045",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F10",
+   "indoorCode": "S11045"
+  },
+  {
+   "code": "r-b-jonghap-F2-S1233",
+   "categoryCode": "classroom",
+   "name": "S1233",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F2",
+   "indoorCode": "S1233"
+  },
+  {
+   "code": "r-b-jonghap-F2-S1239",
+   "categoryCode": "classroom",
+   "name": "S1239",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F2",
+   "indoorCode": "S1239"
+  },
+  {
+   "code": "r-b-jonghap-F2-S1241",
+   "categoryCode": "classroom",
+   "name": "S1241",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F2",
+   "indoorCode": "S1241"
+  },
+  {
+   "code": "r-b-jonghap-F2-S1232",
+   "categoryCode": "classroom",
+   "name": "S1232",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F2",
+   "indoorCode": "S1232"
+  },
+  {
+   "code": "r-b-jonghap-F2-S1229",
+   "categoryCode": "classroom",
+   "name": "S1229",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F2",
+   "indoorCode": "S1229"
+  },
+  {
+   "code": "r-b-jonghap-F2-S1227",
+   "categoryCode": "classroom",
+   "name": "S1227",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F2",
+   "indoorCode": "S1227"
+  },
+  {
+   "code": "r-b-jonghap-F2-S1221",
+   "categoryCode": "classroom",
+   "name": "S1221",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F2",
+   "indoorCode": "S1221"
+  },
+  {
+   "code": "r-b-jonghap-F2-교목실",
+   "categoryCode": "classroom",
+   "name": "교목실",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F2"
+  },
+  {
+   "code": "r-b-jonghap-F2-S1213",
+   "categoryCode": "classroom",
+   "name": "S1213",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F2",
+   "indoorCode": "S1213"
+  },
+  {
+   "code": "r-b-jonghap-F2-S1209",
+   "categoryCode": "classroom",
+   "name": "S1209",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F2",
+   "indoorCode": "S1209"
+  },
+  {
+   "code": "r-b-jonghap-F2-S1246",
+   "categoryCode": "classroom",
+   "name": "S1246",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F2",
+   "indoorCode": "S1246"
+  },
+  {
+   "code": "r-b-jonghap-F2-S1250",
+   "categoryCode": "classroom",
+   "name": "S1250",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F2",
+   "indoorCode": "S1250"
+  },
+  {
+   "code": "r-b-jonghap-F2-S1254",
+   "categoryCode": "classroom",
+   "name": "S1254",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F2",
+   "indoorCode": "S1254"
+  },
+  {
+   "code": "r-b-jonghap-F2-S1256",
+   "categoryCode": "classroom",
+   "name": "S1256",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F2",
+   "indoorCode": "S1256"
+  },
+  {
+   "code": "r-b-jonghap-F2-S1258",
+   "categoryCode": "classroom",
+   "name": "S1258",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F2",
+   "indoorCode": "S1258"
+  },
+  {
+   "code": "r-b-jonghap-F2-S1245",
+   "categoryCode": "classroom",
+   "name": "S1245",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F2",
+   "indoorCode": "S1245"
+  },
+  {
+   "code": "r-b-jonghap-F2-학생지원팀",
+   "categoryCode": "classroom",
+   "name": "학생지원팀",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F2"
+  },
+  {
+   "code": "r-b-jonghap-F3-S1333",
+   "categoryCode": "classroom",
+   "name": "S1333",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F3",
+   "indoorCode": "S1333"
+  },
+  {
+   "code": "r-b-jonghap-F3-S1335",
+   "categoryCode": "classroom",
+   "name": "S1335",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F3",
+   "indoorCode": "S1335"
+  },
+  {
+   "code": "r-b-jonghap-F3-S1337",
+   "categoryCode": "classroom",
+   "name": "S1337",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F3",
+   "indoorCode": "S1337"
+  },
+  {
+   "code": "r-b-jonghap-F3-학군단행정실",
+   "categoryCode": "classroom",
+   "name": "학군단 행정실",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F3"
+  },
+  {
+   "code": "r-b-jonghap-F3-S1341",
+   "categoryCode": "classroom",
+   "name": "S1341",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F3",
+   "indoorCode": "S1341"
+  },
+  {
+   "code": "r-b-jonghap-F3-S1332",
+   "categoryCode": "classroom",
+   "name": "S1332",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F3",
+   "indoorCode": "S1332"
+  },
+  {
+   "code": "r-b-jonghap-F3-S1331",
+   "categoryCode": "classroom",
+   "name": "S1331",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F3",
+   "indoorCode": "S1331"
+  },
+  {
+   "code": "r-b-jonghap-F3-S1330",
+   "categoryCode": "classroom",
+   "name": "S1330",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F3",
+   "indoorCode": "S1330"
+  },
+  {
+   "code": "r-b-jonghap-F3-S1329",
+   "categoryCode": "classroom",
+   "name": "S1329",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F3",
+   "indoorCode": "S1329"
+  },
+  {
+   "code": "r-b-jonghap-F3-S1325",
+   "categoryCode": "classroom",
+   "name": "S1325",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F3",
+   "indoorCode": "S1325"
+  },
+  {
+   "code": "r-b-jonghap-F3-S1321",
+   "categoryCode": "classroom",
+   "name": "S1321",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F3",
+   "indoorCode": "S1321"
+  },
+  {
+   "code": "r-b-jonghap-F3-S1319",
+   "categoryCode": "classroom",
+   "name": "S1319",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F3",
+   "indoorCode": "S1319"
+  },
+  {
+   "code": "r-b-jonghap-F3-S1315",
+   "categoryCode": "classroom",
+   "name": "S1315",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F3",
+   "indoorCode": "S1315"
+  },
+  {
+   "code": "r-b-jonghap-F3-S1313",
+   "categoryCode": "classroom",
+   "name": "S1313",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F3",
+   "indoorCode": "S1313"
+  },
+  {
+   "code": "r-b-jonghap-F3-S1309",
+   "categoryCode": "classroom",
+   "name": "S1309",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F3",
+   "indoorCode": "S1309"
+  },
+  {
+   "code": "r-b-jonghap-F3-S1308",
+   "categoryCode": "classroom",
+   "name": "S1308",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F3",
+   "indoorCode": "S1308"
+  },
+  {
+   "code": "r-b-jonghap-F3-S1307",
+   "categoryCode": "classroom",
+   "name": "S1307",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F3",
+   "indoorCode": "S1307"
+  },
+  {
+   "code": "r-b-jonghap-F3-S1306",
+   "categoryCode": "classroom",
+   "name": "S1306",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F3",
+   "indoorCode": "S1306"
+  },
+  {
+   "code": "r-b-jonghap-F3-S1346",
+   "categoryCode": "classroom",
+   "name": "S1346",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F3",
+   "indoorCode": "S1346"
+  },
+  {
+   "code": "r-b-jonghap-F3-S1350",
+   "categoryCode": "classroom",
+   "name": "S1350",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F3",
+   "indoorCode": "S1350"
+  },
+  {
+   "code": "r-b-jonghap-F3-S1351",
+   "categoryCode": "classroom",
+   "name": "S1351",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F3",
+   "indoorCode": "S1351"
+  },
+  {
+   "code": "r-b-jonghap-F3-S1353",
+   "categoryCode": "classroom",
+   "name": "S1353",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F3",
+   "indoorCode": "S1353"
+  },
+  {
+   "code": "r-b-jonghap-F3-S1357",
+   "categoryCode": "classroom",
+   "name": "S1357",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F3",
+   "indoorCode": "S1357"
+  },
+  {
+   "code": "r-b-jonghap-F3-S1358",
+   "categoryCode": "classroom",
+   "name": "S1358",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F3",
+   "indoorCode": "S1358"
+  },
+  {
+   "code": "r-b-jonghap-F3-S1345",
+   "categoryCode": "classroom",
+   "name": "S1345",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F3",
+   "indoorCode": "S1345"
+  },
+  {
+   "code": "r-b-jonghap-F3-명지미디어센터방송국",
+   "categoryCode": "classroom",
+   "name": "명지 미디어센터 방송국",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F3"
+  },
+  {
+   "code": "r-b-jonghap-F3-인공지능소프트웨어융합대학교학팀",
+   "categoryCode": "classroom",
+   "name": "인공지능·소프트웨어 융합대학 교학팀",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F3"
+  },
+  {
+   "code": "r-b-jonghap-F4-S14331",
+   "categoryCode": "classroom",
+   "name": "S1433-1",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S14331"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1433",
+   "categoryCode": "classroom",
+   "name": "S1433",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1433"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1437",
+   "categoryCode": "classroom",
+   "name": "S1437",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1437"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1441",
+   "categoryCode": "classroom",
+   "name": "S1441",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1441"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1432",
+   "categoryCode": "classroom",
+   "name": "S1432",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1432"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1431",
+   "categoryCode": "classroom",
+   "name": "S1431",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1431"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1430",
+   "categoryCode": "classroom",
+   "name": "S1430",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1430"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1429",
+   "categoryCode": "classroom",
+   "name": "S1429",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1429"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1428",
+   "categoryCode": "classroom",
+   "name": "S1428",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1428"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1427",
+   "categoryCode": "classroom",
+   "name": "S1427",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1427"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1426",
+   "categoryCode": "classroom",
+   "name": "S1426",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1426"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1425",
+   "categoryCode": "classroom",
+   "name": "S1425",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1425"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1424",
+   "categoryCode": "classroom",
+   "name": "S1424",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1424"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1423",
+   "categoryCode": "classroom",
+   "name": "S1423",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1423"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1419",
+   "categoryCode": "classroom",
+   "name": "S1419",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1419"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1415",
+   "categoryCode": "classroom",
+   "name": "S1415",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1415"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1414",
+   "categoryCode": "classroom",
+   "name": "S1414",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1414"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1413",
+   "categoryCode": "classroom",
+   "name": "S1413",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1413"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1412",
+   "categoryCode": "classroom",
+   "name": "S1412",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1412"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1411",
+   "categoryCode": "classroom",
+   "name": "S1411",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1411"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1410",
+   "categoryCode": "classroom",
+   "name": "S1410",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1410"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1409",
+   "categoryCode": "classroom",
+   "name": "S1409",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1409"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1408",
+   "categoryCode": "classroom",
+   "name": "S1408",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1408"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1407",
+   "categoryCode": "classroom",
+   "name": "S1407",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1407"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1406",
+   "categoryCode": "classroom",
+   "name": "S1406",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1406"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1405",
+   "categoryCode": "classroom",
+   "name": "S1405",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1405"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1404",
+   "categoryCode": "classroom",
+   "name": "S1404",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1404"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1403",
+   "categoryCode": "classroom",
+   "name": "S1403",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1403"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1402",
+   "categoryCode": "classroom",
+   "name": "S1402",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1402"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1401",
+   "categoryCode": "classroom",
+   "name": "S1401",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1401"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1446",
+   "categoryCode": "classroom",
+   "name": "S1446",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1446"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1450",
+   "categoryCode": "classroom",
+   "name": "S1450",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1450"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1454",
+   "categoryCode": "classroom",
+   "name": "S1454",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1454"
+  },
+  {
+   "code": "r-b-jonghap-F4-S1458",
+   "categoryCode": "classroom",
+   "name": "S1458",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4",
+   "indoorCode": "S1458"
+  },
+  {
+   "code": "p-convenience-store-b-jonghap-03",
+   "categoryCode": "convenience-store",
+   "name": "이마트24",
+   "imageUrl": "https://thingo.kr/static/images/map/p-convenience-store-b-jonghap-03.jpg",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F4"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1533",
+   "categoryCode": "classroom",
+   "name": "S1533",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1533"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1539",
+   "categoryCode": "classroom",
+   "name": "S1539",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1539"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1532",
+   "categoryCode": "classroom",
+   "name": "S1532",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1532"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1531",
+   "categoryCode": "classroom",
+   "name": "S1531",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1531"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1530",
+   "categoryCode": "classroom",
+   "name": "S1530",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1530"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1529",
+   "categoryCode": "classroom",
+   "name": "S1529",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1529"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1528",
+   "categoryCode": "classroom",
+   "name": "S1528",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1528"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1527",
+   "categoryCode": "classroom",
+   "name": "S1527",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1527"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1526",
+   "categoryCode": "classroom",
+   "name": "S1526",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1526"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1525",
+   "categoryCode": "classroom",
+   "name": "S1525",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1525"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1524",
+   "categoryCode": "classroom",
+   "name": "S1524",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1524"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1523",
+   "categoryCode": "classroom",
+   "name": "S1523",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1523"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1522",
+   "categoryCode": "classroom",
+   "name": "S1522",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1522"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1521",
+   "categoryCode": "classroom",
+   "name": "S1521",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1521"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1520",
+   "categoryCode": "classroom",
+   "name": "S1520",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1520"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1519",
+   "categoryCode": "classroom",
+   "name": "S1519",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1519"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1518",
+   "categoryCode": "classroom",
+   "name": "S1518",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1518"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1517",
+   "categoryCode": "classroom",
+   "name": "S1517",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1517"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1516",
+   "categoryCode": "classroom",
+   "name": "S1516",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1516"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1515",
+   "categoryCode": "classroom",
+   "name": "S1515",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1515"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1514",
+   "categoryCode": "classroom",
+   "name": "S1514",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1514"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1513",
+   "categoryCode": "classroom",
+   "name": "S1513",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1513"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1511",
+   "categoryCode": "classroom",
+   "name": "S1511",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1511"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1509",
+   "categoryCode": "classroom",
+   "name": "S1509",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1509"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1507",
+   "categoryCode": "classroom",
+   "name": "S1507",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1507"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1505",
+   "categoryCode": "classroom",
+   "name": "S1505",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1505"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1504",
+   "categoryCode": "classroom",
+   "name": "S1504",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1504"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1503",
+   "categoryCode": "classroom",
+   "name": "S1503",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1503"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1502",
+   "categoryCode": "classroom",
+   "name": "S1502",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1502"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1501",
+   "categoryCode": "classroom",
+   "name": "S1501",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1501"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1546",
+   "categoryCode": "classroom",
+   "name": "S1546",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1546"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1550",
+   "categoryCode": "classroom",
+   "name": "S1550",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1550"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1552",
+   "categoryCode": "classroom",
+   "name": "S1552",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1552"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1554",
+   "categoryCode": "classroom",
+   "name": "S1554",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1554"
+  },
+  {
+   "code": "r-b-jonghap-F5-S1558",
+   "categoryCode": "classroom",
+   "name": "S1558",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5",
+   "indoorCode": "S1558"
+  },
+  {
+   "code": "r-b-jonghap-F5-사회과학대학학습라운지",
+   "categoryCode": "classroom",
+   "name": "사회과학 대학 학습 라운지",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F5"
+  },
+  {
+   "code": "r-b-jonghap-F6-S1633",
+   "categoryCode": "classroom",
+   "name": "S1633",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F6",
+   "indoorCode": "S1633"
+  },
+  {
+   "code": "r-b-jonghap-F6-S1637",
+   "categoryCode": "classroom",
+   "name": "S1637",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F6",
+   "indoorCode": "S1637"
+  },
+  {
+   "code": "r-b-jonghap-F6-S1641",
+   "categoryCode": "classroom",
+   "name": "S1641",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F6",
+   "indoorCode": "S1641"
+  },
+  {
+   "code": "r-b-jonghap-F6-S1632",
+   "categoryCode": "classroom",
+   "name": "S1632",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F6",
+   "indoorCode": "S1632"
+  },
+  {
+   "code": "r-b-jonghap-F6-S1631",
+   "categoryCode": "classroom",
+   "name": "S1631",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F6",
+   "indoorCode": "S1631"
+  },
+  {
+   "code": "r-b-jonghap-F6-S1630",
+   "categoryCode": "classroom",
+   "name": "S1630",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F6",
+   "indoorCode": "S1630"
+  },
+  {
+   "code": "r-b-jonghap-F6-S1629",
+   "categoryCode": "classroom",
+   "name": "S1629",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F6",
+   "indoorCode": "S1629"
+  },
+  {
+   "code": "r-b-jonghap-F6-S1628",
+   "categoryCode": "classroom",
+   "name": "S1628",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F6",
+   "indoorCode": "S1628"
+  },
+  {
+   "code": "r-b-jonghap-F6-S1627",
+   "categoryCode": "classroom",
+   "name": "S1627",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F6",
+   "indoorCode": "S1627"
+  },
+  {
+   "code": "r-b-jonghap-F6-S1626",
+   "categoryCode": "classroom",
+   "name": "S1626",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F6",
+   "indoorCode": "S1626"
+  },
+  {
+   "code": "r-b-jonghap-F6-S1625",
+   "categoryCode": "classroom",
+   "name": "S1625",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F6",
+   "indoorCode": "S1625"
+  },
+  {
+   "code": "r-b-jonghap-F6-S1623",
+   "categoryCode": "classroom",
+   "name": "S1623",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F6",
+   "indoorCode": "S1623"
+  },
+  {
+   "code": "r-b-jonghap-F6-사회과학대학교학팀",
+   "categoryCode": "classroom",
+   "name": "사회과학대학 교학팀",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F6"
+  },
+  {
+   "code": "r-b-jonghap-F6-미디어휴먼라이프대학교학팀",
+   "categoryCode": "classroom",
+   "name": "미디어·휴먼 라이프대학 교학팀",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F6"
+  },
+  {
+   "code": "r-b-jonghap-F6-S1608",
+   "categoryCode": "classroom",
+   "name": "S1608",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F6",
+   "indoorCode": "S1608"
+  },
+  {
+   "code": "r-b-jonghap-F6-S1607",
+   "categoryCode": "classroom",
+   "name": "S1607",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F6",
+   "indoorCode": "S1607"
+  },
+  {
+   "code": "r-b-jonghap-F6-S1606",
+   "categoryCode": "classroom",
+   "name": "S1606",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F6",
+   "indoorCode": "S1606"
+  },
+  {
+   "code": "r-b-jonghap-F6-S1605",
+   "categoryCode": "classroom",
+   "name": "S1605",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F6",
+   "indoorCode": "S1605"
+  },
+  {
+   "code": "r-b-jonghap-F6-S1604",
+   "categoryCode": "classroom",
+   "name": "S1604",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F6",
+   "indoorCode": "S1604"
+  },
+  {
+   "code": "r-b-jonghap-F6-S1603",
+   "categoryCode": "classroom",
+   "name": "S1603",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F6",
+   "indoorCode": "S1603"
+  },
+  {
+   "code": "r-b-jonghap-F6-S1602",
+   "categoryCode": "classroom",
+   "name": "S1602",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F6",
+   "indoorCode": "S1602"
+  },
+  {
+   "code": "r-b-jonghap-F6-S1601",
+   "categoryCode": "classroom",
+   "name": "S1601",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F6",
+   "indoorCode": "S1601"
+  },
+  {
+   "code": "r-b-jonghap-F6-S1646",
+   "categoryCode": "classroom",
+   "name": "S1646",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F6",
+   "indoorCode": "S1646"
+  },
+  {
+   "code": "r-b-jonghap-F6-S1650",
+   "categoryCode": "classroom",
+   "name": "S1650",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F6",
+   "indoorCode": "S1650"
+  },
+  {
+   "code": "r-b-jonghap-F6-S1654",
+   "categoryCode": "classroom",
+   "name": "S1654",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F6",
+   "indoorCode": "S1654"
+  },
+  {
+   "code": "r-b-jonghap-F6-S1656",
+   "categoryCode": "classroom",
+   "name": "S1656",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F6",
+   "indoorCode": "S1656"
+  },
+  {
+   "code": "r-b-jonghap-F6-S1658",
+   "categoryCode": "classroom",
+   "name": "S1658",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F6",
+   "indoorCode": "S1658"
+  },
+  {
+   "code": "r-b-jonghap-F6-미디어휴먼라이프대학학습라운지",
+   "categoryCode": "classroom",
+   "name": "미디어·휴먼 라이프대학 학습라운지",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F6"
+  },
+  {
+   "code": "r-b-jonghap-F7-S1733",
+   "categoryCode": "classroom",
+   "name": "S1733",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F7",
+   "indoorCode": "S1733"
+  },
+  {
+   "code": "r-b-jonghap-F7-S1741",
+   "categoryCode": "classroom",
+   "name": "S1741",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F7",
+   "indoorCode": "S1741"
+  },
+  {
+   "code": "r-b-jonghap-F7-S1731",
+   "categoryCode": "classroom",
+   "name": "S1731",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F7",
+   "indoorCode": "S1731"
+  },
+  {
+   "code": "r-b-jonghap-F7-S1729",
+   "categoryCode": "classroom",
+   "name": "S1729",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F7",
+   "indoorCode": "S1729"
+  },
+  {
+   "code": "r-b-jonghap-F7-S1727",
+   "categoryCode": "classroom",
+   "name": "S1727",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F7",
+   "indoorCode": "S1727"
+  },
+  {
+   "code": "r-b-jonghap-F7-S1725",
+   "categoryCode": "classroom",
+   "name": "S1725",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F7",
+   "indoorCode": "S1725"
+  },
+  {
+   "code": "r-b-jonghap-F7-S1724",
+   "categoryCode": "classroom",
+   "name": "S1724",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F7",
+   "indoorCode": "S1724"
+  },
+  {
+   "code": "r-b-jonghap-F7-S1723",
+   "categoryCode": "classroom",
+   "name": "S1723",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F7",
+   "indoorCode": "S1723"
+  },
+  {
+   "code": "r-b-jonghap-F7-S1721",
+   "categoryCode": "classroom",
+   "name": "S1721",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F7",
+   "indoorCode": "S1721"
+  },
+  {
+   "code": "r-b-jonghap-F7-S1719",
+   "categoryCode": "classroom",
+   "name": "S1719",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F7",
+   "indoorCode": "S1719"
+  },
+  {
+   "code": "r-b-jonghap-F7-S1718",
+   "categoryCode": "classroom",
+   "name": "S1718",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F7",
+   "indoorCode": "S1718"
+  },
+  {
+   "code": "r-b-jonghap-F7-S1717",
+   "categoryCode": "classroom",
+   "name": "S1717",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F7",
+   "indoorCode": "S1717"
+  },
+  {
+   "code": "r-b-jonghap-F7-S1716",
+   "categoryCode": "classroom",
+   "name": "S1716",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F7",
+   "indoorCode": "S1716"
+  },
+  {
+   "code": "r-b-jonghap-F7-S1715",
+   "categoryCode": "classroom",
+   "name": "S1715",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F7",
+   "indoorCode": "S1715"
+  },
+  {
+   "code": "r-b-jonghap-F7-S1714",
+   "categoryCode": "classroom",
+   "name": "S1714",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F7",
+   "indoorCode": "S1714"
+  },
+  {
+   "code": "r-b-jonghap-F7-S1713",
+   "categoryCode": "classroom",
+   "name": "S1713",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F7",
+   "indoorCode": "S1713"
+  },
+  {
+   "code": "r-b-jonghap-F7-S1712",
+   "categoryCode": "classroom",
+   "name": "S1712",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F7",
+   "indoorCode": "S1712"
+  },
+  {
+   "code": "r-b-jonghap-F7-S1711",
+   "categoryCode": "classroom",
+   "name": "S1711",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F7",
+   "indoorCode": "S1711"
+  },
+  {
+   "code": "r-b-jonghap-F7-인문대교학팀",
+   "categoryCode": "classroom",
+   "name": "인문대 교학팀",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F7"
+  },
+  {
+   "code": "r-b-jonghap-F7-S1746",
+   "categoryCode": "classroom",
+   "name": "S1746",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F7",
+   "indoorCode": "S1746"
+  },
+  {
+   "code": "r-b-jonghap-F7-S1750",
+   "categoryCode": "classroom",
+   "name": "S1750",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F7",
+   "indoorCode": "S1750"
+  },
+  {
+   "code": "r-b-jonghap-F7-S1758",
+   "categoryCode": "classroom",
+   "name": "S1758",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F7",
+   "indoorCode": "S1758"
+  },
+  {
+   "code": "r-b-jonghap-F7-S1745",
+   "categoryCode": "classroom",
+   "name": "S1745",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F7",
+   "indoorCode": "S1745"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1833",
+   "categoryCode": "classroom",
+   "name": "S1833",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1833"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1837",
+   "categoryCode": "classroom",
+   "name": "S1837",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1837"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1841",
+   "categoryCode": "classroom",
+   "name": "S1841",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1841"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1832",
+   "categoryCode": "classroom",
+   "name": "S1832",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1832"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1831",
+   "categoryCode": "classroom",
+   "name": "S1831",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1831"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1830",
+   "categoryCode": "classroom",
+   "name": "S1830",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1830"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1829",
+   "categoryCode": "classroom",
+   "name": "S1829",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1829"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1828",
+   "categoryCode": "classroom",
+   "name": "S1828",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1828"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1827",
+   "categoryCode": "classroom",
+   "name": "S1827",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1827"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1826",
+   "categoryCode": "classroom",
+   "name": "S1826",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1826"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1825",
+   "categoryCode": "classroom",
+   "name": "S1825",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1825"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1824",
+   "categoryCode": "classroom",
+   "name": "S1824",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1824"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1823",
+   "categoryCode": "classroom",
+   "name": "S1823",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1823"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1822",
+   "categoryCode": "classroom",
+   "name": "S1822",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1822"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1821",
+   "categoryCode": "classroom",
+   "name": "S1821",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1821"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1820",
+   "categoryCode": "classroom",
+   "name": "S1820",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1820"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1819",
+   "categoryCode": "classroom",
+   "name": "S1819",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1819"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1818",
+   "categoryCode": "classroom",
+   "name": "S1818",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1818"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1817",
+   "categoryCode": "classroom",
+   "name": "S1817",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1817"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1816",
+   "categoryCode": "classroom",
+   "name": "S1816",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1816"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1815",
+   "categoryCode": "classroom",
+   "name": "S1815",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1815"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1814",
+   "categoryCode": "classroom",
+   "name": "S1814",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1814"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1813",
+   "categoryCode": "classroom",
+   "name": "S1813",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1813"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1812",
+   "categoryCode": "classroom",
+   "name": "S1812",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1812"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1811",
+   "categoryCode": "classroom",
+   "name": "S1811",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1811"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1810",
+   "categoryCode": "classroom",
+   "name": "S1810",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1810"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1809",
+   "categoryCode": "classroom",
+   "name": "S1809",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1809"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1808",
+   "categoryCode": "classroom",
+   "name": "S1808",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1808"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1807",
+   "categoryCode": "classroom",
+   "name": "S1807",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1807"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1806",
+   "categoryCode": "classroom",
+   "name": "S1806",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1806"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1805",
+   "categoryCode": "classroom",
+   "name": "S1805",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1805"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1804",
+   "categoryCode": "classroom",
+   "name": "S1804",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1804"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1803",
+   "categoryCode": "classroom",
+   "name": "S1803",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1803"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1802",
+   "categoryCode": "classroom",
+   "name": "S1802",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1802"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1801",
+   "categoryCode": "classroom",
+   "name": "S1801",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1801"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1846",
+   "categoryCode": "classroom",
+   "name": "S1846",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1846"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1850",
+   "categoryCode": "classroom",
+   "name": "S1850",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1850"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1854",
+   "categoryCode": "classroom",
+   "name": "S1854",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1854"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1858",
+   "categoryCode": "classroom",
+   "name": "S1858",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1858"
+  },
+  {
+   "code": "r-b-jonghap-F8-S1845",
+   "categoryCode": "classroom",
+   "name": "S1845",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F8",
+   "indoorCode": "S1845"
+  },
+  {
+   "code": "r-b-jonghap-F9-S1933",
+   "categoryCode": "classroom",
+   "name": "S1933",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F9",
+   "indoorCode": "S1933"
+  },
+  {
+   "code": "r-b-jonghap-F9-S1939",
+   "categoryCode": "classroom",
+   "name": "S1939",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F9",
+   "indoorCode": "S1939"
+  },
+  {
+   "code": "r-b-jonghap-F9-S1943",
+   "categoryCode": "classroom",
+   "name": "S1943",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F9",
+   "indoorCode": "S1943"
+  },
+  {
+   "code": "r-b-jonghap-F9-S1932",
+   "categoryCode": "classroom",
+   "name": "S1932",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F9",
+   "indoorCode": "S1932"
+  },
+  {
+   "code": "r-b-jonghap-F9-S1931",
+   "categoryCode": "classroom",
+   "name": "S1931",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F9",
+   "indoorCode": "S1931"
+  },
+  {
+   "code": "r-b-jonghap-F9-S1930",
+   "categoryCode": "classroom",
+   "name": "S1930",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F9",
+   "indoorCode": "S1930"
+  },
+  {
+   "code": "r-b-jonghap-F9-S1929",
+   "categoryCode": "classroom",
+   "name": "S1929",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F9",
+   "indoorCode": "S1929"
+  },
+  {
+   "code": "r-b-jonghap-F9-S1928",
+   "categoryCode": "classroom",
+   "name": "S1928",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F9",
+   "indoorCode": "S1928"
+  },
+  {
+   "code": "r-b-jonghap-F9-S1927",
+   "categoryCode": "classroom",
+   "name": "S1927",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F9",
+   "indoorCode": "S1927"
+  },
+  {
+   "code": "r-b-jonghap-F9-S1923",
+   "categoryCode": "classroom",
+   "name": "S1923",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F9",
+   "indoorCode": "S1923"
+  },
+  {
+   "code": "r-b-jonghap-F9-S1919",
+   "categoryCode": "classroom",
+   "name": "S1919",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F9",
+   "indoorCode": "S1919"
+  },
+  {
+   "code": "r-b-jonghap-F9-S1915",
+   "categoryCode": "classroom",
+   "name": "S1915",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F9",
+   "indoorCode": "S1915"
+  },
+  {
+   "code": "r-b-jonghap-F9-S1913",
+   "categoryCode": "classroom",
+   "name": "S1913",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F9",
+   "indoorCode": "S1913"
+  },
+  {
+   "code": "r-b-jonghap-F9-S1912",
+   "categoryCode": "classroom",
+   "name": "S1912",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F9",
+   "indoorCode": "S1912"
+  },
+  {
+   "code": "r-b-jonghap-F9-S1911",
+   "categoryCode": "classroom",
+   "name": "S1911",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F9",
+   "indoorCode": "S1911"
+  },
+  {
+   "code": "r-b-jonghap-F9-S1910",
+   "categoryCode": "classroom",
+   "name": "S1910",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F9",
+   "indoorCode": "S1910"
+  },
+  {
+   "code": "r-b-jonghap-F9-S1909",
+   "categoryCode": "classroom",
+   "name": "S1909",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F9",
+   "indoorCode": "S1909"
+  },
+  {
+   "code": "r-b-jonghap-F9-S1908",
+   "categoryCode": "classroom",
+   "name": "S1908",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F9",
+   "indoorCode": "S1908"
+  },
+  {
+   "code": "r-b-jonghap-F9-S1907",
+   "categoryCode": "classroom",
+   "name": "S1907",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F9",
+   "indoorCode": "S1907"
+  },
+  {
+   "code": "r-b-jonghap-F9-S1906",
+   "categoryCode": "classroom",
+   "name": "S1906",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F9",
+   "indoorCode": "S1906"
+  },
+  {
+   "code": "r-b-jonghap-F9-S1905",
+   "categoryCode": "classroom",
+   "name": "S1905",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F9",
+   "indoorCode": "S1905"
+  },
+  {
+   "code": "r-b-jonghap-F9-S1904",
+   "categoryCode": "classroom",
+   "name": "S1904",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F9",
+   "indoorCode": "S1904"
+  },
+  {
+   "code": "r-b-jonghap-F9-S1903",
+   "categoryCode": "classroom",
+   "name": "S1903",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F9",
+   "indoorCode": "S1903"
+  },
+  {
+   "code": "r-b-jonghap-F9-S1902",
+   "categoryCode": "classroom",
+   "name": "S1902",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F9",
+   "indoorCode": "S1902"
+  },
+  {
+   "code": "r-b-jonghap-F9-S1901",
+   "categoryCode": "classroom",
+   "name": "S1901",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F9",
+   "indoorCode": "S1901"
+  },
+  {
+   "code": "r-b-jonghap-F9-S1946",
+   "categoryCode": "classroom",
+   "name": "S1946",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F9",
+   "indoorCode": "S1946"
+  },
+  {
+   "code": "r-b-jonghap-F9-S1950",
+   "categoryCode": "classroom",
+   "name": "S1950",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F9",
+   "indoorCode": "S1950"
+  },
+  {
+   "code": "r-b-jonghap-F9-S1954",
+   "categoryCode": "classroom",
+   "name": "S1954",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F9",
+   "indoorCode": "S1954"
+  },
+  {
+   "code": "r-b-jonghap-F9-S1958",
+   "categoryCode": "classroom",
+   "name": "S1958",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F9",
+   "indoorCode": "S1958"
+  },
+  {
+   "code": "r-b-jonghap-F9-인문다락방",
+   "categoryCode": "classroom",
+   "name": "인문 다락방",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F9"
+  },
+  {
+   "code": "p-club-room-b-student-03",
+   "categoryCode": "club-room",
+   "name": "화이트홀스",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-03.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "B1",
+   "indoorCode": "S2005"
+  },
+  {
+   "code": "p-club-room-b-student-02",
+   "categoryCode": "club-room",
+   "name": "인해극단",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-02.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "B1",
+   "indoorCode": "S2004"
+  },
+  {
+   "code": "p-club-room-b-student-01",
+   "categoryCode": "club-room",
+   "name": "파인",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-01.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "B1",
+   "indoorCode": "S2003"
+  },
+  {
+   "code": "r-b-student-B1-S2001",
+   "categoryCode": "classroom",
+   "name": "S2001",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "B1",
+   "indoorCode": "S2001"
+  },
+  {
+   "code": "r-b-student-B1-S2006",
+   "categoryCode": "classroom",
+   "name": "화이트홀스 회의실",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "B1",
+   "indoorCode": "S2006"
+  },
+  {
+   "code": "p-bank-b-student-01",
+   "categoryCode": "bank",
+   "name": "새마을금고",
+   "imageUrl": "https://thingo.kr/static/images/map/p-bank-b-student-01.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-student-F1-S2111",
+   "categoryCode": "classroom",
+   "name": "소강당",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F1",
+   "indoorCode": "S2111"
+  },
+  {
+   "code": "r-b-student-F1-하나은행atm",
+   "categoryCode": "classroom",
+   "name": "하나은행 ATM",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-student-F1-S2116",
+   "categoryCode": "classroom",
+   "name": "S2116",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F1",
+   "indoorCode": "S2116"
+  },
+  {
+   "code": "r-b-student-F1-경비실",
+   "categoryCode": "classroom",
+   "name": "경비실",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "p-mail-b-student-01",
+   "categoryCode": "mail",
+   "name": "우편취급국",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-student-F10-S21007",
+   "categoryCode": "classroom",
+   "name": "S21007",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F10",
+   "indoorCode": "S21007"
+  },
+  {
+   "code": "r-b-student-F10-S21013",
+   "categoryCode": "classroom",
+   "name": "S21013",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F10",
+   "indoorCode": "S21013"
+  },
+  {
+   "code": "r-b-student-F10-S21014",
+   "categoryCode": "classroom",
+   "name": "S21014",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F10",
+   "indoorCode": "S21014"
+  },
+  {
+   "code": "r-b-student-F10-S21015",
+   "categoryCode": "classroom",
+   "name": "S21015",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F10",
+   "indoorCode": "S21015"
+  },
+  {
+   "code": "r-b-student-F10-time",
+   "categoryCode": "classroom",
+   "name": "TIME",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F10"
+  },
+  {
+   "code": "r-b-student-F10-S21012",
+   "categoryCode": "classroom",
+   "name": "S21012",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F10",
+   "indoorCode": "S21012"
+  },
+  {
+   "code": "r-b-student-F10-S21011",
+   "categoryCode": "classroom",
+   "name": "S21011",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F10",
+   "indoorCode": "S21011"
+  },
+  {
+   "code": "r-b-student-F10-S21008",
+   "categoryCode": "classroom",
+   "name": "S21008",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F10",
+   "indoorCode": "S21008"
+  },
+  {
+   "code": "r-b-student-F10-S21016",
+   "categoryCode": "classroom",
+   "name": "재학생 맞춤형 고용 서비스 사무실",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F10",
+   "indoorCode": "S21016"
+  },
+  {
+   "code": "r-b-student-F10-S21005",
+   "categoryCode": "classroom",
+   "name": "S21005",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F10",
+   "indoorCode": "S21005"
+  },
+  {
+   "code": "r-b-student-F10-S21006",
+   "categoryCode": "classroom",
+   "name": "창업동아리",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F10",
+   "indoorCode": "S21006"
+  },
+  {
+   "code": "r-b-student-F10-S21002",
+   "categoryCode": "classroom",
+   "name": "S21002",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F10",
+   "indoorCode": "S21002"
+  },
+  {
+   "code": "r-b-student-F10-S21001",
+   "categoryCode": "classroom",
+   "name": "S21001",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F10",
+   "indoorCode": "S21001"
+  },
+  {
+   "code": "r-b-student-F10-S21004",
+   "categoryCode": "classroom",
+   "name": "S21004",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F10",
+   "indoorCode": "S21004"
+  },
+  {
+   "code": "r-b-student-F10-S21003",
+   "categoryCode": "classroom",
+   "name": "S21003",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F10",
+   "indoorCode": "S21003"
+  },
+  {
+   "code": "r-b-student-F10-S21009",
+   "categoryCode": "classroom",
+   "name": "S21009",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F10",
+   "indoorCode": "S21009"
+  },
+  {
+   "code": "r-b-student-F10-S21010",
+   "categoryCode": "classroom",
+   "name": "S21010",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F10",
+   "indoorCode": "S21010"
+  },
+  {
+   "code": "r-b-student-F2-S2205",
+   "categoryCode": "classroom",
+   "name": "명지미디어센터 (명대신문사)",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F2",
+   "indoorCode": "S2205"
+  },
+  {
+   "code": "r-b-student-F2-S2204",
+   "categoryCode": "classroom",
+   "name": "명대신문사 사무실",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F2",
+   "indoorCode": "S2204"
+  },
+  {
+   "code": "r-b-student-F2-S2207",
+   "categoryCode": "classroom",
+   "name": "명지미디어센터 (영자신문사)",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F2",
+   "indoorCode": "S2207"
+  },
+  {
+   "code": "p-convenience-store-b-student-04",
+   "categoryCode": "convenience-store",
+   "name": "이마트24",
+   "imageUrl": "https://thingo.kr/static/images/map/p-convenience-store-b-student-04.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F3"
+  },
+  {
+   "code": "p-cafe-b-student-04",
+   "categoryCode": "cafe",
+   "name": "리에또 커피",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F3"
+  },
+  {
+   "code": "p-cafeteria-b-student-01",
+   "categoryCode": "cafeteria",
+   "name": "학생식당",
+   "imageUrl": "https://thingo.kr/static/images/map/p-cafeteria-b-student-01.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F3"
+  },
+  {
+   "code": "r-b-student-F4-학습라운지",
+   "categoryCode": "classroom",
+   "name": "학습 라운지",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F4"
+  },
+  {
+   "code": "p-study-room-b-student-01",
+   "categoryCode": "study-room",
+   "name": "스터디룸1",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F4"
+  },
+  {
+   "code": "p-study-room-b-student-02",
+   "categoryCode": "study-room",
+   "name": "스터디룸2",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F4"
+  },
+  {
+   "code": "p-study-room-b-student-03",
+   "categoryCode": "study-room",
+   "name": "스터디룸3",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F4"
+  },
+  {
+   "code": "p-study-room-b-student-04",
+   "categoryCode": "study-room",
+   "name": "스터디룸4",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F4"
+  },
+  {
+   "code": "p-study-room-b-student-05",
+   "categoryCode": "study-room",
+   "name": "스터디룸5",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F4"
+  },
+  {
+   "code": "r-b-student-F4-mj대학일자리플러스센터학생상담센터",
+   "categoryCode": "classroom",
+   "name": "MJ대학일자리 플러스센터 학생상담센터",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F4"
+  },
+  {
+   "code": "r-b-student-F4-S2402",
+   "categoryCode": "classroom",
+   "name": "진로/취업 전용강의실 1",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F4",
+   "indoorCode": "S2402"
+  },
+  {
+   "code": "r-b-student-F4-S2401",
+   "categoryCode": "classroom",
+   "name": "진로/취업 전용강의실 2",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F4",
+   "indoorCode": "S2401"
+  },
+  {
+   "code": "p-break-room-b-student-01",
+   "categoryCode": "break-room",
+   "name": "남자 휴게실",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F4",
+   "indoorCode": "S2404"
+  },
+  {
+   "code": "r-b-student-F4-장애학우휴게공간",
+   "categoryCode": "classroom",
+   "name": "장애학우 휴게공간",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F4"
+  },
+  {
+   "code": "p-break-room-b-student-05",
+   "categoryCode": "break-room",
+   "name": "휴게공간3",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F4"
+  },
+  {
+   "code": "p-break-room-b-student-04",
+   "categoryCode": "break-room",
+   "name": "휴게공간2",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F4"
+  },
+  {
+   "code": "p-break-room-b-student-03",
+   "categoryCode": "break-room",
+   "name": "휴게공간1",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F4"
+  },
+  {
+   "code": "r-b-student-F4-S2417",
+   "categoryCode": "classroom",
+   "name": "잡스튜디오",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F4",
+   "indoorCode": "S2417"
+  },
+  {
+   "code": "p-break-room-b-student-02",
+   "categoryCode": "break-room",
+   "name": "여자 휴게실",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F4",
+   "indoorCode": "S2408"
+  },
+  {
+   "code": "r-b-student-F5-S2515",
+   "categoryCode": "classroom",
+   "name": "미래융합대학 학생회실",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F5",
+   "indoorCode": "S2515"
+  },
+  {
+   "code": "r-b-student-F5-S2512",
+   "categoryCode": "classroom",
+   "name": "사회과학대학 학생회실",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F5",
+   "indoorCode": "S2512"
+  },
+  {
+   "code": "r-b-student-F5-S2509",
+   "categoryCode": "classroom",
+   "name": "인문대학 학생회실",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F5",
+   "indoorCode": "S2509"
+  },
+  {
+   "code": "r-b-student-F5-S2508",
+   "categoryCode": "classroom",
+   "name": "경영대학 학생회실",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F5",
+   "indoorCode": "S2508"
+  },
+  {
+   "code": "r-b-student-F5-S2505",
+   "categoryCode": "classroom",
+   "name": "총학생회 사무실",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F5",
+   "indoorCode": "S2505"
+  },
+  {
+   "code": "r-b-student-F5-S2503",
+   "categoryCode": "classroom",
+   "name": "추모사업회",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F5",
+   "indoorCode": "S2503"
+  },
+  {
+   "code": "r-b-student-F5-S2501",
+   "categoryCode": "classroom",
+   "name": "세미나실",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F5",
+   "indoorCode": "S2501"
+  },
+  {
+   "code": "r-b-student-F5-S2514",
+   "categoryCode": "classroom",
+   "name": "인공지능∙소프트웨어 융합대학 학생회실",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F5",
+   "indoorCode": "S2514"
+  },
+  {
+   "code": "r-b-student-F5-S2513",
+   "categoryCode": "classroom",
+   "name": "미디어∙휴먼라이프대학 학생회실",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F5",
+   "indoorCode": "S2513"
+  },
+  {
+   "code": "p-printer-b-student-06",
+   "categoryCode": "printer",
+   "name": "학생복지실",
+   "imageUrl": "https://thingo.kr/static/images/map/p-printer-b-student-06.jpg",
+   "infoText": "총학생회 프린트사업\n월-목 10:00-18:00\n금 10:00-15:00",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F5",
+   "indoorCode": "S2510"
+  },
+  {
+   "code": "r-b-student-F5-S2516",
+   "categoryCode": "classroom",
+   "name": "명지기독교연합",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F5",
+   "indoorCode": "S2516"
+  },
+  {
+   "code": "p-club-room-b-student-15",
+   "categoryCode": "club-room",
+   "name": "비주얼",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-15.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F6",
+   "indoorCode": "S2615"
+  },
+  {
+   "code": "p-club-room-b-student-12",
+   "categoryCode": "club-room",
+   "name": "명지서법연구회",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-12.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F6",
+   "indoorCode": "S2611"
+  },
+  {
+   "code": "p-club-room-b-student-10",
+   "categoryCode": "club-room",
+   "name": "너나들이",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-10.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F6",
+   "indoorCode": "S2609"
+  },
+  {
+   "code": "p-club-room-b-student-11",
+   "categoryCode": "club-room",
+   "name": "극예술연구회 알",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-11.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F6",
+   "indoorCode": "S2610"
+  },
+  {
+   "code": "p-club-room-b-student-07",
+   "categoryCode": "club-room",
+   "name": "그림패시만화",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-07.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F6",
+   "indoorCode": "S2604"
+  },
+  {
+   "code": "p-club-room-b-student-06",
+   "categoryCode": "club-room",
+   "name": "RCY",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-06.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F6",
+   "indoorCode": "S2603"
+  },
+  {
+   "code": "p-club-room-b-student-14",
+   "categoryCode": "club-room",
+   "name": "키비탄",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-14.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F6",
+   "indoorCode": "S2613"
+  },
+  {
+   "code": "p-club-room-b-student-13",
+   "categoryCode": "club-room",
+   "name": "명지챌린저스",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-13.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F6",
+   "indoorCode": "S2612"
+  },
+  {
+   "code": "p-club-room-b-student-09",
+   "categoryCode": "club-room",
+   "name": "코아",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-09.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F6",
+   "indoorCode": "S2608"
+  },
+  {
+   "code": "p-club-room-b-student-08",
+   "categoryCode": "club-room",
+   "name": "농어민후생연구회 흙",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-08.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F6",
+   "indoorCode": "S2607"
+  },
+  {
+   "code": "p-club-room-b-student-16",
+   "categoryCode": "club-room",
+   "name": "포토랩",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-16.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F6",
+   "indoorCode": "S2616"
+  },
+  {
+   "code": "r-b-student-F6-S2605",
+   "categoryCode": "classroom",
+   "name": "총동아리연합회 행정복지실",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F6",
+   "indoorCode": "S2605"
+  },
+  {
+   "code": "r-b-student-F6-S2606",
+   "categoryCode": "classroom",
+   "name": "총동아리연합회",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F6",
+   "indoorCode": "S2606"
+  },
+  {
+   "code": "p-club-room-b-student-05",
+   "categoryCode": "club-room",
+   "name": "MIRS",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-05.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F6",
+   "indoorCode": "S2602"
+  },
+  {
+   "code": "p-club-room-b-student-04",
+   "categoryCode": "club-room",
+   "name": "디비전",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-04.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F6",
+   "indoorCode": "S2601"
+  },
+  {
+   "code": "p-club-room-b-student-31",
+   "categoryCode": "club-room",
+   "name": "TIME",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-31.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F7",
+   "indoorCode": "S2715"
+  },
+  {
+   "code": "p-club-room-b-student-27",
+   "categoryCode": "club-room",
+   "name": "PTPI",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-27.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F7",
+   "indoorCode": "S2711"
+  },
+  {
+   "code": "p-club-room-b-student-25",
+   "categoryCode": "club-room",
+   "name": "콕콕콕",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-25.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F7",
+   "indoorCode": "S2709"
+  },
+  {
+   "code": "p-club-room-b-student-26",
+   "categoryCode": "club-room",
+   "name": "통해",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-26.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F7",
+   "indoorCode": "S2710"
+  },
+  {
+   "code": "p-club-room-b-student-20",
+   "categoryCode": "club-room",
+   "name": "오버행",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-20.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F7",
+   "indoorCode": "S2704"
+  },
+  {
+   "code": "p-club-room-b-student-19",
+   "categoryCode": "club-room",
+   "name": "나라오르다",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-19.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F7",
+   "indoorCode": "S2703"
+  },
+  {
+   "code": "p-club-room-b-student-30",
+   "categoryCode": "club-room",
+   "name": "MGH",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-30.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F7",
+   "indoorCode": "S2714"
+  },
+  {
+   "code": "p-club-room-b-student-29",
+   "categoryCode": "club-room",
+   "name": "CFM",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-29.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F7",
+   "indoorCode": "S2713"
+  },
+  {
+   "code": "p-club-room-b-student-24",
+   "categoryCode": "club-room",
+   "name": "FC명지",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-24.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F7",
+   "indoorCode": "S2708"
+  },
+  {
+   "code": "p-club-room-b-student-23",
+   "categoryCode": "club-room",
+   "name": "주리랑",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-23.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F7",
+   "indoorCode": "S2707"
+  },
+  {
+   "code": "p-club-room-b-student-32",
+   "categoryCode": "club-room",
+   "name": "실로암",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-32.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F7",
+   "indoorCode": "S2716"
+  },
+  {
+   "code": "p-club-room-b-student-21",
+   "categoryCode": "club-room",
+   "name": "MJTA",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-21.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F7",
+   "indoorCode": "S2705"
+  },
+  {
+   "code": "p-club-room-b-student-22",
+   "categoryCode": "club-room",
+   "name": "무릉도원",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-22.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F7",
+   "indoorCode": "S2706"
+  },
+  {
+   "code": "p-club-room-b-student-18",
+   "categoryCode": "club-room",
+   "name": "흑풍",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-18.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F7",
+   "indoorCode": "S2702"
+  },
+  {
+   "code": "p-club-room-b-student-17",
+   "categoryCode": "club-room",
+   "name": "나이너스",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-17.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F7",
+   "indoorCode": "S2701"
+  },
+  {
+   "code": "p-club-room-b-student-28",
+   "categoryCode": "club-room",
+   "name": "UBF",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-28.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F7",
+   "indoorCode": "S2712"
+  },
+  {
+   "code": "r-b-student-F8-S2818",
+   "categoryCode": "classroom",
+   "name": "사회봉사단실",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F8",
+   "indoorCode": "S2818"
+  },
+  {
+   "code": "r-b-student-F8-S2816",
+   "categoryCode": "classroom",
+   "name": "S2816",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F8",
+   "indoorCode": "S2816"
+  },
+  {
+   "code": "r-b-student-F8-S2814",
+   "categoryCode": "classroom",
+   "name": "S2814",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F8",
+   "indoorCode": "S2814"
+  },
+  {
+   "code": "p-club-room-b-student-34",
+   "categoryCode": "club-room",
+   "name": "COW",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-34.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F8",
+   "indoorCode": "S2810"
+  },
+  {
+   "code": "r-b-student-F8-S2811",
+   "categoryCode": "classroom",
+   "name": "그린캠퍼스 지킴이",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F8",
+   "indoorCode": "S2811"
+  },
+  {
+   "code": "r-b-student-F8-S2812",
+   "categoryCode": "classroom",
+   "name": "S2812",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F8",
+   "indoorCode": "S2812"
+  },
+  {
+   "code": "r-b-student-F8-S2813",
+   "categoryCode": "classroom",
+   "name": "S2813",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F8",
+   "indoorCode": "S2813"
+  },
+  {
+   "code": "r-b-student-F8-S28042",
+   "categoryCode": "classroom",
+   "name": "S2804-2",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F8",
+   "indoorCode": "S28042"
+  },
+  {
+   "code": "r-b-student-F8-S28041",
+   "categoryCode": "classroom",
+   "name": "S2804-1",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F8",
+   "indoorCode": "S28041"
+  },
+  {
+   "code": "r-b-student-F8-S28032",
+   "categoryCode": "classroom",
+   "name": "S2803-2",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F8",
+   "indoorCode": "S28032"
+  },
+  {
+   "code": "r-b-student-F8-S28031",
+   "categoryCode": "classroom",
+   "name": "S2803-1",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F8",
+   "indoorCode": "S28031"
+  },
+  {
+   "code": "r-b-student-F8-S2807",
+   "categoryCode": "classroom",
+   "name": "장애학생 서포터즈",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F8",
+   "indoorCode": "S2807"
+  },
+  {
+   "code": "r-b-student-F8-S2808",
+   "categoryCode": "classroom",
+   "name": "S2808",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F8",
+   "indoorCode": "S2808"
+  },
+  {
+   "code": "p-club-room-b-student-33",
+   "categoryCode": "club-room",
+   "name": "인액터스",
+   "imageUrl": "https://thingo.kr/static/images/map/p-club-room-b-student-33.jpg",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F8",
+   "indoorCode": "S2809"
+  },
+  {
+   "code": "r-b-student-F8-S2817",
+   "categoryCode": "classroom",
+   "name": "S2817",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F8",
+   "indoorCode": "S2817"
+  },
+  {
+   "code": "r-b-student-F8-S2805",
+   "categoryCode": "classroom",
+   "name": "S2805",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F8",
+   "indoorCode": "S2805"
+  },
+  {
+   "code": "r-b-student-F8-S2806",
+   "categoryCode": "classroom",
+   "name": "S2806",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F8",
+   "indoorCode": "S2806"
+  },
+  {
+   "code": "r-b-student-F8-S2802",
+   "categoryCode": "classroom",
+   "name": "S2802",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F8",
+   "indoorCode": "S2802"
+  },
+  {
+   "code": "r-b-student-F8-S2801",
+   "categoryCode": "classroom",
+   "name": "S2801",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F8",
+   "indoorCode": "S2801"
+  },
+  {
+   "code": "r-b-student-F9-사회봉사단실",
+   "categoryCode": "classroom",
+   "name": "사회봉사단실",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F9"
+  },
+  {
+   "code": "r-b-student-F9-S2910",
+   "categoryCode": "classroom",
+   "name": "S2910",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F9",
+   "indoorCode": "S2910"
+  },
+  {
+   "code": "r-b-student-F9-S2911",
+   "categoryCode": "classroom",
+   "name": "S2911",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F9",
+   "indoorCode": "S2911"
+  },
+  {
+   "code": "r-b-student-F9-S2912",
+   "categoryCode": "classroom",
+   "name": "S2912",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F9",
+   "indoorCode": "S2912"
+  },
+  {
+   "code": "r-b-student-F9-S29042",
+   "categoryCode": "classroom",
+   "name": "S2904-2",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F9",
+   "indoorCode": "S29042"
+  },
+  {
+   "code": "r-b-student-F9-S29041",
+   "categoryCode": "classroom",
+   "name": "S2904-1",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F9",
+   "indoorCode": "S29041"
+  },
+  {
+   "code": "r-b-student-F9-S29032",
+   "categoryCode": "classroom",
+   "name": "S2903-2",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F9",
+   "indoorCode": "S29032"
+  },
+  {
+   "code": "r-b-student-F9-S29031",
+   "categoryCode": "classroom",
+   "name": "S2903-1",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F9",
+   "indoorCode": "S29031"
+  },
+  {
+   "code": "r-b-student-F9-S2907",
+   "categoryCode": "classroom",
+   "name": "학생 상담 센터",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F9",
+   "indoorCode": "S2907"
+  },
+  {
+   "code": "r-b-student-F9-S2915",
+   "categoryCode": "classroom",
+   "name": "S2915",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F9",
+   "indoorCode": "S2915"
+  },
+  {
+   "code": "r-b-student-F9-S2916",
+   "categoryCode": "classroom",
+   "name": "인문예비군연대",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F9",
+   "indoorCode": "S2916"
+  },
+  {
+   "code": "r-b-student-F9-time",
+   "categoryCode": "classroom",
+   "name": "TIME",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F9"
+  },
+  {
+   "code": "r-b-student-F9-S2914",
+   "categoryCode": "classroom",
+   "name": "S2914",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F9",
+   "indoorCode": "S2914"
+  },
+  {
+   "code": "r-b-student-F9-S2913",
+   "categoryCode": "classroom",
+   "name": "S2913",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F9",
+   "indoorCode": "S2913"
+  },
+  {
+   "code": "r-b-student-F9-S2905",
+   "categoryCode": "classroom",
+   "name": "S2905",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F9",
+   "indoorCode": "S2905"
+  },
+  {
+   "code": "r-b-student-F9-S2906",
+   "categoryCode": "classroom",
+   "name": "S2906",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F9",
+   "indoorCode": "S2906"
+  },
+  {
+   "code": "r-b-student-F9-S2902",
+   "categoryCode": "classroom",
+   "name": "S2902",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F9",
+   "indoorCode": "S2902"
+  },
+  {
+   "code": "r-b-student-F9-S2901",
+   "categoryCode": "classroom",
+   "name": "S2901",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F9",
+   "indoorCode": "S2901"
+  },
+  {
+   "code": "r-b-intl-F1-S4112",
+   "categoryCode": "classroom",
+   "name": "S4112",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F1",
+   "indoorCode": "S4112"
+  },
+  {
+   "code": "r-b-intl-F1-S4115",
+   "categoryCode": "classroom",
+   "name": "S4115",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F1",
+   "indoorCode": "S4115"
+  },
+  {
+   "code": "r-b-intl-F1-S41192",
+   "categoryCode": "classroom",
+   "name": "S4119-2",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F1",
+   "indoorCode": "S41192"
+  },
+  {
+   "code": "r-b-intl-F1-S4120",
+   "categoryCode": "classroom",
+   "name": "S4120",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F1",
+   "indoorCode": "S4120"
+  },
+  {
+   "code": "r-b-intl-F1-S4123",
+   "categoryCode": "classroom",
+   "name": "S4123",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F1",
+   "indoorCode": "S4123"
+  },
+  {
+   "code": "r-b-intl-F1-경비실",
+   "categoryCode": "classroom",
+   "name": "경비실",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-intl-F1-S4111",
+   "categoryCode": "classroom",
+   "name": "S4111",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F1",
+   "indoorCode": "S4111"
+  },
+  {
+   "code": "r-b-intl-F1-S4110",
+   "categoryCode": "classroom",
+   "name": "S4110",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F1",
+   "indoorCode": "S4110"
+  },
+  {
+   "code": "r-b-intl-F1-S4109",
+   "categoryCode": "classroom",
+   "name": "S4109",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F1",
+   "indoorCode": "S4109"
+  },
+  {
+   "code": "r-b-intl-F1-S4107",
+   "categoryCode": "classroom",
+   "name": "S4107",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F1",
+   "indoorCode": "S4107"
+  },
+  {
+   "code": "r-b-intl-F1-보건의료센터",
+   "categoryCode": "classroom",
+   "name": "보건의료센터",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-intl-F1-학생상담센터",
+   "categoryCode": "classroom",
+   "name": "학생상담센터",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-intl-F1-S41041",
+   "categoryCode": "classroom",
+   "name": "S4104 -1",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F1",
+   "indoorCode": "S41041"
+  },
+  {
+   "code": "r-b-intl-F1-장애학생지원센터",
+   "categoryCode": "classroom",
+   "name": "장애 학생 지원 센터",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-intl-F2-S4215",
+   "categoryCode": "classroom",
+   "name": "S4215",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F2",
+   "indoorCode": "S4215"
+  },
+  {
+   "code": "r-b-intl-F2-S4217",
+   "categoryCode": "classroom",
+   "name": "S4217",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F2",
+   "indoorCode": "S4217"
+  },
+  {
+   "code": "r-b-intl-F2-S4219",
+   "categoryCode": "classroom",
+   "name": "S4219",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F2",
+   "indoorCode": "S4219"
+  },
+  {
+   "code": "r-b-intl-F2-S4220",
+   "categoryCode": "classroom",
+   "name": "S4220",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F2",
+   "indoorCode": "S4220"
+  },
+  {
+   "code": "r-b-intl-F2-S4225",
+   "categoryCode": "classroom",
+   "name": "S4225",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F2",
+   "indoorCode": "S4225"
+  },
+  {
+   "code": "r-b-intl-F2-S4226",
+   "categoryCode": "classroom",
+   "name": "S4226",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F2",
+   "indoorCode": "S4226"
+  },
+  {
+   "code": "r-b-intl-F2-S4227",
+   "categoryCode": "classroom",
+   "name": "S4227",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F2",
+   "indoorCode": "S4227"
+  },
+  {
+   "code": "r-b-intl-F2-S4223",
+   "categoryCode": "classroom",
+   "name": "S4223",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F2",
+   "indoorCode": "S4223"
+  },
+  {
+   "code": "r-b-intl-F2-S42142",
+   "categoryCode": "classroom",
+   "name": "S4214-2",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F2",
+   "indoorCode": "S42142"
+  },
+  {
+   "code": "r-b-intl-F2-S42141",
+   "categoryCode": "classroom",
+   "name": "S4214-1",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F2",
+   "indoorCode": "S42141"
+  },
+  {
+   "code": "r-b-intl-F2-S42132",
+   "categoryCode": "classroom",
+   "name": "S4213-2",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F2",
+   "indoorCode": "S42132"
+  },
+  {
+   "code": "r-b-intl-F2-S42131",
+   "categoryCode": "classroom",
+   "name": "S4213-1",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F2",
+   "indoorCode": "S42131"
+  },
+  {
+   "code": "r-b-intl-F2-S4212",
+   "categoryCode": "classroom",
+   "name": "S4212",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F2",
+   "indoorCode": "S4212"
+  },
+  {
+   "code": "r-b-intl-F2-S4211",
+   "categoryCode": "classroom",
+   "name": "S4211",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F2",
+   "indoorCode": "S4211"
+  },
+  {
+   "code": "r-b-intl-F2-S4210",
+   "categoryCode": "classroom",
+   "name": "S4210",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F2",
+   "indoorCode": "S4210"
+  },
+  {
+   "code": "r-b-intl-F2-S4209",
+   "categoryCode": "classroom",
+   "name": "S4209",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F2",
+   "indoorCode": "S4209"
+  },
+  {
+   "code": "r-b-intl-F2-S4208",
+   "categoryCode": "classroom",
+   "name": "S4208",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F2",
+   "indoorCode": "S4208"
+  },
+  {
+   "code": "r-b-intl-F2-S4207",
+   "categoryCode": "classroom",
+   "name": "S4207",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F2",
+   "indoorCode": "S4207"
+  },
+  {
+   "code": "r-b-intl-F2-S4206",
+   "categoryCode": "classroom",
+   "name": "S4206",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F2",
+   "indoorCode": "S4206"
+  },
+  {
+   "code": "r-b-intl-F2-S4205",
+   "categoryCode": "classroom",
+   "name": "S4205",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F2",
+   "indoorCode": "S4205"
+  },
+  {
+   "code": "r-b-intl-F2-S4202",
+   "categoryCode": "classroom",
+   "name": "S4202",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F2",
+   "indoorCode": "S4202"
+  },
+  {
+   "code": "r-b-intl-F2-S4201",
+   "categoryCode": "classroom",
+   "name": "S4201",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F2",
+   "indoorCode": "S4201"
+  },
+  {
+   "code": "r-b-intl-F3-S4315",
+   "categoryCode": "classroom",
+   "name": "S4315",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F3",
+   "indoorCode": "S4315"
+  },
+  {
+   "code": "r-b-intl-F3-S4318",
+   "categoryCode": "classroom",
+   "name": "S4318",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F3",
+   "indoorCode": "S4318"
+  },
+  {
+   "code": "r-b-intl-F3-S4325",
+   "categoryCode": "classroom",
+   "name": "S4325",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F3",
+   "indoorCode": "S4325"
+  },
+  {
+   "code": "r-b-intl-F3-S4327",
+   "categoryCode": "classroom",
+   "name": "S4327",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F3",
+   "indoorCode": "S4327"
+  },
+  {
+   "code": "r-b-intl-F3-S4323",
+   "categoryCode": "classroom",
+   "name": "S4323",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F3",
+   "indoorCode": "S4323"
+  },
+  {
+   "code": "r-b-intl-F3-S43142",
+   "categoryCode": "classroom",
+   "name": "S4314-2",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F3",
+   "indoorCode": "S43142"
+  },
+  {
+   "code": "r-b-intl-F3-S43141",
+   "categoryCode": "classroom",
+   "name": "S4314-1",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F3",
+   "indoorCode": "S43141"
+  },
+  {
+   "code": "r-b-intl-F3-S4313",
+   "categoryCode": "classroom",
+   "name": "S4313",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F3",
+   "indoorCode": "S4313"
+  },
+  {
+   "code": "r-b-intl-F3-S4312",
+   "categoryCode": "classroom",
+   "name": "S4312",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F3",
+   "indoorCode": "S4312"
+  },
+  {
+   "code": "r-b-intl-F3-S43112",
+   "categoryCode": "classroom",
+   "name": "S4311-2",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F3",
+   "indoorCode": "S43112"
+  },
+  {
+   "code": "r-b-intl-F3-S43111",
+   "categoryCode": "classroom",
+   "name": "S4311-1",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F3",
+   "indoorCode": "S43111"
+  },
+  {
+   "code": "r-b-intl-F3-S4310",
+   "categoryCode": "classroom",
+   "name": "S4310",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F3",
+   "indoorCode": "S4310"
+  },
+  {
+   "code": "r-b-intl-F3-S4309",
+   "categoryCode": "classroom",
+   "name": "S4309",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F3",
+   "indoorCode": "S4309"
+  },
+  {
+   "code": "r-b-intl-F3-S43082",
+   "categoryCode": "classroom",
+   "name": "S4308-2",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F3",
+   "indoorCode": "S43082"
+  },
+  {
+   "code": "r-b-intl-F3-S43071",
+   "categoryCode": "classroom",
+   "name": "S4307-1",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F3",
+   "indoorCode": "S43071"
+  },
+  {
+   "code": "r-b-intl-F3-S4306",
+   "categoryCode": "classroom",
+   "name": "S4306",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F3",
+   "indoorCode": "S4306"
+  },
+  {
+   "code": "r-b-intl-F3-S4305",
+   "categoryCode": "classroom",
+   "name": "S4305",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F3",
+   "indoorCode": "S4305"
+  },
+  {
+   "code": "r-b-intl-F3-S4304",
+   "categoryCode": "classroom",
+   "name": "S4304",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F3",
+   "indoorCode": "S4304"
+  },
+  {
+   "code": "r-b-intl-F3-S43032",
+   "categoryCode": "classroom",
+   "name": "S4303-2",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F3",
+   "indoorCode": "S43032"
+  },
+  {
+   "code": "r-b-intl-F3-S43031",
+   "categoryCode": "classroom",
+   "name": "S4303-1",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F3",
+   "indoorCode": "S43031"
+  },
+  {
+   "code": "r-b-intl-F3-S4302",
+   "categoryCode": "classroom",
+   "name": "S4302",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F3",
+   "indoorCode": "S4302"
+  },
+  {
+   "code": "r-b-intl-F3-S4301",
+   "categoryCode": "classroom",
+   "name": "S4301",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F3",
+   "indoorCode": "S4301"
+  },
+  {
+   "code": "r-b-intl-F4-S4415",
+   "categoryCode": "classroom",
+   "name": "S4415",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F4",
+   "indoorCode": "S4415"
+  },
+  {
+   "code": "r-b-intl-F4-S4417",
+   "categoryCode": "classroom",
+   "name": "S4417",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F4",
+   "indoorCode": "S4417"
+  },
+  {
+   "code": "r-b-intl-F4-S4419",
+   "categoryCode": "classroom",
+   "name": "S4419",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F4",
+   "indoorCode": "S4419"
+  },
+  {
+   "code": "r-b-intl-F4-S4425",
+   "categoryCode": "classroom",
+   "name": "S4425",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F4",
+   "indoorCode": "S4425"
+  },
+  {
+   "code": "r-b-intl-F4-S4427",
+   "categoryCode": "classroom",
+   "name": "S4427",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F4",
+   "indoorCode": "S4427"
+  },
+  {
+   "code": "r-b-intl-F4-S4423",
+   "categoryCode": "classroom",
+   "name": "S4423",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F4",
+   "indoorCode": "S4423"
+  },
+  {
+   "code": "r-b-intl-F4-S4413",
+   "categoryCode": "classroom",
+   "name": "S4413",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F4",
+   "indoorCode": "S4413"
+  },
+  {
+   "code": "r-b-intl-F4-S4412",
+   "categoryCode": "classroom",
+   "name": "S4412",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F4",
+   "indoorCode": "S4412"
+  },
+  {
+   "code": "r-b-intl-F4-S4411",
+   "categoryCode": "classroom",
+   "name": "S4411",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F4",
+   "indoorCode": "S4411"
+  },
+  {
+   "code": "r-b-intl-F4-S4410",
+   "categoryCode": "classroom",
+   "name": "S4410",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F4",
+   "indoorCode": "S4410"
+  },
+  {
+   "code": "r-b-intl-F4-S4409",
+   "categoryCode": "classroom",
+   "name": "S4409",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F4",
+   "indoorCode": "S4409"
+  },
+  {
+   "code": "r-b-intl-F4-S4408",
+   "categoryCode": "classroom",
+   "name": "S4408",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F4",
+   "indoorCode": "S4408"
+  },
+  {
+   "code": "r-b-intl-F4-S4407",
+   "categoryCode": "classroom",
+   "name": "S4407",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F4",
+   "indoorCode": "S4407"
+  },
+  {
+   "code": "r-b-intl-F4-S4406",
+   "categoryCode": "classroom",
+   "name": "S4406",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F4",
+   "indoorCode": "S4406"
+  },
+  {
+   "code": "r-b-intl-F4-S44052",
+   "categoryCode": "classroom",
+   "name": "S4405-2",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F4",
+   "indoorCode": "S44052"
+  },
+  {
+   "code": "r-b-intl-F4-S44051",
+   "categoryCode": "classroom",
+   "name": "S4405-1",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F4",
+   "indoorCode": "S44051"
+  },
+  {
+   "code": "r-b-intl-F4-S4404",
+   "categoryCode": "classroom",
+   "name": "S4404",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F4",
+   "indoorCode": "S4404"
+  },
+  {
+   "code": "r-b-intl-F4-S4403",
+   "categoryCode": "classroom",
+   "name": "S4403",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F4",
+   "indoorCode": "S4403"
+  },
+  {
+   "code": "r-b-intl-F4-S4401",
+   "categoryCode": "classroom",
+   "name": "S4401",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F4",
+   "indoorCode": "S4401"
+  },
+  {
+   "code": "r-b-intl-F5-S4515",
+   "categoryCode": "classroom",
+   "name": "S4515",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F5",
+   "indoorCode": "S4515"
+  },
+  {
+   "code": "r-b-intl-F5-S4517",
+   "categoryCode": "classroom",
+   "name": "S4517",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F5",
+   "indoorCode": "S4517"
+  },
+  {
+   "code": "r-b-intl-F5-S4519",
+   "categoryCode": "classroom",
+   "name": "S4519",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F5",
+   "indoorCode": "S4519"
+  },
+  {
+   "code": "r-b-intl-F5-S4525",
+   "categoryCode": "classroom",
+   "name": "S4525",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F5",
+   "indoorCode": "S4525"
+  },
+  {
+   "code": "r-b-intl-F5-S4528",
+   "categoryCode": "classroom",
+   "name": "S4528",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F5",
+   "indoorCode": "S4528"
+  },
+  {
+   "code": "r-b-intl-F5-S4523",
+   "categoryCode": "classroom",
+   "name": "S4523",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F5",
+   "indoorCode": "S4523"
+  },
+  {
+   "code": "r-b-intl-F5-S4513",
+   "categoryCode": "classroom",
+   "name": "S4513",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F5",
+   "indoorCode": "S4513"
+  },
+  {
+   "code": "r-b-intl-F5-S4511",
+   "categoryCode": "classroom",
+   "name": "S4511",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F5",
+   "indoorCode": "S4511"
+  },
+  {
+   "code": "r-b-intl-F5-S4509",
+   "categoryCode": "classroom",
+   "name": "S4509",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F5",
+   "indoorCode": "S4509"
+  },
+  {
+   "code": "r-b-intl-F5-S4507",
+   "categoryCode": "classroom",
+   "name": "S4507",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F5",
+   "indoorCode": "S4507"
+  },
+  {
+   "code": "r-b-intl-F5-S4505",
+   "categoryCode": "classroom",
+   "name": "S4505",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F5",
+   "indoorCode": "S4505"
+  },
+  {
+   "code": "r-b-intl-F5-S4502",
+   "categoryCode": "classroom",
+   "name": "S4502",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F5",
+   "indoorCode": "S4502"
+  },
+  {
+   "code": "r-b-intl-F5-S4501",
+   "categoryCode": "classroom",
+   "name": "S4501",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F5",
+   "indoorCode": "S4501"
+  },
+  {
+   "code": "r-b-intl-F6-S4615",
+   "categoryCode": "classroom",
+   "name": "S4615",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F6",
+   "indoorCode": "S4615"
+  },
+  {
+   "code": "r-b-intl-F6-S4616",
+   "categoryCode": "classroom",
+   "name": "S4616",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F6",
+   "indoorCode": "S4616"
+  },
+  {
+   "code": "r-b-intl-F6-S4617",
+   "categoryCode": "classroom",
+   "name": "S4617",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F6",
+   "indoorCode": "S4617"
+  },
+  {
+   "code": "r-b-intl-F6-S46181",
+   "categoryCode": "classroom",
+   "name": "S4618-1",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F6",
+   "indoorCode": "S46181"
+  },
+  {
+   "code": "r-b-intl-F6-S46182",
+   "categoryCode": "classroom",
+   "name": "S4618-2",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F6",
+   "indoorCode": "S46182"
+  },
+  {
+   "code": "r-b-intl-F6-S4619",
+   "categoryCode": "classroom",
+   "name": "S4619",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F6",
+   "indoorCode": "S4619"
+  },
+  {
+   "code": "r-b-intl-F6-S4620",
+   "categoryCode": "classroom",
+   "name": "S4620",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F6",
+   "indoorCode": "S4620"
+  },
+  {
+   "code": "r-b-intl-F6-S4625",
+   "categoryCode": "classroom",
+   "name": "S4625",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F6",
+   "indoorCode": "S4625"
+  },
+  {
+   "code": "r-b-intl-F6-S4626",
+   "categoryCode": "classroom",
+   "name": "S4626",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F6",
+   "indoorCode": "S4626"
+  },
+  {
+   "code": "r-b-intl-F6-S46271",
+   "categoryCode": "classroom",
+   "name": "S4627-1",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F6",
+   "indoorCode": "S46271"
+  },
+  {
+   "code": "r-b-intl-F6-S46272",
+   "categoryCode": "classroom",
+   "name": "S4627-2",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F6",
+   "indoorCode": "S46272"
+  },
+  {
+   "code": "r-b-intl-F6-S4628",
+   "categoryCode": "classroom",
+   "name": "S4628",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F6",
+   "indoorCode": "S4628"
+  },
+  {
+   "code": "r-b-intl-F6-S4623",
+   "categoryCode": "classroom",
+   "name": "S4623",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F6",
+   "indoorCode": "S4623"
+  },
+  {
+   "code": "r-b-intl-F6-S4614",
+   "categoryCode": "classroom",
+   "name": "S4614",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F6",
+   "indoorCode": "S4614"
+  },
+  {
+   "code": "r-b-intl-F6-S4613",
+   "categoryCode": "classroom",
+   "name": "S4613",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F6",
+   "indoorCode": "S4613"
+  },
+  {
+   "code": "r-b-intl-F6-S4612",
+   "categoryCode": "classroom",
+   "name": "S4612",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F6",
+   "indoorCode": "S4612"
+  },
+  {
+   "code": "r-b-intl-F6-S4611",
+   "categoryCode": "classroom",
+   "name": "S4611",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F6",
+   "indoorCode": "S4611"
+  },
+  {
+   "code": "r-b-intl-F6-S4610",
+   "categoryCode": "classroom",
+   "name": "S4610",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F6",
+   "indoorCode": "S4610"
+  },
+  {
+   "code": "r-b-intl-F6-S4609",
+   "categoryCode": "classroom",
+   "name": "S4609",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F6",
+   "indoorCode": "S4609"
+  },
+  {
+   "code": "r-b-intl-F6-S4605",
+   "categoryCode": "classroom",
+   "name": "S4605",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F6",
+   "indoorCode": "S4605"
+  },
+  {
+   "code": "r-b-intl-F6-S4604",
+   "categoryCode": "classroom",
+   "name": "S4604",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F6",
+   "indoorCode": "S4604"
+  },
+  {
+   "code": "r-b-intl-F6-S4603",
+   "categoryCode": "classroom",
+   "name": "S4603",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F6",
+   "indoorCode": "S4603"
+  },
+  {
+   "code": "r-b-intl-F6-S46022",
+   "categoryCode": "classroom",
+   "name": "S4602-2",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F6",
+   "indoorCode": "S46022"
+  },
+  {
+   "code": "r-b-intl-F6-S46021",
+   "categoryCode": "classroom",
+   "name": "S4602-1",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F6",
+   "indoorCode": "S46021"
+  },
+  {
+   "code": "r-b-intl-F6-S46012",
+   "categoryCode": "classroom",
+   "name": "S4601-2",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F6",
+   "indoorCode": "S46012"
+  },
+  {
+   "code": "r-b-intl-F6-S46011",
+   "categoryCode": "classroom",
+   "name": "S4601-1",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F6",
+   "indoorCode": "S46011"
+  },
+  {
+   "code": "r-b-intl-F7-S4725",
+   "categoryCode": "classroom",
+   "name": "S4725",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F7",
+   "indoorCode": "S4725"
+  },
+  {
+   "code": "r-b-intl-F7-S4727",
+   "categoryCode": "classroom",
+   "name": "S4727",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F7",
+   "indoorCode": "S4727"
+  },
+  {
+   "code": "r-b-intl-F7-S4723",
+   "categoryCode": "classroom",
+   "name": "S4723",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F7",
+   "indoorCode": "S4723"
+  },
+  {
+   "code": "r-b-intl-F7-S4713",
+   "categoryCode": "classroom",
+   "name": "S4713",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F7",
+   "indoorCode": "S4713"
+  },
+  {
+   "code": "r-b-intl-F7-S4711",
+   "categoryCode": "classroom",
+   "name": "S4711",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F7",
+   "indoorCode": "S4711"
+  },
+  {
+   "code": "r-b-intl-F7-S4709",
+   "categoryCode": "classroom",
+   "name": "S4709",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F7",
+   "indoorCode": "S4709"
+  },
+  {
+   "code": "r-b-intl-F7-S4707",
+   "categoryCode": "classroom",
+   "name": "S4707",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F7",
+   "indoorCode": "S4707"
+  },
+  {
+   "code": "r-b-intl-F7-S4705",
+   "categoryCode": "classroom",
+   "name": "S4705",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F7",
+   "indoorCode": "S4705"
+  },
+  {
+   "code": "r-b-intl-F7-S4704",
+   "categoryCode": "classroom",
+   "name": "S4704",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F7",
+   "indoorCode": "S4704"
+  },
+  {
+   "code": "r-b-intl-F7-S4703",
+   "categoryCode": "classroom",
+   "name": "S4703",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F7",
+   "indoorCode": "S4703"
+  },
+  {
+   "code": "r-b-intl-F7-S47021",
+   "categoryCode": "classroom",
+   "name": "S4702-1",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F7",
+   "indoorCode": "S47021"
+  },
+  {
+   "code": "r-b-intl-F7-S47022",
+   "categoryCode": "classroom",
+   "name": "S4702-2",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F7",
+   "indoorCode": "S47022"
+  },
+  {
+   "code": "r-b-intl-F7-S4701",
+   "categoryCode": "classroom",
+   "name": "S4701",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F7",
+   "indoorCode": "S4701"
+  },
+  {
+   "code": "r-b-intl-F7-S47152",
+   "categoryCode": "classroom",
+   "name": "S4715-2",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F7",
+   "indoorCode": "S47152"
+  },
+  {
+   "code": "r-b-intl-F7-S47151",
+   "categoryCode": "classroom",
+   "name": "S4715-1",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F7",
+   "indoorCode": "S47151"
+  },
+  {
+   "code": "r-b-intl-F7-S47161",
+   "categoryCode": "classroom",
+   "name": "S4716-1",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F7",
+   "indoorCode": "S47161"
+  },
+  {
+   "code": "r-b-intl-F7-S47162",
+   "categoryCode": "classroom",
+   "name": "S4716-2",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F7",
+   "indoorCode": "S47162"
+  },
+  {
+   "code": "r-b-intl-F7-S4717",
+   "categoryCode": "classroom",
+   "name": "S4717",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F7",
+   "indoorCode": "S4717"
+  },
+  {
+   "code": "r-b-intl-F7-S4718",
+   "categoryCode": "classroom",
+   "name": "S4718",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F7",
+   "indoorCode": "S4718"
+  },
+  {
+   "code": "r-b-intl-F7-S4719",
+   "categoryCode": "classroom",
+   "name": "S4719",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F7",
+   "indoorCode": "S4719"
+  },
+  {
+   "code": "r-b-intl-F7-S4720",
+   "categoryCode": "classroom",
+   "name": "S4720",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F7",
+   "indoorCode": "S4720"
+  },
+  {
+   "code": "r-b-intl-F8-S4815",
+   "categoryCode": "classroom",
+   "name": "S4815",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F8",
+   "indoorCode": "S4815"
+  },
+  {
+   "code": "r-b-intl-F8-S4816",
+   "categoryCode": "classroom",
+   "name": "S4816",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F8",
+   "indoorCode": "S4816"
+  },
+  {
+   "code": "r-b-intl-F8-S4817",
+   "categoryCode": "classroom",
+   "name": "S4817",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F8",
+   "indoorCode": "S4817"
+  },
+  {
+   "code": "r-b-intl-F8-S4818",
+   "categoryCode": "classroom",
+   "name": "S4818",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F8",
+   "indoorCode": "S4818"
+  },
+  {
+   "code": "r-b-intl-F8-S4819",
+   "categoryCode": "classroom",
+   "name": "S4819",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F8",
+   "indoorCode": "S4819"
+  },
+  {
+   "code": "r-b-intl-F8-S4820",
+   "categoryCode": "classroom",
+   "name": "S4820",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F8",
+   "indoorCode": "S4820"
+  },
+  {
+   "code": "r-b-intl-F8-S4825",
+   "categoryCode": "classroom",
+   "name": "S4825",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F8",
+   "indoorCode": "S4825"
+  },
+  {
+   "code": "r-b-intl-F8-S4826",
+   "categoryCode": "classroom",
+   "name": "S4826",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F8",
+   "indoorCode": "S4826"
+  },
+  {
+   "code": "r-b-intl-F8-S4827",
+   "categoryCode": "classroom",
+   "name": "S4827",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F8",
+   "indoorCode": "S4827"
+  },
+  {
+   "code": "r-b-intl-F8-S4828",
+   "categoryCode": "classroom",
+   "name": "S4828",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F8",
+   "indoorCode": "S4828"
+  },
+  {
+   "code": "r-b-intl-F8-S4814",
+   "categoryCode": "classroom",
+   "name": "S4814",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F8",
+   "indoorCode": "S4814"
+  },
+  {
+   "code": "r-b-intl-F8-S4813",
+   "categoryCode": "classroom",
+   "name": "S4813",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F8",
+   "indoorCode": "S4813"
+  },
+  {
+   "code": "r-b-intl-F8-S4812",
+   "categoryCode": "classroom",
+   "name": "S4812",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F8",
+   "indoorCode": "S4812"
+  },
+  {
+   "code": "r-b-intl-F8-S4811",
+   "categoryCode": "classroom",
+   "name": "S4811",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F8",
+   "indoorCode": "S4811"
+  },
+  {
+   "code": "r-b-intl-F8-S4810",
+   "categoryCode": "classroom",
+   "name": "S4810",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F8",
+   "indoorCode": "S4810"
+  },
+  {
+   "code": "r-b-intl-F8-S4809",
+   "categoryCode": "classroom",
+   "name": "S4809",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F8",
+   "indoorCode": "S4809"
+  },
+  {
+   "code": "r-b-intl-F8-S4808",
+   "categoryCode": "classroom",
+   "name": "S4808",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F8",
+   "indoorCode": "S4808"
+  },
+  {
+   "code": "r-b-intl-F8-S4807",
+   "categoryCode": "classroom",
+   "name": "S4807",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F8",
+   "indoorCode": "S4807"
+  },
+  {
+   "code": "r-b-intl-F8-S4806",
+   "categoryCode": "classroom",
+   "name": "S4806",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F8",
+   "indoorCode": "S4806"
+  },
+  {
+   "code": "r-b-intl-F8-S4805",
+   "categoryCode": "classroom",
+   "name": "S4805",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F8",
+   "indoorCode": "S4805"
+  },
+  {
+   "code": "r-b-intl-F8-S4804",
+   "categoryCode": "classroom",
+   "name": "S4804",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F8",
+   "indoorCode": "S4804"
+  },
+  {
+   "code": "r-b-intl-F8-S4803",
+   "categoryCode": "classroom",
+   "name": "S4803",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F8",
+   "indoorCode": "S4803"
+  },
+  {
+   "code": "r-b-intl-F8-S4802",
+   "categoryCode": "classroom",
+   "name": "S4802",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F8",
+   "indoorCode": "S4802"
+  },
+  {
+   "code": "r-b-intl-F8-S4801",
+   "categoryCode": "classroom",
+   "name": "S4801",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F8",
+   "indoorCode": "S4801"
+  },
+  {
+   "code": "r-b-intl-F9-S4927",
+   "categoryCode": "classroom",
+   "name": "S4927",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F9",
+   "indoorCode": "S4927"
+  },
+  {
+   "code": "r-b-intl-F9-S4901",
+   "categoryCode": "classroom",
+   "name": "S4901",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F9",
+   "indoorCode": "S4901"
+  },
+  {
+   "code": "r-b-intl-F9-S4924",
+   "categoryCode": "classroom",
+   "name": "S4924",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F9",
+   "indoorCode": "S4924"
+  },
+  {
+   "code": "r-b-intl-F9-S4905",
+   "categoryCode": "classroom",
+   "name": "S4905",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F9",
+   "indoorCode": "S4905"
+  },
+  {
+   "code": "r-b-intl-F9-고시반",
+   "categoryCode": "classroom",
+   "name": "고시반",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F9"
+  },
+  {
+   "code": "r-b-intl-F9-S4926",
+   "categoryCode": "classroom",
+   "name": "S4926",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F9",
+   "indoorCode": "S4926"
+  },
+  {
+   "code": "r-b-admin-B1-S50011",
+   "categoryCode": "classroom",
+   "name": "S5001 -1",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "B1",
+   "indoorCode": "S50011"
+  },
+  {
+   "code": "r-b-admin-B1-S5001",
+   "categoryCode": "classroom",
+   "name": "S5001",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "B1",
+   "indoorCode": "S5001"
+  },
+  {
+   "code": "r-b-admin-B1-S5004",
+   "categoryCode": "classroom",
+   "name": "S5004",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "B1",
+   "indoorCode": "S5004"
+  },
+  {
+   "code": "r-b-admin-B1-S50061",
+   "categoryCode": "classroom",
+   "name": "S5006-1",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "B1",
+   "indoorCode": "S50061"
+  },
+  {
+   "code": "r-b-admin-B1-S50062",
+   "categoryCode": "classroom",
+   "name": "S5006 -2",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "B1",
+   "indoorCode": "S50062"
+  },
+  {
+   "code": "r-b-admin-B1-S50052",
+   "categoryCode": "classroom",
+   "name": "S5005 -2",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "B1",
+   "indoorCode": "S50052"
+  },
+  {
+   "code": "r-b-admin-B1-S50021",
+   "categoryCode": "classroom",
+   "name": "S5002 -1",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "B1",
+   "indoorCode": "S50021"
+  },
+  {
+   "code": "r-b-admin-B1-S5002",
+   "categoryCode": "classroom",
+   "name": "S5002",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "B1",
+   "indoorCode": "S5002"
+  },
+  {
+   "code": "r-b-admin-F1-인문진로취업팀",
+   "categoryCode": "classroom",
+   "name": "인문 진로 취업팀",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-admin-F1-교직팀",
+   "categoryCode": "classroom",
+   "name": "교직팀",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-admin-F1-학사지원팀",
+   "categoryCode": "classroom",
+   "name": "학사지원팀",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-admin-F1-S5124",
+   "categoryCode": "classroom",
+   "name": "S5124",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "F1",
+   "indoorCode": "S5124"
+  },
+  {
+   "code": "r-b-admin-F1-S51061",
+   "categoryCode": "classroom",
+   "name": "S5106-1",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "F1",
+   "indoorCode": "S51061"
+  },
+  {
+   "code": "r-b-admin-F1-S5106",
+   "categoryCode": "classroom",
+   "name": "S5106",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "F1",
+   "indoorCode": "S5106"
+  },
+  {
+   "code": "r-b-admin-F1-대학교육혁신팀교수학습센터",
+   "categoryCode": "classroom",
+   "name": "대학교육혁신팀 /교수학습센터",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "p-bank-b-admin-02",
+   "categoryCode": "bank",
+   "name": "하나은행",
+   "imageUrl": "https://thingo.kr/static/images/map/p-bank-b-admin-02.jpg",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-admin-F1-S5107",
+   "categoryCode": "classroom",
+   "name": "S5107",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "F1",
+   "indoorCode": "S5107"
+  },
+  {
+   "code": "r-b-admin-F1-경비실",
+   "categoryCode": "classroom",
+   "name": "경비실",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-admin-F5-S5514",
+   "categoryCode": "classroom",
+   "name": "S5514",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "F5",
+   "indoorCode": "S5514"
+  },
+  {
+   "code": "r-b-admin-F5-S5516",
+   "categoryCode": "classroom",
+   "name": "S5516",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "F5",
+   "indoorCode": "S5516"
+  },
+  {
+   "code": "r-b-admin-F5-S5517",
+   "categoryCode": "classroom",
+   "name": "S5517",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "F5",
+   "indoorCode": "S5517"
+  },
+  {
+   "code": "r-b-admin-F5-S5510",
+   "categoryCode": "classroom",
+   "name": "S5510",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "F5",
+   "indoorCode": "S5510"
+  },
+  {
+   "code": "r-b-admin-F5-S5521",
+   "categoryCode": "classroom",
+   "name": "S5521",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "F5",
+   "indoorCode": "S5521"
+  },
+  {
+   "code": "r-b-admin-F5-S5523",
+   "categoryCode": "classroom",
+   "name": "S5523",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "F5",
+   "indoorCode": "S5523"
+  },
+  {
+   "code": "r-b-admin-F5-S5524",
+   "categoryCode": "classroom",
+   "name": "S5524",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "F5",
+   "indoorCode": "S5524"
+  },
+  {
+   "code": "r-b-admin-F5-S5505",
+   "categoryCode": "classroom",
+   "name": "S5505",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "F5",
+   "indoorCode": "S5505"
+  },
+  {
+   "code": "r-b-admin-F5-S5504",
+   "categoryCode": "classroom",
+   "name": "S5504",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "F5",
+   "indoorCode": "S5504"
+  },
+  {
+   "code": "r-b-admin-F5-S5503",
+   "categoryCode": "classroom",
+   "name": "S5503",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "F5",
+   "indoorCode": "S5503"
+  },
+  {
+   "code": "r-b-admin-F5-S5501",
+   "categoryCode": "classroom",
+   "name": "S5501",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "F5",
+   "indoorCode": "S5501"
+  },
+  {
+   "code": "r-b-admin-F5-S5507",
+   "categoryCode": "classroom",
+   "name": "S5507",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "F5",
+   "indoorCode": "S5507"
+  },
+  {
+   "code": "r-b-admin-F5-S5509",
+   "categoryCode": "classroom",
+   "name": "S5509",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "F5",
+   "indoorCode": "S5509"
+  },
+  {
+   "code": "r-b-library-B2-S9B205",
+   "categoryCode": "classroom",
+   "name": "S9B205",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "B2",
+   "indoorCode": "S9B205"
+  },
+  {
+   "code": "r-b-library-B2-S9B217",
+   "categoryCode": "classroom",
+   "name": "S9B217",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "B2",
+   "indoorCode": "S9B217"
+  },
+  {
+   "code": "r-b-library-B2-S9B216",
+   "categoryCode": "classroom",
+   "name": "S9B216",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "B2",
+   "indoorCode": "S9B216"
+  },
+  {
+   "code": "r-b-library-B2-S9B204",
+   "categoryCode": "classroom",
+   "name": "S9B204",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "B2",
+   "indoorCode": "S9B204"
+  },
+  {
+   "code": "r-b-library-B3-S9B306",
+   "categoryCode": "classroom",
+   "name": "S9B306",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "B3",
+   "indoorCode": "S9B306"
+  },
+  {
+   "code": "r-b-library-B3-S9B307",
+   "categoryCode": "classroom",
+   "name": "S9B307",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "B3",
+   "indoorCode": "S9B307"
+  },
+  {
+   "code": "r-b-library-B3-S9B312",
+   "categoryCode": "classroom",
+   "name": "S9B312",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "B3",
+   "indoorCode": "S9B312"
+  },
+  {
+   "code": "r-b-library-B3-S9B309",
+   "categoryCode": "classroom",
+   "name": "S9B309",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "B3",
+   "indoorCode": "S9B309"
+  },
+  {
+   "code": "r-b-library-B3-S9B310",
+   "categoryCode": "classroom",
+   "name": "S9B310",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "B3",
+   "indoorCode": "S9B310"
+  },
+  {
+   "code": "r-b-library-B3-S9B311",
+   "categoryCode": "classroom",
+   "name": "S9B311",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "B3",
+   "indoorCode": "S9B311"
+  },
+  {
+   "code": "r-b-library-B3-S9B305",
+   "categoryCode": "classroom",
+   "name": "S9B305",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "B3",
+   "indoorCode": "S9B305"
+  },
+  {
+   "code": "r-b-library-B3-S9B322",
+   "categoryCode": "classroom",
+   "name": "S9B322",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "B3",
+   "indoorCode": "S9B322"
+  },
+  {
+   "code": "r-b-library-B3-S9B321",
+   "categoryCode": "classroom",
+   "name": "S9B321",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "B3",
+   "indoorCode": "S9B321"
+  },
+  {
+   "code": "r-b-library-B3-S9B320",
+   "categoryCode": "classroom",
+   "name": "S9B320",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "B3",
+   "indoorCode": "S9B320"
+  },
+  {
+   "code": "r-b-library-B3-S9B304",
+   "categoryCode": "classroom",
+   "name": "S9B304",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "B3",
+   "indoorCode": "S9B304"
+  },
+  {
+   "code": "r-b-library-B3-S9B326",
+   "categoryCode": "classroom",
+   "name": "S9B326",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "B3",
+   "indoorCode": "S9B326"
+  },
+  {
+   "code": "r-b-library-B3-S9B327",
+   "categoryCode": "classroom",
+   "name": "S9B327",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "B3",
+   "indoorCode": "S9B327"
+  },
+  {
+   "code": "r-b-library-B3-S9B328",
+   "categoryCode": "classroom",
+   "name": "S9B328",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "B3",
+   "indoorCode": "S9B328"
+  },
+  {
+   "code": "r-b-library-B3-S9B308",
+   "categoryCode": "classroom",
+   "name": "S9B308",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "B3",
+   "indoorCode": "S9B308"
+  },
+  {
+   "code": "p-reading-room-b-library-04",
+   "categoryCode": "reading-room",
+   "name": "일반열람실1",
+   "imageUrl": "https://thingo.kr/static/images/map/p-reading-room-b-library-04.jpg",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "p-reading-room-b-library-05",
+   "categoryCode": "reading-room",
+   "name": "일반열람실2",
+   "imageUrl": "https://thingo.kr/static/images/map/p-reading-room-b-library-05.jpg",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-library-F1-세미나실",
+   "categoryCode": "classroom",
+   "name": "세미나실",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-library-F1-국제회의장",
+   "categoryCode": "classroom",
+   "name": "국제회의장",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-library-F1-S9115",
+   "categoryCode": "classroom",
+   "name": "S9115",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F1",
+   "indoorCode": "S9115"
+  },
+  {
+   "code": "r-b-library-F1-인터랙티브가든",
+   "categoryCode": "classroom",
+   "name": "인터랙티브가든",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "p-reading-room-b-library-02",
+   "categoryCode": "reading-room",
+   "name": "노트북열람실",
+   "imageUrl": "https://thingo.kr/static/images/map/p-reading-room-b-library-02.jpg",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "p-reading-room-b-library-01",
+   "categoryCode": "reading-room",
+   "name": "대학원열람실",
+   "imageUrl": "https://thingo.kr/static/images/map/p-reading-room-b-library-01.jpg",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "p-printer-b-library-04",
+   "categoryCode": "printer",
+   "name": "프린터",
+   "imageUrl": "https://thingo.kr/static/images/map/p-printer-b-library-04.jpg",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "p-reading-room-b-library-03",
+   "categoryCode": "reading-room",
+   "name": "자유열람실",
+   "imageUrl": "https://thingo.kr/static/images/map/p-reading-room-b-library-03.jpg",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "p-study-room-b-library-06",
+   "categoryCode": "study-room",
+   "name": "스터디룸1",
+   "imageUrl": "https://thingo.kr/static/images/map/p-study-room-b-library-06.jpg",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F2"
+  },
+  {
+   "code": "p-study-room-b-library-07",
+   "categoryCode": "study-room",
+   "name": "스터디룸2",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F2"
+  },
+  {
+   "code": "p-study-room-b-library-08",
+   "categoryCode": "study-room",
+   "name": "스터디룸3",
+   "imageUrl": "https://thingo.kr/static/images/map/p-study-room-b-library-08.jpg",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F2"
+  },
+  {
+   "code": "p-study-room-b-library-09",
+   "categoryCode": "study-room",
+   "name": "스터디룸4",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F2"
+  },
+  {
+   "code": "p-study-room-b-library-10",
+   "categoryCode": "study-room",
+   "name": "스터디룸5",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F2"
+  },
+  {
+   "code": "p-study-room-b-library-11",
+   "categoryCode": "study-room",
+   "name": "스터디룸6",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F2"
+  },
+  {
+   "code": "p-study-room-b-library-12",
+   "categoryCode": "study-room",
+   "name": "스터디룸7",
+   "infoText": "전자칠판 등 장비 추가",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F2"
+  },
+  {
+   "code": "p-study-room-b-library-13",
+   "categoryCode": "study-room",
+   "name": "스터디룸8",
+   "imageUrl": "https://thingo.kr/static/images/map/p-study-room-b-library-13.jpg",
+   "infoText": "전자칠판 등 장비 추가",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F2"
+  },
+  {
+   "code": "r-b-library-F2-스터디가든",
+   "categoryCode": "classroom",
+   "name": "스터디 가든",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F2"
+  },
+  {
+   "code": "r-b-library-F2-방목기념전시관",
+   "categoryCode": "classroom",
+   "name": "방목기념전시관",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F2"
+  },
+  {
+   "code": "r-b-library-F2-S9202",
+   "categoryCode": "classroom",
+   "name": "S9202",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F2",
+   "indoorCode": "S9202"
+  },
+  {
+   "code": "r-b-library-F2-S9203",
+   "categoryCode": "classroom",
+   "name": "S9203",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F2",
+   "indoorCode": "S9203"
+  },
+  {
+   "code": "r-b-library-F2-S9204",
+   "categoryCode": "classroom",
+   "name": "S9204",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F2",
+   "indoorCode": "S9204"
+  },
+  {
+   "code": "r-b-library-F2-학술정보처리팀",
+   "categoryCode": "classroom",
+   "name": "학술정보처리팀",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F2"
+  },
+  {
+   "code": "r-b-library-F2-S9206",
+   "categoryCode": "classroom",
+   "name": "S9206",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F2",
+   "indoorCode": "S9206"
+  },
+  {
+   "code": "r-b-library-F2-S9207",
+   "categoryCode": "classroom",
+   "name": "S9207",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F2",
+   "indoorCode": "S9207"
+  },
+  {
+   "code": "r-b-library-F2-S92191",
+   "categoryCode": "classroom",
+   "name": "S9219-1",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F2",
+   "indoorCode": "S92191"
+  },
+  {
+   "code": "r-b-library-F2-S9220",
+   "categoryCode": "classroom",
+   "name": "S9220",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F2",
+   "indoorCode": "S9220"
+  },
+  {
+   "code": "r-b-library-F2-S92193",
+   "categoryCode": "classroom",
+   "name": "S9219-3",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F2",
+   "indoorCode": "S92193"
+  },
+  {
+   "code": "r-b-library-F2-S92194",
+   "categoryCode": "classroom",
+   "name": "S9219-4",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F2",
+   "indoorCode": "S92194"
+  },
+  {
+   "code": "r-b-library-F2-S9221",
+   "categoryCode": "classroom",
+   "name": "S9221",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F2",
+   "indoorCode": "S9221"
+  },
+  {
+   "code": "r-b-library-F2-대학사료실",
+   "categoryCode": "classroom",
+   "name": "대학사료실",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F2"
+  },
+  {
+   "code": "r-b-library-F2-한적실",
+   "categoryCode": "classroom",
+   "name": "한적실",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F2"
+  },
+  {
+   "code": "r-b-library-F2-태평관기영회",
+   "categoryCode": "classroom",
+   "name": "태평관 기영회",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F2"
+  },
+  {
+   "code": "r-b-library-F2-명지lg한국학자료관",
+   "categoryCode": "classroom",
+   "name": "명지-LG한국학자료관",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F2"
+  },
+  {
+   "code": "p-study-room-b-library-16",
+   "categoryCode": "study-room",
+   "name": "스터디룸11",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F2"
+  },
+  {
+   "code": "p-study-room-b-library-15",
+   "categoryCode": "study-room",
+   "name": "스터디룸10",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F2"
+  },
+  {
+   "code": "p-study-room-b-library-14",
+   "categoryCode": "study-room",
+   "name": "스터디룸9",
+   "imageUrl": "https://thingo.kr/static/images/map/p-study-room-b-library-14.jpg",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F2"
+  },
+  {
+   "code": "p-study-room-b-library-19",
+   "categoryCode": "study-room",
+   "name": "스터디룸14",
+   "infoText": "전자칠판 등 장비 추가",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F2"
+  },
+  {
+   "code": "p-study-room-b-library-18",
+   "categoryCode": "study-room",
+   "name": "스터디룸13",
+   "infoText": "전자칠판 등 장비 추가",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F2"
+  },
+  {
+   "code": "p-study-room-b-library-17",
+   "categoryCode": "study-room",
+   "name": "스터디룸12",
+   "infoText": "전자칠판 등 장비 추가",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F2"
+  },
+  {
+   "code": "r-b-library-F2-S9226",
+   "categoryCode": "classroom",
+   "name": "S9226",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F2",
+   "indoorCode": "S9226"
+  },
+  {
+   "code": "r-b-library-F3-사무실",
+   "categoryCode": "classroom",
+   "name": "사무실",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F3"
+  },
+  {
+   "code": "r-b-library-F3-멀티미디어자료실",
+   "categoryCode": "classroom",
+   "name": "멀티미디어 자료실",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F3"
+  },
+  {
+   "code": "r-b-library-F3-소극장",
+   "categoryCode": "classroom",
+   "name": "소극장",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F3"
+  },
+  {
+   "code": "r-b-library-F3-장애인열람실",
+   "categoryCode": "classroom",
+   "name": "장애인 열람실",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F3"
+  },
+  {
+   "code": "r-b-library-F3-ucc스튜디오",
+   "categoryCode": "classroom",
+   "name": "UCC 스튜디오",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F3"
+  },
+  {
+   "code": "r-b-library-F3-교육실",
+   "categoryCode": "classroom",
+   "name": "교육실",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F3"
+  },
+  {
+   "code": "r-b-library-F3-S9325",
+   "categoryCode": "classroom",
+   "name": "S9325",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F3",
+   "indoorCode": "S9325"
+  },
+  {
+   "code": "r-b-library-F3-S9326",
+   "categoryCode": "classroom",
+   "name": "S9326",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F3",
+   "indoorCode": "S9326"
+  },
+  {
+   "code": "r-b-library-F3-자료실",
+   "categoryCode": "classroom",
+   "name": "자료실",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F3"
+  },
+  {
+   "code": "p-reading-room-b-library-06",
+   "categoryCode": "reading-room",
+   "name": "디지털정보자료실1",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F3"
+  },
+  {
+   "code": "r-b-library-F3-개인열람실캐럴",
+   "categoryCode": "classroom",
+   "name": "개인열람실(캐럴)",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F3"
+  },
+  {
+   "code": "r-b-library-F3-S9327",
+   "categoryCode": "classroom",
+   "name": "S9327",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F3",
+   "indoorCode": "S9327"
+  },
+  {
+   "code": "r-b-library-F3-S9322",
+   "categoryCode": "classroom",
+   "name": "S9322",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F3",
+   "indoorCode": "S9322"
+  },
+  {
+   "code": "r-b-library-F4-S9416",
+   "categoryCode": "classroom",
+   "name": "S9416",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F4",
+   "indoorCode": "S9416"
+  },
+  {
+   "code": "r-b-library-F4-S9415",
+   "categoryCode": "classroom",
+   "name": "S9415",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F4",
+   "indoorCode": "S9415"
+  },
+  {
+   "code": "r-b-library-F4-자료실",
+   "categoryCode": "classroom",
+   "name": "자료실",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F4"
+  },
+  {
+   "code": "p-reading-room-b-library-07",
+   "categoryCode": "reading-room",
+   "name": "열람코너",
+   "imageUrl": "https://thingo.kr/static/images/map/p-reading-room-b-library-07.jpg",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F4"
+  },
+  {
+   "code": "r-b-mcc-F1-S10110",
+   "categoryCode": "classroom",
+   "name": "S10110",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10110"
+  },
+  {
+   "code": "r-b-mcc-F1-S10111",
+   "categoryCode": "classroom",
+   "name": "S10111",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10111"
+  },
+  {
+   "code": "r-b-mcc-F1-S10112",
+   "categoryCode": "classroom",
+   "name": "S10112",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10112"
+  },
+  {
+   "code": "r-b-mcc-F1-S10113",
+   "categoryCode": "classroom",
+   "name": "S10113",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10113"
+  },
+  {
+   "code": "r-b-mcc-F1-S10114",
+   "categoryCode": "classroom",
+   "name": "S10114",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10114"
+  },
+  {
+   "code": "r-b-mcc-F1-S10120",
+   "categoryCode": "classroom",
+   "name": "S10120",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10120"
+  },
+  {
+   "code": "r-b-mcc-F1-S10121",
+   "categoryCode": "classroom",
+   "name": "S10121",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10121"
+  },
+  {
+   "code": "r-b-mcc-F1-S10124",
+   "categoryCode": "classroom",
+   "name": "S10124",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10124"
+  },
+  {
+   "code": "r-b-mcc-F1-S10122",
+   "categoryCode": "classroom",
+   "name": "S10122",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10122"
+  },
+  {
+   "code": "r-b-mcc-F1-S10101",
+   "categoryCode": "classroom",
+   "name": "S10101",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10101"
+  },
+  {
+   "code": "r-b-mcc-F1-S10102",
+   "categoryCode": "classroom",
+   "name": "S10102",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10102"
+  },
+  {
+   "code": "r-b-mcc-F1-S10103",
+   "categoryCode": "classroom",
+   "name": "S10103",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10103"
+  },
+  {
+   "code": "r-b-mcc-F1-S10104",
+   "categoryCode": "classroom",
+   "name": "S10104",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10104"
+  },
+  {
+   "code": "r-b-mcc-F1-한국이미지언어연구소전시실",
+   "categoryCode": "classroom",
+   "name": "한국 이미지 언어연구소 (전시실)",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-mcc-F1-경영대학원세미나실",
+   "categoryCode": "classroom",
+   "name": "경영대학원 세미나실",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-mcc-F1-경영대학원원장실",
+   "categoryCode": "classroom",
+   "name": "경영대학원 원장실",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-mcc-F1-특수대학원수업준비실",
+   "categoryCode": "classroom",
+   "name": "특수대학원 수업준비실",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-mcc-F1-총동문회사무실",
+   "categoryCode": "classroom",
+   "name": "총동문회 사무실",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-mcc-F1-S10115",
+   "categoryCode": "classroom",
+   "name": "S10115",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10115"
+  },
+  {
+   "code": "r-b-mcc-F1-S10116",
+   "categoryCode": "classroom",
+   "name": "S10116",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10116"
+  },
+  {
+   "code": "r-b-mcc-F1-S10117",
+   "categoryCode": "classroom",
+   "name": "S10117",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10117"
+  },
+  {
+   "code": "r-b-mcc-F1-S10118",
+   "categoryCode": "classroom",
+   "name": "S10118",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10118"
+  },
+  {
+   "code": "r-b-mcc-F1-S10119",
+   "categoryCode": "classroom",
+   "name": "S10119",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10119"
+  },
+  {
+   "code": "r-b-mcc-F1-정원",
+   "categoryCode": "classroom",
+   "name": "정원",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-mcc-F1-S10123",
+   "categoryCode": "classroom",
+   "name": "S10123",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10123"
+  },
+  {
+   "code": "r-b-mcc-F1-S10125",
+   "categoryCode": "classroom",
+   "name": "S10125",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10125"
+  },
+  {
+   "code": "r-b-mcc-F1-S10126",
+   "categoryCode": "classroom",
+   "name": "S10126",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10126"
+  },
+  {
+   "code": "r-b-mcc-F1-S10159",
+   "categoryCode": "classroom",
+   "name": "S10159",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10159"
+  },
+  {
+   "code": "r-b-mcc-F1-S10134",
+   "categoryCode": "classroom",
+   "name": "S10134",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10134"
+  },
+  {
+   "code": "r-b-mcc-F1-S10136",
+   "categoryCode": "classroom",
+   "name": "S10136",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10136"
+  },
+  {
+   "code": "r-b-mcc-F1-S10138",
+   "categoryCode": "classroom",
+   "name": "S10138",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10138"
+  },
+  {
+   "code": "r-b-mcc-F1-S10142",
+   "categoryCode": "classroom",
+   "name": "S10142",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10142"
+  },
+  {
+   "code": "r-b-mcc-F1-S10162",
+   "categoryCode": "classroom",
+   "name": "S10162",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10162"
+  },
+  {
+   "code": "r-b-mcc-F1-S10163",
+   "categoryCode": "classroom",
+   "name": "S10163",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10163"
+  },
+  {
+   "code": "r-b-mcc-F1-S10164",
+   "categoryCode": "classroom",
+   "name": "S10164",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10164"
+  },
+  {
+   "code": "r-b-mcc-F1-S10145",
+   "categoryCode": "classroom",
+   "name": "S10145",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10145"
+  },
+  {
+   "code": "r-b-mcc-F1-S10146",
+   "categoryCode": "classroom",
+   "name": "S10146",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10146"
+  },
+  {
+   "code": "r-b-mcc-F1-S10147",
+   "categoryCode": "classroom",
+   "name": "S10147",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10147"
+  },
+  {
+   "code": "r-b-mcc-F1-S10148",
+   "categoryCode": "classroom",
+   "name": "S10148",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10148"
+  },
+  {
+   "code": "p-gym-b-mcc-03",
+   "categoryCode": "gym",
+   "name": "다목적 체육관",
+   "imageUrl": "https://thingo.kr/static/images/map/p-gym-b-mcc-03.jpg",
+   "infoText": "농구 1코트, 배드민턴 4코트, 탁구대 4대, 피크볼 2코트\n이용방법: '서울시 공공서비스 예약시스템'을 통해 사전 예약 후 이용 가능",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-mcc-F1-S10143",
+   "categoryCode": "classroom",
+   "name": "S10143",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10143"
+  },
+  {
+   "code": "p-convenience-store-b-mcc-08",
+   "categoryCode": "convenience-store",
+   "name": "올리브영",
+   "imageUrl": "https://thingo.kr/static/images/map/p-convenience-store-b-mcc-08.jpg",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "p-cafe-b-mcc-03",
+   "categoryCode": "cafe",
+   "name": "베이커리 랩",
+   "imageUrl": "https://thingo.kr/static/images/map/p-cafe-b-mcc-03.jpg",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "p-cafe-b-mcc-02",
+   "categoryCode": "cafe",
+   "name": "스타벅스",
+   "imageUrl": "https://thingo.kr/static/images/map/p-cafe-b-mcc-02.jpg",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "p-convenience-store-b-mcc-06",
+   "categoryCode": "convenience-store",
+   "name": "이마트에브리데이",
+   "imageUrl": "https://thingo.kr/static/images/map/p-convenience-store-b-mcc-06.jpg",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "p-cafe-b-mcc-01",
+   "categoryCode": "cafe",
+   "name": "매머드커피",
+   "imageUrl": "https://thingo.kr/static/images/map/p-cafe-b-mcc-01.jpg",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-mcc-F1-무인카페",
+   "categoryCode": "classroom",
+   "name": "무인 카페",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-mcc-F1-S10129",
+   "categoryCode": "classroom",
+   "name": "S10129",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10129"
+  },
+  {
+   "code": "r-b-mcc-F1-S10149",
+   "categoryCode": "classroom",
+   "name": "S10149",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10149"
+  },
+  {
+   "code": "r-b-mcc-F1-S10160",
+   "categoryCode": "classroom",
+   "name": "S10160",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10160"
+  },
+  {
+   "code": "r-b-mcc-F1-S10161",
+   "categoryCode": "classroom",
+   "name": "S10161",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1",
+   "indoorCode": "S10161"
+  },
+  {
+   "code": "r-b-mcc-F2-S10256",
+   "categoryCode": "classroom",
+   "name": "S10256",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10256"
+  },
+  {
+   "code": "r-b-mcc-F2-S10238",
+   "categoryCode": "classroom",
+   "name": "S10 238",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10238"
+  },
+  {
+   "code": "r-b-mcc-F2-S10228",
+   "categoryCode": "classroom",
+   "name": "S10228",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10228"
+  },
+  {
+   "code": "r-b-mcc-F2-S10239",
+   "categoryCode": "classroom",
+   "name": "S10 239",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10239"
+  },
+  {
+   "code": "r-b-mcc-F2-S10257",
+   "categoryCode": "classroom",
+   "name": "S10257",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10257"
+  },
+  {
+   "code": "r-b-mcc-F2-S10258",
+   "categoryCode": "classroom",
+   "name": "S10258",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10258"
+  },
+  {
+   "code": "r-b-mcc-F2-S10259",
+   "categoryCode": "classroom",
+   "name": "S10259",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10259"
+  },
+  {
+   "code": "r-b-mcc-F2-S10260",
+   "categoryCode": "classroom",
+   "name": "S10260",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10260"
+  },
+  {
+   "code": "r-b-mcc-F2-S10248",
+   "categoryCode": "classroom",
+   "name": "S10248",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10248"
+  },
+  {
+   "code": "r-b-mcc-F2-S10249",
+   "categoryCode": "classroom",
+   "name": "S10249",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10249"
+  },
+  {
+   "code": "r-b-mcc-F2-S10250",
+   "categoryCode": "classroom",
+   "name": "S10250",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10250"
+  },
+  {
+   "code": "r-b-mcc-F2-S10251",
+   "categoryCode": "classroom",
+   "name": "S10251",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10251"
+  },
+  {
+   "code": "r-b-mcc-F2-S10261",
+   "categoryCode": "classroom",
+   "name": "S10261",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10261"
+  },
+  {
+   "code": "p-restaurant-b-mcc-01",
+   "categoryCode": "restaurant",
+   "name": "애슐리퀸즈",
+   "imageUrl": "https://thingo.kr/static/images/map/p-restaurant-b-mcc-01.jpg",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2"
+  },
+  {
+   "code": "p-gym-b-mcc-05",
+   "categoryCode": "gym",
+   "name": "건강과땀",
+   "imageUrl": "https://thingo.kr/static/images/map/p-gym-b-mcc-05.jpg",
+   "infoText": "헬스장",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2"
+  },
+  {
+   "code": "p-convenience-store-b-mcc-02",
+   "categoryCode": "convenience-store",
+   "name": "세븐일레븐",
+   "imageUrl": "https://thingo.kr/static/images/map/p-convenience-store-b-mcc-02.jpg",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2"
+  },
+  {
+   "code": "r-b-mcc-F2-S10243",
+   "categoryCode": "classroom",
+   "name": "S10243",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10243"
+  },
+  {
+   "code": "r-b-mcc-F2-S10225",
+   "categoryCode": "classroom",
+   "name": "S10225",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10225"
+  },
+  {
+   "code": "r-b-mcc-F2-원우회실",
+   "categoryCode": "classroom",
+   "name": "원우회실",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2"
+  },
+  {
+   "code": "r-b-mcc-F2-대학원수업지원실",
+   "categoryCode": "classroom",
+   "name": "대학원 수업지원실",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2"
+  },
+  {
+   "code": "r-b-mcc-F2-S10207",
+   "categoryCode": "classroom",
+   "name": "S10207",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10207"
+  },
+  {
+   "code": "r-b-mcc-F2-S10212",
+   "categoryCode": "classroom",
+   "name": "S10212",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10212"
+  },
+  {
+   "code": "r-b-mcc-F2-S10208",
+   "categoryCode": "classroom",
+   "name": "S10208",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10208"
+  },
+  {
+   "code": "r-b-mcc-F2-S10213",
+   "categoryCode": "classroom",
+   "name": "S10213",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10213"
+  },
+  {
+   "code": "r-b-mcc-F2-mj입학상담실",
+   "categoryCode": "classroom",
+   "name": "MJ 입학상담실",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2"
+  },
+  {
+   "code": "r-b-mcc-F2-S10220",
+   "categoryCode": "classroom",
+   "name": "S10220",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10220"
+  },
+  {
+   "code": "r-b-mcc-F2-S10215",
+   "categoryCode": "classroom",
+   "name": "S10215",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10215"
+  },
+  {
+   "code": "r-b-mcc-F2-S10216",
+   "categoryCode": "classroom",
+   "name": "S10216",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10216"
+  },
+  {
+   "code": "r-b-mcc-F2-S10217",
+   "categoryCode": "classroom",
+   "name": "S10217",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10217"
+  },
+  {
+   "code": "r-b-mcc-F2-S10218",
+   "categoryCode": "classroom",
+   "name": "S10218",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10218"
+  },
+  {
+   "code": "r-b-mcc-F2-S10219",
+   "categoryCode": "classroom",
+   "name": "S10219",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10219"
+  },
+  {
+   "code": "r-b-mcc-F2-S10221",
+   "categoryCode": "classroom",
+   "name": "S10221",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10221"
+  },
+  {
+   "code": "r-b-mcc-F2-S10222",
+   "categoryCode": "classroom",
+   "name": "S10222",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10222"
+  },
+  {
+   "code": "r-b-mcc-F2-S10223",
+   "categoryCode": "classroom",
+   "name": "S10223",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10223"
+  },
+  {
+   "code": "r-b-mcc-F2-S10201",
+   "categoryCode": "classroom",
+   "name": "S10201",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10201"
+  },
+  {
+   "code": "r-b-mcc-F2-S10202",
+   "categoryCode": "classroom",
+   "name": "S10202",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10202"
+  },
+  {
+   "code": "r-b-mcc-F2-S10203",
+   "categoryCode": "classroom",
+   "name": "S10203",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10203"
+  },
+  {
+   "code": "r-b-mcc-F2-S10204",
+   "categoryCode": "classroom",
+   "name": "S10204",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10204"
+  },
+  {
+   "code": "r-b-mcc-F2-S10224",
+   "categoryCode": "classroom",
+   "name": "S10224",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10224"
+  },
+  {
+   "code": "r-b-mcc-F2-S10242",
+   "categoryCode": "classroom",
+   "name": "S10242",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10242"
+  },
+  {
+   "code": "r-b-mcc-F2-S10240",
+   "categoryCode": "classroom",
+   "name": "S10 240",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10240"
+  },
+  {
+   "code": "r-b-mcc-F2-S10241",
+   "categoryCode": "classroom",
+   "name": "S10 241",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2",
+   "indoorCode": "S10241"
+  },
+  {
+   "code": "r-b-mcc-F3-운동장",
+   "categoryCode": "classroom",
+   "name": "운동장",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3"
+  },
+  {
+   "code": "r-b-mcc-F3-S10311",
+   "categoryCode": "classroom",
+   "name": "S10311",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10311"
+  },
+  {
+   "code": "r-b-mcc-F3-대학원교학팀",
+   "categoryCode": "classroom",
+   "name": "대학원 교학팀",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3"
+  },
+  {
+   "code": "r-b-mcc-F3-아너칼리지교학팀",
+   "categoryCode": "classroom",
+   "name": "아너칼리지 교학팀",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3"
+  },
+  {
+   "code": "r-b-mcc-F3-아너창의융합카페",
+   "categoryCode": "classroom",
+   "name": "아너 창의 융합카페",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3"
+  },
+  {
+   "code": "r-b-mcc-F3-S10356",
+   "categoryCode": "classroom",
+   "name": "S10356",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10356"
+  },
+  {
+   "code": "r-b-mcc-F3-S10301",
+   "categoryCode": "classroom",
+   "name": "S10301",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10301"
+  },
+  {
+   "code": "r-b-mcc-F3-S10302",
+   "categoryCode": "classroom",
+   "name": "S10302",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10302"
+  },
+  {
+   "code": "r-b-mcc-F3-S10303",
+   "categoryCode": "classroom",
+   "name": "S10303",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10303"
+  },
+  {
+   "code": "r-b-mcc-F3-S10304",
+   "categoryCode": "classroom",
+   "name": "S10304",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10304"
+  },
+  {
+   "code": "r-b-mcc-F3-S10305",
+   "categoryCode": "classroom",
+   "name": "S10305",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10305"
+  },
+  {
+   "code": "r-b-mcc-F3-S10306",
+   "categoryCode": "classroom",
+   "name": "S10306",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10306"
+  },
+  {
+   "code": "r-b-mcc-F3-S10307",
+   "categoryCode": "classroom",
+   "name": "S10307",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10307"
+  },
+  {
+   "code": "r-b-mcc-F3-S10308",
+   "categoryCode": "classroom",
+   "name": "S10308",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10308"
+  },
+  {
+   "code": "r-b-mcc-F3-S10309",
+   "categoryCode": "classroom",
+   "name": "S10309",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10309"
+  },
+  {
+   "code": "r-b-mcc-F3-S10310",
+   "categoryCode": "classroom",
+   "name": "S10310",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10310"
+  },
+  {
+   "code": "r-b-mcc-F3-S10357",
+   "categoryCode": "classroom",
+   "name": "S10357",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10357"
+  },
+  {
+   "code": "r-b-mcc-F3-S10331",
+   "categoryCode": "classroom",
+   "name": "S10331",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10331"
+  },
+  {
+   "code": "r-b-mcc-F3-S10332",
+   "categoryCode": "classroom",
+   "name": "S10332",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10332"
+  },
+  {
+   "code": "r-b-mcc-F3-S10333",
+   "categoryCode": "classroom",
+   "name": "S10333",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10333"
+  },
+  {
+   "code": "r-b-mcc-F3-S10334",
+   "categoryCode": "classroom",
+   "name": "S10334",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10334"
+  },
+  {
+   "code": "r-b-mcc-F3-S10335",
+   "categoryCode": "classroom",
+   "name": "S10335",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10335"
+  },
+  {
+   "code": "r-b-mcc-F3-S10336",
+   "categoryCode": "classroom",
+   "name": "S10336",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10336"
+  },
+  {
+   "code": "r-b-mcc-F3-S10337",
+   "categoryCode": "classroom",
+   "name": "S10337",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10337"
+  },
+  {
+   "code": "r-b-mcc-F3-S10338",
+   "categoryCode": "classroom",
+   "name": "S10338",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10338"
+  },
+  {
+   "code": "r-b-mcc-F3-S10339",
+   "categoryCode": "classroom",
+   "name": "S10339",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10339"
+  },
+  {
+   "code": "r-b-mcc-F3-S10340",
+   "categoryCode": "classroom",
+   "name": "S10340",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10340"
+  },
+  {
+   "code": "r-b-mcc-F3-S10341",
+   "categoryCode": "classroom",
+   "name": "S10341",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10341"
+  },
+  {
+   "code": "r-b-mcc-F3-S10342",
+   "categoryCode": "classroom",
+   "name": "S10342",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10342"
+  },
+  {
+   "code": "r-b-mcc-F3-S10343",
+   "categoryCode": "classroom",
+   "name": "S10343",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10343"
+  },
+  {
+   "code": "r-b-mcc-F3-S10344",
+   "categoryCode": "classroom",
+   "name": "S10344",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10344"
+  },
+  {
+   "code": "r-b-mcc-F3-S10345",
+   "categoryCode": "classroom",
+   "name": "S10345",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10345"
+  },
+  {
+   "code": "r-b-mcc-F3-S10346",
+   "categoryCode": "classroom",
+   "name": "S10346",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10346"
+  },
+  {
+   "code": "r-b-mcc-F3-S10325",
+   "categoryCode": "classroom",
+   "name": "S10325",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10325"
+  },
+  {
+   "code": "r-b-mcc-F3-S10326",
+   "categoryCode": "classroom",
+   "name": "S10326",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10326"
+  },
+  {
+   "code": "r-b-mcc-F3-S10327",
+   "categoryCode": "classroom",
+   "name": "S10327",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10327"
+  },
+  {
+   "code": "r-b-mcc-F3-S10328",
+   "categoryCode": "classroom",
+   "name": "S10328",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10328"
+  },
+  {
+   "code": "r-b-mcc-F3-S10329",
+   "categoryCode": "classroom",
+   "name": "S10329",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10329"
+  },
+  {
+   "code": "r-b-mcc-F3-S10330",
+   "categoryCode": "classroom",
+   "name": "S10330",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10330"
+  },
+  {
+   "code": "r-b-mcc-F3-S10349",
+   "categoryCode": "classroom",
+   "name": "S10349",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10349"
+  },
+  {
+   "code": "r-b-mcc-F3-S10321",
+   "categoryCode": "classroom",
+   "name": "S10321",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10321"
+  },
+  {
+   "code": "r-b-mcc-F3-S10322",
+   "categoryCode": "classroom",
+   "name": "S10322",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10322"
+  },
+  {
+   "code": "r-b-mcc-F3-S10323",
+   "categoryCode": "classroom",
+   "name": "S10323",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10323"
+  },
+  {
+   "code": "r-b-mcc-F3-S10324",
+   "categoryCode": "classroom",
+   "name": "S10324",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10324"
+  },
+  {
+   "code": "r-b-mcc-F3-S10314",
+   "categoryCode": "classroom",
+   "name": "S10314",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10314"
+  },
+  {
+   "code": "r-b-mcc-F3-S10315",
+   "categoryCode": "classroom",
+   "name": "S10315",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10315"
+  },
+  {
+   "code": "r-b-mcc-F3-S10316",
+   "categoryCode": "classroom",
+   "name": "S10316",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10316"
+  },
+  {
+   "code": "r-b-mcc-F3-S10317",
+   "categoryCode": "classroom",
+   "name": "S10317",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10317"
+  },
+  {
+   "code": "r-b-mcc-F3-S10318",
+   "categoryCode": "classroom",
+   "name": "S10318",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10318"
+  },
+  {
+   "code": "r-b-mcc-F3-S10319",
+   "categoryCode": "classroom",
+   "name": "S10319",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10319"
+  },
+  {
+   "code": "r-b-mcc-F3-S10320",
+   "categoryCode": "classroom",
+   "name": "S10320",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10320"
+  },
+  {
+   "code": "r-b-mcc-F3-S10348",
+   "categoryCode": "classroom",
+   "name": "S10348",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10348"
+  },
+  {
+   "code": "r-b-mcc-F3-S10347",
+   "categoryCode": "classroom",
+   "name": "S10347",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3",
+   "indoorCode": "S10347"
+  },
+  {
+   "code": "r-b-mcc-F4-S10419",
+   "categoryCode": "classroom",
+   "name": "S10419",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4",
+   "indoorCode": "S10419"
+  },
+  {
+   "code": "r-b-mcc-F4-S10420",
+   "categoryCode": "classroom",
+   "name": "S10420",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4",
+   "indoorCode": "S10420"
+  },
+  {
+   "code": "r-b-mcc-F4-S10421",
+   "categoryCode": "classroom",
+   "name": "S10421",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4",
+   "indoorCode": "S10421"
+  },
+  {
+   "code": "r-b-mcc-F4-S10422",
+   "categoryCode": "classroom",
+   "name": "S10422",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4",
+   "indoorCode": "S10422"
+  },
+  {
+   "code": "r-b-mcc-F4-S10423",
+   "categoryCode": "classroom",
+   "name": "S10423",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4",
+   "indoorCode": "S10423"
+  },
+  {
+   "code": "r-b-mcc-F4-S10424",
+   "categoryCode": "classroom",
+   "name": "S10424",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4",
+   "indoorCode": "S10424"
+  },
+  {
+   "code": "r-b-mcc-F4-S10425",
+   "categoryCode": "classroom",
+   "name": "S10425",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4",
+   "indoorCode": "S10425"
+  },
+  {
+   "code": "r-b-mcc-F4-S10426",
+   "categoryCode": "classroom",
+   "name": "S10426",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4",
+   "indoorCode": "S10426"
+  },
+  {
+   "code": "r-b-mcc-F4-S10427",
+   "categoryCode": "classroom",
+   "name": "S10427",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4",
+   "indoorCode": "S10427"
+  },
+  {
+   "code": "r-b-mcc-F4-S10428",
+   "categoryCode": "classroom",
+   "name": "S10428",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4",
+   "indoorCode": "S10428"
+  },
+  {
+   "code": "r-b-mcc-F4-S10410",
+   "categoryCode": "classroom",
+   "name": "S10410",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4",
+   "indoorCode": "S10410"
+  },
+  {
+   "code": "r-b-mcc-F4-S10411",
+   "categoryCode": "classroom",
+   "name": "S10411",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4",
+   "indoorCode": "S10411"
+  },
+  {
+   "code": "r-b-mcc-F4-S10412",
+   "categoryCode": "classroom",
+   "name": "S10412",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4",
+   "indoorCode": "S10412"
+  },
+  {
+   "code": "r-b-mcc-F4-S10413",
+   "categoryCode": "classroom",
+   "name": "S10413",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4",
+   "indoorCode": "S10413"
+  },
+  {
+   "code": "r-b-mcc-F4-S10414",
+   "categoryCode": "classroom",
+   "name": "S10414",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4",
+   "indoorCode": "S10414"
+  },
+  {
+   "code": "r-b-mcc-F4-S10415",
+   "categoryCode": "classroom",
+   "name": "S10415",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4",
+   "indoorCode": "S10415"
+  },
+  {
+   "code": "r-b-mcc-F4-S10401",
+   "categoryCode": "classroom",
+   "name": "S10401",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4",
+   "indoorCode": "S10401"
+  },
+  {
+   "code": "r-b-mcc-F4-S10402",
+   "categoryCode": "classroom",
+   "name": "S10402",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4",
+   "indoorCode": "S10402"
+  },
+  {
+   "code": "r-b-mcc-F4-S10403",
+   "categoryCode": "classroom",
+   "name": "S10403",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4",
+   "indoorCode": "S10403"
+  },
+  {
+   "code": "r-b-mcc-F4-S10404",
+   "categoryCode": "classroom",
+   "name": "S10404",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4",
+   "indoorCode": "S10404"
+  },
+  {
+   "code": "r-b-mcc-F4-S10405",
+   "categoryCode": "classroom",
+   "name": "S10405",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4",
+   "indoorCode": "S10405"
+  },
+  {
+   "code": "r-b-mcc-F4-S10406",
+   "categoryCode": "classroom",
+   "name": "S10406",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4",
+   "indoorCode": "S10406"
+  },
+  {
+   "code": "r-b-mcc-F4-S10407",
+   "categoryCode": "classroom",
+   "name": "S10407",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4",
+   "indoorCode": "S10407"
+  },
+  {
+   "code": "r-b-mcc-F4-S10408",
+   "categoryCode": "classroom",
+   "name": "S10408",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4",
+   "indoorCode": "S10408"
+  },
+  {
+   "code": "r-b-mcc-F4-S10409",
+   "categoryCode": "classroom",
+   "name": "S10409",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4",
+   "indoorCode": "S10409"
+  },
+  {
+   "code": "r-b-mcc-F4-S10432",
+   "categoryCode": "classroom",
+   "name": "S10432",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4",
+   "indoorCode": "S10432"
+  },
+  {
+   "code": "r-b-mcc-F4-S10431",
+   "categoryCode": "classroom",
+   "name": "S10431",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4",
+   "indoorCode": "S10431"
+  },
+  {
+   "code": "r-b-mcc-F4-S10430",
+   "categoryCode": "classroom",
+   "name": "S10430",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4",
+   "indoorCode": "S10430"
+  },
+  {
+   "code": "r-b-mcc-F4-S10429",
+   "categoryCode": "classroom",
+   "name": "S10429",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4",
+   "indoorCode": "S10429"
+  },
+  {
+   "code": "r-b-mcc-F4-S10416",
+   "categoryCode": "classroom",
+   "name": "S10416",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4",
+   "indoorCode": "S10416"
+  },
+  {
+   "code": "r-b-mcc-F4-S10417",
+   "categoryCode": "classroom",
+   "name": "S10417",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4",
+   "indoorCode": "S10417"
+  },
+  {
+   "code": "r-b-mcc-F4-S10418",
+   "categoryCode": "classroom",
+   "name": "S10418",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4",
+   "indoorCode": "S10418"
+  },
+  {
+   "code": "r-b-mcc-F4-경영대학교학팀",
+   "categoryCode": "classroom",
+   "name": "경영대학 교학팀",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4"
+  }
+ ]
+}

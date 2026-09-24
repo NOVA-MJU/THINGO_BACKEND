@@ -186,7 +186,8 @@ class MapSyncE2EIT {
                 .containsExactlyInAnyOrder("무한프린터", "컬러프린터");
         assertThat(printerPins).allSatisfy(pin -> {
             assertThat(pin.getType()).isEqualTo("FLOOR_MAP");
-            assertThat(pin.getLink()).contains("/maps/floor?buildingId=", "target=p-printer");
+            assertThat(pin.getLink()).contains("/maps/floor?buildingId=", "placeId=" + pin.getId(), "target=")
+                    .doesNotContain("p-printer");
         });
 
         // 지도에서는 같은 건물의 프린터 2개를 종합관 대표 마커 하나로 묶는다.

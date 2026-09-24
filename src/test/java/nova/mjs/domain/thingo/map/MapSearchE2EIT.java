@@ -300,7 +300,7 @@ class MapSearchE2EIT {
         assertThat(room.getType()).isEqualTo("FLOOR_MAP");
         assertThat(room.getName()).isEqualTo("강의실 S1353");
         assertThat(room.getLink())
-                .contains("/maps/floor?buildingId=", "floorLabel=F3", "target=p-s1353")
+                .contains("/maps/floor?buildingId=", "floorLabel=F3", "placeId=" + room.getId(), "target=S1353")
                 .doesNotContain("pinId=", "xPercent", "yPercent");
     }
 
@@ -325,13 +325,14 @@ class MapSearchE2EIT {
         PinSummaryResponse internal = resultNamed(results, "무한프린터");
         PinSummaryResponse external = resultNamed(results, "명지문구 프린터");
         assertThat(internal.getType()).isEqualTo("FLOOR_MAP");
-        assertThat(internal.getLink()).contains("target=p-printer");
+        assertThat(internal.getLink()).contains("placeId=" + internal.getId(), "target=")
+                .doesNotContain("p-printer");
         assertThat(external.getType()).isEqualTo("PLACE");
         assertThat(external.getLink()).isNull();
     }
 
     @Test
-    @DisplayName("중복 내부 시설은 각각 고유 target을 가진 층별안내도 목록으로 반환한다")
+    @DisplayName("중복 내부 시설은 각각 고유 placeId를 가진 층별안내도 목록으로 반환한다")
     void should_returnDistinctFloorMapTargets_forDuplicateFacilities() throws Exception {
         syncAndClear();
 
@@ -340,10 +341,9 @@ class MapSearchE2EIT {
         assertThat(results).hasSize(2);
         assertThat(results).extracting(PinSummaryResponse::getType)
                 .containsOnly("FLOOR_MAP");
-        assertThat(results).extracting(PinSummaryResponse::getLink)
-                .containsExactlyInAnyOrder(
-                        floorMapLink(results, "p-restroom-f1-east"),
-                        floorMapLink(results, "p-restroom-f3-west"));
+        assertThat(results).allSatisfy(result ->
+                assertThat(result.getLink()).contains("placeId=" + result.getId()));
+        assertThat(results).extracting(PinSummaryResponse::getLink).doesNotHaveDuplicates();
     }
 
     @Test
@@ -390,7 +390,7 @@ class MapSearchE2EIT {
         MapSuggestResponse suggestion = mapSearchService.suggest("S1353", 10).get(0);
 
         assertThat(suggestion.getType()).isEqualTo("FLOOR_MAP");
-        assertThat(suggestion.getLink()).contains("floorLabel=F3", "target=p-s1353");
+        assertThat(suggestion.getLink()).contains("floorLabel=F3", "placeId=" + suggestion.getId(), "target=S1353");
     }
 
     @Test
@@ -418,14 +418,6 @@ class MapSearchE2EIT {
     private PinSummaryResponse resultNamed(List<PinSummaryResponse> results, String name) {
         return results.stream()
                 .filter(result -> result.getName().equals(name))
-                .findFirst()
-                .orElseThrow();
-    }
-
-    private String floorMapLink(List<PinSummaryResponse> results, String target) {
-        return results.stream()
-                .map(PinSummaryResponse::getLink)
-                .filter(link -> link != null && link.endsWith("target=" + target))
                 .findFirst()
                 .orElseThrow();
     }

@@ -33,6 +33,9 @@ import nova.mjs.util.entity.BaseEntity;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Category extends BaseEntity {
 
+    /** 일반 호실(강의실·학과사무실 등) 카테고리 코드. 층별안내도 검색 전용 */
+    public static final String FLOOR_PLAN_ONLY_CODE = "classroom";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "map_category_id")
@@ -137,6 +140,15 @@ public class Category extends BaseEntity {
     /** 최상위 칩(하위 탭이 아님)인지 여부 */
     public boolean isTopLevel() {
         return parent == null;
+    }
+
+    /**
+     * 층별안내도 검색 전용 카테고리인지 여부 (강의실·학과사무실 등 일반 호실).
+     * 검색으로는 찾을 수 있지만 칩·건물 탭·건물 층별 시설 목록에는 노출하지 않는다.
+     * ponytail: 코드 상수 1개로 판별. 이런 카테고리가 늘어나면 map_category에 노출 여부 컬럼을 둔다.
+     */
+    public boolean isFloorPlanOnly() {
+        return FLOOR_PLAN_ONLY_CODE.equals(code);
     }
 
     /** 동기화 갱신 (code는 유지) */

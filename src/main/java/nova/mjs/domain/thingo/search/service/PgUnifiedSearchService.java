@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import nova.mjs.domain.thingo.search.dto.SearchResponseDTO;
 import nova.mjs.domain.thingo.map.entity.Pin;
 import nova.mjs.domain.thingo.map.repository.PinRepository;
+import nova.mjs.domain.thingo.map.support.MapSearchRouteResolver;
 import nova.mjs.domain.thingo.search.model.SearchType;
 import nova.mjs.domain.thingo.realtimeKeyword.RealtimeKeywordService;
 import nova.mjs.domain.thingo.search.dto.SearchResultRow;
@@ -13,7 +14,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -122,25 +122,19 @@ public class PgUnifiedSearchService {
             return null;
         }
         return pinRepository.findByIndoorCodeIgnoreCase(indoorCode)
+                .filter(MapSearchRouteResolver::isFloorMapTarget)
                 .filter(pin -> category == null || category.equals(pin.getCategory().getCode()))
                 .orElse(null);
     }
 
     private SearchResponseDTO toMapResponse(Pin pin) {
         String location = pin.getParentBuilding().getName() + " " + pin.getFloor().getLabel();
-        String link = UriComponentsBuilder.fromPath("/maps/floor")
-                .queryParam("buildingId", pin.getParentBuilding().getId())
-                .queryParam("floorLabel", pin.getFloor().getLabel())
-                .queryParam("target", pin.getIndoorCode())
-                .encode()
-                .toUriString();
-
         return SearchResponseDTO.builder()
                 .id("MAP:" + pin.getId())
                 .highlightedTitle("<em>" + pin.getIndoorCode() + "</em>"
                         + (pin.getIndoorCode().equalsIgnoreCase(pin.getName()) ? "" : " · " + pin.getName()))
                 .highlightedContent(location + " 층별 안내도")
-                .link(link)
+                .link(MapSearchRouteResolver.link(pin))
                 .category(pin.getCategory().getCode())
                 .type("map")
                 .score(100.0f)

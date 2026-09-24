@@ -627,7 +627,7 @@
         ],
         "summary": "명지도 검색 (건물/장소)",
         "operationId": "searchMap",
-        "description": "기존 명지도 검색 응답(status/data/timestamp)을 유지하며, 화면 이동 방식은 data의 각 항목 type으로 판단합니다. 최상단 resultType은 사용하지 않습니다.\n\n## 프론트 처리 요약\n| item.type | 일반 지도 | 항목 선택 |\n|---|---|---|\n| BUILDING | latitude/longitude에 건물 핀 표시 | 기존 건물 상세를 id로 조회 |\n| PLACE | latitude/longitude에 장소 핀 표시 | 기존 장소 상세를 id로 조회 |\n| FLOOR_MAP | 소속 건물 latitude/longitude에 표시·그룹화 | link로 이동하여 SVG의 target 핀 표시 |\n\n학교 내부 장소도 장소 정보와 층별안내도 정보를 별도 항목으로 나누지 않습니다. 하나의 PinSummary에 기존 장소 카드·지도 정보와 층별안내도 link를 함께 제공합니다. 단일 결과와 다중 결과의 DTO는 같고 data 개수만 달라집니다. 프린터처럼 한 목록에 PLACE와 FLOOR_MAP이 섞일 수 있으므로 반드시 항목별 type으로 분기해야 합니다.\n\n## 필드 필수·nullable 규칙\n| 필드 | 규칙 |\n|---|---|\n| id, type, name, categoryCode, favorite | 모든 항목에서 필수·non-null |\n| iconKey, imageUrl | 등록되지 않았으면 null |\n| classroomCode | BUILDING 전용, 그 외 null |\n| location | PLACE/FLOOR_MAP의 주소 또는 건물+층. 값이 없으면 null |\n| operatingStatus | 운영시간을 계산할 수 없으면 null |\n| distanceMeters | GPS가 없거나 캠퍼스 밖이면 null |\n| latitude, longitude | 좌표가 없으면 null. FLOOR_MAP은 소속 건물 좌표 사용 |\n| indoorCode | S1353 같은 검색 코드가 있는 내부 장소만 값 존재. 화장실·프린터는 null 가능 |\n| link | FLOOR_MAP에서는 필수·non-null, BUILDING/PLACE에서는 null |\n\n## 대표 검색 흐름\n1. S1353: FLOOR_MAP 한 건. 프론트는 결과 화면을 생략하고 link로 바로 이동할 수 있습니다.\n2. 화장실: FLOOR_MAP 여러 건. 일반 지도에서는 건물 위치에 묶어 표시하고 목록에서 선택한 항목의 link로 이동합니다.\n3. 프린터: 교내 FLOOR_MAP과 교외 PLACE가 한 목록에 함께 올 수 있습니다.\n4. 그 외 건물·외부 장소: 기존 BUILDING/PLACE 응답과 이동 방식을 유지합니다.\n\n## 좌표와 내부 SVG 핀\n- FLOOR_MAP의 latitude/longitude는 소속 건물 좌표입니다. 같은 건물의 내부 시설은 일반 지도에서 같은 위치에 겹치므로 프론트는 건물 단위로 묶어 표시할 수 있습니다.\n- 정확한 실내 위치는 좌표가 아니라 link의 target으로 구분합니다. 내부 장소의 고유 Pin.code를 target으로 사용하며 같은 층의 화장실/프린터가 여러 개여도 겹치지 않아야 합니다.\n- SVG 요소의 data-target 값은 반드시 해당 Pin.code와 같아야 합니다. indoorCode는 S1353 같은 사용자 검색용 코드이며 라우팅 식별자로 사용하지 않습니다.\n- parentBuildingCode와 floorLabel이 모두 있는 장소를 내부 장소로 판별합니다.\n\n## 검색 품질·페이지네이션\n- 일반 검색은 공백/기호 무시, 부분 일치, 초성, 오타 허용을 지원합니다. 실내 호실 코드 단독 이동은 정확 일치만 허용합니다.\n- 목록 결과는 page/size를 사용합니다. 정확히 일치한 실내 호실 한 건은 첫 페이지에만 반환합니다.",
+        "description": "기존 명지도 검색 응답(status/data/timestamp)을 유지하며, 화면 이동 방식은 data의 각 항목 type으로 판단합니다. 최상단 resultType은 사용하지 않습니다.\n\n## 프론트 처리 요약\n| item.type | 일반 지도 | 항목 선택 |\n|---|---|---|\n| BUILDING | latitude/longitude에 건물 핀 표시 | 기존 건물 상세를 id로 조회 |\n| PLACE | latitude/longitude에 장소 핀 표시 | 기존 장소 상세를 id로 조회 |\n| FLOOR_MAP | 소속 건물 latitude/longitude에 표시·그룹화 | link로 이동하여 SVG에서 target 텍스트를 찾아 핀 표시 |\n\n학교 내부 장소도 장소 정보와 층별안내도 정보를 별도 항목으로 나누지 않습니다. 하나의 PinSummary에 기존 장소 카드·지도 정보와 층별안내도 link를 함께 제공합니다. 단일 결과와 다중 결과의 DTO는 같고 data 개수만 달라집니다. 프린터처럼 한 목록에 PLACE와 FLOOR_MAP이 섞일 수 있으므로 반드시 항목별 type으로 분기해야 합니다.\n\n## 필드 필수·nullable 규칙\n| 필드 | 규칙 |\n|---|---|\n| id, type, name, categoryCode, favorite | 모든 항목에서 필수·non-null |\n| iconKey, imageUrl | 등록되지 않았으면 null |\n| classroomCode | BUILDING 전용, 그 외 null |\n| location | PLACE/FLOOR_MAP의 주소 또는 건물+층. 값이 없으면 null |\n| operatingStatus | 운영시간을 계산할 수 없으면 null |\n| distanceMeters | GPS가 없거나 캠퍼스 밖이면 null |\n| latitude, longitude | 좌표가 없으면 null. FLOOR_MAP은 소속 건물 좌표 사용 |\n| indoorCode | S1353 같은 검색 코드가 있는 내부 장소만 값 존재. 화장실·프린터는 null 가능 |\n| link | FLOOR_MAP에서는 필수·non-null, BUILDING/PLACE에서는 null |\n\n## 대표 검색 흐름\n1. S1353: FLOOR_MAP 한 건. 프론트는 결과 화면을 생략하고 link로 바로 이동할 수 있습니다.\n2. 화장실: FLOOR_MAP 여러 건. 일반 지도에서는 건물 위치에 묶어 표시하고 목록에서 선택한 항목의 link로 이동합니다.\n3. 프린터: 교내 FLOOR_MAP과 교외 PLACE가 한 목록에 함께 올 수 있습니다.\n4. 그 외 건물·외부 장소: 기존 BUILDING/PLACE 응답과 이동 방식을 유지합니다.\n\n## 좌표와 내부 SVG 핀\n- FLOOR_MAP의 latitude/longitude는 소속 건물 좌표입니다. 같은 건물의 내부 시설은 일반 지도에서 같은 위치에 겹치므로 프론트는 건물 단위로 묶어 표시할 수 있습니다.\n- link 쿼리: buildingId(건물 id = 도면 폴더 번호), floorLabel(층), placeId(장소 id, 상세·즐겨찾기·리뷰 연결용), target(도면 SVG에서 찾을 텍스트).\n- target은 indoorCode가 있으면 indoorCode(S1353), 없으면 장소명입니다. indoorCode는 공백·기호를 제거한 값이므로 SVG 텍스트(예: `S10 238`)와 비교할 때 양쪽 모두 영문·숫자만 남겨 비교합니다.\n- 같은 층에 같은 이름의 시설이 여럿이면 target이 같을 수 있으므로 항목 구분은 placeId로 합니다.\n- Pin.code(p-, b- 동기화 키)는 링크에 노출하지 않습니다.\n- parentBuildingCode와 floorLabel이 모두 있는 장소를 내부 장소로 판별합니다.\n\n## 검색 품질·페이지네이션\n- 일반 검색은 공백/기호 무시, 부분 일치, 초성, 오타 허용을 지원합니다. 실내 호실 코드 단독 이동은 정확 일치만 허용합니다.\n- 목록 결과는 page/size를 사용합니다. 정확히 일치한 실내 호실 한 건은 첫 페이지에만 반환합니다.",
         "parameters": [
           {
             "name": "keyword",
@@ -770,7 +770,7 @@
                           "latitude": 37.221,
                           "longitude": 127.187,
                           "indoorCode": "S1353",
-                          "link": "/maps/floor?buildingId=2&floorLabel=F1&target=p-s1353"
+                          "link": "/maps/floor?buildingId=2&floorLabel=F1&placeId=353&target=S1353"
                         }
                       ],
                       "timestamp": "2026-08-17T12:30:00"
@@ -778,7 +778,7 @@
                   },
                   "multipleFloorMapTargets": {
                     "summary": "화장실 검색: 같은 층의 다중 결과 (선택 시 1핀)",
-                    "description": "각 항목은 같은 건물 좌표를 사용하지만 서로 다른 link target을 갖습니다. 일반 지도에서는 건물 단위로 묶고, 목록에서 선택한 한 항목의 실내 핀을 엽니다.",
+                    "description": "각 항목은 같은 건물 좌표를 사용하지만 서로 다른 link placeId를 갖습니다. 일반 지도에서는 건물 단위로 묶고, 목록에서 선택한 한 항목의 실내 핀을 엽니다.",
                     "value": {
                       "status": "API 요청 성공",
                       "data": [
@@ -793,7 +793,7 @@
                           "distanceMeters": 120,
                           "latitude": 37.221,
                           "longitude": 127.187,
-                          "link": "/maps/floor?buildingId=2&floorLabel=F4&target=p-restroom-student-f4-east"
+                          "link": "/maps/floor?buildingId=2&floorLabel=F4&placeId=401&target=%ED%99%94%EC%9E%A5%EC%8B%A4%20%28%EB%8F%99%EC%B8%A1%29"
                         },
                         {
                           "id": 402,
@@ -806,7 +806,7 @@
                           "distanceMeters": 120,
                           "latitude": 37.221,
                           "longitude": 127.187,
-                          "link": "/maps/floor?buildingId=2&floorLabel=F4&target=p-restroom-student-f4-west"
+                          "link": "/maps/floor?buildingId=2&floorLabel=F4&placeId=402&target=%ED%99%94%EC%9E%A5%EC%8B%A4%20%28%EC%84%9C%EC%B8%A1%29"
                         }
                       ],
                       "timestamp": "2026-08-17T12:30:00"
@@ -829,7 +829,7 @@
                           "distanceMeters": 120,
                           "latitude": 37.221,
                           "longitude": 127.187,
-                          "link": "/maps/floor?buildingId=2&floorLabel=F4&target=p-printer-student-f4"
+                          "link": "/maps/floor?buildingId=2&floorLabel=F4&placeId=81&target=%ED%95%99%EC%83%9D%ED%9A%8C%EA%B4%80%20%EB%AC%B4%ED%95%9C%ED%94%84%EB%A6%B0%ED%84%B0"
                         },
                         {
                           "id": 82,
@@ -976,7 +976,7 @@
                       "categoryCode": "classroom",
                       "iconKey": "ClassroomIcon",
                       "indoorCode": "S1353",
-                      "link": "/maps/floor?buildingId=2&floorLabel=F1&target=p-s1353"
+                      "link": "/maps/floor?buildingId=2&floorLabel=F1&placeId=353&target=S1353"
                     },
                     {
                       "id": 51,
@@ -2652,14 +2652,14 @@
           "indoorCode": {
             "type": "string",
             "nullable": true,
-            "description": "검색 가능한 실제 호실/요소 코드. S1353 같은 값이 있는 내부 장소만 non-null이며 화장실·프린터는 null 가능. 사용자 검색용이며 층별안내도 target 식별자는 아님",
+            "description": "검색 가능한 실제 호실/요소 코드(영문·숫자만, 대문자). S1353 같은 값이 있는 내부 장소만 non-null이며 화장실·프린터는 null 가능. 값이 있으면 층별안내도 link의 target으로 쓰임",
             "example": "S1353"
           },
           "link": {
             "type": "string",
             "nullable": true,
-            "description": "FLOOR_MAP이면 필수·non-null인 층별안내도 상대 URL. target은 중복되지 않는 Pin.code이며 SVG data-target과 일치해야 함. BUILDING/PLACE이면 null",
-            "example": "/maps/floor?buildingId=2&floorLabel=F1&target=p-s1353"
+            "description": "FLOOR_MAP이면 필수·non-null인 층별안내도 상대 URL. placeId=장소 id, target=도면 SVG에서 찾을 텍스트(indoorCode, 없으면 장소명). BUILDING/PLACE이면 null",
+            "example": "/maps/floor?buildingId=2&floorLabel=F1&placeId=353&target=S1353"
           }
         },
         "required": [
@@ -2768,7 +2768,7 @@
             "type": "string",
             "nullable": true,
             "description": "type이 FLOOR_MAP인 경우 이동할 층별안내도 상대 URL. 그 외 type은 null",
-            "example": "/maps/floor?buildingId=2&floorLabel=F1&target=p-s1353"
+            "example": "/maps/floor?buildingId=2&floorLabel=F1&placeId=353&target=S1353"
           }
         },
         "required": [

@@ -77,7 +77,9 @@ public class MapPinService {
      * (층별안내도 칩은 이 API가 아니라 건물 상세의 categoryTabs를 사용한다)
      */
     public List<MapCategoryResponse> getCategories() {
-        List<Category> all = categoryRepository.findAllForListing();
+        List<Category> all = categoryRepository.findAllForListing().stream()
+                .filter(category -> !category.isFloorPlanOnly())
+                .toList();
 
         // 상위 칩 ID → 하위 탭들
         Map<Long, List<Category>> subTabsByParentId = all.stream()
@@ -244,7 +246,7 @@ public class MapPinService {
                 .toList();
 
         // 건물 안 장소들로 카테고리 탭과 층별 목록을 구성
-        List<Pin> placesInBuilding = pinRepository.findByParentBuildingId(buildingId);
+        List<Pin> placesInBuilding = findFacilitiesInBuilding(buildingId);
         List<BuildingDetailResponse.CategoryTab> categoryTabs = buildCategoryTabs(placesInBuilding);
         List<BuildingDetailResponse.FloorPlaces> floors = buildFloorPlaces(building, placesInBuilding);
 
@@ -260,8 +262,15 @@ public class MapPinService {
         // 존재하지 않거나 건물이 아니면 404
         pinRepository.findByIdAndType(buildingId, PinType.BUILDING)
                 .orElseThrow(PinNotFoundException::new);
-        List<Pin> placesInBuilding = pinRepository.findByParentBuildingId(buildingId);
+        List<Pin> placesInBuilding = findFacilitiesInBuilding(buildingId);
         return buildCategoryTabs(placesInBuilding);
+    }
+
+    /** 건물 안 시설. 검색 전용 일반 호실(강의실 등)은 탭·층별 목록에서 뺀다 */
+    private List<Pin> findFacilitiesInBuilding(Long buildingId) {
+        return pinRepository.findByParentBuildingId(buildingId).stream()
+                .filter(place -> !place.getCategory().isFloorPlanOnly())
+                .toList();
     }
 
     /**
