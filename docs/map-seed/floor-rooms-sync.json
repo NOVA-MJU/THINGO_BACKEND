@@ -3461,9 +3461,10 @@
   {
    "code": "r-b-student-F9-s2817",
    "categoryCode": "classroom",
-   "name": "S2817",
+   "name": "S2917",
    "parentBuildingCode": "b-student",
-   "floorLabel": "F9"
+   "floorLabel": "F9",
+   "indoorCode": "S2917"
   },
   {
    "code": "r-b-student-F9-S2905",
@@ -4700,9 +4701,10 @@
   {
    "code": "r-b-intl-F8-s4423",
    "categoryCode": "classroom",
-   "name": "S4423",
+   "name": "S4823",
    "parentBuildingCode": "b-intl",
-   "floorLabel": "F8"
+   "floorLabel": "F8",
+   "indoorCode": "S4823"
   },
   {
    "code": "r-b-intl-F8-S4814",
