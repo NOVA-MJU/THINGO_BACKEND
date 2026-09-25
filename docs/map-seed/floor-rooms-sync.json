@@ -210,6 +210,34 @@
    "indoorCode": "S1019"
   },
   {
+   "code": "r-b-jonghap-F1-출입문",
+   "categoryCode": "building-entrance",
+   "name": "출입문",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-jonghap-F1-출입문-2",
+   "categoryCode": "building-entrance",
+   "name": "출입문",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-jonghap-F1-출입문-3",
+   "categoryCode": "building-entrance",
+   "name": "출입문",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-jonghap-F1-출입문-4",
+   "categoryCode": "building-entrance",
+   "name": "출입문",
+   "parentBuildingCode": "b-jonghap",
+   "floorLabel": "F1"
+  },
+  {
    "code": "r-b-jonghap-F1-S1133",
    "categoryCode": "classroom",
    "name": "S1133",
@@ -2378,6 +2406,13 @@
    "floorLabel": "F9"
   },
   {
+   "code": "r-b-student-B1-출입문",
+   "categoryCode": "building-entrance",
+   "name": "출입문",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "B1"
+  },
+  {
    "code": "p-club-room-b-student-03",
    "categoryCode": "club-room",
    "name": "화이트홀스",
@@ -2462,6 +2497,20 @@
    "code": "p-mail-b-student-01",
    "categoryCode": "mail",
    "name": "우편취급국",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-student-F1-출입문",
+   "categoryCode": "building-entrance",
+   "name": "출입문",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-student-F1-출입문-2",
+   "categoryCode": "building-entrance",
+   "name": "출입문",
    "parentBuildingCode": "b-student",
    "floorLabel": "F1"
   },
@@ -2646,6 +2695,20 @@
    "imageUrl": "https://thingo.kr/static/images/map/p-cafeteria-b-student-01.jpg",
    "parentBuildingCode": "b-student",
    "floorLabel": "F3"
+  },
+  {
+   "code": "r-b-student-F3-출입문",
+   "categoryCode": "building-entrance",
+   "name": "출입문",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F3"
+  },
+  {
+   "code": "r-b-student-F4-출입문",
+   "categoryCode": "building-entrance",
+   "name": "출입문",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F4"
   },
   {
    "code": "r-b-student-F4-학습라운지",
@@ -3396,6 +3459,13 @@
    "indoorCode": "S2913"
   },
   {
+   "code": "r-b-student-F9-s2817",
+   "categoryCode": "classroom",
+   "name": "S2817",
+   "parentBuildingCode": "b-student",
+   "floorLabel": "F9"
+  },
+  {
    "code": "r-b-student-F9-S2905",
    "categoryCode": "classroom",
    "name": "S2905",
@@ -3426,6 +3496,20 @@
    "parentBuildingCode": "b-student",
    "floorLabel": "F9",
    "indoorCode": "S2901"
+  },
+  {
+   "code": "r-b-intl-F1-1층외부방목학술정보관방향",
+   "categoryCode": "building-entrance",
+   "name": "1층 외부 (방목학술정보관 방향)",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-intl-F1-출입문",
+   "categoryCode": "building-entrance",
+   "name": "출입문",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F1"
   },
   {
    "code": "r-b-intl-F1-S4112",
@@ -4040,6 +4124,13 @@
    "indoorCode": "S4401"
   },
   {
+   "code": "r-b-intl-F4-기숙사방향출입문",
+   "categoryCode": "building-entrance",
+   "name": "기숙사 방향 출입문",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F4"
+  },
+  {
    "code": "r-b-intl-F5-S4515",
    "categoryCode": "classroom",
    "name": "S4515",
@@ -4142,6 +4233,13 @@
    "parentBuildingCode": "b-intl",
    "floorLabel": "F5",
    "indoorCode": "S4501"
+  },
+  {
+   "code": "r-b-intl-F5-기숙사방향출입문",
+   "categoryCode": "building-entrance",
+   "name": "기숙사 방향 출입문",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F5"
   },
   {
    "code": "r-b-intl-F6-S4615",
@@ -4600,6 +4698,13 @@
    "indoorCode": "S4828"
   },
   {
+   "code": "r-b-intl-F8-s4423",
+   "categoryCode": "classroom",
+   "name": "S4423",
+   "parentBuildingCode": "b-intl",
+   "floorLabel": "F8"
+  },
+  {
    "code": "r-b-intl-F8-S4814",
    "categoryCode": "classroom",
    "name": "S4814",
@@ -4815,12 +4920,33 @@
    "indoorCode": "S50021"
   },
   {
+   "code": "r-b-admin-B1-차량출입구정문방향",
+   "categoryCode": "building-entrance",
+   "name": "차량 출입구 (정문 방향)",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "B1"
+  },
+  {
    "code": "r-b-admin-B1-S5002",
    "categoryCode": "classroom",
    "name": "S5002",
    "parentBuildingCode": "b-admin",
    "floorLabel": "B1",
    "indoorCode": "S5002"
+  },
+  {
+   "code": "r-b-admin-B1-방목학술정보관진입로",
+   "categoryCode": "building-entrance",
+   "name": "방목학술정보관 진입로",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "B1"
+  },
+  {
+   "code": "r-b-admin-B1-행정동출입계단",
+   "categoryCode": "building-entrance",
+   "name": "행정동 출입계단",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "B1"
   },
   {
    "code": "r-b-admin-F1-인문진로취업팀",
@@ -4894,6 +5020,27 @@
    "code": "r-b-admin-F1-경비실",
    "categoryCode": "classroom",
    "name": "경비실",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-admin-F1-1층외부출입문방목학술정보관방향",
+   "categoryCode": "building-entrance",
+   "name": "1층 외부출입문 (방목학술정보관 방향)",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-admin-F1-1층외부출입문정문방향",
+   "categoryCode": "building-entrance",
+   "name": "1층 외부출입문 (정문 방향)",
+   "parentBuildingCode": "b-admin",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-admin-F1-1층외부출입문흡연장방향",
+   "categoryCode": "building-entrance",
+   "name": "1층 외부출입문 (흡연장 방향)",
    "parentBuildingCode": "b-admin",
    "floorLabel": "F1"
   },
@@ -5002,6 +5149,20 @@
    "indoorCode": "S5509"
   },
   {
+   "code": "r-b-library-B1-b2차량진입로",
+   "categoryCode": "building-entrance",
+   "name": "B2 차량진입로",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "B1"
+  },
+  {
+   "code": "r-b-library-B1-차량출입구정문방향행정동b1연결",
+   "categoryCode": "building-entrance",
+   "name": "차량 출입구 (정문방향), 행정동 B1 연결",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "B1"
+  },
+  {
    "code": "r-b-library-B2-S9B205",
    "categoryCode": "classroom",
    "name": "S9B205",
@@ -5032,6 +5193,20 @@
    "parentBuildingCode": "b-library",
    "floorLabel": "B2",
    "indoorCode": "S9B204"
+  },
+  {
+   "code": "r-b-library-B2-b1차량진입로",
+   "categoryCode": "building-entrance",
+   "name": "B1 차량진입로",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "B2"
+  },
+  {
+   "code": "r-b-library-B2-b3차량진입로",
+   "categoryCode": "building-entrance",
+   "name": "B3 차량진입로",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "B2"
   },
   {
    "code": "r-b-library-B3-S9B306",
@@ -5154,6 +5329,34 @@
    "indoorCode": "S9B308"
   },
   {
+   "code": "r-b-library-B3-b2차량진입로",
+   "categoryCode": "building-entrance",
+   "name": "B2 차량진입로",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "B3"
+  },
+  {
+   "code": "r-b-library-F1-1층외부학교후문방향",
+   "categoryCode": "building-entrance",
+   "name": "1층 외부 (학교 후문 방향)",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-library-F1-주출입문",
+   "categoryCode": "building-entrance",
+   "name": "주출입문",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-library-F1-출입문",
+   "categoryCode": "building-entrance",
+   "name": "출입문",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F1"
+  },
+  {
    "code": "p-reading-room-b-library-04",
    "categoryCode": "reading-room",
    "name": "일반열람실1",
@@ -5227,6 +5430,13 @@
    "categoryCode": "reading-room",
    "name": "자유열람실",
    "imageUrl": "https://thingo.kr/static/images/map/p-reading-room-b-library-03.jpg",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-library-F1-1층외부국제관방향",
+   "categoryCode": "building-entrance",
+   "name": "1층 외부 (국제관 방향)",
    "parentBuildingCode": "b-library",
    "floorLabel": "F1"
   },
@@ -5517,6 +5727,13 @@
    "floorLabel": "F3"
   },
   {
+   "code": "r-b-library-F3-교육실-2",
+   "categoryCode": "classroom",
+   "name": "교육실",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F3"
+  },
+  {
    "code": "r-b-library-F3-S9325",
    "categoryCode": "classroom",
    "name": "S9325",
@@ -5570,6 +5787,13 @@
    "indoorCode": "S9322"
   },
   {
+   "code": "r-b-library-F3-출입문",
+   "categoryCode": "building-entrance",
+   "name": "출입문",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F3"
+  },
+  {
    "code": "r-b-library-F4-S9416",
    "categoryCode": "classroom",
    "name": "S9416",
@@ -5593,10 +5817,31 @@
    "floorLabel": "F4"
   },
   {
+   "code": "r-b-library-F4-자료실-2",
+   "categoryCode": "classroom",
+   "name": "자료실",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F4"
+  },
+  {
    "code": "p-reading-room-b-library-07",
    "categoryCode": "reading-room",
    "name": "열람코너",
    "imageUrl": "https://thingo.kr/static/images/map/p-reading-room-b-library-07.jpg",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F4"
+  },
+  {
+   "code": "r-b-library-F4-자료실-3",
+   "categoryCode": "classroom",
+   "name": "자료실",
+   "parentBuildingCode": "b-library",
+   "floorLabel": "F4"
+  },
+  {
+   "code": "r-b-library-F4-자료실-4",
+   "categoryCode": "classroom",
+   "name": "자료실",
    "parentBuildingCode": "b-library",
    "floorLabel": "F4"
   },
@@ -5819,6 +6064,13 @@
    "indoorCode": "S10159"
   },
   {
+   "code": "r-b-mcc-F1-1층외부학교정문방향",
+   "categoryCode": "building-entrance",
+   "name": "1층 외부 (학교 정문 방향)",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1"
+  },
+  {
    "code": "r-b-mcc-F1-S10134",
    "categoryCode": "classroom",
    "name": "S10134",
@@ -5971,6 +6223,20 @@
    "floorLabel": "F1"
   },
   {
+   "code": "r-b-mcc-F1-게이트강의실",
+   "categoryCode": "building-entrance",
+   "name": "게이트 (강의실)",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-mcc-F1-1층외부학교정문방향-2",
+   "categoryCode": "building-entrance",
+   "name": "1층 외부 (학교 정문 방향)",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1"
+  },
+  {
    "code": "r-b-mcc-F1-S10129",
    "categoryCode": "classroom",
    "name": "S10129",
@@ -5987,6 +6253,20 @@
    "indoorCode": "S10149"
   },
   {
+   "code": "r-b-mcc-F1-차량출입구정문방향",
+   "categoryCode": "building-entrance",
+   "name": "차량 출입구 (정문 방향)",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1"
+  },
+  {
+   "code": "r-b-mcc-F1-f2차량진입로",
+   "categoryCode": "building-entrance",
+   "name": "F2 차량 진입로",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1"
+  },
+  {
    "code": "r-b-mcc-F1-S10160",
    "categoryCode": "classroom",
    "name": "S10160",
@@ -6001,6 +6281,13 @@
    "parentBuildingCode": "b-mcc",
    "floorLabel": "F1",
    "indoorCode": "S10161"
+  },
+  {
+   "code": "r-b-mcc-F1-1층외부학교정문방향-3",
+   "categoryCode": "building-entrance",
+   "name": "1층 외부 (학교 정문 방향)",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F1"
   },
   {
    "code": "r-b-mcc-F2-S10256",
@@ -6138,6 +6425,27 @@
    "parentBuildingCode": "b-mcc",
    "floorLabel": "F2",
    "indoorCode": "S10243"
+  },
+  {
+   "code": "r-b-mcc-F2-2층외부학교정문방향",
+   "categoryCode": "building-entrance",
+   "name": "2층 외부 (학교 정문 방향)",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2"
+  },
+  {
+   "code": "r-b-mcc-F2-2층외부학교정문방향-2",
+   "categoryCode": "building-entrance",
+   "name": "2층 외부 (학교 정문 방향)",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2"
+  },
+  {
+   "code": "r-b-mcc-F2-2층외부",
+   "categoryCode": "building-entrance",
+   "name": "2층 외부",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2"
   },
   {
    "code": "r-b-mcc-F2-S10225",
@@ -6305,6 +6613,13 @@
    "indoorCode": "S10204"
   },
   {
+   "code": "r-b-mcc-F2-2층외부-2",
+   "categoryCode": "building-entrance",
+   "name": "2층 외부",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2"
+  },
+  {
    "code": "r-b-mcc-F2-S10224",
    "categoryCode": "classroom",
    "name": "S10224",
@@ -6319,6 +6634,13 @@
    "parentBuildingCode": "b-mcc",
    "floorLabel": "F2",
    "indoorCode": "S10242"
+  },
+  {
+   "code": "r-b-mcc-F2-차량출입구dmc방향",
+   "categoryCode": "building-entrance",
+   "name": "차량 출입구 (DMC 방향)",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F2"
   },
   {
    "code": "r-b-mcc-F2-S10240",
@@ -6755,6 +7077,48 @@
    "parentBuildingCode": "b-mcc",
    "floorLabel": "F3",
    "indoorCode": "S10347"
+  },
+  {
+   "code": "r-b-mcc-F3-3층외부운동장방향",
+   "categoryCode": "building-entrance",
+   "name": "3층 외부 (운동장 방향)",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3"
+  },
+  {
+   "code": "r-b-mcc-F3-출입문",
+   "categoryCode": "building-entrance",
+   "name": "출입문",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3"
+  },
+  {
+   "code": "r-b-mcc-F3-3층외부테라스",
+   "categoryCode": "building-entrance",
+   "name": "3층 외부 (테라스)",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F3"
+  },
+  {
+   "code": "r-b-mcc-F4-4층외부테라스",
+   "categoryCode": "building-entrance",
+   "name": "4층 외부 (테라스)",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4"
+  },
+  {
+   "code": "r-b-mcc-F4-4층외부미래관방향",
+   "categoryCode": "building-entrance",
+   "name": "4층 외부 (미래관 방향)",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4"
+  },
+  {
+   "code": "r-b-mcc-F4-4층외부운동장방향",
+   "categoryCode": "building-entrance",
+   "name": "4층 외부 (운동장 방향)",
+   "parentBuildingCode": "b-mcc",
+   "floorLabel": "F4"
   },
   {
    "code": "r-b-mcc-F4-S10419",
