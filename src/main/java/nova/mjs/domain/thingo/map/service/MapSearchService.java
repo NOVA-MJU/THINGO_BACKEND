@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -51,6 +52,22 @@ import java.util.Set;
 public class MapSearchService {
 
     private static final ZoneId KST = ZoneId.of("Asia/Seoul");
+
+    /**
+     * 통칭 검색어 → 묶어서 보여줄 카테고리 코드.
+     *
+     * '음식점' 카테고리에는 교내 식당(애슐리퀸즈) 하나뿐이고, 실제 식당 대부분은 대동명지도 하위 탭
+     * (한식/일식/중식/분식/고기/양식)에 흩어져 있다. 라벨 정확 일치만 보면 '음식점' 검색 결과가 1곳뿐이라,
+     * 통칭으로 검색하면 식사할 수 있는 곳 전체를 보여준다. 주류·카페는 식사 장소가 아니라 뺀다.
+     */
+    private static final Map<String, List<String>> CATEGORY_ALIASES = Map.of(
+            "음식점", List.of(
+                    "restaurant", "cafeteria", "truck",
+                    "daedong-kr", "daedong-jp", "daedong-cn",
+                    "daedong-snack", "daedong-meat", "daedong-western"));
+
+    /** 통칭으로 걸린 핀의 자동완성 점수. 매처의 카테고리명 보조 가중과 같은 급(이름 매칭보다 아래). */
+    private static final double CATEGORY_ALIAS_SCORE = 25.0;
 
     private final PinRepository pinRepository;
     private final CategoryRepository categoryRepository;
@@ -99,6 +116,13 @@ public class MapSearchService {
             boolean insideCampus = distanceCalculator.isWithinCampus(userLat, userLng);
             return List.of(toSummary(exactIndoorPin, favoriteIds, userLat, userLng,
                     insideCampus, LocalDateTime.now(KST)));
+        }
+
+        // 통칭('음식점')은 여러 카테고리를 합친 목록. 같은 이름의 단일 라벨보다 먼저 본다.
+        List<String> aliasCategoryCodes = aliasCategoryCodes(keyword);
+        if (!aliasCategoryCodes.isEmpty()) {
+            return mapPinService.getPinsByCategoryCodes(
+                    aliasCategoryCodes, userLat, userLng, page, size, email, floorMap);
         }
 
         Category exactCategory = findExactCategory(keyword);
@@ -163,9 +187,9 @@ public class MapSearchService {
             return List.of(MapSuggestResponse.from(exactIndoorPin));
         }
 
+        Set<String> aliasCategoryCodes = Set.copyOf(aliasCategoryCodes(keyword));
         return pinRepository.findAllForSearch().stream()
-                .map(pin -> new Scored(pin, matcher.score(
-                        pin.getName(), pin.getCategory().getLabel(), pin.getIndoorCode(), keyword), null))
+                .map(pin -> new Scored(pin, suggestScore(pin, keyword, aliasCategoryCodes), null))
                 .filter(s -> s.relevance() > 0.0)
                 .sorted(Comparator.comparingDouble(Scored::relevance).reversed()
                         .thenComparing(s -> s.pin().getName()))
@@ -175,6 +199,20 @@ public class MapSearchService {
     }
 
     // ====================== 내부 헬퍼 ======================
+
+    /** 통칭 검색어면 묶을 카테고리 코드, 아니면 빈 목록 */
+    private List<String> aliasCategoryCodes(String keyword) {
+        return CATEGORY_ALIASES.getOrDefault(matcher.normalize(keyword), List.of());
+    }
+
+    /** 자동완성 점수: 이름·카테고리명 매칭에 더해, 통칭에 속한 카테고리의 핀도 후보로 올린다 */
+    private double suggestScore(Pin pin, String keyword, Set<String> aliasCategoryCodes) {
+        double score = matcher.score(pin.getName(), pin.getCategory().getLabel(), pin.getIndoorCode(), keyword);
+        if (aliasCategoryCodes.contains(pin.getCategory().getCode())) {
+            return Math.max(score, CATEGORY_ALIAS_SCORE);
+        }
+        return score;
+    }
 
     /** 핀 1개를 검색 결과 카드 DTO로 변환 */
     private PinSummaryResponse toSummary(Pin pin, Set<Long> favoriteIds,

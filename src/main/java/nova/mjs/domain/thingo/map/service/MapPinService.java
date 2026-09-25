@@ -185,6 +185,25 @@ public class MapPinService {
         return paginate(sorted, page, size);
     }
 
+    /**
+     * 여러 카테고리를 한 목록으로 합쳐 조회한다(통칭 검색용, 예: '음식점').
+     * 교내·대동명지도가 섞이므로 대동명지도 추천 순서 대신 즐겨찾기 → 가까운 순으로 정렬한다.
+     *
+     * @param floorMap true면 내부 시설(소속 건물+층)만 남긴다
+     */
+    public List<PinSummaryResponse> getPinsByCategoryCodes(List<String> categoryCodes, Double userLat, Double userLng,
+                                                           int page, int size, String email, boolean floorMap) {
+        List<Pin> pins = pinRepository.findByCategoryCodeIn(categoryCodes);
+        if (floorMap) {
+            pins = pins.stream().filter(MapSearchRouteResolver::isFloorMapTarget).toList();
+        }
+
+        Set<Long> favoriteIds = favoritePinIds(resolveMember(email));
+        List<PinSummaryResponse> sorted = toSortedSummaries(
+                pins, favoriteIds, userLat, userLng, LocalDateTime.now(KST));
+        return paginate(sorted, page, size);
+    }
+
     private boolean isDaedongCategory(String categoryCode) {
         return "daedong".equals(categoryCode) || categoryCode.startsWith("daedong-");
     }

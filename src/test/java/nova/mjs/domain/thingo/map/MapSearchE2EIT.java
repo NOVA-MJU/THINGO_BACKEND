@@ -120,7 +120,8 @@ class MapSearchE2EIT {
               ],
               "categories": [
                 {"code":"daedong","groupCode":"food","label":"대동명지도","iconKey":"MyeongwolIcon","resultType":"PLACE_LIST","quickMenu":true,"displayOrder":1},
-                {"code":"korean","groupCode":"food","parentCode":"daedong","label":"한식","iconKey":"KoreanFoodIcon","displayOrder":1},
+                {"code":"daedong-kr","groupCode":"food","parentCode":"daedong","label":"한식","iconKey":"KoreanFoodIcon","displayOrder":1},
+                {"code":"restaurant","groupCode":"food","label":"음식점","iconKey":"RestaurantIcon","resultType":"PLACE_LIST","quickMenu":false,"displayOrder":4},
                 {"code":"cafe","groupCode":"food","label":"카페","iconKey":"CafeIcon","resultType":"PLACE_LIST","quickMenu":true,"displayOrder":2},
                 {"code":"bar","groupCode":"food","label":"주점","iconKey":"BarIcon","resultType":"PLACE_LIST","quickMenu":false,"displayOrder":3},
                 {"code":"building","groupCode":"guide","label":"건물","iconKey":"BuildingIcon","resultType":"BUILDING_LIST","quickMenu":true,"displayOrder":1},
@@ -136,7 +137,7 @@ class MapSearchE2EIT {
                 {"buildingCode":"b-main","label":"F3","floorOrder":3,"mapImageUrl":"https://thingo.kr/f3.jpg"}
               ],
               "places": [
-                {"code":"p-happy","categoryCode":"korean","name":"행복식당","latitude":37.5805,"longitude":126.9230,"address":"서울 서대문구 거북골로 34","infoText":"현금만"},
+                {"code":"p-happy","categoryCode":"daedong-kr","name":"행복식당","latitude":37.5805,"longitude":126.9230,"address":"서울 서대문구 거북골로 34","infoText":"현금만"},
                 {"code":"p-twosome","categoryCode":"cafe","name":"투썸플레이스 명지대점","latitude":37.5806,"longitude":126.9231,"address":"서울 서대문구 거북골로 31-1 1~3층","infoText":"콘센트 많음"},
                 {"code":"p-printer","categoryCode":"printer","name":"무한프린터","parentBuildingCode":"b-main","floorLabel":"F1","infoText":"흑백 50원"},
                 {"code":"p-printer-outside","categoryCode":"printer","name":"명지문구 프린터","latitude":37.5810,"longitude":126.9240,"address":"서울 서대문구 명지대길 10"},
@@ -144,6 +145,7 @@ class MapSearchE2EIT {
                 {"code":"p-restroom-f3-west","categoryCode":"restroom","name":"화장실","parentBuildingCode":"b-main","floorLabel":"F3"},
                 {"code":"p-s1353","categoryCode":"classroom","name":"강의실 S1353","parentBuildingCode":"b-main","floorLabel":"F3","indoorCode":"S1353"},
                 {"code":"p-s1350","categoryCode":"classroom","name":"강의실 S1350","parentBuildingCode":"b-main","floorLabel":"F3","indoorCode":"S1350"},
+                {"code":"p-ashley","categoryCode":"restaurant","name":"애슐리퀸즈","parentBuildingCode":"b-main","floorLabel":"F1"},
                 {"code":"p-twodari","categoryCode":"bar","name":"투다리 하나로점","latitude":37.5812,"longitude":126.9250,"address":"서울 서대문구 명지대길 18","infoText":"단체석 있음"}
               ],
               "operatingHours": [
@@ -171,14 +173,14 @@ class MapSearchE2EIT {
 
         // then - 섹션별 처리 건수
         assertThat(result.getGroups()).isEqualTo(3);
-        assertThat(result.getCategories()).isEqualTo(8);
+        assertThat(result.getCategories()).isEqualTo(9);
         assertThat(result.getBuildings()).isEqualTo(1);
         assertThat(result.getFloors()).isEqualTo(2);
-        assertThat(result.getPlaces()).isEqualTo(9);
+        assertThat(result.getPlaces()).isEqualTo(10);
         assertThat(result.getOperatingHours()).isEqualTo(2);
 
-        // 핀 총 10개 (건물1 + 장소9)
-        assertThat(pinRepository.count()).isEqualTo(10);
+        // 핀 총 11개 (건물1 + 장소10)
+        assertThat(pinRepository.count()).isEqualTo(11);
 
         // 개별 핀의 내용이 시트 값 그대로 적재됐는지 (데이터 품질)
         Pin twosome = pinRepository.findByCode("p-twosome").orElseThrow();
@@ -430,6 +432,29 @@ class MapSearchE2EIT {
         // 코드를 다 치지 않은 중간 입력은 유사 호실 목록을 유지한다
         assertThat(mapSearchService.suggest("135", 10)).extracting(MapSuggestResponse::getIndoorCode)
                 .contains("S1353", "S1350");
+    }
+
+    @Test
+    @DisplayName("통칭 '음식점'은 교내 식당과 대동명지도 식당을 모두 반환하고 카페·주점은 뺀다")
+    void should_returnAllRestaurants_when_searchingRestaurantAlias() throws Exception {
+        syncAndClear();
+
+        assertThat(search("음식점")).extracting(PinSummaryResponse::getName)
+                .containsExactlyInAnyOrder("애슐리퀸즈", "행복식당");
+        assertThat(mapSearchService.suggest("음식점", 10)).extracting(MapSuggestResponse::getName)
+                .contains("애슐리퀸즈", "행복식당")
+                .doesNotContain("투썸플레이스 명지대점", "투다리 하나로점");
+    }
+
+    @Test
+    @DisplayName("층별안내도 모드의 '음식점' 검색은 내부 식당만 반환한다")
+    void should_returnInternalRestaurantsOnly_when_floorMapAlias() throws Exception {
+        syncAndClear();
+
+        List<PinSummaryResponse> results =
+                mapSearchService.search("음식점", null, null, 0, 20, null, null, true);
+
+        assertThat(results).extracting(PinSummaryResponse::getName).containsExactly("애슐리퀸즈");
     }
 
     @Test
