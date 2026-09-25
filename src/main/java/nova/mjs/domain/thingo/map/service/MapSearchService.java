@@ -59,12 +59,19 @@ public class MapSearchService {
      * '음식점' 카테고리에는 교내 식당(애슐리퀸즈) 하나뿐이고, 실제 식당 대부분은 대동명지도 하위 탭
      * (한식/일식/중식/분식/고기/양식)에 흩어져 있다. 라벨 정확 일치만 보면 '음식점' 검색 결과가 1곳뿐이라,
      * 통칭으로 검색하면 식사할 수 있는 곳 전체를 보여준다. 주류·카페는 식사 장소가 아니라 뺀다.
+     *
+     * 술집·카페·디저트도 같은 이유다. 교내 '카페' 라벨은 4곳뿐이고 교외 카페는 대동명지도 '카페·디저트'에,
+     * 술집은 '주류' 탭에 있어서 사용자가 부르는 이름으로는 찾을 수 없었다.
      */
+    private static final List<String> CAFE_CATEGORIES = List.of("cafe", "daedong-cafe");
     private static final Map<String, List<String>> CATEGORY_ALIASES = Map.of(
             "음식점", List.of(
                     "restaurant", "cafeteria", "truck",
                     "daedong-kr", "daedong-jp", "daedong-cn",
-                    "daedong-snack", "daedong-meat", "daedong-western"));
+                    "daedong-snack", "daedong-meat", "daedong-western"),
+            "술집", List.of("daedong-bar"),
+            "카페", CAFE_CATEGORIES,
+            "디저트", CAFE_CATEGORIES);
 
     /** 통칭으로 걸린 핀의 자동완성 점수. 매처의 카테고리명 보조 가중과 같은 급(이름 매칭보다 아래). */
     private static final double CATEGORY_ALIAS_SCORE = 25.0;
