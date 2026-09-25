@@ -117,11 +117,7 @@ public class PgUnifiedSearchService {
     }
 
     private Pin findExactIndoorPin(String keyword, String category) {
-        String indoorCode = normalizeIndoorCode(keyword);
-        if (indoorCode.isEmpty()) {
-            return null;
-        }
-        return pinRepository.findByIndoorCodeIgnoreCase(indoorCode)
+        return pinRepository.findByIndoorCodeOrRoomNumber(normalizeIndoorCode(keyword))
                 .filter(MapSearchRouteResolver::isFloorMapTarget)
                 .filter(pin -> category == null || category.equals(pin.getCategory().getCode()))
                 .orElse(null);

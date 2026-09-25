@@ -157,6 +157,12 @@ public class MapSearchService {
         }
         int safeLimit = limit > 0 ? limit : 10;
 
+        // 호실 코드를 끝까지 입력했으면 유사 호실 없이 그 호실 하나만 제안한다
+        Pin exactIndoorPin = findExactIndoorPin(keyword);
+        if (exactIndoorPin != null) {
+            return List.of(MapSuggestResponse.from(exactIndoorPin));
+        }
+
         return pinRepository.findAllForSearch().stream()
                 .map(pin -> new Scored(pin, matcher.score(
                         pin.getName(), pin.getCategory().getLabel(), pin.getIndoorCode(), keyword), null))
@@ -195,13 +201,12 @@ public class MapSearchService {
                 MapSearchRouteResolver.link(pin));
     }
 
-    /** 실내 코드는 공백·기호·대소문자를 무시하되 정확히 일치할 때만 층 안내도로 보낸다. */
+    /**
+     * 실내 코드는 공백·기호·대소문자를 무시하되 정확히 일치할 때만 층 안내도로 보낸다.
+     * 호수만 입력해도(1353) S를 붙여 정확 일치로 본다.
+     */
     private Pin findExactIndoorPin(String keyword) {
-        String indoorCode = matcher.normalize(keyword).toUpperCase();
-        if (indoorCode.isEmpty()) {
-            return null;
-        }
-        return pinRepository.findByIndoorCodeIgnoreCase(indoorCode)
+        return pinRepository.findByIndoorCodeOrRoomNumber(matcher.normalize(keyword).toUpperCase())
                 .filter(pin -> pin.isInsideBuilding() && pin.getFloor() != null)
                 .orElse(null);
     }

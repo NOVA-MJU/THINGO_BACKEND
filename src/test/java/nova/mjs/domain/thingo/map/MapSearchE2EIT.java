@@ -143,6 +143,7 @@ class MapSearchE2EIT {
                 {"code":"p-restroom-f1-east","categoryCode":"restroom","name":"화장실","parentBuildingCode":"b-main","floorLabel":"F1"},
                 {"code":"p-restroom-f3-west","categoryCode":"restroom","name":"화장실","parentBuildingCode":"b-main","floorLabel":"F3"},
                 {"code":"p-s1353","categoryCode":"classroom","name":"강의실 S1353","parentBuildingCode":"b-main","floorLabel":"F3","indoorCode":"S1353"},
+                {"code":"p-s1350","categoryCode":"classroom","name":"강의실 S1350","parentBuildingCode":"b-main","floorLabel":"F3","indoorCode":"S1350"},
                 {"code":"p-twodari","categoryCode":"bar","name":"투다리 하나로점","latitude":37.5812,"longitude":126.9250,"address":"서울 서대문구 명지대길 18","infoText":"단체석 있음"}
               ],
               "operatingHours": [
@@ -173,11 +174,11 @@ class MapSearchE2EIT {
         assertThat(result.getCategories()).isEqualTo(8);
         assertThat(result.getBuildings()).isEqualTo(1);
         assertThat(result.getFloors()).isEqualTo(2);
-        assertThat(result.getPlaces()).isEqualTo(8);
+        assertThat(result.getPlaces()).isEqualTo(9);
         assertThat(result.getOperatingHours()).isEqualTo(2);
 
-        // 핀 총 9개 (건물1 + 장소8)
-        assertThat(pinRepository.count()).isEqualTo(9);
+        // 핀 총 10개 (건물1 + 장소9)
+        assertThat(pinRepository.count()).isEqualTo(10);
 
         // 개별 핀의 내용이 시트 값 그대로 적재됐는지 (데이터 품질)
         Pin twosome = pinRepository.findByCode("p-twosome").orElseThrow();
@@ -416,6 +417,19 @@ class MapSearchE2EIT {
 
         // 검색으로는 여전히 찾을 수 있다
         assertThat(search("S1353")).extracting(PinSummaryResponse::getName).containsExactly("강의실 S1353");
+    }
+
+    @Test
+    @DisplayName("S 없이 호수만 입력해도(1353) 유사 호실 없이 정확히 그 호실 하나만 검색·자동완성한다")
+    void should_returnOnlyExactRoom_when_roomNumberWithoutPrefix() throws Exception {
+        syncAndClear();
+
+        assertThat(search("1353")).extracting(PinSummaryResponse::getIndoorCode).containsExactly("S1353");
+        assertThat(mapSearchService.suggest("1353", 10)).extracting(MapSuggestResponse::getIndoorCode)
+                .containsExactly("S1353");
+        // 코드를 다 치지 않은 중간 입력은 유사 호실 목록을 유지한다
+        assertThat(mapSearchService.suggest("135", 10)).extracting(MapSuggestResponse::getIndoorCode)
+                .contains("S1353", "S1350");
     }
 
     @Test

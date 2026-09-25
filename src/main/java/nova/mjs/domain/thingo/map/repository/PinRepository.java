@@ -37,6 +37,20 @@ public interface PinRepository extends JpaRepository<Pin, Long> {
     Optional<Pin> findByIndoorCodeIgnoreCase(@Param("indoorCode") String indoorCode);
 
     /**
+     * 정규화된 검색어(영숫자만)로 호실 코드를 정확히 찾는다.
+     * 사용자는 앞의 S 없이 호수만 치기도 하므로(1353 -> S1353) 숫자로 시작하면 S를 붙여 한 번 더 찾는다.
+     */
+    default Optional<Pin> findByIndoorCodeOrRoomNumber(String normalizedCode) {
+        if (normalizedCode == null || normalizedCode.isEmpty()) {
+            return Optional.empty();
+        }
+        return findByIndoorCodeIgnoreCase(normalizedCode)
+                .or(() -> Character.isDigit(normalizedCode.charAt(0))
+                        ? findByIndoorCodeIgnoreCase("S" + normalizedCode)
+                        : Optional.empty());
+    }
+
+    /**
      * 리뷰 도메인 등 타 도메인이 카테고리/그룹까지 즉시 필요할 때 쓰는 단건 조회.
      * (리뷰 작성 시 type/카테고리 코드/그룹 코드(F&B 판정)를 트랜잭션 밖에서도 안전하게 접근)
      */

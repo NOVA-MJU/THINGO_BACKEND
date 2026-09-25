@@ -62,7 +62,7 @@ class PgUnifiedSearchServiceTest {
         Floor floor = org.mockito.Mockito.mock(Floor.class);
         Category category = org.mockito.Mockito.mock(Category.class);
 
-        when(pinRepository.findByIndoorCodeIgnoreCase("S1353")).thenReturn(Optional.of(room));
+        when(pinRepository.findByIndoorCodeOrRoomNumber("S1353")).thenReturn(Optional.of(room));
         when(room.getId()).thenReturn(353L);
         when(room.getType()).thenReturn(PinType.PLACE);
         when(room.getIndoorCode()).thenReturn("S1353");
