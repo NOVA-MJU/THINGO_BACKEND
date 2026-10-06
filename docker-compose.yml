@@ -10,6 +10,7 @@ services:
     volumes:
       - ./infra/redis/redis.conf:/usr/local/etc/redis/redis.conf
       - ./infra/redis/data:/data
+    restart: unless-stopped
 
   loki:
     image: grafana/loki:2.9.8
@@ -54,6 +55,7 @@ services:
       - loki
     volumes:
       - grafana_data:/var/lib/grafana
+    restart: unless-stopped
     networks: [ mon ]
 
   prometheus:
@@ -67,6 +69,7 @@ services:
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--web.enable-remote-write-receiver"
+    restart: unless-stopped
     networks: [ mon ]
 
 
