@@ -76,6 +76,29 @@ public class PgUnifiedSearchService {
     }
 
     /**
+     * 통합검색 화면이 유형마다 따로 보내던 요청(8개)을 한 번으로 묶는다. 유형별 상위 perType건.
+     * 알 수 없는 유형 이름은 무시한다.
+     */
+    public List<SearchResponseDTO> searchOverview(String keyword, List<String> types, int perType) {
+        String normalizedKeyword = keyword == null ? "" : keyword.trim();
+        List<String> normalizedTypes = types == null ? List.of() : types.stream()
+                .map(this::normalizeType)
+                .filter(java.util.Objects::nonNull)
+                .distinct()
+                .toList();
+
+        return repository.searchTopPerType(
+                        normalizedKeyword,
+                        normalizedTypes,
+                        perType,
+                        buildHotPattern(),
+                        REALTIME_HOT_BOOST)
+                .stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
+    /**
      * realtime 인기 키워드 top-K 를 OR-regex 로 결합.
      * - regex 인젝션 방지: 한글/영문/숫자 2~20자만 허용
      */
