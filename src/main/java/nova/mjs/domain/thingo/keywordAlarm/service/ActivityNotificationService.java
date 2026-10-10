@@ -43,7 +43,7 @@ public class ActivityNotificationService {
                 board.getAuthor(),
                 COMMUNITY_LIKE + ":" + board.getUuid(),
                 title,
-                "/boards/" + board.getUuid(),
+                NotificationLinks.post(board.getUuid()),
                 COMMUNITY_LIKE
         );
     }
@@ -62,7 +62,7 @@ public class ActivityNotificationService {
                 board.getAuthor(),
                 COMMUNITY_COMMENT + ":" + commentUuid,
                 title,
-                "/boards/" + board.getUuid(),
+                NotificationLinks.post(board.getUuid()),
                 COMMUNITY_COMMENT
         ));
     }
@@ -80,7 +80,7 @@ public class ActivityNotificationService {
                 preview(review.getContent(), 10),
                 "리뷰를"
         );
-        String link = "/reviews/" + review.getUuid();
+        String link = NotificationLinks.place(review.getPin().getId());
         upsertAggregate(
                 review.getAuthor(),
                 REVIEW_LIKE + ":" + review.getUuid(),

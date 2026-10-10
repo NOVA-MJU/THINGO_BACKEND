@@ -93,7 +93,9 @@ public class ManualKeywordAlarmService {
                 .findByMemberAndSearchIndexId(member, doc.getId())
                 .orElseGet(() -> notificationHistoryRepository.saveAndFlush(
                         NotificationHistory.of(member, subscription.getId(), subscription.getKeyword(),
-                                doc.getId(), doc.getTitle(), doc.getLink(), doc.getType())));
+                                doc.getId(), doc.getTitle(),
+                                NotificationLinks.resolve(doc.getType(), doc.getLink(), doc.getId()),
+                                doc.getType())));
 
         // 6. FCM 발송(키워드 알림 스타일: "'키워드' 키워드 새 소식" / 본문=콘텐츠 제목). @Async 로 비동기 처리.
         FcmDispatch dispatch = new FcmDispatch(tokens, keyword, doc.getTitle(),
@@ -137,7 +139,7 @@ public class ManualKeywordAlarmService {
         Map<String, String> data = new HashMap<>();
         data.put("type", nz(doc.getType()));
         data.put("searchIndexId", nz(doc.getId()));
-        data.put("link", nz(doc.getLink()));
+        data.put("link", nz(NotificationLinks.resolve(doc.getType(), doc.getLink(), doc.getId())));
         data.put("historyId", String.valueOf(historyId));
         return data;
     }
