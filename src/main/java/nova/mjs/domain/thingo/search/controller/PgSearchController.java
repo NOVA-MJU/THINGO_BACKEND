@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.util.List;
 
 /**
  * PostgreSQL 기반 통합 검색 API.
@@ -40,6 +41,9 @@ public class PgSearchController {
     private final PgUnifiedSearchService unifiedSearchService;
     private final PgSearchIndexSyncService syncService;
     private final RealtimeKeywordService realtimeKeywordService;
+
+    // 유형별 상위 결과 상한 (탭 하나가 보여주는 첫 페이지 크기와 같은 20)
+    private static final int MAX_OVERVIEW_PER_TYPE = 20;
 
     // application.yml의 app.sync.search-token으로 주입 (미설정 시 기본값 - prod에서는 반드시 실제 값으로 덮어쓸 것)
     @Value("${app.sync.search-token:change-me-search-sync-token}")
@@ -74,6 +78,27 @@ public class PgSearchController {
         validateToken(token);
         syncService.rebuildVectorsOnly();
         return ResponseEntity.ok(ApiResponse.success("Rebuilt"));
+    }
+
+    /**
+     * 통합검색 화면 전체 탭용: 여러 유형의 상위 결과를 요청 한 번으로 반환한다.
+     * 앱이 유형마다 /detail 을 따로(8개) 보내면 모바일에서 연결 수 제한으로 줄을 서고,
+     * 인기 검색어도 한 번 검색에 8번 집계됐다.
+     */
+    @GetMapping("/overview")
+    public ResponseEntity<ApiResponse<List<SearchResponseDTO>>> searchOverview(
+            @RequestParam(required = false, defaultValue = "") String keyword,
+            @RequestParam List<String> types,
+            @RequestParam(defaultValue = "20") int perType
+    ) {
+        int boundedPerType = Math.max(1, Math.min(perType, MAX_OVERVIEW_PER_TYPE));
+        List<SearchResponseDTO> result = unifiedSearchService.searchOverview(keyword, types, boundedPerType);
+
+        if (keyword != null && !keyword.isBlank()) {
+            realtimeKeywordService.recordSearch(keyword.trim());
+        }
+
+        return ResponseEntity.ok(ApiResponse.success(result));
     }
 
     @GetMapping("/detail")

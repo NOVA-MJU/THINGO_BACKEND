@@ -20,5 +20,15 @@ public interface UnifiedSearchIndexQueryRepository {
                                  double hotBoost,
                                  Pageable pageable);
 
+    /**
+     * 유형별 relevance 상위 perType건을 한 번에 조회한다(통합검색 화면 전체 탭용).
+     * 결과는 type, 유형 내 순위 순으로 정렬된다.
+     */
+    List<SearchResultRow> searchTopPerType(String keyword,
+                                           List<String> types,
+                                           int perType,
+                                           String hotPattern,
+                                           double hotBoost);
+
     List<String> suggest(String keyword, int limit);
 }

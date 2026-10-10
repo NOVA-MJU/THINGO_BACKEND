@@ -139,6 +139,119 @@ public class UnifiedSearchIndexQueryRepositoryImpl implements UnifiedSearchIndex
                                         double hotBoost,
                                         Pageable pageable) {
 
+        PreparedSearch prepared = prepare(keyword, type, List.of(), category, order, hotPattern, hotBoost);
+        if (prepared.noCandidates()) {
+            return new PageImpl<>(java.util.List.of(), pageable, 0L);
+        }
+
+        String selectSql =
+                "SELECT id, original_id, type, category, title, "
+                        + prepared.headlineTitle() + " AS highlighted_title, "
+                        + " content, "
+                        + prepared.headlineContent() + " AS highlighted_content, "
+                        + " author_name, link, image_url, like_count, comment_count, date, "
+                        + " CAST(topic_ids AS text), CAST(direct_topic_ids AS text), "
+                        + prepared.scoreExpr() + " AS score "
+                        + " FROM unified_search_index "
+                        + prepared.where()
+                        + prepared.orderBy()
+                        + " LIMIT :limit OFFSET :offset ";
+
+        String countSql = "SELECT count(*) FROM unified_search_index " + prepared.where();
+
+        Query selectQuery = em.createNativeQuery(selectSql);
+        Query countQuery = em.createNativeQuery(countSql);
+        bindSelectParams(selectQuery, prepared);
+        bindMatchParams(
+                countQuery,
+                prepared.matchTsQuery(),
+                prepared.hasMatchTsQuery() && !prepared.isBroadGlobalProgramQuery(),
+                prepared.type(),
+                prepared.types(),
+                prepared.category(),
+                prepared.topicIds()
+        );
+
+        selectQuery.setParameter("limit", pageable.getPageSize());
+        selectQuery.setParameter("offset", pageable.getOffset());
+
+        @SuppressWarnings("unchecked")
+        List<Object[]> rows = selectQuery.getResultList();
+        long total = ((Number) countQuery.getSingleResult()).longValue();
+
+        List<SearchResultRow> content = new ArrayList<>(rows.size());
+        for (Object[] r : rows) {
+            content.add(toRow(r));
+        }
+
+        return new PageImpl<>(content, pageable, total);
+    }
+
+    /**
+     * 통합검색 화면의 여러 유형 탭을 요청 한 번·쿼리 한 번으로 채운다(유형별 relevance 상위 perType건).
+     * 점수식·후보 조건은 {@link #search}와 같은 {@link #prepare}를 써서 탭별 단건 검색과 순위가 같다.
+     * ts_headline은 비용이 커서 유형별 상위 행을 고른 뒤 남은 행에만 계산한다.
+     */
+    @Override
+    public List<SearchResultRow> searchTopPerType(String keyword,
+                                                  List<String> types,
+                                                  int perType,
+                                                  String hotPattern,
+                                                  double hotBoost) {
+        if (keyword == null || keyword.isBlank() || types.isEmpty() || perType <= 0) {
+            return List.of();
+        }
+
+        PreparedSearch prepared = prepare(keyword, null, types, null, ORDER_RELEVANCE, hotPattern, hotBoost);
+        if (prepared.noCandidates()) {
+            return List.of();
+        }
+
+        String sql =
+                "WITH scored AS ( "
+                        + "  SELECT id, type, date, " + prepared.scoreExpr() + " AS score "
+                        + "  FROM unified_search_index " + prepared.where()
+                        + "), ranked AS ( "
+                        + "  SELECT id, score, "
+                        + "         ROW_NUMBER() OVER (PARTITION BY type ORDER BY score DESC, date DESC NULLS LAST) AS rn "
+                        + "  FROM scored "
+                        + ") "
+                        + "SELECT u.id, u.original_id, u.type, u.category, u.title, "
+                        + prepared.headlineTitle() + " AS highlighted_title, "
+                        + " u.content, "
+                        + prepared.headlineContent() + " AS highlighted_content, "
+                        + " u.author_name, u.link, u.image_url, u.like_count, u.comment_count, u.date, "
+                        + " CAST(u.topic_ids AS text), CAST(u.direct_topic_ids AS text), "
+                        + " r.score "
+                        + " FROM ranked r JOIN unified_search_index u ON u.id = r.id "
+                        + " WHERE r.rn <= :perType "
+                        + " ORDER BY u.type, r.rn ";
+
+        Query query = em.createNativeQuery(sql);
+        bindSelectParams(query, prepared);
+        query.setParameter("perType", perType);
+
+        @SuppressWarnings("unchecked")
+        List<Object[]> rows = query.getResultList();
+        List<SearchResultRow> content = new ArrayList<>(rows.size());
+        for (Object[] r : rows) {
+            content.add(toRow(r));
+        }
+        return content;
+    }
+
+    /**
+     * 검색어를 후보(match)·랭킹(rank)·커버리지(coverage) 계획으로 해석해 WHERE·점수식·하이라이트·정렬 SQL 조각을 만든다.
+     * 단건 검색과 유형별 상위 검색이 같은 조각을 써야 순위가 어긋나지 않는다.
+     */
+    private PreparedSearch prepare(String keyword,
+                                   String type,
+                                   List<String> types,
+                                   String category,
+                                   String order,
+                                   String hotPattern,
+                                   double hotBoost) {
+
         boolean hasKeyword = keyword != null && !keyword.isBlank();
         boolean hasHot = hotPattern != null && !hotPattern.isBlank() && hotBoost > 0d;
         String resolvedOrder = resolveOrder(order, hasKeyword);
@@ -164,12 +277,15 @@ public class UnifiedSearchIndexQueryRepositoryImpl implements UnifiedSearchIndex
         // 키워드가 있으나 의미 토큰이 전혀 없으면(자모/기호 노이즈) 매칭 대상이 없다.
         // DB 조회 없이 빈 결과를 즉시 반환한다(노이즈 입력이 느린 trigram 스캔을 타지 않도록).
         if (hasKeyword && !hasMatchTsQuery && !hasTopicIds) {
-            return new PageImpl<>(java.util.List.of(), pageable, 0L);
+            return PreparedSearch.NO_CANDIDATES;
         }
 
         StringBuilder where = new StringBuilder(" WHERE active = TRUE ");
         if (type != null && !type.isBlank()) {
             where.append(" AND type = :type ");
+        }
+        if (!types.isEmpty()) {
+            where.append(" AND type IN (:types) ");
         }
         if (category != null && !category.isBlank()) {
             where.append(" AND category = :category ");
@@ -256,60 +372,76 @@ public class UnifiedSearchIndexQueryRepositoryImpl implements UnifiedSearchIndex
             default -> " ORDER BY score DESC, date DESC NULLS LAST ";
         };
 
-        String selectSql =
-                "SELECT id, original_id, type, category, title, "
-                        + headlineTitle + " AS highlighted_title, "
-                        + " content, "
-                        + headlineContent + " AS highlighted_content, "
-                        + " author_name, link, image_url, like_count, comment_count, date, "
-                        + " CAST(topic_ids AS text), CAST(direct_topic_ids AS text), "
-                        + scoreExpr + " AS score "
-                        + " FROM unified_search_index "
-                        + where
-                        + orderBy
-                        + " LIMIT :limit OFFSET :offset ";
-
-        String countSql = "SELECT count(*) FROM unified_search_index " + where;
-
-        Query selectQuery = em.createNativeQuery(selectSql);
-        Query countQuery = em.createNativeQuery(countSql);
-
-        bindMatchParams(selectQuery, matchTsQuery, hasMatchTsQuery, type, category, topicIds);
-        bindMatchParams(
-                countQuery,
+        return new PreparedSearch(
+                false,
+                where.toString(),
+                scoreExpr,
+                headlineTitle,
+                headlineContent,
+                orderBy,
                 matchTsQuery,
-                hasMatchTsQuery && !isBroadGlobalProgramQuery,
+                hasMatchTsQuery,
+                isBroadGlobalProgramQuery,
+                rankTsQuery,
+                hasRankTsQuery,
+                coverageTsQuery,
+                hasCoverageTsQuery,
                 type,
+                types,
                 category,
-                topicIds
+                topicIds,
+                hasHot,
+                hotPattern,
+                hotBoost
         );
+    }
 
-        // 랭킹/커버리지 쿼리는 SELECT 점수식과 headline 에만 존재한다.
-        if (hasRankTsQuery) {
-            selectQuery.setParameter("rankTsQuery", rankTsQuery);
+    // 랭킹/커버리지 쿼리는 SELECT 점수식과 headline 에만 존재한다.
+    private void bindSelectParams(Query query, PreparedSearch prepared) {
+        bindMatchParams(
+                query,
+                prepared.matchTsQuery(),
+                prepared.hasMatchTsQuery(),
+                prepared.type(),
+                prepared.types(),
+                prepared.category(),
+                prepared.topicIds()
+        );
+        if (prepared.hasRankTsQuery()) {
+            query.setParameter("rankTsQuery", prepared.rankTsQuery());
         }
-        if (hasCoverageTsQuery) {
-            selectQuery.setParameter("coverageTsQuery", coverageTsQuery);
+        if (prepared.hasCoverageTsQuery()) {
+            query.setParameter("coverageTsQuery", prepared.coverageTsQuery());
         }
-
-        if (hasHot) {
-            selectQuery.setParameter("hotPattern", hotPattern);
-            selectQuery.setParameter("hotBoost", hotBoost);
+        if (prepared.hasHot()) {
+            query.setParameter("hotPattern", prepared.hotPattern());
+            query.setParameter("hotBoost", prepared.hotBoost());
         }
+    }
 
-        selectQuery.setParameter("limit", pageable.getPageSize());
-        selectQuery.setParameter("offset", pageable.getOffset());
+    private record PreparedSearch(boolean noCandidates,
+                                  String where,
+                                  String scoreExpr,
+                                  String headlineTitle,
+                                  String headlineContent,
+                                  String orderBy,
+                                  String matchTsQuery,
+                                  boolean hasMatchTsQuery,
+                                  boolean isBroadGlobalProgramQuery,
+                                  String rankTsQuery,
+                                  boolean hasRankTsQuery,
+                                  String coverageTsQuery,
+                                  boolean hasCoverageTsQuery,
+                                  String type,
+                                  List<String> types,
+                                  String category,
+                                  List<String> topicIds,
+                                  boolean hasHot,
+                                  String hotPattern,
+                                  double hotBoost) {
 
-        @SuppressWarnings("unchecked")
-        List<Object[]> rows = selectQuery.getResultList();
-        long total = ((Number) countQuery.getSingleResult()).longValue();
-
-        List<SearchResultRow> content = new ArrayList<>(rows.size());
-        for (Object[] r : rows) {
-            content.add(toRow(r));
-        }
-
-        return new PageImpl<>(content, pageable, total);
+        static final PreparedSearch NO_CANDIDATES = new PreparedSearch(true, "", "", "", "", "",
+                "", false, false, "", false, "", false, null, List.of(), null, List.of(), false, null, 0d);
     }
 
     @Override
@@ -345,10 +477,14 @@ public class UnifiedSearchIndexQueryRepositoryImpl implements UnifiedSearchIndex
                                  String matchTsQuery,
                                  boolean hasMatchTsQuery,
                                  String type,
+                                 List<String> types,
                                  String category,
                                  List<String> topicIds) {
         if (type != null && !type.isBlank()) {
             q.setParameter("type", type);
+        }
+        if (!types.isEmpty()) {
+            q.setParameter("types", types);
         }
         if (category != null && !category.isBlank()) {
             q.setParameter("category", category);
