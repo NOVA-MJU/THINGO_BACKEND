@@ -107,6 +107,9 @@ public enum ErrorCode {
     MAP_SYNC_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "MAP_SYNC_UNAUTHORIZED", "[MJS] 명지도 동기화 토큰이 유효하지 않습니다."),
     MAP_SYNC_INVALID_ROW(HttpStatus.BAD_REQUEST, "MAP_SYNC_INVALID_ROW", "[MJS] 명지도 동기화 데이터에 유효하지 않은 행이 있습니다."),
 
+    // 검색 색인 관리(개발자 전용 재구축 API) 관련 에러
+    SEARCH_SYNC_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "SEARCH_SYNC_UNAUTHORIZED", "[MJS] 검색 색인 관리 토큰이 유효하지 않습니다."),
+
     // 키워드 알림 관련 에러 (K)
     KEYWORD_INVALID(HttpStatus.BAD_REQUEST, "KEYWORD_INVALID", "[MJS] 올바른 형식의 키워드를 입력해 주세요."),
     KEYWORD_CATEGORY_REQUIRED(HttpStatus.BAD_REQUEST, "KEYWORD_CATEGORY_REQUIRED", "[MJS] 알림 카테고리를 1개 이상 선택해 주세요."),

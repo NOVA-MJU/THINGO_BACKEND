@@ -372,6 +372,16 @@
       "searchTerms": ["복수전공", "복전", "다전공"]
     },
     {
+      "topicId": "EARLY_EMPLOYMENT_ABSENCE",
+      "parentTopicId": null,
+      "displayName": "조기취업 유고결석",
+      "description": "졸업예정자가 조기취업(인턴 포함)으로 결석할 때 출석을 인정받는 제도. 학생들이 '취업계'라고 부르는 절차",
+      "searchable": true,
+      "subscribable": false,
+      "enabled": true,
+      "searchTerms": ["조기취업"]
+    },
+    {
       "topicId": "MEDIA_HUMAN_LIFE_COLLEGE",
       "parentTopicId": null,
       "displayName": "미디어·휴먼라이프대학",
@@ -435,6 +445,8 @@
     {"topicId": "ACADEMIC_FOUNDATION_GENERAL_EDUCATION", "alias": "기초교양", "priority": 100},
     {"topicId": "MULTIPLE_MAJOR", "alias": "복수전공", "priority": 110},
     {"topicId": "MULTIPLE_MAJOR", "alias": "복전", "priority": 130},
+    {"topicId": "EARLY_EMPLOYMENT_ABSENCE", "alias": "취업계", "priority": 120},
+    {"topicId": "EARLY_EMPLOYMENT_ABSENCE", "alias": "조기취업", "priority": 120},
     {"topicId": "MULTIPLE_MAJOR", "alias": "다전공", "priority": 110},
     {"topicId": "MEDIA_HUMAN_LIFE_COLLEGE", "alias": "미디어·휴먼라이프대학", "priority": 120},
     {"topicId": "MEDIA_HUMAN_LIFE_COLLEGE", "alias": "미디어휴먼라이프대학", "priority": 120},
