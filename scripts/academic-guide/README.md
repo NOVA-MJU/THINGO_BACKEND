@@ -19,7 +19,8 @@ python scripts/academic-guide/import_academic_guide.py `
 1. `documentCount`와 실제 `documents` 배열 크기가 같은지 확인한다.
 2. 졸업요건 표의 적용 학번, 단과대·학과, 이수학점과 원문 쪽수를 대조한다.
 3. 학문기초교양과 전공이해 기초교과목을 서로 다른 규칙으로 유지한다.
-4. `/api/v1/search/sync/academic-guides`를 실행해 학사안내문만 통합검색 인덱스에 반영한다.
+4. `POST /api/v1/search/sync/academic-guides`를 실행해 학사안내문만 통합검색 인덱스에 반영한다.
+   `X-Sync-Token` 헤더에 `app.sync.search-token` 값(MJS-BACK-SECURITY)을 넣어야 한다.
 5. `미휴 학기교`, `정외 법학 복전 학기교`, `2025학번 졸업학점`을 검색해 결과와
    원문 페이지를 확인한다.
 

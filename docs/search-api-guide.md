@@ -233,9 +233,12 @@ GET /api/v2/search/suggest?keyword=장학
   자동 반영됩니다. 운영자가 따로 할 일이 없습니다.
 - **전체 재구축(수동, 운영 전용):** `POST /api/v2/search/sync`. 색인을 통째로 다시 만듭니다.
   평상시엔 호출할 필요가 없고, 색인이 꼬였을 때만 운영자가 씁니다.
+  `X-Sync-Token` 헤더에 `app.sync.search-token` 값(MJS-BACK-SECURITY)이 없으면 401로 거절됩니다.
+  (`/sync/academic-guides`, `/rebuild-vectors`도 같습니다)
 
 ```
 POST /api/v2/search/sync
+X-Sync-Token: <app.sync.search-token>
 → { "status": "API 요청 성공", "data": "Success Indexing", "timestamp": "..." }
 ```
 
@@ -270,6 +273,6 @@ GET /api/v2/search/detail?page=1&size=10
 # 자동완성
 GET /api/v2/search/suggest?keyword=기숙
 
-# (운영자) 색인 전체 재구축
+# (운영자) 색인 전체 재구축 - X-Sync-Token 헤더 필요
 POST /api/v2/search/sync
 ```
