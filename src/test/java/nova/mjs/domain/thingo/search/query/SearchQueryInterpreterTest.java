@@ -82,6 +82,18 @@ class SearchQueryInterpreterTest {
     }
 
     @Test
+    @DisplayName("'취업계'는 공지에 쓰이는 공식 용어(조기취업 유고결석)로 찾는다")
+    void employmentAbsenceSlangResolvesToOfficialTerm() {
+        // Komoran이 '취업계'를 '취업'+'계'로 쪼개 '취업'만 든 공지 전체가 후보가 되던 문제.
+        // 공지·학사안내문에는 '취업계'가 아니라 '조기취업 유고결석'으로 적혀 있다
+        SearchQueryPlan plan = interpreter.interpret("취업계");
+
+        assertThat(plan.topicIds()).containsExactly("EARLY_EMPLOYMENT_ABSENCE");
+        assertThat(plan.matchTsQuery()).isEqualTo("(조기취업)");
+        assertConcept("조기취업 유고결석 신청", "EARLY_EMPLOYMENT_ABSENCE");
+    }
+
+    @Test
     @DisplayName("졸업 검색은 학위수여식과 졸업식을 후보에 포함한다")
     void graduationSearchIncludesDegreeCeremonyTerms() {
         SearchQueryPlan plan = interpreter.interpret("졸업");
