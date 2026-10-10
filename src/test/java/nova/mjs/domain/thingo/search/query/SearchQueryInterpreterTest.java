@@ -94,6 +94,30 @@ class SearchQueryInterpreterTest {
     }
 
     @Test
+    @DisplayName("'병결'은 유고결석 중 입원·진단서가 함께 있는 문서로 찾는다")
+    void sickAbsenceSlangRequiresExcusedAbsenceAndIllnessEvidence() {
+        // 공지·학사안내문에 '병결'은 없고, 유고결석 사유 '학생의 입원기간 및 치료기간(진단서)'으로 적혀 있다
+        SearchQueryPlan plan = interpreter.interpret("병결");
+
+        assertThat(plan.topicIds()).containsExactlyInAnyOrder("ABSENCE_ILLNESS", "EXCUSED_ABSENCE");
+        assertThat(plan.matchTsQuery()).contains("유고결석", "입원", "진단서", "&");
+        assertConcept("공결", "EXCUSED_ABSENCE");
+        assertConcept("결석계 제출", "EXCUSED_ABSENCE");
+    }
+
+    @Test
+    @DisplayName("증명서 이름 안의 '졸업'·'휴학'은 별도 개념으로 붙지 않는다")
+    void certificateNameDoesNotPullInGraduationOrLeaveConcept() {
+        for (String query : List.of("졸업증명서", "졸업증명서 발급", "휴학증명서", "성적증명서")) {
+            SearchQueryPlan plan = interpreter.interpret(query);
+            assertThat(plan.topicIds()).as(query).containsExactly("CERTIFICATE_ISSUANCE");
+            assertThat(plan.matchTsQuery()).as(query).isEqualTo("(증명서 | 증명발급)");
+        }
+        // 증명서와 무관한 '졸업' 단독 검색은 기존대로 졸업 개념이다
+        assertThat(interpreter.interpret("졸업").topicIds()).containsExactly("GRADUATION");
+    }
+
+    @Test
     @DisplayName("졸업 검색은 학위수여식과 졸업식을 후보에 포함한다")
     void graduationSearchIncludesDegreeCeremonyTerms() {
         SearchQueryPlan plan = interpreter.interpret("졸업");
