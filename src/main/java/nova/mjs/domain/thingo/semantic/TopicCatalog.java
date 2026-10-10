@@ -67,9 +67,13 @@ public class TopicCatalog {
             return List.of();
         }
 
-        Map<String, ResolvedTopic> bestByTopic = aliases.stream()
+        List<TopicAliasDefinition> matchedAliases = aliases.stream()
                 .filter(alias -> alias.priority() >= minimumPriority)
                 .filter(alias -> matchesAlias(rawText, inputKey, alias.alias()))
+                .toList();
+
+        Map<String, ResolvedTopic> bestByTopic = matchedAliases.stream()
+                .filter(alias -> !isAbsorbedByOtherAlias(alias, matchedAliases))
                 .map(alias -> new ResolvedTopic(topicById.get(alias.topicId()), alias.alias(), alias.priority()))
                 .filter(match -> match.topic() != null && match.topic().enabled())
                 .collect(Collectors.toMap(
@@ -87,6 +91,20 @@ public class TopicCatalog {
                 .sorted(Comparator.comparingInt(ResolvedTopic::priority).reversed()
                         .thenComparing(match -> match.topic().topicId()))
                 .toList();
+    }
+
+    /**
+     * absorbsContainedAliases로 표시된 다른 토픽의 별칭 안에 이 별칭이 들어 있으면 독립 근거로 보지 않는다.
+     * 예: '졸업증명서'(증명서 발급) 안의 '졸업'으로 졸업 토픽까지 필수 조건으로 붙으면 졸업요건·학위수여식 문서가
+     * 증명서 발급 안내를 밀어낸다. '해외연수장학생'처럼 두 개념을 함께 가리키도록 만든 별칭은 표시하지 않는다.
+     */
+    private boolean isAbsorbedByOtherAlias(TopicAliasDefinition alias, List<TopicAliasDefinition> matchedAliases) {
+        String key = SemanticTextNormalizer.lookupKey(alias.alias());
+        return matchedAliases.stream()
+                .filter(TopicAliasDefinition::absorbsContainedAliases)
+                .filter(other -> !other.topicId().equals(alias.topicId()))
+                .map(other -> SemanticTextNormalizer.lookupKey(other.alias()))
+                .anyMatch(otherKey -> otherKey.length() > key.length() && otherKey.contains(key));
     }
 
     public List<TopicDefinition> autocomplete(String query, int limit, boolean subscribableOnly) {
