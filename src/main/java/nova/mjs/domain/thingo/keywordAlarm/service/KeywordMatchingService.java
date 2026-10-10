@@ -136,7 +136,9 @@ public class KeywordMatchingService {
                 Member memberRef = memberRepository.getReferenceById(match.memberId());
                 NotificationHistory history = notificationHistoryRepository.saveAndFlush(
                         NotificationHistory.of(memberRef, match.subscriptionId(), match.keyword(),
-                                searchIndexId, doc.getTitle(), doc.getLink(), doc.getType()));
+                                searchIndexId, doc.getTitle(),
+                                NotificationLinks.resolve(doc.getType(), doc.getLink(), searchIndexId),
+                                doc.getType()));
 
                 List<String> tokens = deviceTokenRepository.findByMember(memberRef).stream()
                         .map(DeviceToken::getFcmToken)
@@ -215,7 +217,7 @@ public class KeywordMatchingService {
         Map<String, String> data = new HashMap<>();
         data.put("type", nz(doc.getType()));
         data.put("searchIndexId", searchIndexId);
-        data.put("link", nz(doc.getLink()));
+        data.put("link", nz(NotificationLinks.resolve(doc.getType(), doc.getLink(), searchIndexId)));
         data.put("historyId", String.valueOf(historyId));
         return data;
     }

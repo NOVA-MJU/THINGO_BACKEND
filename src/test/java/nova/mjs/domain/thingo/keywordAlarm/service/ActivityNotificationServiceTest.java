@@ -68,7 +68,7 @@ class ActivityNotificationServiceTest {
         assertThat(saved.getMember()).isEqualTo(author);
         assertThat(saved.getType()).isEqualTo("COMMUNITY_LIKE");
         assertThat(saved.getTitle()).isEqualTo("좋아요맨님이 열 글자가 넘는 게… 글을 좋아합니다.");
-        assertThat(saved.getLink()).isEqualTo("/boards/" + board.getUuid());
+        assertThat(saved.getLink()).isEqualTo("/posts/" + board.getUuid());
         assertThat(saved.isRead()).isFalse();
     }
 

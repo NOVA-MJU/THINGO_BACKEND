@@ -94,7 +94,7 @@ public class CafeteriaAlarmService {
             try {
                 NotificationHistory history = notificationHistoryRepository.saveAndFlush(
                         NotificationHistory.of(member, subscription.getId(), MATCHED_LABEL,
-                                searchIndexId, ALARM_TITLE, null, TYPE));
+                                searchIndexId, ALARM_TITLE, NotificationLinks.MEAL, TYPE));
 
                 List<String> tokens = deviceTokenRepository.findByMember(member).stream()
                         .map(DeviceToken::getFcmToken)
@@ -147,6 +147,7 @@ public class CafeteriaAlarmService {
         data.put("type", TYPE);
         data.put("searchIndexId", searchIndexId);
         data.put("menuCount", String.valueOf(menuCount));
+        data.put("link", NotificationLinks.MEAL);
         data.put("historyId", String.valueOf(historyId));
         return data;
     }

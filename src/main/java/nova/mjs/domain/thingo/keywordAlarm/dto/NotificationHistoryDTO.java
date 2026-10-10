@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import nova.mjs.domain.thingo.keywordAlarm.entity.AlarmCategory;
 import nova.mjs.domain.thingo.keywordAlarm.entity.NotificationHistory;
+import nova.mjs.domain.thingo.keywordAlarm.service.NotificationLinks;
 import org.springframework.data.domain.Page;
 
 import java.time.Instant;
@@ -93,7 +94,9 @@ public class NotificationHistoryDTO {
                         .categoryCode(categoryCode)
                         .category(category)
                         .title(history.getTitle())
-                        .link(history.getLink())
+                        // 링크 규칙이 바뀌기 전에 저장된 알림(링크 없음, '/boards/..')도 지금 규칙으로 이동하도록 응답 시 보정한다
+                        .link(NotificationLinks.resolve(
+                                history.getType(), history.getLink(), history.getSearchIndexId()))
                         .read(history.isRead())
                         .sentAt(history.getSentAt())
                         .timestamp(history.getSentAt().toEpochMilli())
