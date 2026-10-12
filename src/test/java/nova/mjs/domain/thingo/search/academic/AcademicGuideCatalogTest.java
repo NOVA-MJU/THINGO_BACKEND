@@ -23,7 +23,8 @@ class AcademicGuideCatalogTest {
                     assertThat(document.getType()).isEqualTo("ACADEMIC_GUIDE");
                     assertThat(document.getTitle()).contains("미휴", "학기교", "12학점");
                     assertThat(document.getContent())
-                            .contains("적용 학번: 2025학번 이후", "학사안내문 47쪽");
+                            .contains("적용 학번: 2025학번 이후", "학사안내문 47쪽",
+                                    "출처 공지: 2026-2학기 학사안내문");
                     assertThat(document.getLink()).endsWith("#guide-page-47-media-human-life");
                 });
     }
