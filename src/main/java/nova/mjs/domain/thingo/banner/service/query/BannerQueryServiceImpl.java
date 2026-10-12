@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 
 @Service
@@ -35,7 +36,8 @@ public class BannerQueryServiceImpl implements BannerQueryService {
                 : bannerRepository.findByActiveTrueAndCategoryOrderByDisplayOrderAsc(category);
 
         // 2) 노출기간 필터 (오늘 기준 노출 대상만)
-        LocalDate today = LocalDate.now();
+        // 시트의 노출 시작/종료일은 한국 날짜다. 서버 JVM이 UTC라 기본 now()를 쓰면 오전 9시에야 바뀐다
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
 
         // 3) DTO 변환
         return banners.stream()
