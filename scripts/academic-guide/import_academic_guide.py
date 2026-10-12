@@ -19,6 +19,8 @@ from pypdf import PdfReader
 
 
 SOURCE_URL = "https://bangmok.mju.ac.kr/bbs/mjukr/1725/233916/artclView.do"
+# 학사안내문이 첨부된 공지의 제목. AI 요약 출처에 "공지 제목 · 첨부파일 N쪽"으로 보여준다
+SOURCE_TITLE = "2026-2학기 학사안내문"
 PUBLISHED_AT = "2026-08-04T00:00:00Z"
 
 
@@ -924,6 +926,7 @@ def main() -> None:
         "revision": "v1.6",
         "publishedAt": PUBLISHED_AT,
         "sourceUrl": SOURCE_URL,
+        "sourceTitle": SOURCE_TITLE,
         "documentCount": len(documents),
         "documents": documents,
     }

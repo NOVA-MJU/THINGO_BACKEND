@@ -44,7 +44,7 @@ public class AcademicGuideCatalog {
                 throw new IllegalStateException("Academic guide document count mismatch: " + RESOURCE_PATH);
             }
             return file.documents().stream()
-                    .map(entry -> AcademicGuideDocument.from(entry, file.publishedAt()))
+                    .map(entry -> AcademicGuideDocument.from(entry, file.publishedAt(), file.sourceTitle()))
                     .toList();
         } catch (Exception e) {
             throw new IllegalStateException("Failed to load academic guide: " + RESOURCE_PATH, e);
@@ -54,6 +54,7 @@ public class AcademicGuideCatalog {
     @JsonIgnoreProperties(ignoreUnknown = true)
     private record CatalogFile(int documentCount,
                                Instant publishedAt,
+                               String sourceTitle,
                                List<CatalogEntry> documents) {
     }
 
@@ -78,7 +79,9 @@ public class AcademicGuideCatalog {
                                         String link,
                                         Instant instant) implements SearchDocument {
 
-        private static AcademicGuideDocument from(CatalogEntry entry, Instant publishedAt) {
+        // sourceTitle: 학사안내문이 첨부된 공지 제목. AI 요약이 출처를 "공지 제목 · 첨부파일 N쪽"으로 보여줄 수 있게
+        // 본문 앞 메타데이터에 '출처 공지'로 넣는다 (AI 서버는 검색 결과의 제목·본문만 받음)
+        private static AcademicGuideDocument from(CatalogEntry entry, Instant publishedAt, String sourceTitle) {
             String indexId = TYPE + ":" + entry.id();
             if (indexId.length() > INDEX_ID_MAX_LENGTH) {
                 throw new IllegalStateException(
@@ -89,6 +92,7 @@ public class AcademicGuideCatalog {
                             formatList("단과대", entry.colleges()),
                             formatList("학과·전공", entry.departments()),
                             entry.documentPage() == null ? "" : "학사안내문 " + entry.documentPage() + "쪽",
+                            sourceTitle == null || sourceTitle.isBlank() ? "" : "출처 공지: " + sourceTitle,
                             formatList("검색어", entry.keywords()))
                     .stream()
                     .filter(value -> !value.isBlank())
