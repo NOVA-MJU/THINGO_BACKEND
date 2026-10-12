@@ -153,8 +153,8 @@ public class PgSearchIndexSyncService {
 
         deactivateMissing(desiredIds, stats);
 
-        // 트리거 의존 제거: 변경/삽입분의 search_vector/title_vector 를 직접 재생성한다(트리거 누락 안전망).
-        repository.rebuildVectors();
+        // 트리거 누락 안전망: 변경/삽입분은 트리거가 벡터를 갱신하므로, 벡터가 NULL로 남은 행만 채운다.
+        repository.rebuildMissingVectors();
 
         log.info("[PgSearch][RECONCILE] end. new={}, updated={}, deactivated={}, unchanged={}",
                 stats.inserted, stats.updated, stats.deactivated, stats.unchanged);

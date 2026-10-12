@@ -61,8 +61,10 @@ public interface PinRepository extends JpaRepository<Pin, Long> {
      * 검색용 전체 핀 조회. 관련도 스코어링/카드 구성에 필요한 연관을 fetch join으로 함께 로딩한다.
      * (카테고리는 이름·라벨·아이콘, 소속 건물/층은 내부 장소의 위치·운영시간 상속에 쓰인다)
      * 캠퍼스 규모(핀 수백 개)라 전체를 메모리에 올려 스코어링해도 충분하다.
+     * 연관이 모두 to-one이라 행이 중복되지 않으므로 distinct를 쓰지 않는다
+     * (distinct는 네 테이블의 모든 컬럼을 비교해 검색·자동완성마다 DB 시간을 크게 늘린다).
      */
-    @Query("select distinct p from Pin p "
+    @Query("select p from Pin p "
             + "join fetch p.category "
             + "left join fetch p.parentBuilding "
             + "left join fetch p.floor")

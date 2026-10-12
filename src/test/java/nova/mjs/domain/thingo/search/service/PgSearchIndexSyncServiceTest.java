@@ -87,7 +87,8 @@ class PgSearchIndexSyncServiceTest {
         assertThat(pageableCaptor.getValue().getSort().getOrderFor("id").isAscending()).isTrue();
         assertThat(stale.getActive()).isFalse();
         verify(repository, never()).findAll();
-        verify(repository).rebuildVectors();
+        verify(repository).rebuildMissingVectors();
+        verify(repository, never()).rebuildVectors();
         verify(entityManager).clear();
     }
 
