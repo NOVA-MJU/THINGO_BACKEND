@@ -39,6 +39,9 @@ public class MapSyncServiceImpl implements MapSyncService {
     private final FloorRepository floorRepository;
     private final OperatingHourRepository operatingHourRepository;
 
+    /** 상세 화면 한 번에 보여줄 만큼만 받는다 */
+    private static final int MAX_PLACE_IMAGES = 10;
+
     @Override
     @Transactional
     public MapSyncDTO.SyncResult syncFromSheet(MapSyncDTO.SyncRequest request) {
@@ -222,9 +225,23 @@ public class MapSyncServiceImpl implements MapSyncService {
                                     row.getInfoText(), row.getAddress());
                         return pinRepository.save(created);
                     });
+            if (row.getImageUrls() != null) {
+                place.replaceImageUrls(validImageUrls(row.getImageUrls(), i));
+            }
             context.pins.put(place.getCode(), place);
         }
         return rows.size();
+    }
+
+    /** 빈 URL은 갤러리에 빈 칸으로 보이므로 거부한다 */
+    private List<String> validImageUrls(List<String> urls, int index) {
+        if (urls.size() > MAX_PLACE_IMAGES) {
+            throw invalidRow("places", index, "image_urls 는 최대 " + MAX_PLACE_IMAGES + "장입니다.");
+        }
+        if (urls.stream().anyMatch(this::isBlank)) {
+            throw invalidRow("places", index, "image_urls 에 빈 값이 있습니다.");
+        }
+        return urls.stream().map(String::trim).toList();
     }
 
     // ====================== 6. 운영시간 ======================

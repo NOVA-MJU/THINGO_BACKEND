@@ -246,6 +246,50 @@ class MapSyncE2EIT {
     }
 
     @Test
+    @DisplayName("갤러리 사진은 순서대로 저장되고, 사진 목록 없이 다시 발행해도 유지되며, 빈 배열이면 대표 사진만 남는다")
+    void should_keepGallery_untilExplicitlyReplaced() throws Exception {
+        String withGallery = SHEET_JSON.replace("\"infoText\":\"현금만\"",
+                "\"infoText\":\"현금만\",\"imageUrl\":\"https://thingo.kr/happy.jpg\","
+                        + "\"imageUrls\":[\"https://thingo.kr/happy-1.jpg\",\"https://thingo.kr/happy-2.jpg\"]");
+        mapSyncService.syncFromSheet(objectMapper.readValue(withGallery, MapSyncDTO.SyncRequest.class));
+        entityManager.flush();
+        entityManager.clear();
+        Long happyId = pinRepository.findByCode("p-happy").orElseThrow().getId();
+        assertThat(mapPinService.getPlaceDetail(happyId, null, null, null).getImageUrls())
+                .containsExactly("https://thingo.kr/happy-1.jpg", "https://thingo.kr/happy-2.jpg");
+
+        // 시트 발행은 imageUrls를 보내지 않는다 - 갤러리가 지워지면 안 된다
+        mapSyncService.syncFromSheet(objectMapper.readValue(
+                withGallery.replaceAll(",\"imageUrls\":\\[[^\\]]*\\]", ""), MapSyncDTO.SyncRequest.class));
+        entityManager.flush();
+        entityManager.clear();
+        assertThat(mapPinService.getPlaceDetail(happyId, null, null, null).getImageUrls()).hasSize(2);
+
+        // 빈 배열은 명시적 삭제 - 대표 사진 1장으로 돌아간다
+        mapSyncService.syncFromSheet(objectMapper.readValue(
+                withGallery.replaceAll("\"imageUrls\":\\[[^\\]]*\\]", "\"imageUrls\":[]"), MapSyncDTO.SyncRequest.class));
+        entityManager.flush();
+        entityManager.clear();
+        assertThat(mapPinService.getPlaceDetail(happyId, null, null, null).getImageUrls())
+                .containsExactly("https://thingo.kr/happy.jpg");
+
+        // 사진이 하나도 없는 장소는 빈 배열
+        Long printerId = pinRepository.findByCode("p-printer").orElseThrow().getId();
+        assertThat(mapPinService.getPlaceDetail(printerId, null, null, null).getImageUrls()).isEmpty();
+    }
+
+    @Test
+    @DisplayName("갤러리 사진은 10장을 넘길 수 없다")
+    void should_rejectGallery_overLimit() throws Exception {
+        String urls = String.join(",", java.util.Collections.nCopies(11, "\"https://thingo.kr/x.jpg\""));
+        String tooMany = SHEET_JSON.replace("\"infoText\":\"현금만\"", "\"infoText\":\"현금만\",\"imageUrls\":[" + urls + "]");
+        MapSyncDTO.SyncRequest request = objectMapper.readValue(tooMany, MapSyncDTO.SyncRequest.class);
+
+        assertThatThrownBy(() -> mapSyncService.syncFromSheet(request))
+                .hasMessageContaining("image_urls 는 최대 10장");
+    }
+
+    @Test
     @DisplayName("상위 건물이 있는 내부 장소는 층 정보 없이 동기화할 수 없다")
     void should_rejectInternalPlace_withoutFloor() throws Exception {
         String invalidJson = SHEET_JSON.replace(",\"floorLabel\":\"F1\"", "");

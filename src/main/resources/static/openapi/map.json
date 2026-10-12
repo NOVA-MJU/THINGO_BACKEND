@@ -2480,6 +2480,13 @@
             "description": "장소 대표 이미지 URL(선택).",
             "nullable": true
           },
+          "imageUrls": {
+            "type": "array",
+            "items": { "type": "string" },
+            "maxItems": 10,
+            "description": "상세 갤러리 사진 URL 목록(선택, 최대 10장). 생략(null)하면 기존 갤러리 유지, 빈 배열이면 삭제. 시트 발행은 이 값을 보내지 않는다.",
+            "nullable": true
+          },
           "infoText": {
             "type": "string",
             "description": "장소 부가 설명(선택).",
@@ -3064,6 +3071,12 @@
             "description": "장소 대표 이미지 URL.",
             "nullable": true,
             "example": "https://thingo.kr/img/place/51.jpg"
+          },
+          "imageUrls": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "상세 갤러리 사진 URL(노출 순서). 갤러리를 등록하지 않은 장소는 대표 이미지 1장, 사진이 없으면 빈 배열.",
+            "example": ["https://thingo.kr/static/images/map/p-smoking-ext-02.jpg", "https://thingo.kr/static/images/map/p-smoking-ext-02-2.jpg"]
           },
           "favorite": {
             "type": "boolean",
