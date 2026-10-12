@@ -9,23 +9,31 @@ import nova.mjs.domain.thingo.member.entity.Member;
 import nova.mjs.util.entity.BaseEntity;
 
 import java.time.Instant;
+import java.util.UUID;
 
 /**
  * 키워드 알림 발송 내역(알림함).
  *
  * 어떤 키워드가 어떤 콘텐츠(통합검색 인덱스 id)와 매칭돼 누구에게 발송됐는지의 기록.
- * (member_id, search_index_id) 유일 제약으로 같은 회원에게 같은 콘텐츠가 두 번 알림되지
- * 않도록 막는다(권위 dedup) - 한 글이 한 사람의 여러 키워드에 걸려도 알림은 1건.
+ * 수신자는 회원(member) 또는 비로그인 기기(deviceId) 중 정확히 하나다.
+ * (member_id, search_index_id) / (device_id, search_index_id) 유일 제약으로 같은 수신자에게
+ * 같은 콘텐츠가 두 번 알림되지 않도록 막는다(권위 dedup) - 한 글이 한 사람의 여러 키워드에 걸려도 알림은 1건.
  * 대표 키워드(matchedKeyword)/구독(keywordSubscriptionId)만 남기며, 구독이 삭제돼도
  * 내역이 보존되도록 구독은 FK 가 아닌 식별자(Long)로 보관하고 표시 값은 스냅샷으로 둔다.
  */
 @Entity
 @Table(
         name = "notification_history",
-        uniqueConstraints = @UniqueConstraint(
-                name = "uk_notification_history_member_index",
-                columnNames = {"member_id", "search_index_id"}
-        )
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_notification_history_member_index",
+                        columnNames = {"member_id", "search_index_id"}
+                ),
+                @UniqueConstraint(
+                        name = "uk_notification_history_device_index",
+                        columnNames = {"device_id", "search_index_id"}
+                )
+        }
 )
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -37,8 +45,12 @@ public class NotificationHistory extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
+    @JoinColumn(name = "member_id")
     private Member member;
+
+    /** 비로그인 기기 수신 알림의 기기 id. 회원 알림이면 null. */
+    @Column(name = "device_id")
+    private UUID deviceId;
 
     /** 매칭된 구독 id (FK 아님 - 구독 삭제와 무관하게 내역 보존) */
     @Column(name = "keyword_subscription_id", nullable = false)
@@ -68,9 +80,10 @@ public class NotificationHistory extends BaseEntity {
     private Instant sentAt;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private NotificationHistory(Member member, Long keywordSubscriptionId, String matchedKeyword,
+    private NotificationHistory(Member member, UUID deviceId, Long keywordSubscriptionId, String matchedKeyword,
                                String searchIndexId, String title, String link, String type) {
         this.member = member;
+        this.deviceId = deviceId;
         this.keywordSubscriptionId = keywordSubscriptionId;
         this.matchedKeyword = matchedKeyword;
         this.searchIndexId = searchIndexId;
@@ -83,8 +96,15 @@ public class NotificationHistory extends BaseEntity {
 
     public static NotificationHistory of(Member member, Long keywordSubscriptionId, String matchedKeyword,
                                          String searchIndexId, String title, String link, String type) {
+        return of(AlarmOwner.ofMember(member), keywordSubscriptionId, matchedKeyword,
+                searchIndexId, title, link, type);
+    }
+
+    public static NotificationHistory of(AlarmOwner owner, Long keywordSubscriptionId, String matchedKeyword,
+                                         String searchIndexId, String title, String link, String type) {
         return NotificationHistory.builder()
-                .member(member)
+                .member(owner.member())
+                .deviceId(owner.deviceId())
                 .keywordSubscriptionId(keywordSubscriptionId)
                 .matchedKeyword(matchedKeyword)
                 .searchIndexId(searchIndexId)
@@ -102,6 +122,12 @@ public class NotificationHistory extends BaseEntity {
     public static NotificationHistory ofActivity(Member member, String notificationKey,
                                                  String title, String link, String type) {
         return of(member, 0L, "", notificationKey, title, link, type);
+    }
+
+    /** 로그인 시 비로그인 기기 알림함을 회원 알림함으로 옮긴다. */
+    public void reassignTo(Member member) {
+        this.member = member;
+        this.deviceId = null;
     }
 
     public void markAsRead() {

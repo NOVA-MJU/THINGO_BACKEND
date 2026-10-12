@@ -4,14 +4,18 @@
 Topic을 선택하면 공지 분류 계층으로, 선택하지 않으면 기존 제목 키워드 방식으로 매칭한다.
 
 > 모든 응답은 공통 래퍼로 감싼다: `{ "status": "...", "data": <실제값>, "timestamp": "..." }`
-> 추천 키워드를 빼면 전부 **로그인 필요**(헤더 `Authorization: Bearer <accessToken>`).
+> 키워드 알림/알림함/기기 토큰 등록은 **로그인 없이도** 쓸 수 있다.
+> 소유자 식별: 로그인 상태면 `Authorization: Bearer <accessToken>`(회원), 아니면 `X-Device-Id: <deviceId>`(기기).
+> 로그인 상태에서는 `X-Device-Id` 가 있어도 회원 기준으로 동작한다.
+> 둘 다 없거나 서버가 발급하지 않은 `X-Device-Id` 면 `401` + `DEVICE_ID_INVALID` → 앱은 기기 id 를 새로 발급받는다.
 
 ---
 
 ## 쓰는 순서 (앱 기준)
 
-1. 로그인 → accessToken 확보
-2. 앱이 FCM 토큰 발급 → `POST /api/v1/device-tokens` 로 등록 (이게 있어야 푸시가 감)
+0. 앱 최초 실행 시 `POST /api/v1/devices` 로 `deviceId` 발급 → 저장 후 아래 요청마다 `X-Device-Id` 헤더로 전송
+1. (선택) 로그인 → accessToken 확보. 로그인 직후 `POST /api/v1/keyword-alarms/merge-device` 로 비로그인 때 등록한 구독/알림함을 회원으로 병합
+2. 앱이 FCM 토큰 발급 → `POST /api/v1/device-tokens` 로 등록 (이게 있어야 푸시가 감). 로그인/로그아웃 직후에도 다시 등록
 3. 입력 중 `GET /api/v1/alarm-topics/autocomplete`로 표준 Topic 후보 표시
 4. 사용자가 키워드와 선택한 `topicId` 등록 → `POST /api/v1/keyword-alarms`
 5. 새 글/학식이 올라오면 서버가 알아서 매칭 → 푸시 발송
@@ -33,6 +37,35 @@ Topic을 선택하면 공지 분류 계층으로, 선택하지 않으면 기존 
 | `ANDROID` / `IOS` / `WEB` | 토큰이 발급된 기기 종류 |
 
 > `topicId`가 없으면 **제목 기준 + 접두 일치**다. `topicId`가 있으면 분류된 Topic 계층으로 매칭한다.
+
+## 기기 id 발급 (비로그인 사용)
+
+```
+POST /api/v1/devices
+```
+
+로그인 불필요, 본문 없음. 응답 `data`: `{ "deviceId": "3f1c...-uuid" }`
+
+- id 는 서버가 만든 UUID 다. 앱이 임의로 만든 값은 `X-Device-Id` 로 인정되지 않는다(`401 DEVICE_ID_INVALID`).
+- 앱 저장소에 보관하고 재설치 전까지 계속 쓴다.
+
+## 로그인 시 기기 구독 병합
+
+```
+POST /api/v1/keyword-alarms/merge-device
+Authorization: Bearer <accessToken>
+X-Device-Id: <deviceId>
+```
+
+응답 `data`: `{ "mergedCount": 1, "duplicateCount": 1, "skippedCount": 0 }`
+
+- 회원에게 같은 키워드(앞뒤 공백 무시, 대소문자 무시)가 있으면 **카테고리를 합치고**(둘 중 하나라도 켜져 있으면 켬) 기기 구독은 지운다 → `duplicateCount`
+- 없으면 기기 구독을 회원 소유로 옮긴다 → `mergedCount`
+- 회원 구독이 10개에 차면 더 옮기지 않는다(기기 쪽에 남음) → `skippedCount`
+- 기기 알림함도 회원 알림함으로 옮긴다(회원이 이미 받은 같은 콘텐츠는 기기 쪽 기록을 지움)
+- 옮길 것이 없거나 서버가 모르는 `deviceId` 면 모두 0 (여러 번 호출해도 안전). `X-Device-Id` 헤더 자체가 없으면 `400`.
+
+---
 
 ## 0. 알림 Topic 자동완성
 
@@ -68,6 +101,7 @@ POST /api/v1/keyword-alarms
 
 검증 실패 시 `400` + 메시지 `"올바른 형식의 키워드를 입력해 주세요."`
 이미 등록한 키워드면 `400` + `"이미 등록된 키워드입니다."`
+이미 10개를 등록했으면 `400` + `KEYWORD_SUBSCRIPTION_LIMIT_EXCEEDED` (`"키워드 알림은 최대 10개까지 등록할 수 있습니다."`, 회원/기기 각각)
 
 성공 응답(`data`):
 ```json
@@ -176,9 +210,13 @@ POST /api/v1/device-tokens
 ```
 
 - 같은 토큰을 다시 보내면 **갱신**(멱등). 다른 계정에서 같은 기기면 현재 계정으로 재배정.
+- 로그인 상태: 회원에게 연결. 유효한 `X-Device-Id` 가 있으면 함께 기록(없거나 틀려도 등록은 됨).
+- 비로그인 상태: `X-Device-Id` 필수. 회원 연결을 끊고 기기(게스트) 토큰으로 등록한다.
+  **로그아웃 후 이 요청을 보내야** 그 기기로 회원 알림이 더 가지 않고 게스트 구독 알림을 받는다.
+- 비로그인 기기 구독 알림은 그 기기의 게스트 토큰(회원 연결 없는 토큰)으로만 간다.
 - 성공 시 `data` 없음.
 
-## 7. 기기 토큰 삭제 (로그아웃 시)
+## 7. 기기 토큰 삭제 (로그아웃 시, 로그인 필요)
 
 ```
 DELETE /api/v1/device-tokens?fcmToken=<토큰>
@@ -309,7 +347,8 @@ curl -X POST https://<host>/api/v1/admin/keyword-alarms/manual-send \
 - **키워드 푸시 시점**: 콘텐츠가 **처음 올라올 때만** 발송한다(수정으로는 재알림 안 함).
 - **활동 인앱 알림**: 내 게시글 좋아요/댓글, 내 명지도 리뷰 좋아요가 알림함에 쌓인다. 본인 활동은 제외한다.
 - **좋아요 집계**: 같은 게시글/리뷰의 좋아요는 알림 1건을 최신 인원·개수로 갱신하고 다시 미읽음 처리한다.
-- **중복 방지**: 한 글이 한 사람의 키워드 여러 개에 걸려도 **알림은 1건**.
+- **중복 방지**: 한 글이 한 사람(회원 또는 기기)의 키워드 여러 개에 걸려도 **알림은 1건**.
+- **비로그인 범위**: 키워드/Topic/학식 알림과 알림함만 기기 단위로 지원한다. 활동 알림(좋아요/댓글)과 관리자 수동 발송은 회원 전용.
 - **학식**: 크롤링은 같은 주를 여러 번 돌리지만, **메뉴 내용이 실제 바뀐 경우에만** 1건 발송.
 - **푸시 안 와도 알림함은 쌓임**: 기기 토큰이 없거나 FCM 미설정이어도 `GET /notifications` 에는 기록된다.
 - **에러 형식**: 실패는 `{ status, error, message }` 형태로 내려온다(전역 핸들러).
@@ -332,4 +371,10 @@ curl -X POST https://<host>/api/v1/device-tokens \
 # 알림함
 curl https://<host>/api/v1/notifications?page=0&size=20 \
   -H "Authorization: Bearer $TOKEN"
+
+# 비로그인: 기기 id 발급 -> 키워드 등록
+curl -X POST https://<host>/api/v1/devices
+curl -X POST https://<host>/api/v1/keyword-alarms \
+  -H "X-Device-Id: $DEVICE_ID" -H "Content-Type: application/json" \
+  -d '{"keyword":"장학","categories":["NOTICE"]}'
 ```

@@ -93,5 +93,21 @@ public class KeywordSubscriptionDTO {
                         .build();
             }
         }
+
+        /** 로그인 시 비로그인 기기 구독 병합 결과 */
+        @Getter
+        @Builder
+        public static class MergeResult {
+            /** 회원 소유로 옮긴 기기 구독 수 */
+            private final int mergedCount;
+            /** 회원에게 같은 키워드가 이미 있어 카테고리만 합친 수 */
+            private final int duplicateCount;
+            /** 회원 구독이 최대 개수에 도달해 옮기지 못한 수(기기 쪽에 그대로 남는다) */
+            private final int skippedCount;
+
+            public static MergeResult empty() {
+                return MergeResult.builder().build();
+            }
+        }
     }
 }

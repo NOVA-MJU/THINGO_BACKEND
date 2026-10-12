@@ -18,6 +18,7 @@ import java.nio.charset.StandardCharsets;
  *  - pg_trgm 확장
  *  - GIN 인덱스 (search_vector, search_tokens, title)
  *  - search_vector 자동 갱신 트리거 함수
+ *  - 키워드 알림 게스트 기기 소유자 확장(member_id NOT NULL 해제, device_id, 소유자 CHECK)
  *
  * 적용 시점: Spring 컨텍스트 로드 + ddl-auto 처리 이후. (ApplicationRunner)
  *

@@ -2,6 +2,7 @@ package nova.mjs.domain.thingo.keywordAlarm.service;
 
 import lombok.extern.slf4j.Slf4j;
 import nova.mjs.domain.thingo.keywordAlarm.entity.AlarmCategory;
+import nova.mjs.domain.thingo.keywordAlarm.entity.AlarmOwner;
 import nova.mjs.domain.thingo.keywordAlarm.entity.DeviceToken;
 import nova.mjs.domain.thingo.keywordAlarm.entity.KeywordSubscription;
 import nova.mjs.domain.thingo.keywordAlarm.entity.NotificationHistory;
@@ -9,7 +10,6 @@ import nova.mjs.domain.thingo.keywordAlarm.repository.DeviceTokenRepository;
 import nova.mjs.domain.thingo.keywordAlarm.repository.KeywordSubscriptionRepository;
 import nova.mjs.domain.thingo.keywordAlarm.repository.NotificationHistoryRepository;
 import nova.mjs.domain.thingo.keywordAlarm.service.fcm.FcmDispatch;
-import nova.mjs.domain.thingo.member.entity.Member;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * 학식(방송형) 알림 서비스.
  *
- * 키워드 매칭과 달리, '학식' 카테고리를 구독한 회원 전원에게 "새 학식 등록" 알림을 1건씩 보낸다.
+ * 키워드 매칭과 달리, '학식' 카테고리를 구독한 수신자(회원/비로그인 기기) 전원에게 "새 학식 등록" 알림을 1건씩 보낸다.
  * 학식 크롤링은 같은 주를 여러 번 받아오므로, 내용 지문(signature)이 직전과 같으면 발송을 건너뛴다.
  */
 @Slf4j
@@ -61,7 +61,7 @@ public class CafeteriaAlarmService {
      *
      * @param menuCount 저장된 식단 수(표시용)
      * @param signature 식단 내용 지문(직전과 같으면 발송 생략)
-     * @return 회원별 FCM 발송 단위 목록
+     * @return 수신자별 FCM 발송 단위 목록
      */
     // 호출부(WeeklyMenuAlarmListener)가 AFTER_COMMIT 단계 -> 완료된 트랜잭션에 참여하면 저장이 실패한다.
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -73,42 +73,40 @@ public class CafeteriaAlarmService {
             return List.of();
         }
 
-        // 2. 학식 카테고리 구독 조회 후 회원 단위로 묶음(한 회원이 학식 구독을 여러 개 둬도 1건)
+        // 2. 학식 카테고리 구독 조회 후 수신자 단위로 묶음(한 수신자가 학식 구독을 여러 개 둬도 1건)
         List<KeywordSubscription> subscriptions =
                 keywordSubscriptionRepository.findByCategoryWithMember(AlarmCategory.CAFETERIA);
-        Map<Long, KeywordSubscription> representativeByMember = new LinkedHashMap<>();
+        Map<String, KeywordSubscription> representativeByRecipient = new LinkedHashMap<>();
         for (KeywordSubscription subscription : subscriptions) {
-            representativeByMember.putIfAbsent(subscription.getMember().getId(), subscription);
+            representativeByRecipient.putIfAbsent(subscription.getOwner().key(), subscription);
         }
-        if (representativeByMember.isEmpty()) {
+        if (representativeByRecipient.isEmpty()) {
             return List.of();
         }
 
-        // 3. searchIndexId 에 지문을 포함 -> (회원, 지문) 유일 제약이 권위 dedup 역할
+        // 3. searchIndexId 에 지문을 포함 -> (수신자, 지문) 유일 제약이 권위 dedup 역할
         String searchIndexId = TYPE + ":" + signature;
 
-        // 4. 회원마다 내역 저장 + 기기 토큰 수집
+        // 4. 수신자마다 내역 저장 + 기기 토큰 수집
         List<FcmDispatch> dispatches = new ArrayList<>();
-        for (KeywordSubscription subscription : representativeByMember.values()) {
-            Member member = subscription.getMember();
+        for (KeywordSubscription subscription : representativeByRecipient.values()) {
+            AlarmOwner owner = subscription.getOwner();
             try {
                 NotificationHistory history = notificationHistoryRepository.saveAndFlush(
-                        NotificationHistory.of(member, subscription.getId(), MATCHED_LABEL,
+                        NotificationHistory.of(owner, subscription.getId(), MATCHED_LABEL,
                                 searchIndexId, ALARM_TITLE, NotificationLinks.MEAL, TYPE));
 
-                List<String> tokens = deviceTokenRepository.findByMember(member).stream()
-                        .map(DeviceToken::getFcmToken)
-                        .toList();
+                List<String> tokens = findTokens(owner);
                 if (!tokens.isEmpty()) {
                     dispatches.add(new FcmDispatch(tokens, MATCHED_LABEL, ALARM_TITLE,
                             buildData(searchIndexId, menuCount, history.getId())));
                 }
             } catch (DataIntegrityViolationException e) {
-                // (회원, 지문) 유일 제약 위반 = 이미 발송됨. 안전하게 스킵.
-                log.debug("학식 중복 알림 스킵 - memberId={}, signature={}", member.getId(), signature);
+                // (수신자, 지문) 유일 제약 위반 = 이미 발송됨. 안전하게 스킵.
+                log.debug("학식 중복 알림 스킵 - recipient={}, signature={}", owner, signature);
             } catch (RuntimeException e) {
                 alarmMetrics.failed("cafeteria");
-                log.error("[학식알림] 내역 저장 실패 - memberId={}, signature={}", member.getId(), signature, e);
+                log.error("[학식알림] 내역 저장 실패 - recipient={}, signature={}", owner, signature, e);
                 throw e; // 지문을 갱신하지 않고 빠져나가 다음 크롤에서 재시도되게 한다
             }
         }
@@ -118,6 +116,18 @@ public class CafeteriaAlarmService {
         alarmMetrics.dispatched(dispatches.size());
         log.info("[학식알림] 발송 단위 {}건 - menuCount={}", dispatches.size(), menuCount);
         return dispatches;
+    }
+
+    /**
+     * 수신자의 FCM 토큰. 기기 수신자는 게스트 토큰(member 없음)만 받는다(KeywordMatchingService 와 같은 규칙).
+     */
+    private List<String> findTokens(AlarmOwner owner) {
+        List<DeviceToken> tokens = owner.isMember()
+                ? deviceTokenRepository.findByMember(owner.member())
+                : deviceTokenRepository.findByDeviceIdAndMemberIsNull(owner.deviceId());
+        return tokens.stream()
+                .map(DeviceToken::getFcmToken)
+                .toList();
     }
 
     /**

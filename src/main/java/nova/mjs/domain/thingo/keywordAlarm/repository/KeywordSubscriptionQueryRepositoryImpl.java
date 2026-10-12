@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 키워드 구독 네이티브 매칭 구현.
@@ -28,6 +29,9 @@ import java.util.List;
  * 단 3글자 이상 키워드에만 적용한다. 2글자는 형태소 토큰과 길이가 같아 접두 매칭으로 이미 잡히고,
  * 부분일치로 열면 '공지'가 '인공지능'에 걸리는 식의 오탐이 생긴다(운영 데이터로 확인).
  *
+ * 구독 소유자는 회원(member_id) 또는 비로그인 기기(device_id) 중 하나라 둘 다 돌려준다.
+ * device_id 는 드라이버/방언별 UUID 매핑 차이를 피하려고 text 로 꺼내 파싱한다.
+ *
  * 마지막 조건은 복합어 사이에 말이 끼는 경우를 잡는다.
  * '해외탐방' 구독이 '해외문화탐방' 공지를 놓치던 문제 -> 키워드를 2음절씩 끊어
  * '해외[가-힣]{0,3}탐방' 으로 찾는다. 첫 조각은 반드시 단어 경계에서 시작해야 한다.
@@ -44,7 +48,7 @@ public class KeywordSubscriptionQueryRepositoryImpl implements KeywordSubscripti
             "regexp_replace(lower(ks.keyword), '[^a-z0-9가-힣]', '', 'g')";
 
     private static final String MATCH_SQL = """
-            SELECT ks.keyword_subscription_id, ks.member_id, ks.keyword
+            SELECT ks.keyword_subscription_id, ks.member_id, cast(ks.device_id AS text), ks.keyword
             FROM keyword_subscription ks
             JOIN keyword_subscription_category c
                  ON c.keyword_subscription_id = ks.keyword_subscription_id
@@ -85,9 +89,10 @@ public class KeywordSubscriptionQueryRepositoryImpl implements KeywordSubscripti
         List<KeywordMatch> matches = new ArrayList<>(rows.size());
         for (Object[] row : rows) {
             Long subscriptionId = ((Number) row[0]).longValue();
-            Long memberId = ((Number) row[1]).longValue();
-            String keyword = (String) row[2];
-            matches.add(new KeywordMatch(subscriptionId, memberId, keyword));
+            Long memberId = row[1] == null ? null : ((Number) row[1]).longValue();
+            UUID deviceId = row[2] == null ? null : UUID.fromString((String) row[2]);
+            String keyword = (String) row[3];
+            matches.add(new KeywordMatch(subscriptionId, memberId, deviceId, keyword, null));
         }
         return matches;
     }

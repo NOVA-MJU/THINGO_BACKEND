@@ -10,8 +10,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.Instant;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface NotificationHistoryRepository extends JpaRepository<NotificationHistory, Long> {
 
@@ -41,4 +43,34 @@ public interface NotificationHistoryRepository extends JpaRepository<Notificatio
     @Modifying(clearAutomatically = true)
     @Query("update NotificationHistory n set n.read = true where n.member = :member and n.read = false")
     int markAllAsRead(@Param("member") Member member);
+
+    // 비로그인 기기 알림함 (위 회원 메서드와 짝)
+
+    @Query("""
+        select n
+        from NotificationHistory n
+        where n.deviceId = :deviceId
+        order by n.read asc, n.sentAt desc, n.id desc
+    """)
+    Page<NotificationHistory> findDeviceInbox(@Param("deviceId") UUID deviceId, Pageable pageable);
+
+    Optional<NotificationHistory> findByIdAndDeviceId(Long id, UUID deviceId);
+
+    long countByDeviceIdAndReadFalse(UUID deviceId);
+
+    @Query("select n.title from NotificationHistory n where n.deviceId = :deviceId and n.sentAt >= :since")
+    List<String> findRecentTitlesByDevice(@Param("deviceId") UUID deviceId, @Param("since") Instant since);
+
+    @Modifying(clearAutomatically = true)
+    @Query("update NotificationHistory n set n.read = true where n.deviceId = :deviceId and n.read = false")
+    int markAllAsReadByDevice(@Param("deviceId") UUID deviceId);
+
+    /** 로그인 병합용 - 기기 알림함 전체 */
+    List<NotificationHistory> findByDeviceId(UUID deviceId);
+
+    /** 로그인 병합용 - 회원이 이미 받은 콘텐츠(같은 콘텐츠를 두 번 옮기지 않도록) */
+    @Query("select n.searchIndexId from NotificationHistory n "
+            + "where n.member = :member and n.searchIndexId in :searchIndexIds")
+    List<String> findSearchIndexIdsByMember(@Param("member") Member member,
+                                            @Param("searchIndexIds") Collection<String> searchIndexIds);
 }

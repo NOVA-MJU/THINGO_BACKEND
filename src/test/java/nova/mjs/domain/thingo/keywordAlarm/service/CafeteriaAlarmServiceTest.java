@@ -1,6 +1,7 @@
 package nova.mjs.domain.thingo.keywordAlarm.service;
 
 import nova.mjs.domain.thingo.keywordAlarm.entity.AlarmCategory;
+import nova.mjs.domain.thingo.keywordAlarm.entity.AlarmOwner;
 import nova.mjs.domain.thingo.keywordAlarm.entity.DevicePlatform;
 import nova.mjs.domain.thingo.keywordAlarm.entity.DeviceToken;
 import nova.mjs.domain.thingo.keywordAlarm.entity.KeywordSubscription;
@@ -13,6 +14,7 @@ import nova.mjs.domain.thingo.member.entity.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -21,6 +23,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -91,5 +94,40 @@ class CafeteriaAlarmServiceTest {
         assertThat(result).isEmpty();
         verify(keywordSubscriptionRepository, never()).findByCategoryWithMember(any());
         verify(notificationHistoryRepository, never()).saveAndFlush(any());
+    }
+
+    @Test
+    @DisplayName("비로그인 기기의 학식 구독도 기기 단위 1건으로 알림함에 저장하고 게스트 토큰으로 발송한다")
+    void should_broadcast_to_device_recipient() {
+        // given - 회원1 1개, 기기 D 학식구독 2개
+        Member m1 = 회원(1L);
+        UUID deviceId = UUID.randomUUID();
+        KeywordSubscription d1 = KeywordSubscription.of(
+                AlarmOwner.ofDevice(deviceId), "학식", null, Set.of(AlarmCategory.CAFETERIA));
+        KeywordSubscription d2 = KeywordSubscription.of(
+                AlarmOwner.ofDevice(deviceId), "점심", null, Set.of(AlarmCategory.CAFETERIA));
+        given(keywordSubscriptionRepository.findByCategoryWithMember(AlarmCategory.CAFETERIA))
+                .willReturn(List.of(학식구독(10L, m1), d1, d2));
+        given(keywordRedisTemplate.opsForValue()).willReturn(valueOperations);
+        given(valueOperations.get(any())).willReturn("old-sig");
+        given(notificationHistoryRepository.saveAndFlush(any(NotificationHistory.class)))
+                .willAnswer(invocation -> invocation.getArgument(0));
+        given(deviceTokenRepository.findByMember(m1))
+                .willReturn(List.of(DeviceToken.of(m1, "tok-1", DevicePlatform.ANDROID)));
+        given(deviceTokenRepository.findByDeviceIdAndMemberIsNull(deviceId))
+                .willReturn(List.of(DeviceToken.ofGuest(deviceId, "tok-guest", DevicePlatform.IOS)));
+
+        // when
+        List<FcmDispatch> result = service().broadcastIfNew(15, "new-sig");
+
+        // then
+        assertThat(result).extracting(FcmDispatch::tokens)
+                .containsExactlyInAnyOrder(List.of("tok-1"), List.of("tok-guest"));
+        ArgumentCaptor<NotificationHistory> histories = ArgumentCaptor.forClass(NotificationHistory.class);
+        verify(notificationHistoryRepository, times(2)).saveAndFlush(histories.capture());
+        assertThat(histories.getAllValues())
+                .filteredOn(history -> history.getMember() == null)
+                .singleElement()
+                .satisfies(history -> assertThat(history.getDeviceId()).isEqualTo(deviceId));
     }
 }

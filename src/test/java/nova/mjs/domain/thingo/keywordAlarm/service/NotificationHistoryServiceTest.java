@@ -1,10 +1,10 @@
 package nova.mjs.domain.thingo.keywordAlarm.service;
 
 import nova.mjs.domain.thingo.keywordAlarm.dto.NotificationHistoryDTO;
+import nova.mjs.domain.thingo.keywordAlarm.entity.AlarmOwner;
 import nova.mjs.domain.thingo.keywordAlarm.entity.NotificationHistory;
 import nova.mjs.domain.thingo.keywordAlarm.repository.NotificationHistoryRepository;
 import nova.mjs.domain.thingo.member.entity.Member;
-import nova.mjs.domain.thingo.member.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,21 +27,19 @@ class NotificationHistoryServiceTest {
     @Mock
     private NotificationHistoryRepository notificationHistoryRepository;
 
-    @Mock
-    private MemberRepository memberRepository;
-
     private NotificationHistoryService service;
     private Member member;
+    private AlarmOwner owner;
 
     @BeforeEach
     void setUp() {
-        service = new NotificationHistoryService(notificationHistoryRepository, memberRepository);
+        service = new NotificationHistoryService(notificationHistoryRepository);
         member = Member.builder()
                 .id(1L)
                 .uuid(UUID.randomUUID())
                 .email("user@mju.ac.kr")
                 .build();
-        given(memberRepository.findByEmail(member.getEmail())).willReturn(Optional.of(member));
+        owner = AlarmOwner.ofMember(member);
     }
 
     @Test
@@ -54,7 +52,7 @@ class NotificationHistoryServiceTest {
         given(notificationHistoryRepository.countByMemberAndReadFalse(member)).willReturn(3L);
 
         NotificationHistoryDTO.Response.Inbox inbox =
-                service.getMyNotifications(member.getEmail(), pageable);
+                service.getMyNotifications(owner, pageable);
 
         assertThat(inbox.getUnreadCount()).isEqualTo(3);
         assertThat(inbox.isHasUnread()).isTrue();
@@ -71,7 +69,7 @@ class NotificationHistoryServiceTest {
     void getUnreadStatus() {
         given(notificationHistoryRepository.countByMemberAndReadFalse(member)).willReturn(2L);
 
-        var status = service.getUnreadStatus(member.getEmail());
+        var status = service.getUnreadStatus(owner);
 
         assertThat(status.getUnreadCount()).isEqualTo(2);
         assertThat(status.isHasUnread()).isTrue();
@@ -86,7 +84,7 @@ class NotificationHistoryServiceTest {
                 .willReturn(new PageImpl<>(List.of(history), pageable, 1));
         given(notificationHistoryRepository.countByMemberAndReadFalse(member)).willReturn(1L);
 
-        var item = service.getMyNotifications(member.getEmail(), pageable)
+        var item = service.getMyNotifications(owner, pageable)
                 .getContent().get(0);
 
         assertThat(item.getCategoryCode()).isEqualTo("CAFETERIA");
@@ -109,7 +107,7 @@ class NotificationHistoryServiceTest {
                 .willReturn(new PageImpl<>(List.of(history), pageable, 1));
         given(notificationHistoryRepository.countByMemberAndReadFalse(member)).willReturn(1L);
 
-        var item = service.getMyNotifications(member.getEmail(), pageable)
+        var item = service.getMyNotifications(owner, pageable)
                 .getContent().get(0);
 
         assertThat(item.getCategoryCode()).isEqualTo("MAP");
@@ -124,7 +122,7 @@ class NotificationHistoryServiceTest {
         given(notificationHistoryRepository.findByIdAndMember(10L, member))
                 .willReturn(Optional.of(history));
 
-        var result = service.markAsRead(member.getEmail(), 10L);
+        var result = service.markAsRead(owner, 10L);
 
         assertThat(result.isRead()).isTrue();
     }
@@ -134,11 +132,40 @@ class NotificationHistoryServiceTest {
     void markAllAsRead() {
         given(notificationHistoryRepository.markAllAsRead(member)).willReturn(4);
 
-        var result = service.markAllAsRead(member.getEmail());
+        var result = service.markAllAsRead(owner);
 
         assertThat(result.getUpdatedCount()).isEqualTo(4);
         assertThat(result.getUnreadCount()).isZero();
         assertThat(result.isHasUnread()).isFalse();
+    }
+
+    @Test
+    @DisplayName("비로그인 기기 알림함은 기기 소유 알림과 미읽음 수만 조회한다")
+    void getDeviceNotifications() {
+        var pageable = PageRequest.of(0, 20);
+        UUID deviceId = UUID.randomUUID();
+        NotificationHistory history = NotificationHistory.of(AlarmOwner.ofDevice(deviceId), 1L, "장학",
+                "NOTICE:1", "알림 제목", "/target/1", "NOTICE");
+        given(notificationHistoryRepository.findDeviceInbox(deviceId, pageable))
+                .willReturn(new PageImpl<>(List.of(history), pageable, 1));
+        given(notificationHistoryRepository.countByDeviceIdAndReadFalse(deviceId)).willReturn(1L);
+
+        var inbox = service.getMyNotifications(AlarmOwner.ofDevice(deviceId), pageable);
+
+        assertThat(inbox.getUnreadCount()).isEqualTo(1);
+        assertThat(inbox.getContent()).singleElement()
+                .satisfies(item -> assertThat(item.getKeyword()).isEqualTo("장학"));
+    }
+
+    @Test
+    @DisplayName("비로그인 기기는 자기 알림만 읽음 처리할 수 있다")
+    void markAsReadByDevice() {
+        UUID deviceId = UUID.randomUUID();
+        given(notificationHistoryRepository.findByIdAndDeviceId(10L, deviceId)).willReturn(Optional.empty());
+
+        org.assertj.core.api.Assertions.assertThatThrownBy(
+                        () -> service.markAsRead(AlarmOwner.ofDevice(deviceId), 10L))
+                .isInstanceOf(nova.mjs.domain.thingo.keywordAlarm.exception.NotificationHistoryNotFoundException.class);
     }
 
     private NotificationHistory notification(String type, String keyword) {
