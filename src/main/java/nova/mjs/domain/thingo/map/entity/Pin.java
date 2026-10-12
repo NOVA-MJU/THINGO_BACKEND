@@ -75,6 +75,16 @@ public class Pin extends BaseEntity {
     @Column(name = "image_url")
     private String imageUrl;
 
+    /**
+     * 상세 화면 갤러리 사진 URL (노출 순서 유지).
+     * 목록 썸네일·대표 사진은 imageUrl 한 장으로 충분해서 그대로 두고, 여러 각도 사진은 상세에서만 쓰므로 별도 테이블로 분리한다.
+     */
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "map_pin_image", joinColumns = @JoinColumn(name = "map_pin_id"))
+    @OrderColumn(name = "display_order")
+    @Column(name = "image_url", nullable = false, length = 500)
+    private List<String> imageUrls = new ArrayList<>();
+
     /** 정보(i) 아이콘에 표시할 기타 안내 텍스트. 없으면 null */
     @Column(name = "info_text", length = 1000)
     private String infoText;
@@ -216,6 +226,12 @@ public class Pin extends BaseEntity {
         this.parentBuilding = parentBuilding;
         this.floor = floor;
         this.indoorCode = indoorCode;
+    }
+
+    /** 갤러리 사진을 통째로 교체한다. 컬렉션 인스턴스를 유지해야 Hibernate가 변경분을 추적한다 */
+    public void replaceImageUrls(List<String> urls) {
+        this.imageUrls.clear();
+        this.imageUrls.addAll(urls);
     }
 
     /** 거리 계산에 쓸 위도. 내부 장소면 소속 건물 위도로 대체. 둘 다 없으면 null */

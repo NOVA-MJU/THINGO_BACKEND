@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import nova.mjs.domain.thingo.map.entity.Pin;
 
+import java.util.List;
+
 /**
  * 장소(비건물) 상세 페이지 응답.
  *
@@ -20,6 +22,8 @@ public class PlaceDetailResponse {
     private final String categoryCode;
     private final String iconKey;
     private final String imageUrl;
+    /** 상세 갤러리 사진. 갤러리를 따로 등록하지 않은 장소는 대표 사진(imageUrl) 1장, 사진이 없으면 빈 배열 */
+    private final List<String> imageUrls;
     private final boolean favorite;
     /** 현재 위치로부터의 거리(미터). 캠퍼스 밖/GPS 없으면 null */
     private final Integer distanceMeters;
@@ -39,6 +43,7 @@ public class PlaceDetailResponse {
                 .categoryCode(place.getCategory().getCode())
                 .iconKey(place.getCategory().getIconKey())
                 .imageUrl(place.getImageUrl())
+                .imageUrls(galleryOf(place))
                 .favorite(favorite)
                 .distanceMeters(distanceMeters)
                 .latitude(place.resolveLatitude())
@@ -46,5 +51,12 @@ public class PlaceDetailResponse {
                 .location(location)
                 .infoText(place.getInfoText())
                 .build();
+    }
+
+    private static List<String> galleryOf(Pin place) {
+        if (!place.getImageUrls().isEmpty()) {
+            return List.copyOf(place.getImageUrls());
+        }
+        return place.getImageUrl() == null ? List.of() : List.of(place.getImageUrl());
     }
 }

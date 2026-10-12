@@ -90,6 +90,11 @@ public class MapSyncDTO {
         private Double latitude;
         private Double longitude;
         private String imageUrl;
+        /**
+         * 상세 갤러리 사진 URL 목록(순서대로 노출).
+         * 시트 발행은 이 값을 보내지 않으므로 null이면 기존 갤러리를 그대로 두고, 빈 배열이면 비운다.
+         */
+        private List<String> imageUrls;
         private String infoText;
         private String address;
         /** 내부 장소면 소속 건물 코드, 외부 장소면 비움 */
