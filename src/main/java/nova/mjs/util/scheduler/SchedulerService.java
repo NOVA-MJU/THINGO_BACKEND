@@ -26,6 +26,9 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor
 public class SchedulerService {
 
+    // 서버 JVM이 UTC라 zone 없이 두면 모든 cron이 한국 시간보다 9시간 늦게 돈다 (04:00 보정이 13:00에 실행되는 등)
+    private static final String KST = "Asia/Seoul";
+
     private final NewsService newsService;
     private final WeatherService weatherService;
     private final WeeklyMenuService weeklyMenuService;
@@ -40,7 +43,7 @@ public class SchedulerService {
     // - 이 스케줄은 이벤트 누락으로 생긴 drift 를 truncate 없이 reconcile 로 메운다(무중단).
     // 주의: 다중 인스턴스 운영 시 동시 실행될 수 있으나 upsert/deactivate 라 결과는 멱등.
     //       엄격한 단일 실행 보장이 필요하면 ShedLock 도입(후속 과제).
-    @Scheduled(cron = "0 0 4 * * *")
+    @Scheduled(cron = "0 0 4 * * *", zone = KST)
     public void scheduledReconcileSearchIndex() {
         log.info("[스케쥴러] 매일 04:00 검색 인덱스 정합성 보정 실행");
         CompletableFuture.runAsync(() -> {
@@ -56,7 +59,7 @@ public class SchedulerService {
     // 알림 backfill (매일 04:10, reconcile 직후)
     // - reconcile 은 인덱스에 직접 upsert 하고 이벤트를 발행하지 않아 알림이 누락된다.
     // - 최근 색인분을 다시 매칭에 태워 메운다. 중복은 기존 dedup 이 막는다.
-    @Scheduled(cron = "0 10 4 * * *")
+    @Scheduled(cron = "0 10 4 * * *", zone = KST)
     public void scheduledAlarmBackfill() {
         log.info("[스케쥴러] 매일 04:10 알림 backfill 실행");
         CompletableFuture.runAsync(() -> {
@@ -71,7 +74,7 @@ public class SchedulerService {
     // 학사일정 동기화 (매주 월 03:00)
     // - 학사일정은 연 단위 데이터라 잦은 크롤이 불필요하다. 2026-08-05 이후 갱신이 멈춰 있었음.
     // - refresh 는 자연키 기준 멱등이라 변경분만 반영된다(구독자 반복 알림 없음).
-    @Scheduled(cron = "0 0 3 * * MON")
+    @Scheduled(cron = "0 0 3 * * MON", zone = KST)
     public void scheduledRefreshCalendar() {
         int currentYear = java.time.Year.now().getValue();
         log.info("[스케쥴러] 매주 월 03:00 학사일정 동기화 실행 ({}~{})", currentYear, currentYear + 1);
@@ -85,7 +88,7 @@ public class SchedulerService {
     }
 
     //날씨 데이터 스케줄링 (매 정각 실행)
-    @Scheduled(cron = "0 0 * * * *")
+    @Scheduled(cron = "0 0 * * * *", zone = KST)
     public void scheduledFetchWeatherData() {
         log.info("[스케쥴러] 매시간 정각 날씨 데이터 업데이트 실행");
         CompletableFuture.runAsync(() -> {
@@ -108,7 +111,7 @@ public class SchedulerService {
     // 명대신문 크롤링 스케줄링 (매주 월요일 09:00 실행)
     // 주의: Spring cron 6필드 = 초 분 시 일 월 요일.
     //       기존 "0 0 * * 1 *" 는 월(month)=1 위치라 1월에만 동작하던 버그였음.
-    @Scheduled(cron = "0 0 9 * * MON")
+    @Scheduled(cron = "0 0 9 * * MON", zone = KST)
     public void scheduledCrawlNews() {
         log.info("[스케쥴러] 매주 월요일 09:00 기사 크롤링 실행");
         CompletableFuture.runAsync(() -> {
@@ -129,7 +132,7 @@ public class SchedulerService {
     }
 
     // 명대 뉴스 데이터 스케쥴링 (매주 화, 목, 토 오전 1시에 실행)
-    @Scheduled(cron = "0 0 1 * * TUE,THU,SAT")
+    @Scheduled(cron = "0 0 1 * * TUE,THU,SAT", zone = KST)
     public void scheduledCrawlBroadcastData() {
         log.info("[스케쥴러] 매주 화요일 정각마다 명대 뉴스 업데이트 실행");
         CompletableFuture.runAsync(() -> {
@@ -150,7 +153,7 @@ public class SchedulerService {
     }
 
     // 명지대학교 공식 유튜브(@mjuniv) 최신 영상 동기화 (매일 02:00)
-    @Scheduled(cron = "0 0 2 * * *")
+    @Scheduled(cron = "0 0 2 * * *", zone = KST)
     public void scheduledSyncOfficialYoutube() {
         log.info("[스케쥴러] 매일 02:00 명지대 공식 유튜브 최신 영상 동기화 실행");
         CompletableFuture.runAsync(() -> {
@@ -164,13 +167,13 @@ public class SchedulerService {
     }
 
     //식단 데이터 크롤링 스케줄링 (매주 토, 일, 월 19:00 실행)
-    //@Scheduled(cron = "0 55 22 * * 6") // 테스트 추가
-    @Scheduled(cron = "0 0 22 * * 5") // 매주 금요일 22:00시 추가
-    @Scheduled(cron = "0 0 10 * * 6") // 매주 토요일 10:00 추가 (금요일에 안올라왔을 경우)
-    @Scheduled(cron = "0 0 14 * * 6") // 매주 토요일 14:00 추가 (금요일에 안올라왔을 경우)
-    @Scheduled(cron = "0 0 19 * * 6") // 매주 토요일 19:00 실행
-    @Scheduled(cron = "0 0 19 * * 7") // 매주 일요일 19:00 실행
-    @Scheduled(cron = "0 0 19 * * 1") // 매주 월요일 19:00 실행
+    //@Scheduled(cron = "0 55 22 * * 6", zone = KST) // 테스트 추가
+    @Scheduled(cron = "0 0 22 * * 5", zone = KST) // 매주 금요일 22:00시 추가
+    @Scheduled(cron = "0 0 10 * * 6", zone = KST) // 매주 토요일 10:00 추가 (금요일에 안올라왔을 경우)
+    @Scheduled(cron = "0 0 14 * * 6", zone = KST) // 매주 토요일 14:00 추가 (금요일에 안올라왔을 경우)
+    @Scheduled(cron = "0 0 19 * * 6", zone = KST) // 매주 토요일 19:00 실행
+    @Scheduled(cron = "0 0 19 * * 7", zone = KST) // 매주 일요일 19:00 실행
+    @Scheduled(cron = "0 0 19 * * 1", zone = KST) // 매주 월요일 19:00 실행
     public void scheduledCrawlWeeklyMenu() {
         log.info("[스케쥴러] 매주 토, 일, 월 19시와 추가로 금 22시, 토 10시, 14시에 식단 크롤링 실행");
         CompletableFuture.runAsync(() -> {
@@ -192,15 +195,15 @@ public class SchedulerService {
     // 보통 출근-퇴근 중간에 틈틈히 올리시니까
     // 오전 오후 1시간 ~ 1시간 반 쯤 격차 두고 크롤링
     // 퇴근시간 이후는 크롤링 하지 않고 혹시 전날 저녁에 올라온 게 있을 수 있으니 다음날 8시에 크롤링
-    @Scheduled(cron = "0 0 8 * * *")   // 매일 08:00
-    @Scheduled(cron = "0 30 9 * * *")  // 매일 09:30
-    @Scheduled(cron = "0 30 10 * * *") // 매일 10:30
-    @Scheduled(cron = "0 0 12 * * *")  // 매일 12:00
-    @Scheduled(cron = "0 30 13 * * *") // 매일 13:30
-    @Scheduled(cron = "0 00 15 * * *") // 매일 15:00
-    @Scheduled(cron = "0 30 16 * * *") // 매일 16:30
-    @Scheduled(cron = "0 0 18 * * *")  // 매일 18:00
-    //@Scheduled(cron = "0 36 16 * * *")  // TEST
+    @Scheduled(cron = "0 0 8 * * *", zone = KST)   // 매일 08:00
+    @Scheduled(cron = "0 30 9 * * *", zone = KST)  // 매일 09:30
+    @Scheduled(cron = "0 30 10 * * *", zone = KST) // 매일 10:30
+    @Scheduled(cron = "0 0 12 * * *", zone = KST)  // 매일 12:00
+    @Scheduled(cron = "0 30 13 * * *", zone = KST) // 매일 13:30
+    @Scheduled(cron = "0 00 15 * * *", zone = KST) // 매일 15:00
+    @Scheduled(cron = "0 30 16 * * *", zone = KST) // 매일 16:30
+    @Scheduled(cron = "0 0 18 * * *", zone = KST)  // 매일 18:00
+    //@Scheduled(cron = "0 36 16 * * *", zone = KST)  // TEST
     public void crawlAllNotices() {
         log.info("[MJS][Scheduler] Notice crawling started.");
         CompletableFuture.runAsync(() -> {

@@ -58,6 +58,23 @@ public interface UnifiedSearchIndexRepository
             """, nativeQuery = true)
     void rebuildVectors();
 
+    /**
+     * 벡터가 비어 있는 행만 채운다. 트리거가 있으면 삽입·수정 시 벡터가 자동 갱신되므로
+     * 매일 도는 정합성 보정에서는 트리거 누락으로 NULL이 된 행만 보정하면 된다.
+     * 전체 재생성은 5천여 행, 150MB를 다시 써서 작은 RDS의 CPU를 10분 넘게 점유한다.
+     */
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
+    @Query(value = """
+            UPDATE unified_search_index SET
+              search_vector = to_tsvector('simple', coalesce(search_tokens,''))
+                           || to_tsvector('simple', coalesce(title,''))
+                           || to_tsvector('simple', coalesce(content,'')),
+              title_vector  = to_tsvector('simple', coalesce(title_tokens,''))
+                           || to_tsvector('simple', coalesce(title,''))
+            WHERE search_vector IS NULL OR title_vector IS NULL
+            """, nativeQuery = true)
+    int rebuildMissingVectors();
+
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query(value = "DELETE FROM unified_search_index WHERE type = ?1", nativeQuery = true)
     int deleteAllByType(String type);
