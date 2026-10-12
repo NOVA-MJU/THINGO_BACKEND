@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import nova.mjs.config.elasticsearch.KomoranTokenizerUtil;
 import nova.mjs.domain.thingo.ElasticSearch.Document.SearchDocument;
 import nova.mjs.domain.thingo.keywordAlarm.entity.AlarmCategory;
+import nova.mjs.domain.thingo.keywordAlarm.entity.AlarmOwner;
 import nova.mjs.domain.thingo.keywordAlarm.entity.DeviceToken;
 import nova.mjs.domain.thingo.keywordAlarm.entity.NotificationHistory;
 import nova.mjs.domain.thingo.keywordAlarm.repository.DeviceTokenRepository;
@@ -11,7 +12,6 @@ import nova.mjs.domain.thingo.keywordAlarm.repository.KeywordMatch;
 import nova.mjs.domain.thingo.keywordAlarm.repository.KeywordSubscriptionRepository;
 import nova.mjs.domain.thingo.keywordAlarm.repository.NotificationHistoryRepository;
 import nova.mjs.domain.thingo.keywordAlarm.service.fcm.FcmDispatch;
-import nova.mjs.domain.thingo.member.entity.Member;
 import nova.mjs.domain.thingo.member.repository.MemberRepository;
 import nova.mjs.domain.thingo.semantic.NoticeSemanticClassifier;
 import nova.mjs.domain.thingo.semantic.NoticeSemanticMetadata;
@@ -37,6 +37,8 @@ import java.util.Set;
  * 신규 콘텐츠(SearchDocument)를 구독 키워드와 매칭해 알림 내역을 적재하고,
  * 발송 대상(기기 토큰 + 페이로드) 목록을 반환한다. 실제 FCM 발송은 호출부(리스너)가
  * 이 트랜잭션이 끝난 뒤 비동기로 수행한다(외부 호출을 트랜잭션 밖으로).
+ *
+ * 수신자는 회원 또는 비로그인 기기(AlarmOwner)다. 묶기/중복 차단/교차게시 판정은 모두 수신자 단위로 한다.
  */
 @Slf4j
 @Service
@@ -76,9 +78,9 @@ public class KeywordMatchingService {
     /**
      * 문서를 구독과 매칭해 알림 내역을 저장하고 발송 대상을 모은다.
      *
-     * 한 콘텐츠가 한 회원의 여러 키워드에 걸려도 알림은 1건(회원 단위로 묶음, 대표 키워드 사용).
+     * 한 콘텐츠가 한 수신자의 여러 키워드에 걸려도 알림은 1건(수신자 단위로 묶음, 대표 키워드 사용).
      *
-     * @return 회원별 FCM 발송 단위 목록 (기기 토큰이 없는 회원은 제외)
+     * @return 수신자별 FCM 발송 단위 목록 (기기 토큰이 없는 수신자는 제외)
      */
     // 호출부(KeywordAlarmIndexListener)가 AFTER_COMMIT 단계라 원본 트랜잭션은 이미 커밋된 상태다.
     // REQUIRED 로 두면 그 완료된 트랜잭션에 참여해 saveAndFlush 가
@@ -116,46 +118,48 @@ public class KeywordMatchingService {
             return List.of();
         }
 
-        // 4. 회원 단위로 묶기(콘텐츠당 1회). 같은 회원의 여러 키워드 매칭 중 첫 건을 대표로 사용.
-        Map<Long, KeywordMatch> representativeByMember = new LinkedHashMap<>();
+        // 4. 수신자(회원/기기) 단위로 묶기(콘텐츠당 1회). 같은 수신자의 여러 키워드 매칭 중 첫 건을 대표로 사용.
+        Map<String, KeywordMatch> representativeByRecipient = new LinkedHashMap<>();
         for (KeywordMatch match : matches) {
-            representativeByMember.putIfAbsent(match.memberId(), match);
+            representativeByRecipient.putIfAbsent(AlarmOwner.key(match.memberId(), match.deviceId()), match);
         }
 
-        // 5. 회원마다 dedup -> 내역 저장 -> 기기 토큰 수집
+        // 5. 수신자마다 dedup -> 내역 저장 -> 기기 토큰 수집
         List<FcmDispatch> dispatches = new ArrayList<>();
-        for (KeywordMatch match : representativeByMember.values()) {
-            if (isCrossPostDuplicate(match.memberId(), doc.getTitle())) {
-                log.debug("교차게시 중복 스킵 - memberId={}, searchIndexId={}", match.memberId(), searchIndexId);
+        for (Map.Entry<String, KeywordMatch> entry : representativeByRecipient.entrySet()) {
+            String recipientKey = entry.getKey();
+            KeywordMatch match = entry.getValue();
+            if (isCrossPostDuplicate(match, doc.getTitle())) {
+                log.debug("교차게시 중복 스킵 - recipient={}, searchIndexId={}", recipientKey, searchIndexId);
                 continue;
             }
-            if (!claimDedup(match.memberId(), searchIndexId)) {
+            if (!claimDedup(recipientKey, searchIndexId)) {
                 continue; // Redis 가 이미 발송됨을 확인 -> 스킵
             }
             try {
-                Member memberRef = memberRepository.getReferenceById(match.memberId());
+                AlarmOwner owner = match.memberId() != null
+                        ? AlarmOwner.ofMember(memberRepository.getReferenceById(match.memberId()))
+                        : AlarmOwner.ofDevice(match.deviceId());
                 NotificationHistory history = notificationHistoryRepository.saveAndFlush(
-                        NotificationHistory.of(memberRef, match.subscriptionId(), match.keyword(),
+                        NotificationHistory.of(owner, match.subscriptionId(), match.keyword(),
                                 searchIndexId, doc.getTitle(),
                                 NotificationLinks.resolve(doc.getType(), doc.getLink(), searchIndexId),
                                 doc.getType()));
 
-                List<String> tokens = deviceTokenRepository.findByMember(memberRef).stream()
-                        .map(DeviceToken::getFcmToken)
-                        .toList();
+                List<String> tokens = findTokens(owner);
                 if (!tokens.isEmpty()) {
                     dispatches.add(new FcmDispatch(tokens, match.keyword(), doc.getTitle(),
                             buildData(doc, searchIndexId, history.getId())));
                 }
             } catch (DataIntegrityViolationException e) {
-                // (회원, 콘텐츠) 유일 제약 위반 = 이미 발송됨(권위 dedup). 안전하게 스킵.
-                log.debug("중복 알림 스킵 - memberId={}, searchIndexId={}", match.memberId(), searchIndexId);
+                // (수신자, 콘텐츠) 유일 제약 위반 = 이미 발송됨(권위 dedup). 안전하게 스킵.
+                log.debug("중복 알림 스킵 - recipient={}, searchIndexId={}", recipientKey, searchIndexId);
             } catch (RuntimeException e) {
                 // 저장 실패. claim 을 그대로 두면 TTL 7일 동안 재시도조차 막히므로 되돌린다.
-                releaseDedup(match.memberId(), searchIndexId);
+                releaseDedup(recipientKey, searchIndexId);
                 alarmMetrics.matchFailed();
-                log.error("[키워드알림] 내역 저장 실패 - memberId={}, searchIndexId={}",
-                        match.memberId(), searchIndexId, e);
+                log.error("[키워드알림] 내역 저장 실패 - recipient={}, searchIndexId={}",
+                        recipientKey, searchIndexId, e);
             }
         }
         alarmMetrics.dispatched(dispatches.size());
@@ -163,11 +167,25 @@ public class KeywordMatchingService {
     }
 
     /**
+     * 수신자의 FCM 토큰. 기기 수신자는 게스트 토큰(member 없음)만 - 그 기기가 로그인했다면
+     * 토큰은 회원 소유로 넘어갔고 게스트 구독은 회원으로 병합됐어야 하므로 보내지 않는다.
+     */
+    private List<String> findTokens(AlarmOwner owner) {
+        List<DeviceToken> tokens = owner.isMember()
+                ? deviceTokenRepository.findByMember(owner.member())
+                : deviceTokenRepository.findByDeviceIdAndMemberIsNull(owner.deviceId());
+        return tokens.stream()
+                .map(DeviceToken::getFcmToken)
+                .toList();
+    }
+
+    /**
      * Redis 빠른 dedup. 처음이면 true(진행), 이미 claim 됐으면 false(스킵).
      * Redis 장애 시에는 true 를 반환해 진행하고, DB 유일 제약(권위 dedup)에 맡긴다.
+     * 키: 회원 kwalarm:dedup:{memberId}:{searchIndexId}, 기기 kwalarm:dedup:d:{deviceId}:{searchIndexId}
      */
-    private boolean claimDedup(Long memberId, String searchIndexId) {
-        String key = DEDUP_KEY_PREFIX + memberId + ":" + searchIndexId;
+    private boolean claimDedup(String recipientKey, String searchIndexId) {
+        String key = DEDUP_KEY_PREFIX + recipientKey + ":" + searchIndexId;
         try {
             Boolean firstTime = keywordRedisTemplate.opsForValue().setIfAbsent(key, "1", DEDUP_TTL);
             return !Boolean.FALSE.equals(firstTime);
@@ -178,18 +196,20 @@ public class KeywordMatchingService {
     }
 
     /**
-     * 학교가 같은 공지를 여러 게시판에 별도 글로 올리면 링크/ID 가 달라 (회원, 콘텐츠) dedup 에 걸리지 않는다.
-     * 앞의 [부서명] 을 떼고 비교한 제목이 최근 3일 안에 받은 알림과 같으면 같은 공지로 본다.
+     * 학교가 같은 공지를 여러 게시판에 별도 글로 올리면 링크/ID 가 달라 (수신자, 콘텐츠) dedup 에 걸리지 않는다.
+     * 앞의 [부서명] 을 떼고 비교한 제목이 수신자가 최근 3일 안에 받은 알림과 같으면 같은 공지로 본다.
      * (예: "[진로취업지원팀] 선배와의 취업멘토링 모집" / "선배와의 취업멘토링 모집")
      */
-    private boolean isCrossPostDuplicate(Long memberId, String title) {
+    private boolean isCrossPostDuplicate(KeywordMatch match, String title) {
         String core = coreTitle(title);
         if (core.isEmpty()) {
             return false;
         }
-        return notificationHistoryRepository
-                .findRecentTitles(memberId, Instant.now().minus(CROSS_POST_WINDOW))
-                .stream()
+        Instant since = Instant.now().minus(CROSS_POST_WINDOW);
+        List<String> recentTitles = match.memberId() != null
+                ? notificationHistoryRepository.findRecentTitles(match.memberId(), since)
+                : notificationHistoryRepository.findRecentTitlesByDevice(match.deviceId(), since);
+        return recentTitles.stream()
                 .map(KeywordMatchingService::coreTitle)
                 .anyMatch(core::equals);
     }
@@ -205,11 +225,11 @@ public class KeywordMatchingService {
     }
 
     /** 저장이 실패한 claim 을 되돌린다(되돌리지 않으면 TTL 동안 재시도 불가). */
-    private void releaseDedup(Long memberId, String searchIndexId) {
+    private void releaseDedup(String recipientKey, String searchIndexId) {
         try {
-            keywordRedisTemplate.delete(DEDUP_KEY_PREFIX + memberId + ":" + searchIndexId);
+            keywordRedisTemplate.delete(DEDUP_KEY_PREFIX + recipientKey + ":" + searchIndexId);
         } catch (Exception e) {
-            log.warn("Redis dedup 해제 실패 - memberId={}, searchIndexId={}", memberId, searchIndexId, e);
+            log.warn("Redis dedup 해제 실패 - recipient={}, searchIndexId={}", recipientKey, searchIndexId, e);
         }
     }
 

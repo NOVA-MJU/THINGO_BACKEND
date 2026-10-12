@@ -1,6 +1,7 @@
 package nova.mjs.domain.thingo.keywordAlarm.service;
 
 import nova.mjs.domain.thingo.ElasticSearch.Document.SearchDocument;
+import nova.mjs.domain.thingo.keywordAlarm.entity.AlarmOwner;
 import nova.mjs.domain.thingo.keywordAlarm.entity.DevicePlatform;
 import nova.mjs.domain.thingo.keywordAlarm.entity.DeviceToken;
 import nova.mjs.domain.thingo.keywordAlarm.entity.NotificationHistory;
@@ -16,6 +17,7 @@ import nova.mjs.domain.thingo.semantic.TopicCatalog;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -24,6 +26,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -196,5 +199,72 @@ class KeywordMatchingServiceTest {
                 eq(nova.mjs.domain.thingo.keywordAlarm.entity.AlarmCategory.NOTICE),
                 org.mockito.ArgumentMatchers.argThat(ids ->
                         ids.contains("GRADUATION") && ids.contains("GRADUATION_DEFERRAL")));
+    }
+
+    @Test
+    @DisplayName("비로그인 기기 구독도 매칭되면 기기 알림함에 저장하고 게스트 토큰으로 발송한다(회원과 별도 1건)")
+    void should_dispatch_to_device_recipient() {
+        // given - 회원 1과 기기 D 가 같은 공지에 매칭
+        UUID deviceId = UUID.fromString("0f8fad5b-d9cb-469f-a165-70867728950e");
+        given(keywordSubscriptionRepository.findMatchingSubscriptions(eq("NOTICE"), anyString(), anyString()))
+                .willReturn(List.of(
+                        new KeywordMatch(10L, 1L, "장학"),
+                        new KeywordMatch(30L, null, deviceId, "장학", null)));
+        given(keywordRedisTemplate.opsForValue()).willReturn(valueOperations);
+        given(valueOperations.setIfAbsent(anyString(), eq("1"), any(Duration.class))).willReturn(true);
+
+        Member member = Member.builder().id(1L).email("u@mju.ac.kr").build();
+        given(memberRepository.getReferenceById(1L)).willReturn(member);
+        given(notificationHistoryRepository.saveAndFlush(any(NotificationHistory.class)))
+                .willAnswer(invocation -> invocation.getArgument(0));
+        given(deviceTokenRepository.findByMember(member))
+                .willReturn(List.of(DeviceToken.of(member, "tok-member", DevicePlatform.ANDROID)));
+        given(deviceTokenRepository.findByDeviceIdAndMemberIsNull(deviceId))
+                .willReturn(List.of(DeviceToken.ofGuest(deviceId, "tok-guest", DevicePlatform.IOS)));
+
+        // when
+        List<FcmDispatch> result = service().matchAndCollect(doc("100", "NOTICE", "교내 장학 신청 안내", "장학금 신청"));
+
+        // then - 수신자별 1건씩, 기기는 게스트 토큰으로
+        assertThat(result).extracting(FcmDispatch::tokens)
+                .containsExactlyInAnyOrder(List.of("tok-member"), List.of("tok-guest"));
+
+        ArgumentCaptor<NotificationHistory> histories = ArgumentCaptor.forClass(NotificationHistory.class);
+        verify(notificationHistoryRepository, times(2)).saveAndFlush(histories.capture());
+        assertThat(histories.getAllValues()).anySatisfy(history -> {
+            assertThat(history.getMember()).isNull();
+            assertThat(history.getDeviceId()).isEqualTo(deviceId);
+        });
+
+        // dedup 키: 회원은 기존 형식 유지, 기기는 d: 접두
+        verify(valueOperations).setIfAbsent(eq("kwalarm:dedup:1:NOTICE:100"), eq("1"), any(Duration.class));
+        verify(valueOperations).setIfAbsent(
+                eq("kwalarm:dedup:d:" + deviceId + ":NOTICE:100"), eq("1"), any(Duration.class));
+    }
+
+    @Test
+    @DisplayName("교차게시 중복 판정은 기기 수신자의 최근 알림 제목으로 한다")
+    void should_skip_cross_posted_notice_for_device() {
+        UUID deviceId = UUID.randomUUID();
+        given(keywordSubscriptionRepository.findMatchingSubscriptions(eq("NOTICE"), anyString(), anyString()))
+                .willReturn(List.of(new KeywordMatch(30L, null, deviceId, "모집", null)));
+        given(notificationHistoryRepository.findRecentTitlesByDevice(eq(deviceId), any(Instant.class)))
+                .willReturn(List.of("[진로취업지원팀] 2026 선배와의 취업멘토링 참여학생 모집(10월)"));
+
+        List<FcmDispatch> result = service().matchAndCollect(
+                doc("2921", "NOTICE", "2026 선배와의 취업멘토링 참여학생 모집(10월)", "본문"));
+
+        assertThat(result).isEmpty();
+        verify(notificationHistoryRepository, never()).findRecentTitles(any(), any());
+        verify(notificationHistoryRepository, never()).saveAndFlush(any(NotificationHistory.class));
+    }
+
+    @Test
+    @DisplayName("수신자 키: 회원은 id 그대로, 기기는 d: 접두")
+    void recipient_key_format() {
+        UUID deviceId = UUID.randomUUID();
+        assertThat(AlarmOwner.key(7L, null)).isEqualTo("7");
+        assertThat(AlarmOwner.key(null, deviceId)).isEqualTo("d:" + deviceId);
+        assertThat(AlarmOwner.ofDevice(deviceId).key()).isEqualTo("d:" + deviceId);
     }
 }

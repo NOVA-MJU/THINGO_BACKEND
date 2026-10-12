@@ -10,6 +10,8 @@
 --   3. BEFORE INSERT/UPDATE 트리거 (search_vector 자동 갱신)
 --
 -- 테이블 자체는 JPA (ddl-auto=update) 가 생성한다.
+--
+-- 키워드 알림의 비로그인(게스트) 기기 소유자 확장 DDL 도 함께 적용한다(keyword_subscription.topic_id 와 같은 방식).
 
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 
@@ -33,6 +35,52 @@ ALTER TABLE unified_search_index ADD COLUMN IF NOT EXISTS classification_confide
 ALTER TABLE keyword_subscription ADD COLUMN IF NOT EXISTS topic_id VARCHAR(64);
 CREATE INDEX IF NOT EXISTS idx_keyword_subscription_topic
     ON keyword_subscription(topic_id) WHERE topic_id IS NOT NULL AND enabled = true;
+
+-- 비로그인(게스트) 기기 키워드 알림.
+-- 구독/알림함/FCM 토큰의 소유자를 회원(member_id) 또는 서버 발급 기기(device_id)로 확장한다.
+-- ddl-auto=update 는 기존 컬럼의 NOT NULL 을 풀지 못하고 CHECK 도 만들지 않으므로 여기서 멱등 적용한다.
+-- 기존 행은 모두 member_id 가 있고 device_id 는 NULL 이라 아래 CHECK 를 그대로 통과한다.
+-- 유일 인덱스는 엔티티 @UniqueConstraint 와 같은 이름이라, Hibernate 가 먼저 만들었으면 건너뛴다.
+-- (PostgreSQL 유일 제약은 NULL 을 서로 다른 값으로 보므로 회원 행끼리/기기 행끼리만 중복을 막는다)
+CREATE TABLE IF NOT EXISTS device (
+    device_id    UUID PRIMARY KEY,
+    created_at   TIMESTAMP(6) WITH TIME ZONE NOT NULL,
+    last_seen_at TIMESTAMP(6) WITH TIME ZONE NOT NULL
+);
+
+ALTER TABLE keyword_subscription ALTER COLUMN member_id DROP NOT NULL;
+ALTER TABLE keyword_subscription ADD COLUMN IF NOT EXISTS device_id UUID;
+CREATE UNIQUE INDEX IF NOT EXISTS uk_keyword_subscription_device_keyword
+    ON keyword_subscription(device_id, keyword);
+
+ALTER TABLE notification_history ALTER COLUMN member_id DROP NOT NULL;
+ALTER TABLE notification_history ADD COLUMN IF NOT EXISTS device_id UUID;
+CREATE UNIQUE INDEX IF NOT EXISTS uk_notification_history_device_index
+    ON notification_history(device_id, search_index_id);
+
+ALTER TABLE device_token ALTER COLUMN member_id DROP NOT NULL;
+ALTER TABLE device_token ADD COLUMN IF NOT EXISTS device_id UUID;
+-- 기기 수신자 발송 시 게스트 토큰(member_id IS NULL) 조회용
+CREATE INDEX IF NOT EXISTS idx_device_token_guest_device
+    ON device_token(device_id) WHERE member_id IS NULL;
+
+-- 소유자 규칙: 구독/알림함은 회원·기기 중 정확히 하나, 토큰은 최소 하나(로그인 토큰도 device_id 를 기록할 수 있음)
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'ck_keyword_subscription_owner') THEN
+        ALTER TABLE keyword_subscription ADD CONSTRAINT ck_keyword_subscription_owner
+            CHECK ((member_id IS NULL) <> (device_id IS NULL));
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'ck_notification_history_owner') THEN
+        ALTER TABLE notification_history ADD CONSTRAINT ck_notification_history_owner
+            CHECK ((member_id IS NULL) <> (device_id IS NULL));
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'ck_device_token_owner') THEN
+        ALTER TABLE device_token ADD CONSTRAINT ck_device_token_owner
+            CHECK (member_id IS NOT NULL OR device_id IS NOT NULL);
+    END IF;
+END;
+$$;
 
 ALTER TABLE unified_search_index ALTER COLUMN topic_ids SET DEFAULT '[]'::jsonb;
 ALTER TABLE unified_search_index ALTER COLUMN direct_topic_ids SET DEFAULT '[]'::jsonb;

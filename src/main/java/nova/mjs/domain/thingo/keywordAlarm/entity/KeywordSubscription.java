@@ -10,22 +10,31 @@ import nova.mjs.util.entity.BaseEntity;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * 키워드 알림 구독.
  *
- * 한 회원이 '알림 받을 키워드'(공백 제외 5글자 이내)와 그 키워드를 감시할
+ * 한 회원(또는 비로그인 기기)이 '알림 받을 키워드'(공백 제외 5글자 이내)와 그 키워드를 감시할
  * 카테고리(공지/학사일정/게시판, 1개 이상)를 등록한 기록.
- * (member, keyword) 조합은 유일 (같은 키워드 중복 등록 방지).
+ * 소유자는 member 또는 deviceId 중 정확히 하나(AlarmOwner, DB CHECK 제약).
+ * (member, keyword) / (device, keyword) 조합은 유일 (같은 키워드 중복 등록 방지).
+ * PostgreSQL 유일 제약은 NULL 을 서로 다른 값으로 보므로, 두 제약이 서로의 행에 걸리지 않는다.
  * 신규 콘텐츠가 이 키워드/카테고리와 매칭되면 알림이 발송된다.
  */
 @Entity
 @Table(
         name = "keyword_subscription",
-        uniqueConstraints = @UniqueConstraint(
-                name = "uk_keyword_subscription_member_keyword",
-                columnNames = {"member_id", "keyword"}
-        )
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_keyword_subscription_member_keyword",
+                        columnNames = {"member_id", "keyword"}
+                ),
+                @UniqueConstraint(
+                        name = "uk_keyword_subscription_device_keyword",
+                        columnNames = {"device_id", "keyword"}
+                )
+        }
 )
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -37,8 +46,15 @@ public class KeywordSubscription extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
+    @JoinColumn(name = "member_id")
     private Member member;
+
+    /**
+     * 비로그인 기기 소유 구독의 기기 id (device.device_id). 회원 구독이면 null.
+     * 발송/조회 시 Device 엔티티를 읽을 일이 없어 연관관계 대신 값으로 둔다.
+     */
+    @Column(name = "device_id")
+    private UUID deviceId;
 
     @Column(name = "keyword", nullable = false, length = 5)
     private String keyword;
@@ -74,8 +90,10 @@ public class KeywordSubscription extends BaseEntity {
     private Set<AlarmCategory> categories = new LinkedHashSet<>();
 
     @Builder(access = AccessLevel.PRIVATE)
-    private KeywordSubscription(Member member, String keyword, String topicId, Set<AlarmCategory> categories) {
+    private KeywordSubscription(Member member, UUID deviceId, String keyword, String topicId,
+                                Set<AlarmCategory> categories) {
         this.member = member;
+        this.deviceId = deviceId;
         this.keyword = keyword;
         this.topicId = topicId;
         this.categories = new LinkedHashSet<>(categories);
@@ -87,8 +105,14 @@ public class KeywordSubscription extends BaseEntity {
 
     public static KeywordSubscription of(
             Member member, String keyword, String topicId, Set<AlarmCategory> categories) {
+        return of(AlarmOwner.ofMember(member), keyword, topicId, categories);
+    }
+
+    public static KeywordSubscription of(
+            AlarmOwner owner, String keyword, String topicId, Set<AlarmCategory> categories) {
         return KeywordSubscription.builder()
-                .member(member)
+                .member(owner.member())
+                .deviceId(owner.deviceId())
                 .keyword(keyword)
                 .topicId(topicId)
                 .categories(categories)
@@ -118,6 +142,30 @@ public class KeywordSubscription extends BaseEntity {
      */
     public void changeEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public AlarmOwner getOwner() {
+        return new AlarmOwner(member, deviceId);
+    }
+
+    /**
+     * 비로그인 기기 구독을 로그인한 회원 소유로 옮긴다(로그인 시 병합).
+     */
+    public void reassignTo(Member member) {
+        this.member = member;
+        this.deviceId = null;
+    }
+
+    /**
+     * 같은 키워드의 다른 구독(로그인 전 기기 구독)을 흡수한다.
+     * 카테고리는 합집합, 알림은 둘 중 하나라도 켜져 있으면 켠다(사용자가 원한 알림을 잃지 않도록).
+     * 키워드 표기와 Topic 은 기존(회원) 구독 값을 유지한다.
+     */
+    public void absorb(KeywordSubscription other) {
+        Set<AlarmCategory> merged = new LinkedHashSet<>(this.categories);
+        merged.addAll(other.categories);
+        this.categories = merged;
+        this.enabled = this.enabled || other.enabled;
     }
 
     /**

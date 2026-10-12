@@ -4,6 +4,7 @@ import nova.mjs.config.elasticsearch.KomoranTokenizerUtil;
 import nova.mjs.domain.thingo.ElasticSearch.indexing.publisher.SearchIndexPublisher;
 import nova.mjs.domain.thingo.department.entity.enumList.College;
 import nova.mjs.domain.thingo.keywordAlarm.entity.AlarmCategory;
+import nova.mjs.domain.thingo.keywordAlarm.entity.AlarmOwner;
 import nova.mjs.domain.thingo.keywordAlarm.entity.KeywordSubscription;
 import nova.mjs.domain.thingo.member.entity.Member;
 import org.junit.jupiter.api.DisplayName;
@@ -45,6 +46,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  * - (member, keyword) 유일 제약
  * - @ElementCollection 카테고리 round-trip
  * - 소유권 조회(findByIdAndMember)
+ * - 비로그인 기기 소유 구독의 매칭/방송 조회
  */
 @Testcontainers
 @DataJpaTest(excludeAutoConfiguration = {
@@ -311,5 +313,65 @@ class KeywordSubscriptionRepositoryIT {
         // then
         assertThat(byOwner).isPresent();
         assertThat(byOther).isEmpty();
+    }
+
+    @Test
+    @DisplayName("비로그인 기기 구독도 키워드 매칭에 걸리고 deviceId 를 돌려준다")
+    void should_match_device_subscription() {
+        // given - 같은 키워드를 회원과 기기가 각각 구독(유일 제약은 소유자별이라 충돌하지 않음)
+        Member member = 영속회원("device-match@mju.ac.kr");
+        UUID deviceId = UUID.randomUUID();
+        repository.saveAndFlush(KeywordSubscription.of(member, "장학", Set.of(AlarmCategory.NOTICE)));
+        repository.saveAndFlush(KeywordSubscription.of(
+                AlarmOwner.ofDevice(deviceId), "장학", null, Set.of(AlarmCategory.NOTICE)));
+        String docTokens = KomoranTokenizerUtil.buildSearchTokens("2026 교내 장학금 신청 안내", null, "장학금 신청 안내");
+
+        // when
+        List<KeywordMatch> matches = repository.findMatchingSubscriptions(
+                "NOTICE", docTokens, "2026 교내 장학금 신청 안내");
+
+        // then
+        assertThat(matches).hasSize(2);
+        assertThat(matches).anySatisfy(match -> {
+            assertThat(match.memberId()).isNull();
+            assertThat(match.deviceId()).isEqualTo(deviceId);
+        });
+        assertThat(matches).anySatisfy(match -> {
+            assertThat(match.memberId()).isEqualTo(member.getId());
+            assertThat(match.deviceId()).isNull();
+        });
+    }
+
+    @Test
+    @DisplayName("같은 기기가 같은 키워드를 중복 저장하면 제약 위반")
+    void should_violate_unique_when_기기_중복키워드() {
+        UUID deviceId = UUID.randomUUID();
+        repository.saveAndFlush(KeywordSubscription.of(
+                AlarmOwner.ofDevice(deviceId), "장학", null, Set.of(AlarmCategory.NOTICE)));
+
+        assertThatThrownBy(() -> repository.saveAndFlush(KeywordSubscription.of(
+                AlarmOwner.ofDevice(deviceId), "장학", null, Set.of(AlarmCategory.COMMUNITY))))
+                .isInstanceOf(DataIntegrityViolationException.class);
+    }
+
+    @Test
+    @DisplayName("Topic 구독 매칭과 학식 방송 조회는 비로그인 기기 구독도 포함한다")
+    void should_include_device_subscription_in_topic_and_cafeteria() {
+        UUID deviceId = UUID.randomUUID();
+        repository.saveAndFlush(KeywordSubscription.of(
+                AlarmOwner.ofDevice(deviceId), "졸업", "GRADUATION", Set.of(AlarmCategory.NOTICE)));
+        repository.saveAndFlush(KeywordSubscription.of(
+                AlarmOwner.ofDevice(deviceId), "학식", null, Set.of(AlarmCategory.CAFETERIA)));
+        em.clear();
+
+        assertThat(repository.findMatchingTopicSubscriptions(AlarmCategory.NOTICE, Set.of("GRADUATION")))
+                .singleElement()
+                .satisfies(match -> {
+                    assertThat(match.memberId()).isNull();
+                    assertThat(match.deviceId()).isEqualTo(deviceId);
+                });
+        assertThat(repository.findByCategoryWithMember(AlarmCategory.CAFETERIA))
+                .singleElement()
+                .satisfies(subscription -> assertThat(subscription.getOwner()).isEqualTo(AlarmOwner.ofDevice(deviceId)));
     }
 }
