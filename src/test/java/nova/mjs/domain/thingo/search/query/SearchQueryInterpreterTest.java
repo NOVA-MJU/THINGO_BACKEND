@@ -172,4 +172,13 @@ class SearchQueryInterpreterTest {
                 "ACADEMIC_FOUNDATION_GENERAL_EDUCATION");
         assertThat(plan.matchTsQuery()).contains("정치외교학전공", "법학과", "복수전공", "학문기초교양");
     }
+
+    @Test
+    @DisplayName("개념이 여럿이면 검색어에 먼저 나온 개념이 첫 주제가 된다")
+    void ordersTopicsByPositionInQuery() {
+        assertThat(interpreter.interpret("조기취업 유고결석").topicIds())
+                .containsExactly("EARLY_EMPLOYMENT_ABSENCE", "EXCUSED_ABSENCE");
+        assertThat(interpreter.interpret("유고결석 조기취업").topicIds())
+                .containsExactly("EXCUSED_ABSENCE", "EARLY_EMPLOYMENT_ABSENCE");
+    }
 }
