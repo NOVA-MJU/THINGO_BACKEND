@@ -2,6 +2,7 @@ package nova.mjs.domain.thingo.map.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import nova.mjs.domain.thingo.map.config.MapPlaceAliasCatalog;
 import nova.mjs.domain.thingo.map.dto.MapSuggestResponse;
 import nova.mjs.domain.thingo.map.dto.PinSummaryResponse;
 import nova.mjs.domain.thingo.map.entity.Category;
@@ -76,6 +77,12 @@ public class MapSearchService {
     /** 통칭으로 걸린 핀의 자동완성 점수. 매처의 카테고리명 보조 가중과 같은 급(이름 매칭보다 아래). */
     private static final double CATEGORY_ALIAS_SCORE = 25.0;
 
+    /**
+     * 엄격 모드 최소 관련도. 매처 점수상 이름에 검색어가 그대로 들어 있는(부분 포함 45) 이상만 남긴다.
+     * 통합검색 화면처럼 장소를 찾는 검색인지 확실하지 않은 곳에서 오타 허용(20~40)·카테고리명 보조(25) 결과를 띄우지 않기 위함이다.
+     */
+    private static final double STRICT_MIN_RELEVANCE = 45.0;
+
     private final PinRepository pinRepository;
     private final CategoryRepository categoryRepository;
     private final FavoritePlaceRepository favoritePlaceRepository;
@@ -84,6 +91,7 @@ public class MapSearchService {
     private final OperatingStatusResolver operatingStatusResolver;
     private final MapSearchMatcher matcher;
     private final MapPinService mapPinService;
+    private final MapPlaceAliasCatalog placeAliasCatalog;
 
     /** 관련도 정렬 계산용 임시 행 (핀 + 관련도 점수 + 정렬 거리) */
     private record Scored(Pin pin, double relevance, Double sortDistance) {}
@@ -110,9 +118,18 @@ public class MapSearchService {
      */
     public List<PinSummaryResponse> search(String keyword, Double userLat, Double userLng, int page, int size,
                                            String email, String recommendationSeed, boolean floorMap) {
+        return search(keyword, userLat, userLng, page, size, email, recommendationSeed, floorMap, false);
+    }
+
+    /**
+     * @param strict 엄격 모드. 일반 이름 검색에서 이름에 검색어가 들어 있는 장소만 남긴다 (통합검색의 '명지도 장소' 칸용)
+     */
+    public List<PinSummaryResponse> search(String keyword, Double userLat, Double userLng, int page, int size,
+                                           String email, String recommendationSeed, boolean floorMap, boolean strict) {
         if (keyword == null || keyword.isBlank()) {
             return List.of();
         }
+        keyword = placeAliasCatalog.resolve(keyword);
 
         Pin exactIndoorPin = findExactIndoorPin(keyword);
         if (exactIndoorPin != null) {
@@ -138,11 +155,11 @@ public class MapSearchService {
                     exactCategory.getCode(), userLat, userLng, page, size, email, recommendationSeed, floorMap);
         }
 
-        return searchGeneral(keyword, userLat, userLng, page, size, email);
+        return searchGeneral(keyword, userLat, userLng, page, size, email, strict);
     }
 
     private List<PinSummaryResponse> searchGeneral(String keyword, Double userLat, Double userLng, int page, int size,
-                                                   String email) {
+                                                   String email, boolean strict) {
 
         // 검색 대상 핀을 연관과 함께 한 번에 로딩 (카테고리/소속건물/층)
         List<Pin> candidates = pinRepository.findAllForSearch();
@@ -157,7 +174,7 @@ public class MapSearchService {
         for (Pin pin : candidates) {
             double relevance = matcher.score(
                     pin.getName(), null, pin.getIndoorCode(), keyword);
-            if (relevance <= 0.0) {
+            if (relevance <= 0.0 || (strict && relevance < STRICT_MIN_RELEVANCE)) {
                 continue;
             }
             scored.add(new Scored(pin, relevance, sortDistance(pin, userLat, userLng, hasGps, insideCampus)));
@@ -182,11 +199,12 @@ public class MapSearchService {
      * @param keyword    검색어 (비면 빈 목록)
      * @param limit      최대 개수 (0 이하면 10)
      */
-    public List<MapSuggestResponse> suggest(String keyword, int limit) {
-        if (keyword == null || keyword.isBlank()) {
+    public List<MapSuggestResponse> suggest(String rawKeyword, int limit) {
+        if (rawKeyword == null || rawKeyword.isBlank()) {
             return List.of();
         }
         int safeLimit = limit > 0 ? limit : 10;
+        String keyword = placeAliasCatalog.resolve(rawKeyword);
 
         // 호실 코드를 끝까지 입력했으면 유사 호실 없이 그 호실 하나만 제안한다
         Pin exactIndoorPin = findExactIndoorPin(keyword);
