@@ -1,6 +1,7 @@
 package nova.mjs.domain.thingo.search.repository;
 
 import nova.mjs.config.elasticsearch.KomoranTokenizerUtil;
+import nova.mjs.domain.thingo.search.query.CanonicalNoticeTitle;
 import nova.mjs.domain.thingo.search.query.GraduationQueryScope;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -339,6 +340,16 @@ public class UnifiedSearchIndexQueryRepositoryImpl implements UnifiedSearchIndex
         String subjectBoostExpr = SAFE_TSQUERY.matcher(subjectTsQuery).matches() && !subjectTsQuery.isBlank()
                 ? " + CASE WHEN title_vector @@ to_tsquery('simple', '" + subjectTsQuery + "') THEN 0.40 ELSE 0 END "
                 : " ";
+        // 제목의 핵심어가 검색어와 같은 공지('수강신청' → '2026학년도 2학기 수강신청 일정 안내')는 그 주제의 학교 대표 공지다.
+        // 학기마다 반복되는 대표 공지는 신청 기간이 지나도(만료 -0.5) 다음 학기 공지가 나오기 전까지 가장 정확한 답이라
+        // 만료 감점을 넘어설 만큼 올린다. 대표 공지끼리는 최신성으로 최근 학기가 앞선다.
+        // 핵심어는 한글·영소문자·숫자만 남긴 값이라 SQL에 그대로 넣어도 안전하다
+        String keywordCore = hasKeyword ? CanonicalNoticeTitle.core(keyword) : "";
+        String canonicalNoticeExpr = keywordCore.isEmpty()
+                ? " "
+                : " + CASE WHEN type IN ('NOTICE','DEPARTMENT_NOTICE','STUDENT_COUNCIL_NOTICE') "
+                + "        AND regexp_replace(lower(coalesce(title,'')), '" + CanonicalNoticeTitle.STRIP_REGEX + "', '', 'g') = '"
+                + keywordCore + "' THEN 0.60 ELSE 0 END ";
         String allConceptsBoostExpr = topicIds.size() > 1 && hasMatchTsQuery
                 ? " + CASE WHEN search_vector @@ to_tsquery('simple', :matchTsQuery) THEN 0.40 ELSE 0 END "
                 : " ";
@@ -386,6 +397,7 @@ public class UnifiedSearchIndexQueryRepositoryImpl implements UnifiedSearchIndex
                 + cohortWideExpr
                 + cohortRangeExpr
                 + subjectBoostExpr
+                + canonicalNoticeExpr
                 + hotBoostExpr
                 + VALIDITY_WEIGHT_EXPR
                 + RECENCY_WEIGHT_EXPR
