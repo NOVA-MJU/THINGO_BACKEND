@@ -101,6 +101,8 @@ dependencies {
 
 	// FCM 푸시 (Firebase Admin) - 키워드 알림 발송
 	implementation 'com.google.firebase:firebase-admin:9.9.0'
+	// 구글 로그인 ID 토큰 검증 (firebase-admin이 이미 같은 버전을 가져오지만 직접 쓰므로 명시)
+	implementation 'com.google.api-client:google-api-client:2.7.2'
 
 	//websocket
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'

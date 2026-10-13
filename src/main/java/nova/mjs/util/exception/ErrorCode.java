@@ -68,6 +68,12 @@ public enum ErrorCode {
     INVALID_STUDENT_NUMBER_EXCEPTION(HttpStatus.BAD_REQUEST,"INVALID_STUDENT_NUMBER_EXCEPTION", "[MJS] 요청하신 학번이 8자리 숫자로 이루어져있지 않습니다." ),
     DUPLICATE_NICKNAME_EXCEPTION(HttpStatus.BAD_REQUEST,"DUPLICATE_NICKNAME_EXCEPTION", "[MJS] 이미 존재하는 닉네임입니다." ),
 
+    // 구글 로그인 에러 (앱이 401을 토큰 만료로 보고 재발급을 시도하므로 401은 쓰지 않는다)
+    GOOGLE_LOGIN_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "GOOGLE_LOGIN_UNAVAILABLE", "[MJS] 지금은 구글 로그인을 사용할 수 없습니다."),
+    GOOGLE_ID_TOKEN_INVALID(HttpStatus.BAD_REQUEST, "GOOGLE_ID_TOKEN_INVALID", "[MJS] 구글 로그인 정보가 올바르지 않습니다. 다시 로그인해 주세요."),
+    GOOGLE_ACCOUNT_NOT_ALLOWED(HttpStatus.FORBIDDEN, "GOOGLE_ACCOUNT_NOT_ALLOWED", "[MJS] 명지대 구글 계정(@mju.ac.kr)으로만 이용할 수 있습니다."),
+    GOOGLE_SIGNUP_EXPIRED(HttpStatus.BAD_REQUEST, "GOOGLE_SIGNUP_EXPIRED", "[MJS] 가입 가능 시간이 지났습니다. 구글 로그인을 다시 해 주세요."),
+
     // 날씨 에러
     API_CALL_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "API_CALL_FAILED", "[MJS] API 호출 중 오류 발생하였습니다."),
     JSON_PARSING_FAILED(HttpStatus.BAD_REQUEST, "JSON_PARSING_FAILED", "[MJS] JSON 데이터 파싱 오류입니다."),

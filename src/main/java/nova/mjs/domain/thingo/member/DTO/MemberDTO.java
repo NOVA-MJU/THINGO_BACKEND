@@ -29,6 +29,8 @@ public class MemberDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Member.Role role;
+    // 구글로 가입해 비밀번호가 없으면 false. 앱은 비밀번호 변경과 탈퇴 시 비밀번호 확인을 숨긴다
+    private boolean hasPassword;
 
     /**
      * Member 엔티티를 MemberDTO로 변환하는 메서드 (응답용)
@@ -46,6 +48,7 @@ public class MemberDTO {
                 .updatedAt(member.getUpdatedAt())
                 .role(member.getRole())
                 .profileImageUrl(member.getProfileImageUrl())
+                .hasPassword(member.hasPassword())
                 .build();
     }
 

@@ -139,10 +139,8 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     @Override
     public void deleteMember(String emailId, MemberDTO.PasswordRequestDTO requestPassword) {
         Member member = memberQueryService.getMemberByEmail(emailId);
-        // 비밀번호 검증
-        boolean passwordMatches = passwordEncoder.matches(requestPassword.getPassword(), member.getPassword());
-
-        if (!passwordMatches) {
+        // 비밀번호 검증 (구글로 가입해 비밀번호가 없는 회원은 로그인 상태만으로 탈퇴한다)
+        if (member.hasPassword() && !passwordEncoder.matches(requestPassword.getPassword(), member.getPassword())) {
             throw new PasswordIsInvalidException();
         }
         memberRepository.delete(member);
