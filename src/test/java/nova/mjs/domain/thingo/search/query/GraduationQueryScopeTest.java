@@ -36,4 +36,13 @@ class GraduationQueryScopeTest {
         assertThat(GraduationQueryScope.cohortTitleLabel("98학번 졸업학점")).isEmpty();
         assertThat(GraduationQueryScope.cohortTitleLabel("21학번 장학금")).isEmpty();
     }
+
+    @Test
+    @DisplayName("학번·졸업 일반어를 뺀 학과 이름만 남긴다")
+    void extractsSubjectText() {
+        assertThat(GraduationQueryScope.subjectText("경영학과 21학번 졸업학점")).isEqualTo("경영학과");
+        assertThat(GraduationQueryScope.subjectText("컴공 졸업요건")).isEqualTo("컴공");
+        assertThat(GraduationQueryScope.subjectText("2025학번 졸업학점")).isEmpty();
+        assertThat(GraduationQueryScope.subjectText("경영학과 장학금")).isEmpty();
+    }
 }
