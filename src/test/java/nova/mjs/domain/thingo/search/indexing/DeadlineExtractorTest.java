@@ -92,4 +92,34 @@ class DeadlineExtractorTest {
         assertThat(ldt.getHour()).isEqualTo(23);
         assertThat(ldt.getMinute()).isEqualTo(59);
     }
+
+    @Test
+    void should_끝날짜_채택_when_기간끝에_연도생략() {
+        // given - 학점포기 신청 공지 형식: 끝 날짜에 연도가 없다
+        Optional<Instant> result = extractor.extract("2. 신청기간 : 2026. 10. 12.(월)~10. 16.(금) 17:00 3. 신청방법");
+
+        // then - 시작일(10.12)이 아니라 끝 날짜(10.16)
+        assertThat(dateOf(result)).isEqualTo(LocalDate.of(2026, 10, 16));
+    }
+
+    @Test
+    void should_같은달_끝날짜_when_월까지_생략() {
+        Optional<Instant> result = extractor.extract("접수 2026년 3월 2일(월) ~ 6일(금)");
+
+        assertThat(dateOf(result)).isEqualTo(LocalDate.of(2026, 3, 6));
+    }
+
+    @Test
+    void should_다음해_끝날짜_when_해를_넘기는_기간() {
+        Optional<Instant> result = extractor.extract("동계 계절학기 2026.12.21 ~ 01.13");
+
+        assertThat(dateOf(result)).isEqualTo(LocalDate.of(2027, 1, 13));
+    }
+
+    @Test
+    void should_연도있는_끝날짜는_그대로_when_기간에_연도표기() {
+        Optional<Instant> result = extractor.extract("신청기간 2026.03.01(일) ~ 2026.03.15(일)");
+
+        assertThat(dateOf(result)).isEqualTo(LocalDate.of(2026, 3, 15));
+    }
 }
