@@ -204,6 +204,20 @@ public class MapPinService {
         return paginate(sorted, page, size);
     }
 
+    /**
+     * 장소 코드 목록의 핀을 그 순서 그대로 목록 카드로 조회한다 (테마지도).
+     * 코드가 시트 동기화로 사라졌으면 그 장소만 빠진다.
+     */
+    public List<PinSummaryResponse> getPinsByCodes(List<String> codes, Double userLat, Double userLng, String email) {
+        Map<String, Pin> pinsByCode = pinRepository.findByCodeIn(codes).stream()
+                .collect(Collectors.toMap(Pin::getCode, pin -> pin));
+        List<Pin> ordered = codes.stream()
+                .map(pinsByCode::get)
+                .filter(Objects::nonNull)
+                .toList();
+        return toSummaries(ordered, favoritePinIds(resolveMember(email)), userLat, userLng);
+    }
+
     private boolean isDaedongCategory(String categoryCode) {
         return "daedong".equals(categoryCode) || categoryCode.startsWith("daedong-");
     }
