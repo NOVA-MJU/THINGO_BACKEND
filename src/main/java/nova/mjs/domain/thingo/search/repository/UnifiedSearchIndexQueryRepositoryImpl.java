@@ -54,12 +54,13 @@ public class UnifiedSearchIndexQueryRepositoryImpl implements UnifiedSearchIndex
      *   카테고리 격차를 키워 "일반/학사 > 장학/취업/활동"이 실제 순위에 드러나게 한다.
      * - rule(학칙)은 기한 없는 evergreen 문서라 academic 급(0.08)으로 우대(과거 0.00 → 묻힘 방지).
      * - 수강신청 공지 첨부 학사안내 원문(academic_source)은 사용자가 기준 파일을 즉시 열 수 있도록
-     *   단일 기준 문서에만 0.80을 부여한다. 나머지 카테고리 boost는 0.11 이하로 유지한다.
+     *   단일 기준 문서에만 0.80을 부여하되, 제목이 검색어를 모두 포함할 때만 준다(아래 academicSourceBoost).
+     *   본문 검색어 목록이 넓어 '학점포기'처럼 공지가 답인 검색에서도 이 문서가 1위로 올라와 AI 요약이 공지 대신
+     *   학사안내문을 근거로 삼았다. 나머지 카테고리 boost는 0.11 이하로 유지한다.
      */
     private static final String CATEGORY_WEIGHT_EXPR =
             " CASE category "
                     + "  WHEN 'general' THEN 0.10 "
-                    + "  WHEN 'academic_source' THEN 0.80 "
                     + "  WHEN 'academic_course_rule' THEN 0.11 "
                     + "  WHEN 'academic' THEN 0.09 "
                     + "  WHEN 'academic_rule' THEN 0.09 "
@@ -328,11 +329,17 @@ public class UnifiedSearchIndexQueryRepositoryImpl implements UnifiedSearchIndex
                 ? " + CASE WHEN title_vector @@ to_tsquery('simple', :coverageTsQuery) "
                 + "        THEN 0.4 ELSE 0 END "
                 : " ";
+        // 학사안내 원문(academic_source)은 제목이 검색어를 모두 포함할 때만(학기교·졸업요건·학사안내문 등) 기준 문서로 끌어올린다
+        String academicSourceBoost = hasCoverageTsQuery
+                ? " + CASE WHEN category = 'academic_source' "
+                + "        AND title_vector @@ to_tsquery('simple', :coverageTsQuery) THEN 0.80 ELSE 0 END "
+                : " ";
         String ftsScore = hasRankTsQuery
                 ? " ts_rank(search_vector, to_tsquery('simple', :rankTsQuery)) * 0.6 "
                 + " + CASE WHEN title_vector @@ to_tsquery('simple', :matchTsQuery) "
                 + "        THEN 0.25 ELSE 0 END "
                 + coverageBoost
+                + academicSourceBoost
                 : " 0.0 ";
 
         String scoreExpr = hasKeyword
