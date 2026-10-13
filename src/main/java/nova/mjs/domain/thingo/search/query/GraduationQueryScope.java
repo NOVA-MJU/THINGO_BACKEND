@@ -66,6 +66,29 @@ public final class GraduationQueryScope {
                 .findFirst();
     }
 
+    /**
+     * 졸업요건 검색어에서 학번·졸업 일반어를 뺀 나머지(학과·단과대 이름 등). '경영학과 21학번 졸업학점' → '경영학과'.
+     * 졸업요건 검색이 아니거나 남는 말이 없으면 빈 문자열.
+     */
+    public static String subjectText(String keyword) {
+        String text = keyword == null ? "" : keyword.trim();
+        String key = SemanticTextNormalizer.lookupKey(text);
+        if (GRADUATION_WORDS.stream().noneMatch(key::contains)) {
+            return "";
+        }
+        List<String> subjects = new java.util.ArrayList<>();
+        for (String token : text.split("\\s+")) {
+            String remainder = COHORT.matcher(SemanticTextNormalizer.lookupKey(token)).replaceAll("");
+            for (String word : GENERIC_WORDS) {
+                remainder = remainder.replace(word, "");
+            }
+            if (!PARTICLES.matcher(remainder).replaceAll("").isBlank()) {
+                subjects.add(remainder);
+            }
+        }
+        return String.join(" ", subjects);
+    }
+
     public static boolean isCohortWide(String keyword) {
         String key = SemanticTextNormalizer.lookupKey(keyword == null ? "" : keyword);
         if (GRADUATION_WORDS.stream().noneMatch(key::contains)) {

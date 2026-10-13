@@ -1,5 +1,6 @@
 package nova.mjs.domain.thingo.search.repository;
 
+import nova.mjs.config.elasticsearch.KomoranTokenizerUtil;
 import nova.mjs.domain.thingo.search.query.GraduationQueryScope;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -47,6 +48,7 @@ public class UnifiedSearchIndexQueryRepositoryImpl implements UnifiedSearchIndex
     private static final String ORDER_OLDEST = "oldest";
 
     private static final double SUGGEST_TRIGRAM_THRESHOLD = 0.2d;
+    private static final java.util.regex.Pattern SAFE_TSQUERY = java.util.regex.Pattern.compile("[\\p{L}\\p{N}|& ()]*");
 
     /*
      * 카테고리 가중치 (NOTICE 도메인 한정).
@@ -328,6 +330,15 @@ public class UnifiedSearchIndexQueryRepositoryImpl implements UnifiedSearchIndex
                         .map(label -> " + CASE WHEN title LIKE '%" + label + "%' THEN 0.30 ELSE 0 END ")
                         .orElse(" ")
                 : " ";
+        // '경영학과 21학번 졸업학점'처럼 학과가 있으면 학번 구간 보정만으로는 같은 구간의 모든 학과가 같은 점수가 된다.
+        // 학번·졸업 일반어를 뺀 말(학과명)이 제목에 있는 문서를 올린다.
+        // tsquery는 형태소 분석기가 영숫자·한글만 남겨 만들고, 그 외 문자가 섞이면 쓰지 않아 SQL에 넣어도 안전하다
+        String subjectTsQuery = hasKeyword
+                ? KomoranTokenizerUtil.buildTsQuery(GraduationQueryScope.subjectText(keyword))
+                : "";
+        String subjectBoostExpr = SAFE_TSQUERY.matcher(subjectTsQuery).matches() && !subjectTsQuery.isBlank()
+                ? " + CASE WHEN title_vector @@ to_tsquery('simple', '" + subjectTsQuery + "') THEN 0.40 ELSE 0 END "
+                : " ";
         String allConceptsBoostExpr = topicIds.size() > 1 && hasMatchTsQuery
                 ? " + CASE WHEN search_vector @@ to_tsquery('simple', :matchTsQuery) THEN 0.40 ELSE 0 END "
                 : " ";
@@ -374,6 +385,7 @@ public class UnifiedSearchIndexQueryRepositoryImpl implements UnifiedSearchIndex
                 + allConceptsBoostExpr
                 + cohortWideExpr
                 + cohortRangeExpr
+                + subjectBoostExpr
                 + hotBoostExpr
                 + VALIDITY_WEIGHT_EXPR
                 + RECENCY_WEIGHT_EXPR
