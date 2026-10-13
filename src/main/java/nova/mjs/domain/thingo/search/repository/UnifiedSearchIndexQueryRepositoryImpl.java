@@ -321,6 +321,13 @@ public class UnifiedSearchIndexQueryRepositoryImpl implements UnifiedSearchIndex
                 + "        WHEN category LIKE 'graduation\\_%' OR id LIKE 'ACADEMIC\\_GUIDE%rule%find-requirements' THEN 0.35 "
                 + "        ELSE 0 END "
                 : " ";
+        // '21학번'은 제목에 그대로 나오지 않아('2018~2024학번 졸업요건') 다른 학번 구간 문서와 구분이 안 된다.
+        // 학번이 속한 구간 제목을 가진 문서를 올린다 (구간 제목은 고정 목록이라 SQL에 그대로 넣어도 안전하다)
+        String cohortRangeExpr = hasKeyword
+                ? GraduationQueryScope.cohortTitleLabel(keyword)
+                        .map(label -> " + CASE WHEN title LIKE '%" + label + "%' THEN 0.30 ELSE 0 END ")
+                        .orElse(" ")
+                : " ";
         String allConceptsBoostExpr = topicIds.size() > 1 && hasMatchTsQuery
                 ? " + CASE WHEN search_vector @@ to_tsquery('simple', :matchTsQuery) THEN 0.40 ELSE 0 END "
                 : " ";
@@ -366,6 +373,7 @@ public class UnifiedSearchIndexQueryRepositoryImpl implements UnifiedSearchIndex
                 + topicBoostExpr
                 + allConceptsBoostExpr
                 + cohortWideExpr
+                + cohortRangeExpr
                 + hotBoostExpr
                 + VALIDITY_WEIGHT_EXPR
                 + RECENCY_WEIGHT_EXPR
