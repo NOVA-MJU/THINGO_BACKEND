@@ -10,6 +10,7 @@ import nova.mjs.domain.thingo.semantic.SearchIntent;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -37,8 +38,11 @@ public class SearchQueryInterpreter {
 
         String defaultOr = KomoranTokenizerUtil.buildTsQuery(original);
         String defaultAnd = KomoranTokenizerUtil.buildTsQueryAnd(original);
+        // 검색어에 먼저 나온 개념을 앞에 둔다. 점수식이 첫 개념에 가장 큰 가산점을 주기 때문이다
+        String originalKey = SemanticTextNormalizer.lookupKey(original);
         List<ResolvedTopic> topics = topicCatalog.resolve(original).stream()
                 .filter(match -> match.topic().searchable())
+                .sorted(Comparator.comparingInt(match -> aliasPosition(originalKey, match.matchedAlias())))
                 .toList();
         topics = resolveBroadGlobalProgram(original, topics);
 
@@ -184,5 +188,10 @@ public class SearchQueryInterpreter {
 
     private String parenthesizeOr(Set<String> values) {
         return "(" + String.join(" | ", values) + ")";
+    }
+
+    private static int aliasPosition(String originalKey, String alias) {
+        int position = originalKey.indexOf(SemanticTextNormalizer.lookupKey(alias));
+        return position < 0 ? Integer.MAX_VALUE : position;
     }
 }

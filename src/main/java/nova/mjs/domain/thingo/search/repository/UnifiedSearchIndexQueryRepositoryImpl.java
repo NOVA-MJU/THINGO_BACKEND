@@ -1,5 +1,6 @@
 package nova.mjs.domain.thingo.search.repository;
 
+import nova.mjs.domain.thingo.search.query.GraduationQueryScope;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
@@ -303,9 +304,25 @@ public class UnifiedSearchIndexQueryRepositoryImpl implements UnifiedSearchIndex
             where.append(" AND (").append(String.join(" OR ", candidateConditions)).append(") ");
         }
 
-        String topicMatchExpr = buildTopicMatchExpression(topicIds);
+        // 개념이 여럿이면(예: '조기취업 유고결석') 검색어 앞쪽 개념이 사용자가 찾는 대상이고 뒤쪽은 범위를 좁히는 말이다.
+        // 뒤쪽 개념 태그만 가진 문서(예비군 유고결석)가 앞쪽 개념 문서와 같은 가산점을 받지 않도록 첫 개념만 전부 주고,
+        // 나머지 개념은 일부만 준다. 개념을 모두 본문에 담은 문서는 따로 끌어올린다.
         String topicBoostExpr = hasTopicIds
-                ? " + CASE WHEN " + topicMatchExpr + " THEN 0.65 ELSE 0 END "
+                ? " + CASE WHEN " + buildTopicMatchExpression(topicIds.subList(0, 1)) + " THEN 0.65 "
+                + (topicIds.size() > 1
+                    ? " WHEN " + buildTopicMatchExpression(topicIds.subList(1, topicIds.size()), 1) + " THEN 0.30 "
+                    : "")
+                + " ELSE 0 END "
+                : " ";
+        // '2025학번 졸업학점'처럼 학과 없이 학번·졸업 일반어만 있으면 학번 공통 기준(공통·핵심교양, 졸업 이수학점, 찾는 법)을 올리고
+        // 학과별 학기교 문서는 내린다. 학과 이름이 있으면 지금처럼 그 학과 문서가 제목 매칭으로 위에 온다
+        String cohortWideExpr = hasKeyword && GraduationQueryScope.isCohortWide(keyword)
+                ? " + CASE WHEN category = 'academic_course_rule' THEN -0.35 "
+                + "        WHEN category LIKE 'graduation\\_%' OR id LIKE 'ACADEMIC\\_GUIDE%rule%find-requirements' THEN 0.35 "
+                + "        ELSE 0 END "
+                : " ";
+        String allConceptsBoostExpr = topicIds.size() > 1 && hasMatchTsQuery
+                ? " + CASE WHEN search_vector @@ to_tsquery('simple', :matchTsQuery) THEN 0.40 ELSE 0 END "
                 : " ";
 
         String hotBoostExpr = hasHot
@@ -347,6 +364,8 @@ public class UnifiedSearchIndexQueryRepositoryImpl implements UnifiedSearchIndex
                 + "  + coalesce(popularity, 0) * 0.0001 "
                 + weightExpr
                 + topicBoostExpr
+                + allConceptsBoostExpr
+                + cohortWideExpr
                 + hotBoostExpr
                 + VALIDITY_WEIGHT_EXPR
                 + RECENCY_WEIGHT_EXPR
@@ -505,9 +524,14 @@ public class UnifiedSearchIndexQueryRepositoryImpl implements UnifiedSearchIndex
     }
 
     private String buildTopicMatchExpression(List<String> topicIds) {
+        return buildTopicMatchExpression(topicIds, 0);
+    }
+
+    // offset: 바인딩 파라미터 이름(:topicId{i})이 전체 목록 기준 위치를 쓰도록 부분 목록의 시작 위치를 넘긴다
+    private String buildTopicMatchExpression(List<String> topicIds, int offset) {
         List<String> conditions = new ArrayList<>();
         for (int i = 0; i < topicIds.size(); i++) {
-            conditions.add("topic_ids @> CAST(:topicId" + i + " AS jsonb)");
+            conditions.add("topic_ids @> CAST(:topicId" + (offset + i) + " AS jsonb)");
         }
         return conditions.isEmpty() ? "FALSE" : "(" + String.join(" OR ", conditions) + ")";
     }
