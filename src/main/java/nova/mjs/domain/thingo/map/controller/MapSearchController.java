@@ -49,12 +49,14 @@ public class MapSearchController {
             @RequestParam(value = "size", defaultValue = "20") int size,
             @RequestParam(value = "seed", required = false) String seed,
             @RequestParam(value = "floorMap", defaultValue = "false") boolean floorMap,
+            @RequestParam(value = "strict", defaultValue = "false") boolean strict,
             @AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
         String email = (userPrincipal != null) ? userPrincipal.getUsername() : null;
-        log.info("[명지도 검색] keyword={}, lat={}, lng={}, page={}, floorMap={}, email={}",
-                keyword, lat, lng, page, floorMap, email);
-        List<PinSummaryResponse> results = mapSearchService.search(keyword, lat, lng, page, size, email, seed, floorMap);
+        log.info("[명지도 검색] keyword={}, lat={}, lng={}, page={}, floorMap={}, strict={}, email={}",
+                keyword, lat, lng, page, floorMap, strict, email);
+        List<PinSummaryResponse> results =
+                mapSearchService.search(keyword, lat, lng, page, size, email, seed, floorMap, strict);
         return ApiResponse.success(
                 floorMap ? results : results.stream().map(PinSummaryResponse::toPlaceFallback).toList());
     }
