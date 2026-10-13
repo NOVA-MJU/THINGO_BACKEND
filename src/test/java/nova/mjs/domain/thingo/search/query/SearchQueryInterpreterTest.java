@@ -181,4 +181,11 @@ class SearchQueryInterpreterTest {
         assertThat(interpreter.interpret("유고결석 조기취업").topicIds())
                 .containsExactly("EXCUSED_ABSENCE", "EARLY_EMPLOYMENT_ABSENCE");
     }
+
+    @Test
+    @DisplayName("병결은 질병(입원·진단서) 주제를 첫 주제로 둔다")
+    void sickAbsencePutsIllnessTopicFirst() {
+        assertThat(interpreter.interpret("병결").topicIds())
+                .containsExactly("ABSENCE_ILLNESS", "EXCUSED_ABSENCE");
+    }
 }

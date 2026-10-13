@@ -395,11 +395,11 @@
       "topicId": "ABSENCE_ILLNESS",
       "parentTopicId": null,
       "displayName": "병결(입원·치료)",
-      "description": "아파서 결석한 경우: 유고결석 사유 중 학생의 입원·치료기간(진단서, 학기 수업일수 1/4까지). '병결'은 유고결석 토픽과 함께 잡혀 두 조건을 모두 만족하는 문서만 후보가 된다(하위 토픽으로 두면 상위가 빠져 '입원'만으로 찾게 됨)",
+      "description": "아파서 결석한 경우: 유고결석 사유 중 학생의 입원·치료기간(진단서, 학기 수업일수 1/4까지). '병결'은 유고결석 토픽과 함께 잡혀 두 조건을 모두 만족하는 문서만 후보가 된다(하위 토픽으로 두면 상위가 빠져 '입원'만으로 찾게 됨). '병결' 별칭 우선순위를 유고결석보다 높여 이 토픽이 첫 주제가 되게 해, 예비군 등 다른 유고결석 공지보다 질병 관련 문서가 앞선다",
       "searchable": true,
       "subscribable": false,
       "enabled": true,
-      "searchTerms": ["입원", "진단서"]
+      "searchTerms": ["입원", "진단서", "질병"]
     },
     {
       "topicId": "CERTIFICATE_ISSUANCE",
@@ -483,8 +483,10 @@
     {"topicId": "EXCUSED_ABSENCE", "alias": "생리공결", "priority": 120},
     {"topicId": "EXCUSED_ABSENCE", "alias": "결석계", "priority": 120},
     {"topicId": "EXCUSED_ABSENCE", "alias": "결석", "priority": 100},
-    {"topicId": "ABSENCE_ILLNESS", "alias": "병결", "priority": 120},
+    {"topicId": "ABSENCE_ILLNESS", "alias": "병결", "priority": 125},
+    {"topicId": "ABSENCE_ILLNESS", "alias": "질병결석", "priority": 120},
     {"topicId": "ABSENCE_ILLNESS", "alias": "아파서", "priority": 100},
+    {"topicId": "ABSENCE_ILLNESS", "alias": "아플때", "priority": 100},
     {"topicId": "CERTIFICATE_ISSUANCE", "alias": "증명서 발급", "priority": 120},
     {"topicId": "CERTIFICATE_ISSUANCE", "alias": "증명서발급", "priority": 120},
     {"topicId": "CERTIFICATE_ISSUANCE", "alias": "증명발급", "priority": 120},
