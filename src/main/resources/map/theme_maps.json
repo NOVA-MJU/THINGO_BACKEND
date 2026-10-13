@@ -1,0 +1,88 @@
+{
+  "themes": [
+    {
+      "id": "budget-meal",
+      "title": "만원의 행복",
+      "subtitle": "만원 이하 가성비 식당",
+      "imageUrl": "https://thingo.kr/static/images/map//beb589ad66c7399fcf948b23ee237b69f4eafdac7d8dfb1f4bfe79898ef0382e.jpg",
+      "placeCodes": [
+        "p-cafeteria-b-student-01",
+        "dd-1426644127",
+        "dd-2025426353",
+        "dd-1902140274",
+        "dd-36680436",
+        "dd-1763285419",
+        "dd-11824926",
+        "dd-21796089",
+        "dd-18287122"
+      ]
+    },
+    {
+      "id": "work-cafe",
+      "title": "작업하기 좋은 카페",
+      "subtitle": "충전 걱정 없이, 집중 ON",
+      "imageUrl": "https://thingo.kr/static/images/map//16dc5cad4e468a7152ac3291c1c4275165d39aa9666a677f3316120b233429a2.jpg",
+      "placeCodes": [
+        "p-cafe-b-mcc-02",
+        "p-cafe-b-mcc-01",
+        "p-cafe-b-mcc-03",
+        "dd-1837793874",
+        "dd-1665675029",
+        "dd-18763492",
+        "dd-1491366315",
+        "dd-1237053267"
+      ]
+    },
+    {
+      "id": "campus-walk",
+      "title": "학교 주변 한 바퀴",
+      "subtitle": "명지대생 단골 코스부터, 숨은 산책길까지",
+      "imageUrl": "https://thingo.kr/static/images/map//3a1bcb231efe80efa8b82694243ef63a5da27cc5d28d0d8d4174637f14002056.jpg",
+      "placeCodes": [
+        "p-campus-entrance-ext-01",
+        "p-terrace-ext-01",
+        "p-terrace-ext-03",
+        "p-terrace-ext-04",
+        "p-terrace-ext-02",
+        "p-shortcut-ext-01",
+        "p-shortcut-ext-02",
+        "p-gym-ext-01",
+        "p-gym-ext-02",
+        "p-truck-ext-01"
+      ]
+    },
+    {
+      "id": "senior-cafe",
+      "title": "4학년 추천 느좋 카페",
+      "subtitle": "나만 알고 싶었던 카페 족보",
+      "imageUrl": "https://thingo.kr/static/images/map//6fb289f093a9bcea3f6f0e7c100a8bdac9b50640fe91335373b0018d42b4907e.jpg",
+      "placeCodes": [
+        "dd-1671471877",
+        "dd-1043369174",
+        "dd-1094289115",
+        "dd-1896032587",
+        "dd-2073427794",
+        "dd-1541225537",
+        "dd-1311135942",
+        "dd-1459177124"
+      ]
+    },
+    {
+      "id": "group-dining",
+      "title": "같이 먹자! 단체 식사/술집",
+      "subtitle": "여럿이 방문하기 좋은 곳",
+      "imageUrl": "https://thingo.kr/static/images/map//453b2a314b5300a04b94f32260b26e312d8a019ccdc9dc8ecdf71d0854600e38.jpg",
+      "placeCodes": [
+        "dd-1039079229",
+        "dd-1401730641",
+        "dd-1102427977",
+        "dd-1712679482",
+        "dd-2007292156",
+        "dd-1921315424",
+        "dd-36342590",
+        "dd-1323812622",
+        "dd-1838620157"
+      ]
+    }
+  ]
+}

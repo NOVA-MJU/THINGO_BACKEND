@@ -28,6 +28,9 @@ public interface PinRepository extends JpaRepository<Pin, Long> {
     /** 특정 건물에 속한 내부 장소들 (층별 시설 목록 구성용) */
     List<Pin> findByParentBuildingId(Long buildingId);
 
+    /** 테마지도처럼 장소 코드 목록으로 묶은 핀 조회 (순서는 호출부가 맞춘다) */
+    List<Pin> findByCodeIn(Collection<String> codes);
+
     /** 동기화 upsert용 - code로 단건 조회 */
     Optional<Pin> findByCode(String code);
 
