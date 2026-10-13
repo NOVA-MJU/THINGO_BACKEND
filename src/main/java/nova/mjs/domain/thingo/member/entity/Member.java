@@ -5,6 +5,8 @@ import lombok.*;
 import nova.mjs.admin.account.DTO.AdminDTO;
 import nova.mjs.domain.thingo.department.entity.enumList.College;
 import nova.mjs.domain.thingo.member.DTO.MemberDTO;
+import nova.mjs.domain.thingo.member.google.GoogleAccount;
+import nova.mjs.domain.thingo.member.google.GoogleAuthDTO;
 import nova.mjs.domain.thingo.department.entity.enumList.DepartmentName;
 import nova.mjs.util.entity.BaseEntity;
 
@@ -39,7 +41,8 @@ public class Member extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
+    // 구글로 가입한 회원은 비밀번호가 없다 (이메일 로그인을 쓰려면 비밀번호 찾기로 새로 정한다)
+    @Column
     private String password;
 
     private String nickname;
@@ -72,6 +75,24 @@ public class Member extends BaseEntity {
                 .studentNumber(memberDTO.getStudentNumber())
                 .role(Role.USER)
                 .build();
+    }
+
+    public static Member createWithGoogle(GoogleAccount account, GoogleAuthDTO.SignupRequest request) {
+        return Member.builder()
+                .uuid(UUID.randomUUID())
+                .name(account.name())
+                .email(account.email())
+                .nickname(request.getNickname())
+                .profileImageUrl(request.getProfileImageUrl() != null ? request.getProfileImageUrl() : account.pictureUrl())
+                .college(request.getCollege())
+                .departmentName(request.getDepartmentName())
+                .studentNumber(request.getStudentNumber())
+                .role(Role.USER)
+                .build();
+    }
+
+    public boolean hasPassword() {
+        return password != null;
     }
 
     public void update(MemberDTO.MemberUpdateRequestDTO memberDTO) {

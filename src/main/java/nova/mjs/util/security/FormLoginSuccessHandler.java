@@ -7,13 +7,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nova.mjs.util.jwt.JwtUtil;
-import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.time.Duration;
 import java.util.UUID;
 
 @Slf4j
@@ -58,14 +56,7 @@ public class FormLoginSuccessHandler implements AuthenticationSuccessHandler {
     private void writeWebResponse(HttpServletResponse response,
                                   String accessToken,
                                   String refreshToken) throws IOException {
-        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken)
-                .httpOnly(true)
-                .secure(true)
-                .sameSite("None")
-                .path("/")
-                .maxAge(Duration.ofDays(14))
-                .build();
-        response.addHeader("Set-Cookie", refreshCookie.toString());
+        response.addHeader("Set-Cookie", RefreshTokenCookie.of(refreshToken).toString());
 
         AuthDTO.LoginResponseDTO responseData = AuthDTO.LoginResponseDTO.builder()
                 .accessToken(accessToken)
