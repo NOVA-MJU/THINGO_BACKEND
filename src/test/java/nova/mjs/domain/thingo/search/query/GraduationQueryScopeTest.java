@@ -25,4 +25,15 @@ class GraduationQueryScopeTest {
         assertThat(GraduationQueryScope.isCohortWide("졸업작품 전시")).isFalse();
         assertThat(GraduationQueryScope.isCohortWide("장학금 신청")).isFalse();
     }
+
+    @Test
+    @DisplayName("학번을 학사안내문 졸업요건 표의 학번 구간 제목으로 바꾼다")
+    void mapsCohortToGuideRangeTitle() {
+        assertThat(GraduationQueryScope.cohortTitleLabel("21학번 졸업학점")).contains("2018~2024학번");
+        assertThat(GraduationQueryScope.cohortTitleLabel("경영학과 2016학번 졸업요건")).contains("2015~2017학번");
+        assertThat(GraduationQueryScope.cohortTitleLabel("26학번 졸업학점")).contains("2025학번 이후");
+        assertThat(GraduationQueryScope.cohortTitleLabel("10학번 졸업학점")).contains("2009~2014학번");
+        assertThat(GraduationQueryScope.cohortTitleLabel("98학번 졸업학점")).isEmpty();
+        assertThat(GraduationQueryScope.cohortTitleLabel("21학번 장학금")).isEmpty();
+    }
 }

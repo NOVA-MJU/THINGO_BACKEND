@@ -4,6 +4,8 @@ import nova.mjs.domain.thingo.semantic.SemanticTextNormalizer;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -16,6 +18,16 @@ import java.util.regex.Pattern;
 public final class GraduationQueryScope {
 
     private static final Pattern COHORT = Pattern.compile("\\d{2,4}학번(이후|까지)?");
+    private static final Pattern COHORT_YEAR = Pattern.compile("(\\d{2,4})학번");
+    // 학사안내문 졸업요건 표의 학번 구간 제목. 학기마다 학사안내문 구성이 바뀌면 함께 바꾼다
+    private static final List<CohortRange> COHORT_RANGES = List.of(
+            new CohortRange(2025, Integer.MAX_VALUE, "2025학번 이후"),
+            new CohortRange(2018, 2024, "2018~2024학번"),
+            new CohortRange(2015, 2017, "2015~2017학번"),
+            new CohortRange(2009, 2014, "2009~2014학번"));
+
+    private record CohortRange(int from, int to, String titleLabel) {
+    }
     private static final List<String> GRADUATION_WORDS = List.of("졸업", "학기교", "이수학점");
     // 학번 공통 기준을 물을 때 함께 쓰는 일반어. 긴 말부터 지워야 '졸업학점'이 '졸업'+'학점' 조각으로 남지 않는다
     private static final List<String> GENERIC_WORDS = List.of(
@@ -28,6 +40,30 @@ public final class GraduationQueryScope {
     private static final Pattern PARTICLES = Pattern.compile("[은는이가의을를요도]");
 
     private GraduationQueryScope() {
+    }
+
+    /**
+     * 졸업요건 검색어의 학번('21학번', '2021학번')이 속한 학사안내문 학번 구간 제목('2018~2024학번').
+     * 두 자리 학번은 50 이상이면 1900년대로 본다. 졸업요건 검색이 아니거나 구간 밖이면 empty.
+     */
+    public static Optional<String> cohortTitleLabel(String keyword) {
+        String key = SemanticTextNormalizer.lookupKey(keyword == null ? "" : keyword);
+        if (GRADUATION_WORDS.stream().noneMatch(key::contains)) {
+            return Optional.empty();
+        }
+        Matcher matcher = COHORT_YEAR.matcher(key);
+        if (!matcher.find()) {
+            return Optional.empty();
+        }
+        int year = Integer.parseInt(matcher.group(1));
+        if (year < 100) {
+            year += year >= 50 ? 1900 : 2000;
+        }
+        int admissionYear = year;
+        return COHORT_RANGES.stream()
+                .filter(range -> admissionYear >= range.from() && admissionYear <= range.to())
+                .map(CohortRange::titleLabel)
+                .findFirst();
     }
 
     public static boolean isCohortWide(String keyword) {
