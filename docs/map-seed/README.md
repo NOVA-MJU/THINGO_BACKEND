@@ -145,3 +145,33 @@ ext-02/ext-04의 사진 배정도 이 좌표를 근거로 삼았다. 실측 좌�
 - 산책 코스 7곳은 맞는 카테고리가 없어 `guide` 그룹에 `walk`(산책) 칩을 새로 만들었다.
 - 스터디카페 4곳은 `study-room`, 나머지 식당·카페는 대동명지도 하위탭(`daedong-*`)에 넣었다.
 - 홍제천 폭포·안산벚꽃길·홍제천 음악분수는 네이버 장소명(홍제폭포광장·안산자락길·홍제천 음악분수) 대신 기획 시트 이름을 썼다.
+
+## 산책 코스 사진 (walk-photos-sync.json)
+
+산책 코스 6곳 갤러리는 Wikimedia Commons의 자유 라이선스 사진(CC0·CC BY-SA·공공누리 제1유형)만 썼다.
+네이버 사진은 이용약관(자동 수집 금지)과 저작권 문제로 쓰지 않는다. 긴 변 1280px JPEG로 줄여 업로드 API로 올렸다.
+CC BY-SA·공공누리는 출처 표시가 조건이라 각 핀 `infoText`에 작가와 라이선스를 넣었다. 사진을 바꾸면 `infoText`도 같이 고칠 것.
+홍제천 음악분수는 자유 라이선스 사진이 없어 비워 두었다.
+
+| 장소 | 원본 | 작가 | 라이선스 |
+|---|---|---|---|
+| 홍제천 폭포 | [Hongjecheon Artificial Waterfall 2023-10-31.jpg](https://commons.wikimedia.org/wiki/File:Hongjecheon_Artificial_Waterfall_2023-10-31.jpg) | Huntsmanleader | CC0 |
+| 홍제천 폭포 | [Hongjecheon Artificial Falls Frozen.jpg](https://commons.wikimedia.org/wiki/File:Hongjecheon_Artificial_Falls_Frozen.jpg) | Huntsmanleader | CC0 |
+| 홍제천 폭포 | [Biking in Seoul (14012446781).jpg](https://commons.wikimedia.org/wiki/File:Biking_in_Seoul_(14012446781).jpg) | Michael Sean Gallagher from London, United Kingdom | CC BY-SA 2.0 |
+| 안산벚꽃길 | [KOCIS Korea First Snowfall in Seoul 05 (10922179396).jpg](https://commons.wikimedia.org/wiki/File:KOCIS_Korea_First_Snowfall_in_Seoul_05_(10922179396).jpg) | Korea.net / Korean Culture and Information Service (Jeon Han) | CC BY-SA 2.0 |
+| 안산벚꽃길 | [KOCIS Korea First Snowfall in Seoul 23 (10922164646).jpg](https://commons.wikimedia.org/wiki/File:KOCIS_Korea_First_Snowfall_in_Seoul_23_(10922164646).jpg) | Korea.net / Korean Culture and Information Service (Jeon Han) | CC BY-SA 2.0 |
+| 안산벚꽃길 | [KOCIS Korea First Snowfall in Seoul 20 (10922235624).jpg](https://commons.wikimedia.org/wiki/File:KOCIS_Korea_First_Snowfall_in_Seoul_20_(10922235624).jpg) | Korea.net / Korean Culture and Information Service (Jeon Han) | CC BY-SA 2.0 |
+| 안산벚꽃길 | [KOCIS Korea First Snowfall in Seoul 04 (10922180466).jpg](https://commons.wikimedia.org/wiki/File:KOCIS_Korea_First_Snowfall_in_Seoul_04_(10922180466).jpg) | Korea.net / Korean Culture and Information Service (Jeon Han) | CC BY-SA 2.0 |
+| 안산벚꽃길 | [KOCIS Korea First Snowfall in Seoul 22 (10922103795).jpg](https://commons.wikimedia.org/wiki/File:KOCIS_Korea_First_Snowfall_in_Seoul_22_(10922103795).jpg) | Korea.net / Korean Culture and Information Service (Jeon Han) | CC BY-SA 2.0 |
+| 불광천 | [Bulgwangcheon 20230403 009.jpg](https://commons.wikimedia.org/wiki/File:Bulgwangcheon_20230403_009.jpg) | Mobius6 | CC BY-SA 4.0 |
+| 불광천 | [Bulgwangcheon 20230403 006.jpg](https://commons.wikimedia.org/wiki/File:Bulgwangcheon_20230403_006.jpg) | Mobius6 | CC BY-SA 4.0 |
+| 불광천 | [Bulgwangcheon 20230403 018.jpg](https://commons.wikimedia.org/wiki/File:Bulgwangcheon_20230403_018.jpg) | Mobius6 | CC BY-SA 4.0 |
+| 불광천 | [Bulgwangcheon 20230403 005.jpg](https://commons.wikimedia.org/wiki/File:Bulgwangcheon_20230403_005.jpg) | Mobius6 | CC BY-SA 4.0 |
+| 불광천 | [Bulgwangcheon 20230403 015.jpg](https://commons.wikimedia.org/wiki/File:Bulgwangcheon_20230403_015.jpg) | Mobius6 | CC BY-SA 4.0 |
+| 망원정터 | [서울 망원정 터.jpg](https://commons.wikimedia.org/wiki/File:%EC%84%9C%EC%9A%B8_%EB%A7%9D%EC%9B%90%EC%A0%95_%ED%84%B0.jpg) | 문화재청 | KOGL Type 1 |
+| 망원 한강공원 | [Mangwon Hangang Park.png](https://commons.wikimedia.org/wiki/File:Mangwon_Hangang_Park.png) | Brit in Seoul | CC BY-SA 4.0 |
+| 하늘공원 | [Haneul-Park.jpg](https://commons.wikimedia.org/wiki/File:Haneul-Park.jpg) | Vanessaliam | CC BY-SA 3.0 |
+| 하늘공원 | [Cosmos in the Sky Park3.jpg](https://commons.wikimedia.org/wiki/File:Cosmos_in_the_Sky_Park3.jpg) | Ji-soo Seo | CC BY-SA 4.0 |
+| 하늘공원 | [Haneul-Park--reeds.jpg](https://commons.wikimedia.org/wiki/File:Haneul-Park--reeds.jpg) | Vanessaliam | CC BY-SA 3.0 |
+| 하늘공원 | [Haneul Park Seoul 13.jpg](https://commons.wikimedia.org/wiki/File:Haneul_Park_Seoul_13.jpg) | U2em | CC BY-SA 3.0 |
+| 하늘공원 | [KOCIS Korea Autumn SkyPark 20 (10471401284).jpg](https://commons.wikimedia.org/wiki/File:KOCIS_Korea_Autumn_SkyPark_20_(10471401284).jpg) | Korea.net / Korean Culture and Information Service (Jeon Han) | CC BY-SA 2.0 |

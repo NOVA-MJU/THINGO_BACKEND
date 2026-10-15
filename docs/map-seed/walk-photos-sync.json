@@ -1,0 +1,96 @@
+{
+  "places": [
+    {
+      "code": "dd-36271773",
+      "categoryCode": "walk",
+      "name": "홍제천 폭포",
+      "latitude": 37.5816819,
+      "longitude": 126.9370633,
+      "address": "서울 서대문구 홍은동 428-1",
+      "imageUrl": "https://thingo.kr/static/images/map//ce81cd939b5bd79d102aeeea2d66fd811d87a8095fa17363a40069ea07706339.jpg",
+      "imageUrls": [
+        "https://thingo.kr/static/images/map//ce81cd939b5bd79d102aeeea2d66fd811d87a8095fa17363a40069ea07706339.jpg",
+        "https://thingo.kr/static/images/map//2162966231225b3f4dbebfe3337af35627514668873e1e5f63f49d636d21c176.jpg",
+        "https://thingo.kr/static/images/map//47b864a6e6199c2c34fa5f82ff8c9aea225aecf23a92f7e8d048721beb4534a7.jpg"
+      ],
+      "infoText": "사진: Huntsmanleader (CC0), Michael Sean Gallagher (CC BY-SA 2.0) / Wikimedia Commons"
+    },
+    {
+      "code": "dd-36804699",
+      "categoryCode": "walk",
+      "name": "안산벚꽃길",
+      "latitude": 37.574378,
+      "longitude": 126.9465278,
+      "address": "서울 서대문구 봉원사길 75-66",
+      "imageUrl": "https://thingo.kr/static/images/map//ed4b6eeda990838948babe811082f4fb09366ed67482c0ebff14b350c862a631.jpg",
+      "imageUrls": [
+        "https://thingo.kr/static/images/map//ed4b6eeda990838948babe811082f4fb09366ed67482c0ebff14b350c862a631.jpg",
+        "https://thingo.kr/static/images/map//a06b084fe3373acb19001704ca7c669e168bd19e67a35d5c5fcb86d5c3fe1968.jpg",
+        "https://thingo.kr/static/images/map//e9fdad8a8242a3882ef6b78794a6d12718713b8fdb27c8be59781e4a3037d0f4.jpg",
+        "https://thingo.kr/static/images/map//13f345074762ca714de88f45178439ab548618ea8f112b06313ef2b4cd2150dd.jpg",
+        "https://thingo.kr/static/images/map//3794d442678d36ba3180af5dfd4fa445154d9024d414133ce0d784fe93307148.jpg"
+      ],
+      "infoText": "사진: Korea.net/KOCIS (CC BY-SA 2.0) / Wikimedia Commons"
+    },
+    {
+      "code": "dd-13544494",
+      "categoryCode": "walk",
+      "name": "불광천",
+      "latitude": 37.5848787,
+      "longitude": 126.9113648,
+      "address": "서울 서대문구 북가좌동",
+      "imageUrl": "https://thingo.kr/static/images/map//53db6a323aba3abeadb10ebe78b3c75e96661c193d2c2a606c6ad7a5f97f47b3.jpg",
+      "imageUrls": [
+        "https://thingo.kr/static/images/map//53db6a323aba3abeadb10ebe78b3c75e96661c193d2c2a606c6ad7a5f97f47b3.jpg",
+        "https://thingo.kr/static/images/map//6ea4c756b1a138b2737419e86239db70836626ab1f69de9fe6cd013081ebec66.jpg",
+        "https://thingo.kr/static/images/map//d43801b621280f53e491a0e204cd2cf5b80776b2d9b820e39bc9fe574a77f30e.jpg",
+        "https://thingo.kr/static/images/map//2357dca1cfb67326eb596143db42f4a2c9ca34bf79d27caed4c70d587eea49e4.jpg",
+        "https://thingo.kr/static/images/map//539611f8e70436e1857a979d0393eb0d65edbf88a5be7c52778f9783aeb200ea.jpg"
+      ],
+      "infoText": "사진: Mobius6 (CC BY-SA 4.0) / Wikimedia Commons"
+    },
+    {
+      "code": "dd-20099160",
+      "categoryCode": "walk",
+      "name": "망원정터",
+      "latitude": 37.549911,
+      "longitude": 126.9046666,
+      "address": "서울 마포구 동교로8안길 23",
+      "imageUrl": "https://thingo.kr/static/images/map//8855f8095e92ae73dc37e287efa55d9d4054883653684bd766c65402712a9231.jpg",
+      "imageUrls": [
+        "https://thingo.kr/static/images/map//8855f8095e92ae73dc37e287efa55d9d4054883653684bd766c65402712a9231.jpg"
+      ],
+      "infoText": "사진: 문화재청 (공공누리 제1유형)"
+    },
+    {
+      "code": "dd-13416958",
+      "categoryCode": "walk",
+      "name": "망원 한강공원",
+      "latitude": 37.5553018,
+      "longitude": 126.8952798,
+      "address": "서울 마포구 마포나루길 467",
+      "imageUrl": "https://thingo.kr/static/images/map//7d5e75ec37d16ca82f3621cbbe07bcf87ba138299446cf6542c43e862fd5bdc4.jpg",
+      "imageUrls": [
+        "https://thingo.kr/static/images/map//7d5e75ec37d16ca82f3621cbbe07bcf87ba138299446cf6542c43e862fd5bdc4.jpg"
+      ],
+      "infoText": "사진: Brit in Seoul (CC BY-SA 4.0) / Wikimedia Commons"
+    },
+    {
+      "code": "dd-13219083",
+      "categoryCode": "walk",
+      "name": "하늘공원",
+      "latitude": 37.5675623,
+      "longitude": 126.885063,
+      "address": "서울 마포구 하늘공원로 95",
+      "imageUrl": "https://thingo.kr/static/images/map//83202581287f729a8ecad87f5e1a8b357c42fb98810366a1a39f46effd9f32fe.jpg",
+      "imageUrls": [
+        "https://thingo.kr/static/images/map//83202581287f729a8ecad87f5e1a8b357c42fb98810366a1a39f46effd9f32fe.jpg",
+        "https://thingo.kr/static/images/map//efe10d64c8a1d6e7a49c7d338825f36b2606c866423b62205340edc1e345345e.jpg",
+        "https://thingo.kr/static/images/map//dce679586641477a3777a821526a4625be7dcd2bf1af930bf5fb17afbb5ce156.jpg",
+        "https://thingo.kr/static/images/map//0515d8f398836393aa0974f88d7d4c6571f141da23954304a6b6f0a26278dfc3.jpg",
+        "https://thingo.kr/static/images/map//a7cdac1baf3f8e421204b451f401c42b7630657a84bd9c386f7a7531dd2754c7.jpg"
+      ],
+      "infoText": "사진: Vanessaliam (CC BY-SA 3.0), Ji-soo Seo (CC BY-SA 4.0), U2em (CC BY-SA 3.0), Korea.net/KOCIS (CC BY-SA 2.0) / Wikimedia Commons"
+    }
+  ]
+}
