@@ -1,0 +1,310 @@
+{
+  "categories": [
+    {
+      "code": "walk",
+      "groupCode": "guide",
+      "label": "산책",
+      "resultType": "PLACE_LIST",
+      "quickMenu": false,
+      "displayOrder": 8
+    }
+  ],
+  "places": [
+    {
+      "code": "dd-1106665543",
+      "categoryCode": "daedong-kr",
+      "name": "명지 밥집",
+      "latitude": 37.5790139,
+      "longitude": 126.9235975,
+      "address": "서울 서대문구 거북골로 43-11"
+    },
+    {
+      "code": "dd-1121306880",
+      "categoryCode": "daedong-kr",
+      "name": "나주향 나주곰탕 남가좌점",
+      "latitude": 37.57611,
+      "longitude": 126.9255854,
+      "address": "서울 서대문구 증가로 101"
+    },
+    {
+      "code": "dd-1962135519",
+      "categoryCode": "daedong-bar",
+      "name": "명지 치킨포차",
+      "latitude": 37.5786573,
+      "longitude": 126.9242504,
+      "address": "서울 서대문구 증가로10길 36-4"
+    },
+    {
+      "code": "dd-2062256000",
+      "categoryCode": "daedong-kr",
+      "name": "장평리막국수&요리도리별장",
+      "latitude": 37.5799387,
+      "longitude": 126.9250117,
+      "address": "서울 서대문구 거북골로 21-8"
+    },
+    {
+      "code": "dd-1014037406",
+      "categoryCode": "daedong-meat",
+      "name": "미소그릴 한돈다이닝",
+      "latitude": 37.5835446,
+      "longitude": 126.9230947,
+      "address": "서울 서대문구 명지대길 83"
+    },
+    {
+      "code": "dd-1286392271",
+      "categoryCode": "daedong-cafe",
+      "name": "0122COFFEEBAR",
+      "latitude": 37.584801,
+      "longitude": 126.9231416,
+      "address": "서울 서대문구 명지대길 108"
+    },
+    {
+      "code": "dd-36271773",
+      "categoryCode": "walk",
+      "name": "홍제천 폭포",
+      "latitude": 37.5816819,
+      "longitude": 126.9370633,
+      "address": "서울 서대문구 홍은동 428-1"
+    },
+    {
+      "code": "dd-1713627368",
+      "categoryCode": "daedong-snack",
+      "name": "어글리김밥",
+      "latitude": 37.5780832,
+      "longitude": 126.9215756,
+      "address": "서울 서대문구 증가로 150"
+    },
+    {
+      "code": "dd-2030377593",
+      "categoryCode": "daedong-jp",
+      "name": "기린이라멘",
+      "latitude": 37.5781852,
+      "longitude": 126.922952,
+      "address": "서울 서대문구 거북골로 53-18"
+    },
+    {
+      "code": "dd-2031543961",
+      "categoryCode": "daedong-western",
+      "name": "한아름",
+      "latitude": 37.5798495,
+      "longitude": 126.9250449,
+      "address": "서울 서대문구 거북골로 21-10"
+    },
+    {
+      "code": "dd-1032580297",
+      "categoryCode": "daedong-cafe",
+      "name": "프로토콜 연희점",
+      "latitude": 37.5677946,
+      "longitude": 126.9313914,
+      "address": "서울 서대문구 연희로 109"
+    },
+    {
+      "code": "dd-1304262793",
+      "categoryCode": "daedong-cafe",
+      "name": "데스툴 연희",
+      "latitude": 37.5695541,
+      "longitude": 126.9318126,
+      "address": "서울 서대문구 연희로25길 98"
+    },
+    {
+      "code": "dd-1792285395",
+      "categoryCode": "daedong-cafe",
+      "name": "센티멘트",
+      "latitude": 37.5672271,
+      "longitude": 126.9290697,
+      "address": "서울 서대문구 연희맛로 17-14"
+    },
+    {
+      "code": "dd-1451188213",
+      "categoryCode": "daedong-cafe",
+      "name": "쓰리어클락 연희",
+      "latitude": 37.5707266,
+      "longitude": 126.9328889,
+      "address": "서울 서대문구 연희로25길 66"
+    },
+    {
+      "code": "dd-1113397432",
+      "categoryCode": "daedong-cafe",
+      "name": "고유",
+      "latitude": 37.5660843,
+      "longitude": 126.9305538,
+      "address": "서울 서대문구 연희로 90-1"
+    },
+    {
+      "code": "dd-1456583705",
+      "categoryCode": "daedong-cafe",
+      "name": "공간커피",
+      "latitude": 37.5706848,
+      "longitude": 126.9328247,
+      "address": "서울 서대문구 연희로25길 68"
+    },
+    {
+      "code": "dd-2094729231",
+      "categoryCode": "daedong-snack",
+      "name": "착한컵",
+      "latitude": 37.581284,
+      "longitude": 126.9263125,
+      "address": "서울 서대문구 거북골로 6"
+    },
+    {
+      "code": "dd-20824658",
+      "categoryCode": "daedong-kr",
+      "name": "원조손칼국수",
+      "latitude": 37.5760206,
+      "longitude": 126.9256767,
+      "address": "서울 서대문구 증가로 99"
+    },
+    {
+      "code": "dd-1161125870",
+      "categoryCode": "daedong-cafe",
+      "name": "본지르르 연희",
+      "latitude": 37.5740902,
+      "longitude": 126.9346502,
+      "address": "서울 서대문구 연희로 189-16"
+    },
+    {
+      "code": "dd-1485444554",
+      "categoryCode": "daedong-cafe",
+      "name": "앤트러사이트 연희점",
+      "latitude": 37.5696725,
+      "longitude": 126.9329052,
+      "address": "서울 서대문구 연희로 135"
+    },
+    {
+      "code": "dd-1939804876",
+      "categoryCode": "daedong-cafe",
+      "name": "비바보사",
+      "latitude": 37.565156,
+      "longitude": 126.9278845,
+      "address": "서울 서대문구 동교로 296"
+    },
+    {
+      "code": "dd-2099113298",
+      "categoryCode": "daedong-cafe",
+      "name": "우드코티지",
+      "latitude": 37.5664603,
+      "longitude": 126.9265087,
+      "address": "서울 서대문구 성산로 325"
+    },
+    {
+      "code": "dd-1594562774",
+      "categoryCode": "daedong-cafe",
+      "name": "하우스오브바이닐 연희점",
+      "latitude": 37.5668179,
+      "longitude": 126.9286731,
+      "address": "서울 서대문구 연희맛로 17-43"
+    },
+    {
+      "code": "dd-36543730",
+      "categoryCode": "daedong-cafe",
+      "name": "푸어링아웃 본점",
+      "latitude": 37.567293,
+      "longitude": 126.9281513,
+      "address": "서울 서대문구 연희로11나길 7-7"
+    },
+    {
+      "code": "dd-1995069188",
+      "categoryCode": "daedong-cafe",
+      "name": "카페 마",
+      "latitude": 37.5669713,
+      "longitude": 126.9274411,
+      "address": "서울 서대문구 연희로11가길 48-10"
+    },
+    {
+      "code": "dd-1008629511",
+      "categoryCode": "daedong-cafe",
+      "name": "혹스턴",
+      "latitude": 37.566343,
+      "longitude": 126.9302802,
+      "address": "서울 서대문구 연희로 91"
+    },
+    {
+      "code": "dd-1162811035",
+      "categoryCode": "daedong-cafe",
+      "name": "로우키 연희점",
+      "latitude": 37.5668087,
+      "longitude": 126.9276284,
+      "address": "서울 서대문구 연희로11가길 48-4"
+    },
+    {
+      "code": "dd-2004538478",
+      "categoryCode": "study-room",
+      "name": "언레이지 스터디카페",
+      "latitude": 37.5809637,
+      "longitude": 126.9266282,
+      "address": "서울 서대문구 거북골로 5-4"
+    },
+    {
+      "code": "dd-1091772138",
+      "categoryCode": "study-room",
+      "name": "투어스비긴",
+      "latitude": 37.5700065,
+      "longitude": 126.9312814,
+      "address": "서울 서대문구 증가로 18"
+    },
+    {
+      "code": "dd-2009307744",
+      "categoryCode": "study-room",
+      "name": "카공족 연희점",
+      "latitude": 37.5666211,
+      "longitude": 126.9310187,
+      "address": "서울 서대문구 연희로 98"
+    },
+    {
+      "code": "dd-2074731569",
+      "categoryCode": "study-room",
+      "name": "카공족 명지대점",
+      "latitude": 37.5832293,
+      "longitude": 126.925532,
+      "address": "서울 서대문구 가좌로 120"
+    },
+    {
+      "code": "dd-36804699",
+      "categoryCode": "walk",
+      "name": "안산벚꽃길",
+      "latitude": 37.574378,
+      "longitude": 126.9465278,
+      "address": "서울 서대문구 봉원사길 75-66"
+    },
+    {
+      "code": "dd-13544494",
+      "categoryCode": "walk",
+      "name": "불광천",
+      "latitude": 37.5848787,
+      "longitude": 126.9113648,
+      "address": "서울 서대문구 북가좌동"
+    },
+    {
+      "code": "dd-20099160",
+      "categoryCode": "walk",
+      "name": "망원정터",
+      "latitude": 37.549911,
+      "longitude": 126.9046666,
+      "address": "서울 마포구 동교로8안길 23"
+    },
+    {
+      "code": "dd-13416958",
+      "categoryCode": "walk",
+      "name": "망원 한강공원",
+      "latitude": 37.5553018,
+      "longitude": 126.8952798,
+      "address": "서울 마포구 마포나루길 467"
+    },
+    {
+      "code": "dd-13219083",
+      "categoryCode": "walk",
+      "name": "하늘공원",
+      "latitude": 37.5675623,
+      "longitude": 126.885063,
+      "address": "서울 마포구 하늘공원로 95"
+    },
+    {
+      "code": "dd-4823368863",
+      "categoryCode": "walk",
+      "name": "홍제천 음악분수",
+      "latitude": 37.5725928,
+      "longitude": 126.9223887,
+      "address": "서울 서대문구 연희동"
+    }
+  ]
+}
