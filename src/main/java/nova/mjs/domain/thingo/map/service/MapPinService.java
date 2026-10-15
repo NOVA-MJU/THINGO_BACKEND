@@ -205,17 +205,25 @@ public class MapPinService {
     }
 
     /**
-     * 장소 코드 목록의 핀을 그 순서 그대로 목록 카드로 조회한다 (테마지도).
+     * 장소 코드 목록의 핀을 목록 카드로 조회한다 (테마지도).
+     * 사진 있는 장소를 먼저 두고, 그 안에서는 코드 목록 순서를 지킨다.
      * 코드가 시트 동기화로 사라졌으면 그 장소만 빠진다.
      */
     public List<PinSummaryResponse> getPinsByCodes(List<String> codes, Double userLat, Double userLng, String email) {
         Map<String, Pin> pinsByCode = pinRepository.findByCodeIn(codes).stream()
                 .collect(Collectors.toMap(Pin::getCode, pin -> pin));
-        List<Pin> ordered = codes.stream()
+        List<Pin> ordered = photoFirst(codes.stream()
                 .map(pinsByCode::get)
                 .filter(Objects::nonNull)
-                .toList();
+                .toList());
         return toSummaries(ordered, favoritePinIds(resolveMember(email)), userLat, userLng);
+    }
+
+    /** 대표 사진(카드 썸네일)이 있는 핀을 앞으로. 정렬이 안정적이라 같은 그룹 안의 순서는 유지된다 */
+    static List<Pin> photoFirst(List<Pin> pins) {
+        return pins.stream()
+                .sorted(Comparator.comparing((Pin pin) -> pin.getImageUrl() == null || pin.getImageUrl().isBlank()))
+                .toList();
     }
 
     private boolean isDaedongCategory(String categoryCode) {
