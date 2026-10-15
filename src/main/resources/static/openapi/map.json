@@ -595,7 +595,8 @@
                     "favorite": true,
                     "distanceMeters": 150,
                     "location": "서울 서대문구 거북골로 34",
-                    "infoText": "현금 결제만 가능, 단체석 보유"
+                    "infoText": "현금 결제만 가능, 단체석 보유",
+                    "naverPlaceUrl": "https://map.naver.com/p/entry/place/1025414098"
                   },
                   "timestamp": "2026-06-22T09:05:12"
                 }
@@ -3114,6 +3115,12 @@
             "nullable": true,
             "description": "추가 정보 텍스트",
             "example": "현금 결제만 가능, 단체석 보유"
+          },
+          "naverPlaceUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "네이버 지도 장소 페이지 링크. 영업시간·전화번호·사진은 이 링크로 네이버에서 확인한다. 네이버 장소가 아닌 교내 시설은 null",
+            "example": "https://map.naver.com/p/entry/place/1025414098"
           }
         },
         "required": [

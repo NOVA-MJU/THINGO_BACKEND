@@ -48,4 +48,14 @@ class PlaceDetailResponseTest {
 
         assertThat(PlaceDetailResponse.of(pin, false, null, null).getImageUrls()).containsExactly("https://thingo.kr/c.jpg");
     }
+
+    @Test
+    @DisplayName("네이버 장소 핀(dd-{id})만 네이버 지도 링크를 내려준다")
+    void naverPlaceUrl_onlyForNaverPlaces() {
+        assertThat(PlaceDetailResponse.naverPlaceUrlOf("dd-1029271253"))
+                .isEqualTo("https://map.naver.com/p/entry/place/1029271253");
+        assertThat(PlaceDetailResponse.naverPlaceUrlOf("p-smoking-ext-01")).isNull();
+        assertThat(PlaceDetailResponse.naverPlaceUrlOf("dd-abc")).isNull();
+        assertThat(PlaceDetailResponse.of(place(null), false, null, null).getNaverPlaceUrl()).isNull();
+    }
 }
