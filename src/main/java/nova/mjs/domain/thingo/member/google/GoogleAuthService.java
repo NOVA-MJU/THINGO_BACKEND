@@ -2,6 +2,7 @@ package nova.mjs.domain.thingo.member.google;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import nova.mjs.domain.thingo.department.entity.enumList.DepartmentName;
 import nova.mjs.domain.thingo.member.entity.Member;
 import nova.mjs.domain.thingo.member.repository.MemberRepository;
 import nova.mjs.domain.thingo.member.service.query.MemberQueryService;
@@ -30,7 +31,8 @@ public class GoogleAuthService {
     @Transactional(readOnly = true)
     public GoogleAuthDTO.LoginResult login(String idToken) {
         GoogleAccount account = googleIdTokenService.verify(idToken);
-        return memberRepository.findByEmail(account.email())
+        DepartmentName department = DepartmentName.fromAffiliation(account.affiliation());
+        return memberRepository.findFirstByEmailIgnoreCaseOrderByIdAsc(account.email())
                 .map(this::loggedIn)
                 .orElseGet(() -> GoogleAuthDTO.LoginResult.builder()
                         .status(GoogleAuthDTO.Status.SIGNUP_REQUIRED)
@@ -38,6 +40,8 @@ public class GoogleAuthService {
                         .email(account.email())
                         .name(account.name())
                         .profileImageUrl(account.pictureUrl())
+                        .college(department == null ? null : department.getCollege())
+                        .departmentName(department)
                         .build());
     }
 

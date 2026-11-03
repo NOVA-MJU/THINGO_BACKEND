@@ -1,6 +1,7 @@
 package nova.mjs.domain.thingo.member.google;
 
 import nova.mjs.domain.thingo.department.entity.enumList.College;
+import nova.mjs.domain.thingo.department.entity.enumList.DepartmentName;
 import nova.mjs.domain.thingo.member.entity.Member;
 import nova.mjs.domain.thingo.member.exception.DuplicateNicknameException;
 import nova.mjs.domain.thingo.member.repository.MemberRepository;
@@ -24,7 +25,7 @@ import static org.mockito.Mockito.when;
 
 class GoogleAuthServiceTest {
 
-    private static final GoogleAccount ACCOUNT = new GoogleAccount("hong@mju.ac.kr", "홍길동", "https://pic");
+    private static final GoogleAccount ACCOUNT = new GoogleAccount("hong@mju.ac.kr", "홍길동", "https://pic", "학생/융합소프트웨어학부 데이터사이언스전공");
 
     private GoogleIdTokenService idTokenService;
     private GoogleSignupTicketStore ticketStore;
@@ -49,7 +50,7 @@ class GoogleAuthServiceTest {
     void 같은_이메일_회원이_있으면_이메일_가입자여도_바로_로그인한다() {
         Member existing = Member.builder().uuid(UUID.randomUUID()).email("hong@mju.ac.kr")
                 .password("{bcrypt}x").role(Member.Role.USER).build();
-        when(memberRepository.findByEmail("hong@mju.ac.kr")).thenReturn(Optional.of(existing));
+        when(memberRepository.findFirstByEmailIgnoreCaseOrderByIdAsc("hong@mju.ac.kr")).thenReturn(Optional.of(existing));
 
         GoogleAuthDTO.LoginResult result = service.login("id-token");
 
@@ -61,7 +62,7 @@ class GoogleAuthServiceTest {
 
     @Test
     void 처음_온_학교_계정이면_가입표와_구글_계정_정보를_준다() {
-        when(memberRepository.findByEmail("hong@mju.ac.kr")).thenReturn(Optional.empty());
+        when(memberRepository.findFirstByEmailIgnoreCaseOrderByIdAsc("hong@mju.ac.kr")).thenReturn(Optional.empty());
         when(ticketStore.issue(ACCOUNT)).thenReturn("ticket");
 
         GoogleAuthDTO.LoginResult result = service.login("id-token");
@@ -69,6 +70,8 @@ class GoogleAuthServiceTest {
         assertThat(result.getStatus()).isEqualTo(GoogleAuthDTO.Status.SIGNUP_REQUIRED);
         assertThat(result.getSignupToken()).isEqualTo("ticket");
         assertThat(result.getEmail()).isEqualTo("hong@mju.ac.kr");
+        assertThat(result.getCollege()).isEqualTo(College.AI_SOFTWARE);
+        assertThat(result.getDepartmentName()).isEqualTo(DepartmentName.DATA_SCIENCE);
         assertThat(result.getAccessToken()).isNull();
     }
 

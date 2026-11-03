@@ -41,6 +41,9 @@ public class GoogleAuthDTO {
         private String email;
         private String name;
         private String profileImageUrl;
+        // 구글 프로필 소속에서 찾은 학과. 가입 화면이 미리 골라 두며 찾지 못하면 비어 있다
+        private College college;
+        private DepartmentName departmentName;
     }
 
     @Data
