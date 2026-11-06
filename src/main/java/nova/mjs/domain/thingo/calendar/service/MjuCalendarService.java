@@ -45,6 +45,13 @@ public class MjuCalendarService {
                 .toList();
     }
 
+    // 설명 앞의 [학부], [대학원], [학부·대학원] 태그로 대상을 판단한다. 태그가 없으면 공통 일정으로 본다
+    public boolean isForAudience(String description, boolean graduate) {
+        if (description == null) return true;
+        Set<String> tags = parseAndClassify(description).tags();
+        return tags.isEmpty() || tags.contains(graduate ? "대학원" : "학부");
+    }
+
     public Page<MjuCalendarDTO> getCalendarsFiltered(Integer year, Pageable pageable) {
         Page<MjuCalendar> result = (year != null)
                 ? calendarRepository.findByYear(year, pageable)

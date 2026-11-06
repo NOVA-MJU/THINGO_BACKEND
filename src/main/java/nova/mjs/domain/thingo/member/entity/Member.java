@@ -58,8 +58,21 @@ public class Member extends BaseEntity {
 
     private String studentNumber;
 
+    // 학사일정 디데이를 학생/대학원생에 맞게 거르는 데 쓴다. 값이 없으면(기존 회원) 학생으로 본다
+    @Enumerated(EnumType.STRING)
+    @Column
+    private StudentType studentType;
+
     public enum Role {
         USER, ADMIN, OPERATOR, MENTOR
+    }
+
+    public enum StudentType {
+        STUDENT, GRADUATE_STUDENT
+    }
+
+    public StudentType getStudentType() {
+        return studentType != null ? studentType : StudentType.STUDENT;
     }
 
     public static Member create(MemberDTO.MemberRegistrationRequestDTO memberDTO, String encodePassword) {
@@ -102,6 +115,7 @@ public class Member extends BaseEntity {
         this.college = getOrDefault(memberDTO.getCollege(), this.college);
         this.studentNumber = getOrDefault(memberDTO.getStudentNumber(), this.studentNumber);
         this.profileImageUrl = getOrDefault(memberDTO.getProfileImageUrl(), this.profileImageUrl);
+        this.studentType = getOrDefault(memberDTO.getStudentType(), this.studentType);
     }
 
 
