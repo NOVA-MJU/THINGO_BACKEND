@@ -49,6 +49,7 @@ public enum ErrorCode {
 
     //식단 관련 에러
     WEEKLYMENU_NOT_FOUND(HttpStatus.NOT_FOUND, "WEEKLYMENU_NOT_FOUND", "[MJS] 식단 내용을 찾을 수 없습니다."),
+    MEAL_RATING_MENU_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEAL_RATING_MENU_NOT_FOUND", "[MJS] 오늘 해당 끼니의 식단이 없어 평점을 남길 수 없습니다."),
 
     //명대신문 관련 에러
     NEWS_NOT_FOUND(HttpStatus.NOT_FOUND, "NEWS_NOT_FOUND", "[MJS] 요청한 기사 내용을 찾을 수 없습니다."),
