@@ -147,6 +147,18 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
         return ReviewDTO.buildKeywordCatalog(isFnb);
     }
 
+    @Override
+    public List<ReviewDTO.Response.MyReview> getMyReviews(String email) {
+        Member viewer = resolveViewer(email);
+        List<Review> reviews =
+                reviewRepository.findByAuthor_IdAndHiddenFalseOrderByCreatedAtDesc(viewer.getId());
+        Set<UUID> likedUuids = resolveLikedUuids(viewer, reviews);
+        return reviews.stream()
+                .map(review -> ReviewDTO.Response.MyReview.from(
+                        review, likedUuids.contains(review.getUuid())))
+                .toList();
+    }
+
     // ===== 헬퍼 =====
 
     /** email이 null이면 비로그인(null 반환). 값이 있으면 회원 로딩 */

@@ -28,6 +28,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.HashSet;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -243,5 +244,12 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
                 log.warn("리뷰 미디어 S3 삭제 실패(무시) - url: {}, cause: {}", media.getUrl(), e.getMessage());
             }
         }
+    }
+
+    @Override
+    @Transactional
+    public void recordViews(List<UUID> reviewUuids) {
+        // ponytail: 같은 사람이 앱을 다시 켜면 다시 센다(노출 수). 사람 수로 세야 하면 기기·회원별 기록 테이블로 바꾼다
+        reviewRepository.increaseViewCount(new HashSet<>(reviewUuids));
     }
 }

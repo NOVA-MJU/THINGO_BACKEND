@@ -155,6 +155,8 @@ public class ReviewDTO {
             private String content;
             private List<MediaInfo> media;
             private int likeCount;
+            /** 목록·스토리에서 화면에 보인 횟수 */
+            private int viewCount;
             @JsonProperty("isLiked")
             private boolean liked;
             @JsonProperty("isMine")
@@ -169,6 +171,7 @@ public class ReviewDTO {
                         .content(review.getContent())
                         .media(toMediaInfos(review.getMedia()))
                         .likeCount(review.getLikeCount())
+                        .viewCount(review.getViewCount())
                         .liked(isLiked)
                         .mine(isMine)
                         .createdAt(review.getCreatedAt())
@@ -187,6 +190,8 @@ public class ReviewDTO {
             private String content;
             private List<MediaInfo> media;
             private int likeCount;
+            /** 목록·스토리에서 화면에 보인 횟수 */
+            private int viewCount;
             @JsonProperty("isLiked")
             private boolean liked;
             @JsonProperty("isMine")
@@ -203,12 +208,46 @@ public class ReviewDTO {
                         .content(review.getContent())
                         .media(toMediaInfos(review.getMedia()))
                         .likeCount(review.getLikeCount())
+                        .viewCount(review.getViewCount())
                         .liked(isLiked)
                         .mine(isMine)
                         .canDelete(canDelete)
                         .createdAt(review.getCreatedAt())
                         .build();
             }
+        }
+
+        /**
+         * 내가 쓴 리뷰(GET /reviews/me). 목록 항목에 장소 id·이름·좌표를 붙인다.
+         * 앱이 지도에 "내가 리뷰한 곳" 핀을 찍고, 장소 상세에서 내 리뷰를 맨 위에 보여줄 때 쓴다
+         */
+        @Getter
+        @Builder
+        public static class MyReview {
+            private Long pinId;
+            private String pinName;
+            private Double latitude;
+            private Double longitude;
+            private Summary review;
+
+            public static MyReview from(Review review, boolean isLiked) {
+                return MyReview.builder()
+                        .pinId(review.getPin().getId())
+                        .pinName(review.getPin().getName())
+                        .latitude(review.getPin().getLatitude())
+                        .longitude(review.getPin().getLongitude())
+                        .review(Summary.from(review, isLiked, true))
+                        .build();
+            }
+        }
+
+        /** 조회수 올리기 요청(POST /reviews/views). 화면에 보인 리뷰 uuid 묶음 */
+        @Getter
+        @NoArgsConstructor
+        public static class ViewRequest {
+            @NotNull
+            @Size(min = 1, max = 50)
+            private List<UUID> reviewUuids;
         }
 
         /** 장소 상세 상단 사진·영상 스트립 항목 */

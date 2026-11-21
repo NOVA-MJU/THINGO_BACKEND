@@ -58,6 +58,23 @@ public class ReviewController {
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
+    /** 내가 쓴 리뷰 전체(장소 id·이름·좌표 포함). 지도 "내가 리뷰한 곳" 핀과 장소 상세의 내 리뷰 맨 위 표시에 쓴다 */
+    @GetMapping("/me")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<ApiResponse<List<ReviewDTO.Response.MyReview>>> getMyReviews(
+            @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
+        return ResponseEntity.ok(ApiResponse.success(
+                reviewQueryService.getMyReviews(userPrincipal.getUsername())));
+    }
+
+    /** 화면에 보인 리뷰들의 조회수 올리기(비로그인 허용). 한 번에 최대 50개 */
+    @PostMapping("/views")
+    public ResponseEntity<Void> recordViews(@Valid @RequestBody ReviewDTO.Response.ViewRequest request) {
+        reviewCommandService.recordViews(request.getReviewUuids());
+        return ResponseEntity.noContent().build();
+    }
+
     /** 리뷰 단건 상세 */
     @GetMapping("/{reviewUuid}")
     public ResponseEntity<ApiResponse<ReviewDTO.Response.Detail>> getReview(

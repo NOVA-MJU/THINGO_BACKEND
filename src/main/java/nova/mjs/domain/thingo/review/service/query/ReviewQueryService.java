@@ -21,4 +21,7 @@ public interface ReviewQueryService {
 
     /** 작성 화면용 키워드 카탈로그(pinId가 F&B면 전용 키워드 포함, null이면 전체) */
     ReviewDTO.Response.KeywordCatalog getKeywordCatalog(Long pinId);
+
+    /** 내가 쓴 리뷰 전체(숨김 제외, 최신순)와 그 장소 id·이름·좌표 */
+    List<ReviewDTO.Response.MyReview> getMyReviews(String email);
 }
