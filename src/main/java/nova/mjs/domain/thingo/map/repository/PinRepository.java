@@ -34,6 +34,12 @@ public interface PinRepository extends JpaRepository<Pin, Long> {
     /** 동기화 upsert용 - code로 단건 조회 */
     Optional<Pin> findByCode(String code);
 
+    /** 좌표 상자 안의 핀 (네이버 지도 기본 글자 대조용). 좌표가 없는 건물 안 시설은 빠진다 */
+    @Query("select p from Pin p where p.latitude between :minLatitude and :maxLatitude "
+            + "and p.longitude between :minLongitude and :maxLongitude")
+    List<Pin> findAllInBox(@Param("minLatitude") double minLatitude, @Param("maxLatitude") double maxLatitude,
+                           @Param("minLongitude") double minLongitude, @Param("maxLongitude") double maxLongitude);
+
     /** 일반 검색에서 S1353 같은 실제 호실 코드를 정확히 찾을 때 사용 */
     @Query("select p from Pin p join fetch p.category left join fetch p.parentBuilding "
             + "left join fetch p.floor where lower(p.indoorCode) = lower(:indoorCode)")
