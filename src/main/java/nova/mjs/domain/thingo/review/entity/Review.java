@@ -127,6 +127,17 @@ public class Review extends BaseEntity {
         addMedia(url, null, mediaType);
     }
 
+    /**
+     * 리뷰 수정. 본문과 키워드를 바꾸고 미디어는 새 목록으로 통째로 바꾼다(빠진 미디어 행은 orphanRemoval로 지워진다).
+     * 좋아요 수·숨김 상태는 그대로 둔다.
+     */
+    public void update(String content, Set<ReviewKeyword> keywords) {
+        this.content = content;
+        this.keywords.clear();
+        this.keywords.addAll(keywords);
+        this.media.clear();
+    }
+
     /** 삭제 권한 판정용: 작성자 본인인지 여부 */
     public boolean isAuthoredBy(Member member) {
         return this.author != null && this.author.equals(member);
