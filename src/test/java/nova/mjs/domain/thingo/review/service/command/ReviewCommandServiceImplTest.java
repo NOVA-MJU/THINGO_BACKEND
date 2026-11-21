@@ -17,6 +17,7 @@ import nova.mjs.domain.thingo.review.exception.ReviewForbiddenException;
 import nova.mjs.domain.thingo.review.exception.ReviewNotFoundException;
 import nova.mjs.domain.thingo.review.exception.ReviewValidationException;
 import nova.mjs.domain.thingo.review.repository.ReviewRepository;
+import nova.mjs.domain.thingo.review.service.query.ReviewQueryService;
 import nova.mjs.util.exception.ErrorCode;
 import nova.mjs.util.profanity.ProfanityFilter;
 import nova.mjs.util.s3.S3Service;
@@ -47,6 +48,7 @@ class ReviewCommandServiceImplTest {
     @Mock private PinQueryService pinQueryService;
     @Mock private S3Service s3Service;
     @Mock private ProfanityFilter profanityFilter;
+    @Mock private ReviewQueryService reviewQueryService;
 
     @InjectMocks private ReviewCommandServiceImpl service;
 
@@ -323,5 +325,64 @@ class ReviewCommandServiceImplTest {
 
         assertThatThrownBy(() -> service.deleteReview("e@mju.ac.kr", uuid))
                 .isInstanceOf(ReviewNotFoundException.class);
+    }
+
+    // ===== 수정 =====
+
+    private ReviewDTO.Request.Update 수정요청(List<ReviewKeyword> keywords, String content,
+                                          List<ReviewDTO.Request.MediaItem> media) {
+        ReviewDTO.Request.Update request = new ReviewDTO.Request.Update();
+        ReflectionTestUtils.setField(request, "keywords", keywords);
+        ReflectionTestUtils.setField(request, "content", content);
+        ReflectionTestUtils.setField(request, "media", media);
+        return request;
+    }
+
+    @Test
+    @DisplayName("작성자는 리뷰를 수정할 수 있고, 새 목록에서 빠진 미디어는 S3에서 지워진다")
+    void should_update_when_작성자() {
+        // given - 사진 a가 붙은 내 리뷰를 사진 b로 바꾼다
+        Member author = 회원(1L, Member.Role.USER);
+        Review review = Review.create(장소("restaurant", "food", PinType.PLACE), author, "처음 내용",
+                java.util.Set.of(ReviewKeyword.TASTY));
+        review.addMedia("https://thingo.kr/a.png", ReviewMediaType.IMAGE);
+        UUID uuid = review.getUuid();
+        given(memberQueryService.getMemberByEmail("e@mju.ac.kr")).willReturn(author);
+        given(reviewRepository.findByUuid(uuid)).willReturn(Optional.of(review));
+        given(profanityFilter.mask(any())).willAnswer(invocation -> invocation.getArgument(0));
+        given(s3Service.replaceCloudfrontUrlToS3Url("https://thingo.kr/a.png"))
+                .willReturn("static/images/reviews/a.png");
+        given(s3Service.replaceCloudfrontUrlToS3Url("https://thingo.kr/b.png"))
+                .willReturn("static/images/reviews/b.png");
+        var request = 수정요청(List.of(ReviewKeyword.VALUE), "바뀐 내용",
+                List.of(미디어("https://thingo.kr/b.png", ReviewMediaType.IMAGE)));
+
+        // when
+        service.updateReview("e@mju.ac.kr", uuid, request);
+
+        // then - 본문·키워드·미디어가 바뀌고 빠진 사진 a만 S3에서 지워진다
+        assertThat(review.getContent()).isEqualTo("바뀐 내용");
+        assertThat(review.getKeywords()).containsExactly(ReviewKeyword.VALUE);
+        assertThat(review.getMedia()).extracting("url").containsExactly("https://thingo.kr/b.png");
+        verify(s3Service).deleteFile("static/images/reviews/a.png");
+        verify(s3Service, never()).deleteFile("static/images/reviews/b.png");
+        verify(reviewRepository).saveAndFlush(review);
+    }
+
+    @Test
+    @DisplayName("작성자가 아니면 수정 권한 없음 (OPERATOR도 남의 글을 고치지 않는다)")
+    void should_throw_when_타인수정() {
+        Member author = 회원(1L, Member.Role.USER);
+        Member operator = 회원(9L, Member.Role.OPERATOR);
+        Review review = Review.create(장소("restaurant", "food", PinType.PLACE), author, "내용",
+                java.util.Set.of(ReviewKeyword.TASTY));
+        UUID uuid = review.getUuid();
+        given(memberQueryService.getMemberByEmail("op@mju.ac.kr")).willReturn(operator);
+        given(reviewRepository.findByUuid(uuid)).willReturn(Optional.of(review));
+
+        assertThatThrownBy(() -> service.updateReview("op@mju.ac.kr", uuid,
+                수정요청(List.of(ReviewKeyword.TASTY), "고친 내용", null)))
+                .isInstanceOf(ReviewForbiddenException.class);
+        verify(reviewRepository, never()).saveAndFlush(any());
     }
 }

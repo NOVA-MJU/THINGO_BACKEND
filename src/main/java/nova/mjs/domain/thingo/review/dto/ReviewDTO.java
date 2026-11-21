@@ -52,6 +52,23 @@ public class ReviewDTO {
             private List<MediaItem> media;
         }
 
+        /** 수정 요청. 장소는 바꿀 수 없고 본문·키워드·미디어를 통째로 바꾼다 (미디어를 빼면 지워진다) */
+        @Getter
+        @NoArgsConstructor
+        public static class Update {
+
+            /** 선택 키워드. 개수/조합 검증은 서비스(REVIEW_KEYWORD_*) */
+            private List<ReviewKeyword> keywords;
+
+            @NotBlank
+            @Size(max = 400)
+            private String content;
+
+            /** 사진/영상. 개수 검증은 서비스(REVIEW_MEDIA_LIMIT_EXCEEDED) */
+            @Valid
+            private List<MediaItem> media;
+        }
+
         /** 작성 요청에 담기는 미디어 1건(사전 업로드된 URL + 종류) */
         @Getter
         @NoArgsConstructor

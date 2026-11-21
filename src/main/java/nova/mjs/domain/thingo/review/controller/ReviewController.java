@@ -69,6 +69,19 @@ public class ReviewController {
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
+    /** 리뷰 수정(작성자만). 본문·키워드·미디어를 통째로 바꾼다 */
+    @PatchMapping("/{reviewUuid}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<ApiResponse<ReviewDTO.Response.Detail>> updateReview(
+            @PathVariable UUID reviewUuid,
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @Valid @RequestBody ReviewDTO.Request.Update request
+    ) {
+        ReviewDTO.Response.Detail response =
+                reviewCommandService.updateReview(userPrincipal.getUsername(), reviewUuid, request);
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
     /** 리뷰 삭제(작성자/OPERATOR) */
     @DeleteMapping("/{reviewUuid}")
     @PreAuthorize("isAuthenticated()")

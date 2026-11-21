@@ -1,5 +1,6 @@
 package nova.mjs.domain.thingo.review.service.command;
 
+import nova.mjs.domain.thingo.review.service.query.ReviewQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nova.mjs.domain.thingo.map.entity.Pin;
@@ -25,8 +26,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 리뷰 커맨드 서비스 구현.
@@ -52,6 +56,7 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
     private final PinQueryService pinQueryService;
     private final S3Service s3Service;
     private final ProfanityFilter profanityFilter;
+    private final ReviewQueryService reviewQueryService;
 
     @Override
     @Transactional
@@ -86,6 +91,44 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
 
         // 작성 직후: 본인 리뷰이므로 isMine/canDelete=true, 좋아요 0/false
         return ReviewDTO.Response.Detail.from(review, false, true, true);
+    }
+
+    @Override
+    @Transactional
+    public ReviewDTO.Response.Detail updateReview(
+            String email, UUID reviewUuid, ReviewDTO.Request.Update request) {
+        // 1. 작성자 본인 확인 (운영자는 삭제만 할 수 있고 남의 글을 고치지 않는다)
+        Member member = memberQueryService.getMemberByEmail(email);
+        Review review = reviewRepository.findByUuid(reviewUuid)
+                .orElseThrow(ReviewNotFoundException::new);
+        if (!review.isAuthoredBy(member)) {
+            throw new ReviewForbiddenException();
+        }
+
+        // 2. 작성과 같은 키워드·미디어 검증
+        Set<ReviewKeyword> keywords = validateKeywords(request.getKeywords(), review.getPin());
+        List<ReviewDTO.Request.MediaItem> mediaItems =
+                request.getMedia() == null ? List.of() : request.getMedia();
+        if (mediaItems.size() > MAX_MEDIA) {
+            throw new ReviewValidationException(ErrorCode.REVIEW_MEDIA_LIMIT_EXCEEDED);
+        }
+        mediaItems.forEach(this::validateMedia);
+
+        // 3. 새 목록에서 빠진 미디어는 S3에서도 지운다 (best-effort, 새 목록에 남은 URL은 그대로 둔다)
+        Set<String> keptUrls = mediaItems.stream()
+                .flatMap(item -> Stream.of(item.getUrl(), item.getThumbnailUrl()))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+        deleteRemovedMediaFromS3(review, keptUrls);
+
+        // 4. 본문(비속어 마스킹 L1)·키워드 교체 후 미디어를 새 순서대로 다시 붙인다
+        review.update(profanityFilter.mask(request.getContent()), keywords);
+        mediaItems.forEach(item -> review.addMedia(
+                item.getUrl(), item.getThumbnailUrl(), item.getMediaType()));
+        reviewRepository.saveAndFlush(review);
+
+        log.info("리뷰 수정 완료 - reviewUuid: {}, 작성자: {}", reviewUuid, member.getId());
+        return reviewQueryService.getReview(reviewUuid, email);
     }
 
     @Override
@@ -172,6 +215,21 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
     }
 
     /** 리뷰 미디어를 S3에서 개별 삭제한다(실패는 무시하고 로그). */
+    private void deleteRemovedMediaFromS3(Review review, Set<String> keptUrls) {
+        review.getMedia().stream()
+                .flatMap(media -> Stream.of(media.getUrl(), media.getThumbnailUrl()))
+                .filter(Objects::nonNull)
+                .distinct()
+                .filter(url -> !keptUrls.contains(url))
+                .forEach(url -> {
+                    try {
+                        s3Service.deleteFile(s3Service.replaceCloudfrontUrlToS3Url(url));
+                    } catch (Exception e) {
+                        log.warn("리뷰 미디어 S3 삭제 실패(무시) - url: {}, cause: {}", url, e.getMessage());
+                    }
+                });
+    }
+
     private void deleteMediaFromS3(Review review) {
         for (ReviewMedia media : review.getMedia()) {
             try {
