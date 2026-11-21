@@ -385,4 +385,15 @@ class ReviewCommandServiceImplTest {
                 .isInstanceOf(ReviewForbiddenException.class);
         verify(reviewRepository, never()).saveAndFlush(any());
     }
+
+    @Test
+    @DisplayName("조회수: 화면에 보인 리뷰 uuid를 중복 없이 한 번에 올린다")
+    void should_increase_view_count_once_per_uuid() {
+        UUID first = UUID.randomUUID();
+        UUID second = UUID.randomUUID();
+
+        service.recordViews(List.of(first, second, first));
+
+        verify(reviewRepository).increaseViewCount(java.util.Set.of(first, second));
+    }
 }

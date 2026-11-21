@@ -2,6 +2,7 @@ package nova.mjs.domain.thingo.review.service.command;
 
 import nova.mjs.domain.thingo.review.dto.ReviewDTO;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -17,4 +18,7 @@ public interface ReviewCommandService {
 
     /** 리뷰 삭제. 작성자 또는 OPERATOR만 가능. 미디어 S3 정리 후 하드 삭제. */
     void deleteReview(String email, UUID reviewUuid);
+
+    /** 화면에 보인 리뷰들의 조회수를 1씩 올린다. 로그인 없이 부른다(앱이 한 번 실행하는 동안 리뷰마다 한 번만 보낸다). */
+    void recordViews(List<UUID> reviewUuids);
 }

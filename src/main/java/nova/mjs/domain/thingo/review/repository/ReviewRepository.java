@@ -165,4 +165,17 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
         where r.uuid = :uuid
     """)
     Integer findLikeCount(@Param("uuid") UUID uuid);
+
+    /** 리뷰가 화면에 보인 횟수(조회수)를 한 번에 1씩 올린다. 없는 uuid는 무시된다 */
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("""
+        update Review r
+        set r.viewCount = r.viewCount + 1
+        where r.uuid in :uuids
+    """)
+    int increaseViewCount(@Param("uuids") Collection<UUID> uuids);
+
+    /** 내가 쓴 리뷰(숨김 제외, 최신순). 장소 이름·좌표를 같이 보여주려고 pin을 함께 읽는다 */
+    @EntityGraph(attributePaths = {"pin", "author"})
+    List<Review> findByAuthor_IdAndHiddenFalseOrderByCreatedAtDesc(Long authorId);
 }

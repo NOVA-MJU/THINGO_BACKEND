@@ -68,6 +68,14 @@ public class Review extends BaseEntity {
     private int likeCount;
 
     /**
+     * 비정규화 조회수(노출 수). 목록·스토리에서 리뷰가 화면에 보일 때 앱이 모아 보내고
+     * 리포지토리 원자적 증가로만 바꾼다. 기존 행은 0으로 시작한다(ddl-auto 컬럼 추가 시 기본값).
+     */
+    @ColumnDefault("0")
+    @Column(name = "view_count", nullable = false)
+    private int viewCount;
+
+    /**
      * 신고 누적으로 인한 자동 숨김 여부 (L2).
      * - true면 목록/상세/미디어 등 모든 조회에서 제외한다(뷰어 무관 전역 숨김, 차단과 다름).
      * - 운영자만 별도 API로 확인/복원한다.
