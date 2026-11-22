@@ -111,6 +111,7 @@ public enum ErrorCode {
     MAP_PIN_NOT_FOUND(HttpStatus.NOT_FOUND, "MAP_PIN_NOT_FOUND", "[MJS] 해당 건물/장소를 찾을 수 없습니다."),
     MAP_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "MAP_CATEGORY_NOT_FOUND", "[MJS] 해당 카테고리를 찾을 수 없습니다."),
     MAP_THEME_NOT_FOUND(HttpStatus.NOT_FOUND, "MAP_THEME_NOT_FOUND", "[MJS] 해당 테마지도를 찾을 수 없습니다."),
+    MAP_SYMBOL_PLACE_INVALID(HttpStatus.BAD_REQUEST, "MAP_SYMBOL_PLACE_INVALID", "[MJS] 이 가게는 띵고에 추가할 수 없습니다."),
 
     // 명지도 구글 시트 동기화 관련 에러
     MAP_SYNC_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "MAP_SYNC_UNAUTHORIZED", "[MJS] 명지도 동기화 토큰이 유효하지 않습니다."),
